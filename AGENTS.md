@@ -1,4 +1,4 @@
-# Productscapes toolkit
+# Productscape toolkit
 
 This repository contains reusable domain-authoring skills, JSON schemas, shared
 model defaults, HTML templates, and Python generators. Real domain examples live

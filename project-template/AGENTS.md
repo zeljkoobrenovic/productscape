@@ -6,7 +6,7 @@ Use lowercase IDs, globally unique domain IDs, and groups discovered from disk.
 Preserve existing uncommitted source changes and inspect generated changes before rebuilding.
 
 The scripts, schemas, templates, and canonical skills belong to the separate
-**productscapes** toolkit. Run `python3 productscapes.py info` to locate it.
+**productscape** toolkit. Run `python3 productscapes.py info` to locate it.
 `productscapes.json` records its relative checkout path and pinned commit;
 `PRODUCTSCAPES_HOME` may override the path. Keep shared implementation changes
 in the toolkit; the local `productscapes.py` only forwards commands.

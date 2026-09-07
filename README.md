@@ -1,4 +1,4 @@
-# Productscapes
+# Productscape
 
 Reusable skills and scripts for turning product-domain research into structured
 JSON and a static website: customers, jobs to be done, strategy, products, product
@@ -10,9 +10,11 @@ or API key is required. Optional image generation uses provider APIs.
 
 ## Create your first domain
 
-Clone this repository and run these commands from its root:
+Clone the toolkit and run these commands:
 
 ```sh
+git clone https://github.com/zeljkoobrenovic/productscape.git
+cd productscape
 python3 productscapes.py new my-domain --group my-group --name "My Domain"
 python3 productscapes.py validate my-domain --strict-ids
 python3 productscapes.py build my-domain
@@ -51,7 +53,7 @@ The new project gets its own source tree, a thin `productscapes.py` launcher,
 relative to that project and its current commit. Initialize Git in the data
 project if you want a separate repository. Scripts and templates stay in the toolkit.
 
-`productscape-examples` uses this same interface for the existing example domains.
+[productscape-examples](https://github.com/zeljkoobrenovic/productscape-examples) uses this same interface for the existing example domains.
 Clone both repositories beside each other and check out the toolkit commit named
 by the examples' `productscapes.json` before building.
 
