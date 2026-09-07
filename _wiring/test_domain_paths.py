@@ -109,6 +109,14 @@ class GroupedDomainTests(unittest.TestCase):
         shutil.copy2(source / 'project_paths.py', wiring)
         shutil.copy2(source.parent / 'productscapes.py', self.repo)
         shutil.copytree(source.parent / '_templates/catalog', self.repo / '_templates/catalog')
+        (self.repo / '_config/_shared').mkdir(parents=True)
+        navigation = self.root / 'start/apps.json'
+        navigation.parent.mkdir()
+        shutil.copy2(source.parent / '_config/product-domains/start/apps.json', navigation)
+        for section in ('start', 'customers', 'product-deployments', 'product-bricks', 'teams', 'competition', 'residuality', 'evidence-explorer'):
+            template = self.repo / '_templates' / section / 'index.html'
+            template.parent.mkdir(parents=True)
+            template.write_text('stub template')
         (self.repo / 'docs').mkdir()
         for domain in discover_domain_dirs(self.root):
             for seed in (source.parent / '_templates/domain').rglob('*.json'):
@@ -119,8 +127,7 @@ class GroupedDomainTests(unittest.TestCase):
         evidence = wiring / 'evidence-explorer'
         evidence.mkdir()
         (evidence / 'generate-evidence-explorer-docs.py').write_text('pass')
-        for name in ('run.sh', 'run-one.sh'):
-            shutil.copy2(source / 'product-domains' / name, scripts)
+        shutil.copy2(source / 'product-domains/run.sh', scripts)
         for name in ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality'):
             (scripts / f'generate-{name}-docs.py').write_text(
                 'import json, sys\n'
@@ -135,14 +142,14 @@ class GroupedDomainTests(unittest.TestCase):
         for group, domain_id in (('new-group', 'first'), ('another-group', 'second')):
             self.make_domain(group, domain_id)
         scripts = self.install_wrappers()
-        for wrapper, arguments, expected_ids in (
-            ('run-one.sh', ['second'], ['second'] * 7),
-            ('run.sh', [], ['first'] * 7 + ['second'] * 7),
+        for arguments, expected_ids in (
+            ([str(self.root / 'another-group/second')], ['second'] * 7),
+            (['--project', str(self.repo), '--all'], ['first'] * 7 + ['second'] * 7),
         ):
-            with self.subTest(wrapper=wrapper):
+            with self.subTest(arguments=arguments):
                 calls = scripts / 'calls.jsonl'
                 calls.write_text('')
-                result = subprocess.run(['sh', str(scripts / wrapper), *arguments], cwd=self.repo, capture_output=True, text=True)
+                result = subprocess.run(['sh', str(scripts / 'run.sh'), *arguments], cwd=self.repo, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 records = [json.loads(line) for line in calls.read_text().splitlines()]
                 self.assertEqual([record[1] for record in records], expected_ids)
@@ -152,7 +159,7 @@ class GroupedDomainTests(unittest.TestCase):
         self.make_domain('one', 'broken')
         self.make_domain('two', 'healthy')
         scripts = self.install_wrappers(failed_domain='broken')
-        result = subprocess.run(['sh', str(scripts / 'run.sh')], cwd=self.repo, capture_output=True, text=True)
+        result = subprocess.run(['sh', str(scripts / 'run.sh'), '--project', str(self.repo), '--all'], cwd=self.repo, capture_output=True, text=True)
         self.assertEqual(result.returncode, 1)
         records = [json.loads(line) for line in (scripts / 'calls.jsonl').read_text().splitlines()]
         self.assertEqual([record[1] for record in records], ['broken'] * 7 + ['healthy'] * 7)
@@ -160,7 +167,7 @@ class GroupedDomainTests(unittest.TestCase):
 
     def test_full_wrapper_fails_for_an_empty_registry(self):
         scripts = self.install_wrappers()
-        result = subprocess.run(['sh', str(scripts / 'run.sh')], cwd=self.repo, capture_output=True, text=True)
+        result = subprocess.run(['sh', str(scripts / 'run.sh'), '--project', str(self.repo), '--all'], cwd=self.repo, capture_output=True, text=True)
         self.assertEqual(result.returncode, 1)
         self.assertIn('No registered domains', result.stderr)
 

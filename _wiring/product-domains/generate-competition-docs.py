@@ -13,6 +13,7 @@ from generator_common import (
 
 from generator_common import template_path
 
+domain, _ = load_domain_args()
 enter_docs_root()
 
 templates_root = template_path('competition')
@@ -23,9 +24,6 @@ tabs_script = open(os.path.join(templates_root, '../_imports/tabs/script.html'))
 common_style = open(os.path.join(templates_root, '../_imports/common/style.html')).read()
 breadcrumbs_style = open(os.path.join(templates_root, '../_imports/breadcrumbs/style.html')).read()
 breadcrumbs_script = open(os.path.join(templates_root, '../_imports/breadcrumbs/script.html')).read()
-
-domain, _ = load_domain_args()
-
 
 def render_breadcrumbs(template_name, replacements):
     return render_breadcrumbs_from(templates_root, template_name, replacements)

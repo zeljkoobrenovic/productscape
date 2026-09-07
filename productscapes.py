@@ -13,6 +13,7 @@ import sys
 TOOLKIT = Path(__file__).resolve().parent
 sys.path.insert(0, str(TOOLKIT / '_wiring'))
 from domain_paths import discover_domain_dirs, resolve_domain_dir
+import project_paths
 
 SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality')
 REQUIRED = (
@@ -42,6 +43,7 @@ def revision():
 
 def run_script(relative, arguments, project, quiet=False):
     env = dict(os.environ, PRODUCTSCAPES_PROJECT=str(project), PYTHONDONTWRITEBYTECODE='1', PYTHONUTF8='1')
+    env.update(project_paths.render_environment())
     result = subprocess.run([sys.executable, str(TOOLKIT / relative), *arguments], cwd=project,
                             env=env, capture_output=quiet, text=True)
     if result.returncode:
@@ -52,6 +54,8 @@ def run_script(relative, arguments, project, quiet=False):
 
 def selected_domains(args):
     root = args.project / '_config/product-domains'
+    if getattr(args, 'domain_dir', None) is not None:
+        return [resolve_domain_dir(args.domain_dir.name, domains_root=root)]
     if args.domain:
         return [resolve_domain_dir(args.domain, domains_root=root)]
     if not args.all:
@@ -135,13 +139,11 @@ def new_domain(args):
 def build(args):
     domains = selected_domains(args)
     preflight(domains)
-    docs = args.project / 'docs'
-    if docs.is_symlink():
-        raise ValueError('The docs output directory must not be a symlink.')
-    for domain in domains:
-        target = docs / domain.parent.name / domain.name
-        if not target.resolve().is_relative_to(docs.resolve()):
-            raise ValueError(f'Output resolves outside docs/: {target}')
+    docs = project_paths.DOCS_ROOT
+    sections = ['product-deployments' if section == 'products' else section for section in args.sections or SECTIONS]
+    if (args.project / '_config/start-packages').is_dir():
+        sections.append('start')
+    project_paths.validate_render_paths(domains, [*sections, 'catalog', 'evidence-explorer'])
     failures = []
     for domain in domains:
         config = read_json(domain / 'start/config.json')
@@ -166,10 +168,11 @@ def build(args):
 
 
 def build_index(project):
+    docs = project_paths.DOCS_ROOT
     groups = {}
     for domain in discover_domain_dirs(project / '_config/product-domains'):
         page = Path(domain.parent.name) / domain.name / 'start/index.html'
-        if not (project / 'docs' / page).is_file():
+        if not (docs / page).is_file():
             continue
         config = read_json(domain / 'start/config.json')
         groups.setdefault(domain.parent.name, []).append(
@@ -177,9 +180,9 @@ def build_index(project):
             html.escape(config['name']) + '</a><p>' + html.escape(config['description']) + '</p></li>')
     content = '\n'.join('<section><h2>' + html.escape(group.replace('-', ' ').title()) +
                         '</h2><ul>' + '\n'.join(cards) + '</ul></section>' for group, cards in sorted(groups.items()))
-    template = (TOOLKIT / '_templates/catalog/index.html').read_text(encoding='utf-8')
-    (project / 'docs/index.html').write_text(template.replace('${domains}', content), encoding='utf-8')
-    (project / 'docs/.nojekyll').touch()
+    template = (project_paths.TEMPLATES_ROOT / 'catalog/index.html').read_text(encoding='utf-8')
+    (docs / 'index.html').write_text(template.replace('${domains}', content), encoding='utf-8')
+    (docs / '.nojekyll').touch()
 
 
 def validate(args):
@@ -227,7 +230,7 @@ def main():
     parser.add_argument('--version', action='version', version='productscapes 0.1.0')
     commands = parser.add_subparsers(dest='command', required=True)
     common = argparse.ArgumentParser(add_help=False)
-    common.add_argument('--project', type=Path, default=Path(os.environ.get('PRODUCTSCAPES_PROJECT', Path.cwd())),
+    common.add_argument('--project', type=Path,
                         help='Data project root (default: current directory).')
     new = commands.add_parser('new', parents=[common], help='Create an empty, buildable domain scaffold.')
     new.add_argument('domain')
@@ -242,6 +245,8 @@ def main():
         selection.add_argument('--all', action='store_true')
         command_parser.set_defaults(action=action)
         if command == 'build':
+            selection.add_argument('--domain-dir', type=Path, help='Domain folder path; selects its data project automatically.')
+            project_paths.add_render_arguments(command_parser)
             command_parser.add_argument('--sections', nargs='+', choices=SECTIONS)
             command_parser.add_argument('--verbose', action='store_true')
         else:
@@ -267,8 +272,14 @@ def main():
     media.add_argument('--skip-existing', action='store_true')
     media.set_defaults(action=images)
     args = parser.parse_args()
-    args.project = args.project.expanduser().resolve()
     try:
+        if args.command == 'build':
+            args.domain, args.domain_dir = project_paths.domain_selection(args.domain, args.domain_dir)
+        args.project = project_paths.resolve_project_root(args.project, getattr(args, 'domain_dir', None))
+        project_paths.configure(args.project, **{
+            name: getattr(args, name, None)
+            for name in ('output_dir', 'templates_dir', 'navigation_file', 'shared_config_dir')
+        })
         args.action(args)
     except (OSError, ValueError, RuntimeError) as error:
         parser.exit(1, f'Error: {error}\n')

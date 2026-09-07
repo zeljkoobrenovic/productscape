@@ -7,12 +7,12 @@ from pathlib import Path
 # Resolve repo root relative to this script (_wiring/evidence-explorer/).
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, os.path.join(REPO_ROOT, '_wiring'))
-from project_paths import PROJECT_ROOT, DOCS_ROOT
+from project_paths import PROJECT_ROOT, DOCS_ROOT, TEMPLATES_ROOT
 
 EVIDENCE_JSON = PROJECT_ROOT / '_evidence/database/all-evidence.json'
 EVIDENCE_ICONS = PROJECT_ROOT / '_evidence/icons'
-TEMPLATE = os.path.join(REPO_ROOT, '_templates', 'evidence-explorer', 'index.html')
-TEMPLATE_ICONS = os.path.join(REPO_ROOT, '_templates', 'evidence-explorer', 'icons')
+TEMPLATE = str(TEMPLATES_ROOT / 'evidence-explorer/index.html')
+TEMPLATE_ICONS = str(TEMPLATES_ROOT / 'evidence-explorer/icons')
 OUTPUT_DIR = str(DOCS_ROOT / 'evidence-explorer')
 
 # Icons are copied next to the page under ./icons/, so the page references them

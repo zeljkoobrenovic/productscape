@@ -14,12 +14,12 @@ from generator_common import (
 
 from generator_common import template_path
 
+domain, site_config = load_domain_args()
 enter_docs_root()
 
 date_string = today_string()
 
 templates_root = template_path('customers')
-domain, site_config = load_domain_args()
 
 tabs_style = open(templates_root + '../_imports/tabs/style.html').read()
 tokens_style = open(templates_root + '../_imports/tokens/style.html').read()

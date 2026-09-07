@@ -7,6 +7,7 @@ from generator_common import domain_docs_path, domain_source_path, copy_icons, e
 
 from generator_common import template_path
 
+domain, _ = load_domain_args()
 enter_docs_root()
 
 date_string = today_string()
@@ -15,7 +16,6 @@ from generator_common import navigation_path
 apps = json.load(open(navigation_path()))
 
 templates_root = template_path('start')
-domain, _ = load_domain_args()
 
 tabs_style = open(templates_root + '../_imports/tabs/style.html').read()
 tokens_style = open(templates_root + '../_imports/tokens/style.html').read()

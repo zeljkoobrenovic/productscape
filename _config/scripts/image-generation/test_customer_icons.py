@@ -222,29 +222,74 @@ class CustomerIconTests(unittest.TestCase):
             self.assertEqual(before, self.snapshot())
             self.assertTrue(all(call.kwargs["path"].name.startswith("kpi-") for call in other_icons.call_args_list))
 
-    def test_wrapper_runs_portraits_once_and_preserves_lightweight_flags(self):
+    def make_wrapper_fixture(self):
+        domain_dir = self.root / "data project/_config/product-domains/example-group/alpha"
+        domain_dir.mkdir(parents=True)
         stub_dir = self.root / "bin"
         stub_dir.mkdir()
         stub = stub_dir / "python3"
-        stub.write_text(f"#!{sys.executable}\nimport json, sys\nprint(json.dumps(sys.argv[1:]))\n")
+        stub.write_text(
+            f"#!{sys.executable}\n"
+            "import json, sys\n"
+            "from pathlib import Path\n"
+            "args = sys.argv[1:]\n"
+            "sys.path.insert(0, str(Path(args[0]).resolve().parents[3] / '_wiring'))\n"
+            "from domain_paths import resolve_domain_dir\n"
+            "domain = resolve_domain_dir(args[args.index('--domain') + 1])\n"
+            "print(json.dumps({'args': args, 'domain_dir': str(domain)}))\n"
+        )
         stub.chmod(0o755)
-        env = {**os.environ, "PATH": str(stub_dir) + os.pathsep + os.environ.get("PATH", "")}
-        result = subprocess.run(
-            ["bash", str(Path(__file__).parent / "run.sh"), "alpha", "--lightweight"],
-            env=env, check=True, capture_output=True, text=True,
-        )
-        calls = [json.loads(line) for line in result.stdout.splitlines()]
-        self.assertEqual(len(calls), 5)
-        self.assertEqual(Path(calls[0][0]).name, "generate_customer_icons_gemini_nanobanana_api.py")
-        self.assertEqual([index for index, call in enumerate(calls) if "--lightweight" in call], [1, 2])
-        self.assertFalse(any("generate_missing_domain_icons" in call[0] for call in calls))
-        full = subprocess.run(
-            ["bash", str(Path(__file__).parent / "run.sh"), "alpha"],
-            env=env, check=True, capture_output=True, text=True,
-        )
-        full_calls = [json.loads(line) for line in full.stdout.splitlines()]
-        self.assertEqual(len(full_calls), 6)
-        self.assertIn("--skip-customer-icons", full_calls[-1])
+        env = {
+            **os.environ,
+            "PATH": str(stub_dir) + os.pathsep + os.environ.get("PATH", ""),
+            "PRODUCTSCAPES_PROJECT": str(self.root / "wrong project"),
+            "PYTHONDONTWRITEBYTECODE": "1",
+        }
+        return domain_dir, env
+
+    def test_wrapper_resolves_folder_paths_and_preserves_lightweight_flags(self):
+        domain_dir, env = self.make_wrapper_fixture()
+        for domain_arg in (str(domain_dir) + "/", os.path.relpath(domain_dir, self.root)):
+            for lightweight in (True, False):
+                with self.subTest(domain=domain_arg, lightweight=lightweight):
+                    flags = ["--lightweight"] if lightweight else []
+                    result = subprocess.run(
+                        ["bash", str(Path(__file__).resolve().parent / "run.sh"), domain_arg, *flags],
+                        cwd=self.root, env=env, check=True, capture_output=True, text=True,
+                    )
+                    records = [json.loads(line) for line in result.stdout.splitlines()]
+                    calls = [record["args"] for record in records]
+                    self.assertEqual(len(calls), 5 if lightweight else 6)
+                    self.assertTrue(all(record["domain_dir"] == str(domain_dir.resolve()) for record in records))
+                    self.assertEqual(Path(calls[0][0]).name, "generate_customer_icons_gemini_nanobanana_api.py")
+                    self.assertEqual(
+                        [index for index, call in enumerate(calls) if "--lightweight" in call],
+                        [1, 2] if lightweight else [],
+                    )
+                    if lightweight:
+                        self.assertFalse(any("generate_missing_domain_icons" in call[0] for call in calls))
+                    else:
+                        self.assertIn("--skip-customer-icons", calls[-1])
+
+    def test_wrapper_rejects_invalid_folders_and_arguments_before_running_generators(self):
+        domain_dir, env = self.make_wrapper_fixture()
+        for arguments, message in (
+            ([], "Usage:"),
+            (["alpha"], "Domain folder does not exist:"),
+            ([str(domain_dir / "missing")], "Domain folder does not exist:"),
+            ([str(self.path)], "Domain folder does not exist:"),
+            ([str(domain_dir.parent)], "Expected a domain folder"),
+            ([str(domain_dir), "--unknown"], "Usage:"),
+            ([str(domain_dir), "--lightweight", "extra"], "Usage:"),
+        ):
+            with self.subTest(arguments=arguments):
+                result = subprocess.run(
+                    ["bash", str(Path(__file__).resolve().parent / "run.sh"), *arguments],
+                    cwd=self.root, env=env, capture_output=True, text=True,
+                )
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn(message, result.stderr)
+                self.assertEqual(result.stdout, "")
 
 
 if __name__ == "__main__":

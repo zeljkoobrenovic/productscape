@@ -2,7 +2,7 @@
 
 This folder contains source-first scripts that scan product-domain models, generate supporting imagery, save files beside the relevant source JSON, and update media references when needed.
 
-Sources live in `_config/product-domains/<group>/<domain-id>/`. All image scripts discover groups through `_wiring/domain_paths.py`; group names can change without script edits. `--domain` and the wrapper take the bare domain ID, for example `--domain ride-sharing-marketplace`. Domain IDs must be unique across groups. The shared root-level `start/` folder is excluded from discovery.
+Sources live in `_config/product-domains/<group>/<domain-id>/`. All image scripts discover groups through `_wiring/domain_paths.py`; group names can change without script edits. Python scripts take the bare domain ID with `--domain`, for example `--domain ride-sharing-marketplace`. The `run.sh` wrapper takes a path to the domain folder and selects its data project automatically. Domain IDs must be unique across groups. The shared root-level `start/` folder is excluded from discovery.
 
 ## What It Does
 
@@ -39,7 +39,7 @@ For a separate data repository, prefer its launcher:
 python3 productscapes.py images my-domain --dry-run --lightweight
 ```
 
-For the direct commands below, run from the toolkit root and set
+For the direct Python commands below, run from the toolkit root and set
 `PRODUCTSCAPES_PROJECT` to the absolute path of your data repository. Named example
 domains are available in productscape-examples; substitute your own domain ID.
 
@@ -94,13 +94,17 @@ python3 _config/scripts/image-generation/generate_journey_images_gemini_nanobana
 python3 _config/scripts/image-generation/generate_journey_images_gemini_nanobanana_api.py --domain food-and-nutrition-product-platform --overwrite
 ```
 
-Run all image generators for a domain, using lightweight JTBD and journey generation:
+Run the image generators for a domain folder, using lightweight JTBD and journey generation:
 
 ```bash
-_config/scripts/image-generation/run.sh food-and-nutrition-product-platform --lightweight
+bash _config/scripts/image-generation/run.sh \
+  ../productscape-examples/_config/product-domains/vortexcp/solvari-home-improvement-marketplace \
+  --lightweight
 ```
 
-The wrapper runs customer portraits first, then JTBD, journeys, relations, remaining domain icons, and residuality images. Lightweight mode still includes one portrait per customer. The general `generate_missing_domain_icons_gemini_nanobanana_api.py` script delegates customer work to the same portrait generator when run directly; the wrapper passes `--skip-customer-icons` to avoid repeating that work. KPI, start-page, brick, and capability icons retain their existing monochrome style.
+The folder can be an absolute path or a path relative to the directory where you run the command. It must identify `<project>/_config/product-domains/<group>/<domain-id>/`. The wrapper derives `PRODUCTSCAPES_PROJECT` from that folder, overriding any inherited value, so it works from another directory without a separate project setting. Missing folders and paths outside this layout are rejected before any generator runs.
+
+The wrapper runs customer portraits first, then JTBD, journeys, relations, and residuality images. Full runs also generate the remaining domain icons. Lightweight mode still includes one portrait per customer. The general `generate_missing_domain_icons_gemini_nanobanana_api.py` script delegates customer work to the same portrait generator when run directly; the wrapper passes `--skip-customer-icons` to avoid repeating that work. KPI, start-page, brick, and capability icons retain their existing monochrome style.
 
 Residuality stressor images via Gemini Nano Banana API:
 

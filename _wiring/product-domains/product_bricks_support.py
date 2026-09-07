@@ -840,17 +840,17 @@ def normalize_product_brick_root_groups(root_groups):
     return normalize_brick_dependencies(normalized_root_groups)
 
 
-_SHARED_CONFIG_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '_config', '_shared')
 _shared_model_cache = {}
 
 
 def _shared_model(filename):
     """Shared enum/definition defaults hoisted out of the per-domain files.
     Domain files may still declare these keys to override the shared model."""
-    if filename not in _shared_model_cache:
-        shared_path = os.path.join(_SHARED_CONFIG_ROOT, filename)
-        _shared_model_cache[filename] = json.load(open(shared_path)) if os.path.exists(shared_path) else {}
-    return _shared_model_cache[filename]
+    from project_paths import SHARED_CONFIG_ROOT
+    shared_path = SHARED_CONFIG_ROOT / filename
+    if shared_path not in _shared_model_cache:
+        _shared_model_cache[shared_path] = json.loads(shared_path.read_text(encoding='utf-8')) if shared_path.is_file() else {}
+    return _shared_model_cache[shared_path]
 
 
 def apply_shared_defaults(target, filename, keys):

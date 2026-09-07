@@ -24,12 +24,12 @@ from product_bricks_support import (
 
 from generator_common import template_path
 
+domain, _ = load_domain_args()
 enter_docs_root()
 
 date_string = today_string()
 
 templates_root = template_path('teams')
-domain, _ = load_domain_args()
 
 common_style = open(templates_root + '../_imports/common/style.html').read()
 tabs_style = open(templates_root + '../_imports/tabs/style.html').read()

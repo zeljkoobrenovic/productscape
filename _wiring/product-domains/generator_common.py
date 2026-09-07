@@ -1,9 +1,8 @@
 """Shared helpers for the product-domain doc generators.
 
-Every generator chdirs into docs/ (enter_docs_root) and works
-with repo-relative template paths from there. Source-domain paths are resolved
-through the shared group discovery helper. Keep rendering behavior stable since
-generated output is diffed against the committed docs tree.
+Generators resolve command-line inputs before entering the output directory.
+Sources and templates use absolute paths; published paths retain the grouped
+site layout.
 """
 import datetime
 import json
@@ -13,8 +12,9 @@ import sys
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 sys.path.insert(0, os.path.join(REPO_ROOT, '_wiring'))
-from domain_paths import domain_docs_path, domain_source_path
-from project_paths import DOCS_ROOT, template_path, navigation_path
+import domain_paths
+import project_paths
+from project_paths import template_path, navigation_path
 
 CUSTOMER_ICON_MAP = {
     'house-search': 'seeker.png',
@@ -24,9 +24,17 @@ CUSTOMER_ICON_MAP = {
 
 
 def enter_docs_root():
-    docs_root = str(DOCS_ROOT)
+    docs_root = str(project_paths.DOCS_ROOT)
     os.makedirs(docs_root, exist_ok=True)
     os.chdir(docs_root)
+
+
+def domain_source_path(domain_id, *parts):
+    return domain_paths.domain_source_path(domain_id, *parts, domains_root=project_paths.DOMAINS_ROOT)
+
+
+def domain_docs_path(domain_id, *parts):
+    return domain_paths.domain_docs_path(domain_id, *parts, domains_root=project_paths.DOMAINS_ROOT)
 
 
 def today_string():

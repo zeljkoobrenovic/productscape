@@ -17,8 +17,6 @@ from generator_common import (
     today_string,
 )
 
-TEMPLATES_ROOT = template_path('residuality')
-
 TARGET_TYPES = {
     'vision',
     'job',
@@ -390,6 +388,7 @@ def json_for_script(value):
 
 
 def create_docs(domain):
+    templates_root = template_path('residuality')
     domain_id = domain['id']
     model = load_domain_json(domain_id, 'residuality/residuality.json', default_model(domain))
     customers = load_domain_json(domain_id, 'customers/customers.json', [])
@@ -404,20 +403,20 @@ def create_docs(domain):
 
     docs_folder = domain_docs_path(domain_id, 'residuality') + '/'
     reset_output_folder(docs_folder, 'icons', 'media')
-    copy_icons(TEMPLATES_ROOT + 'icons', docs_folder)
+    copy_icons(templates_root + 'icons', docs_folder)
     copy_files_into(
         domain_source_path(domain_id, 'residuality', 'media'),
         os.path.join(docs_folder, 'media'),
     )
 
-    template = open(TEMPLATES_ROOT + 'index.html').read()
-    app_style = open(TEMPLATES_ROOT + 'style.css').read()
-    app_script = open(TEMPLATES_ROOT + 'app.js').read()
-    tokens_style = read_import(TEMPLATES_ROOT, 'tokens/style')
-    tabs_style = read_import(TEMPLATES_ROOT, 'tabs/style')
-    breadcrumbs_style = read_import(TEMPLATES_ROOT, 'breadcrumbs/style')
-    breadcrumbs_script = read_import(TEMPLATES_ROOT, 'breadcrumbs/script')
-    breadcrumbs = render_breadcrumbs(TEMPLATES_ROOT, 'index_breadcrumbs.json', {
+    template = open(templates_root + 'index.html').read()
+    app_style = open(templates_root + 'style.css').read()
+    app_script = open(templates_root + 'app.js').read()
+    tokens_style = read_import(templates_root, 'tokens/style')
+    tabs_style = read_import(templates_root, 'tabs/style')
+    breadcrumbs_style = read_import(templates_root, 'breadcrumbs/style')
+    breadcrumbs_script = read_import(templates_root, 'breadcrumbs/script')
+    breadcrumbs = render_breadcrumbs(templates_root, 'index_breadcrumbs.json', {
         'domain_name': domain['name'],
     })
     rendered = (
@@ -443,8 +442,8 @@ def create_docs(domain):
 
 
 def main():
-    enter_docs_root()
     domain, _ = load_domain_args()
+    enter_docs_root()
     create_docs(domain)
 
 

@@ -21,12 +21,12 @@ from product_bricks_support import (
 
 from generator_common import template_path
 
+domain, site_config = load_domain_args()
 enter_docs_root()
 
 date_string = today_string()
 
 root_templates = template_path('product-bricks')
-domain, site_config = load_domain_args()
 
 common_style = open(root_templates + '../_imports/common/style.html').read()
 

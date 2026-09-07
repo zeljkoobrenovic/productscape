@@ -7,12 +7,12 @@ from urllib.parse import urlparse
 
 from domain_paths import discover_domain_dirs, domain_docs_path
 
-from project_paths import TOOLKIT_ROOT as REPO_ROOT, PROJECT_ROOT, DOCS_ROOT
+from project_paths import PROJECT_ROOT, DOCS_ROOT, TEMPLATES_ROOT as SITE_TEMPLATES_ROOT
 
 DATE_STRING = datetime.date.today().strftime('%Y-%m-%d')
 
-TEMPLATES_ROOT = REPO_ROOT / '_templates' / 'start'
-IMPORTS_ROOT = REPO_ROOT / '_templates' / '_imports'
+TEMPLATES_ROOT = SITE_TEMPLATES_ROOT / 'start'
+IMPORTS_ROOT = SITE_TEMPLATES_ROOT / '_imports'
 PACKAGES_ROOT = PROJECT_ROOT / '_config' / 'start-packages'
 DOCS_PACKAGES_ROOT = DOCS_ROOT / 'start-packages'
 
@@ -153,7 +153,7 @@ def main():
         rendered_packages.append(render_package(package_folder, template))
 
     for package_title_value, output_folder in rendered_packages:
-        print(f'Generated {package_title_value}: {output_folder.relative_to(PROJECT_ROOT)}')
+        print(f'Generated {package_title_value}: {output_folder}')
 
 
 if __name__ == '__main__':

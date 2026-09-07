@@ -60,6 +60,7 @@ by the examples' `productscapes.json` before building.
 ## Commands
 
 Run commands from the data project root, or use `--project PATH` from the toolkit.
+For builds, a domain folder path also selects its data project automatically.
 
 | Command | Purpose |
 | --- | --- |
@@ -70,6 +71,7 @@ Run commands from the data project root, or use `--project PATH` from the toolki
 | `validate --all` | Check all registered domains |
 | `check-kpis ID` | Check KPI pyramid structure and metric references |
 | `build ID` | Generate all pages for one domain |
+| `build --domain-dir PATH --output-dir PATH` | Build a domain folder into an explicit site output root |
 | `build --all` | Generate all registered domains and a site catalog |
 | `build ID --sections customers teams` | Rebuild selected sections |
 | `skills --target .agents/skills` | Copy portable authoring/review skills into the project |
@@ -121,9 +123,12 @@ After verifying an upgrade, update the project's recorded revision to the new
 toolkit commit. Pin checks compare Git HEAD; use a clean toolkit checkout for a
 reproducible build. Generated pages also include the build date.
 
-For direct low-level generators, set `PRODUCTSCAPES_PROJECT` to the absolute data
-project path. Without it, direct generators use the toolkit checkout as their
-project. The public CLI sets this variable automatically.
+Domain page generators accept `--domain-dir PATH`, or a domain ID with
+`--project PATH`. The `build` command and domain generators also accept `--output-dir`,
+`--templates-dir`, `--navigation-file`, and `--shared-config-dir`; relative paths
+are resolved from the caller's working directory. See the
+[domain generator commands](_wiring/product-domains/README.md) for complete
+examples and metadata overrides.
 
 ## Optional images
 
