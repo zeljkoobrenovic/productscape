@@ -1,0 +1,46 @@
+{
+  "$comment": "product-deployments/deployment.json — channel groups, sub-channels, deployed bricks",
+  "type": "object",
+  "required": [
+    "channels"
+  ],
+  "properties": {
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "groupId"
+        ],
+        "properties": {
+          "groupId": {
+            "type": "string"
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "subChannelId"
+              ],
+              "properties": {
+                "subChannelId": {
+                  "type": "string"
+                },
+                "deployedBricks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "brickId"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

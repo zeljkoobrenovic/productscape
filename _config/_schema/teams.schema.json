@@ -1,0 +1,86 @@
+{
+  "$comment": "teams/teams.json — org design and team groups",
+  "type": "object",
+  "required": [
+    "groups"
+  ],
+  "properties": {
+    "orgDesign": {
+      "type": "object"
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "teams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "brickDependencies": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "brickId"
+                  ]
+                }
+              },
+              "customerDependencies": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "customerId"
+                  ]
+                }
+              },
+              "otherTeamDependencies": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "teamId"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

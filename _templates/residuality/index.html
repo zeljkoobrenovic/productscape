@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Explore how ${domain_name} should change when customers, markets, regulation, operations, or competitors change unexpectedly.">
+    <link rel="icon" href="icons/logo.png" type="image/png">
+    <title>Residuality Stress Test (${domain_name})</title>
+    ${breadcrumbs_style}
+    ${tokens_style}
+    ${tabs_style}
+    <style>${app_style}</style>
+    <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
+</head>
+<body>
+<nav class="site-nav" aria-label="Productscape sections">
+    <a href="../start/index.html">Home</a>
+    <a href="../customers/index.html">Customers</a>
+    <a href="../product-deployments/index.html">Products</a>
+    <a href="../product-bricks/index.html">Bricks &amp; Streams</a>
+    <a href="../teams/index.html">Teams</a>
+    <a href="../competition/index.html">Competition</a>
+    <a href="../residuality/index.html" class="active" aria-current="page">Stress Test</a>
+</nav>
+<div id="breadcrumbs"></div>
+
+<main>
+    <header class="hero">
+        <img class="hero-mark" src="icons/logo.png" alt="Residuality Stress Test">
+        <div class="hero-copy">
+            <div class="eyebrow">Designing for unexpected change</div>
+            <h1>Residuality Stress Test</h1>
+            <p class="hero-description">Ask a practical question: if the world around this product changed in a way we did not plan for, what would the business need to do and what would we need to change? Each test connects an outside change to a business response, a concrete product or architecture change, and the affected parts of the productscape.</p>
+            <p class="hero-scope"><strong>Focus for this domain:</strong> <span id="heroDescription"></span></p>
+            <div class="principle-row" aria-label="Method principles">
+                <span>Explore before judging likelihood</span>
+                <span>Keep every credible outside change</span>
+                <span>Describe the business situation first</span>
+                <span>Reuse earlier changes when they already work</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="metric-grid" id="metricGrid" aria-label="Stress-test summary"></section>
+
+    <nav class="view-tabs tab" aria-label="Residuality views">
+        <button type="button" class="view-tab tablinks active" data-view="analysis" aria-selected="true">Stress tests</button>
+        <button type="button" class="view-tab tablinks" data-view="impacts" aria-selected="false">What changes</button>
+        <button type="button" class="view-tab tablinks" data-view="contagion" aria-selected="false">Shared impact</button>
+        <button type="button" class="view-tab tablinks" data-view="method" aria-selected="false">How it works</button>
+    </nav>
+
+    <section class="filter-bar" id="filterBar" aria-label="Filter stress tests">
+        <label class="search-field">
+            <span class="sr-only">Search outside changes, responses, and affected items</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+            <input id="searchInput" type="search" placeholder="Search outside changes, business responses, design changes, or impacts…">
+        </label>
+        <label>
+            <span class="sr-only">Filter by business context</span>
+            <select id="groupFilter"><option value="">All business contexts</option></select>
+        </label>
+        <label>
+            <span class="sr-only">Filter by change status</span>
+            <select id="statusFilter">
+                <option value="">All change states</option>
+                <option value="candidate">Proposed change</option>
+                <option value="integrated">Built into the design</option>
+                <option value="already-survived">Already handled</option>
+            </select>
+        </label>
+        <button type="button" class="secondary-button" id="clearFilters">Clear</button>
+        <div class="filter-summary" id="filterSummary" aria-live="polite"></div>
+    </section>
+
+    <section class="view active" id="view-analysis" data-view-panel="analysis">
+        <div class="architecture-grid" id="architectureGrid"></div>
+        <div class="empty-state" id="analysisEmpty" hidden></div>
+        <div class="stressor-list" id="stressorList"></div>
+    </section>
+
+    <section class="view" id="view-impacts" data-view-panel="impacts" hidden>
+        <div class="section-heading">
+            <div>
+                <div class="eyebrow">See exactly what would be different</div>
+                <h2>Changes across the productscape</h2>
+                <p>Each affected item includes a concrete change. Strategy &amp; Vision covers customer goals, journeys, measures, and competitors; Implementation covers products, streams, and bricks; Organization covers teams and ownership.</p>
+            </div>
+        </div>
+        <div class="impact-summary" id="impactSummary"></div>
+        <div class="empty-state" id="impactEmpty" hidden></div>
+        <div class="impact-groups" id="impactGroups"></div>
+    </section>
+
+    <section class="view" id="view-contagion" data-view-panel="contagion" hidden>
+        <div class="section-heading split-heading">
+            <div>
+                <div class="eyebrow">Where one outside change affects several parts</div>
+                <h2>Shared-impact matrix</h2>
+                <p>A marked cell means that the outside change affects that part of the productscape. Several marks in one row show work that must be coordinated. A column with many marks needs extra attention; a column with none may simply need more tests.</p>
+            </div>
+            <div class="matrix-type-picker" id="matrixTypePicker" aria-label="Matrix target type"></div>
+        </div>
+        <div class="matrix-callouts" id="matrixCallouts"></div>
+        <div class="matrix-scroll" id="matrixContainer"></div>
+        <div class="empty-state" id="matrixEmpty" hidden></div>
+        <div class="trigger-grid" id="triggerGrid"></div>
+    </section>
+
+    <section class="view" id="view-method" data-view-panel="method" hidden>
+        <div class="method-intro">
+            <div>
+                <div class="eyebrow">Based on Barry M. O'Reilly's Residuality Theory</div>
+                <h2>A practical way to design for unexpected change</h2>
+                <p>Start with the simplest design that works today. Introduce an outside change, describe the new situation it creates for the business, decide how the business would respond, and record the concrete change needed in the product or architecture. Repeat until new situations can often be handled by changes already made.</p>
+            </div>
+            <a class="source-link" id="sourceLink" target="_blank" rel="noopener noreferrer">Open source ↗</a>
+        </div>
+
+        <div class="concept-chain" aria-label="Residuality method">
+            <article><span>1</span><h3>Current design</h3><p>The simplest product and architecture that solve today’s stated problem—the happy path.</p></article>
+            <div class="chain-arrow" aria-hidden="true">→</div>
+            <article><span>2</span><h3>Outside change</h3><p>A credible change in customers, markets, regulation, society, operations, or competition. Residuality calls this a stressor.</p></article>
+            <div class="chain-arrow" aria-hidden="true">→</div>
+            <article><span>3</span><h3>New business situation</h3><p>The situation the business would repeatedly face after that change. The theory calls this an attractor.</p></article>
+            <div class="chain-arrow" aria-hidden="true">→</div>
+            <article><span>4</span><h3>Required change</h3><p>The specific product or architecture change needed to handle the new situation. The theory calls this a residue.</p></article>
+            <div class="chain-arrow" aria-hidden="true">→</div>
+            <article><span>5</span><h3>More adaptable design</h3><p>The current design plus the useful changes, combined into one coherent product and architecture.</p></article>
+        </div>
+
+        <div class="method-grid">
+            <article class="method-card">
+                <div class="method-number">01</div>
+                <h3>Explore outside changes</h3>
+                <p>Try varied changes in the business environment. For each one, record what would reveal it, the situation it creates, the business response, and the exact product or architecture change.</p>
+                <ul>
+                    <li>Use changes in customers, markets, regulation, economics, politics, society, and the physical world.</li>
+                    <li>If the list only says that servers or databases fail, the business context is missing.</li>
+                    <li>Do not score likelihood; first use the change to expose assumptions and weak points.</li>
+                    <li>Keep unusual but credible changes long enough to learn from them.</li>
+                    <li>Discuss cost only after the design weakness and possible change are understood.</li>
+                </ul>
+            </article>
+            <article class="method-card">
+                <div class="method-number">02</div>
+                <h3>Find shared impact</h3>
+                <p>Map each outside change to the productscape items it affects. This shows where strategy, implementation, and organization must change together.</p>
+                <ul>
+                    <li>Many marks in one row: the change crosses several boundaries and needs coordination.</li>
+                    <li>Many marks in one column: that item carries many responsibilities or is central to adaptation.</li>
+                    <li>Columns that change together may share an unclear boundary or duplicated responsibility.</li>
+                    <li>No marks in a column means “not tested yet,” not “safe.”</li>
+                </ul>
+            </article>
+        </div>
+
+        <div class="distinction-card">
+            <h3>An outside change is not just a renamed risk</h3>
+            <div class="distinction-grid">
+                <div><strong>Requirement</strong><span>What someone says the product should do today. The stress test asks how that need might change.</span></div>
+                <div><strong>Risk</strong><span>Usually estimates likelihood and impact. Here, likelihood is deliberately left aside so the design can be explored first.</span></div>
+                <div><strong>Scenario</strong><span>A planned story about a possible future. An outside change can be stranger; it only needs a credible path to a meaningful business situation.</span></div>
+                <div><strong>Technical failure drill</strong><span>Checks a known system failure such as a database outage. This exercise starts with a change outside the technical system.</span></div>
+            </div>
+        </div>
+
+        <div class="index-card">
+            <div>
+                <div class="eyebrow">Optional evidence check · use only new tests</div>
+                <h3>Did the design become more adaptable?</h3>
+                <p>After making the changes, test both the original and adapted designs against a fresh set of outside changes. X is the number handled by the original design, Y by the adapted design, and S is the number of new tests.</p>
+            </div>
+            <div class="formula">R<sub>i</sub> = <span>(Y − X)</span> / S</div>
+            <div class="index-result" id="methodIndexResult"></div>
+        </div>
+
+        <footer>
+            <span>Generated ${date}</span>
+            <span id="sourceCitation"></span>
+        </footer>
+    </section>
+</main>
+
+<script>
+    window.RESIDUALITY_MODEL = ${model};
+    window.RESIDUALITY_CATALOG = ${catalog};
+</script>
+<script>${app_script}</script>
+${breadcrumbs_script}
+</body>
+</html>

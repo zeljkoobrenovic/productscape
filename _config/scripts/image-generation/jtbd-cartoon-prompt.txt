@@ -1,0 +1,72 @@
+Your task:
+For the customer object, analyze every item in `jobsToBeDone` and create the remaining visual prompt package for each one.
+
+For each job to be done, produce the following sections in this exact order:
+
+## 3. Visual narrative
+Create a short visual narrative for the full job:
+- Headline
+- Supporting subhead
+- Core message
+- Suggested visual tone
+
+## 4. Step-by-step cartoon / infographic definitions
+For each step in `steps`, create:
+- Step title
+- Cartoon definition: describe the scene
+- Visual cues: objects, interfaces, people, symbols, dashboards, maps, devices, or workflows to show
+- Message: what this panel should communicate
+- Caption: concise sentence based on the step description
+- Capability mapping: list the capabilities needed for that step and how they should appear visually
+
+## 5. Simple panel storyline
+Create a concise storyline for the full job:
+- one line per step
+- written like panel labels in a storyboard
+- short and memorable
+
+## 6. Flatter enterprise infographic prompts
+Create:
+### A. Combined prompt
+A single polished image-generation prompt for the whole job as one connected infographic.
+
+### B. Step prompts
+One polished image-generation prompt for each individual step.
+
+Requirements for all prompts:
+- style: flat enterprise infographic
+- polished civic-tech / enterprise strategy slide aesthetic
+- flat vector shapes
+- minimal shading
+- clean composition
+- simple professional characters
+- soft blue, teal, and restrained orange accents unless the customer context suggests another palette
+- clean dashboards, signage, maps, charts, and system flows
+- clear title ribbon and supporting caption
+- keep visuals grounded in the job-to-be-done and capabilities
+- do not invent random scenes unrelated to the job
+- make the prompts image-generator ready
+
+## 7. Recommended headline set
+Provide:
+- Main headline
+- One subhead per step
+- Optional bottom-strip KPI language using relevant KPIs from `kpiPyramids`
+
+## 8. Generation sequence
+At the end of each job section, include:
+- “Reply with ‘flatter enterprise infographic style’ to generate the combined version.”
+- “Reply with ‘proceed with step 1’ to generate the first panel.”
+- If there are more than 2 steps, continue the sequence for all steps.
+
+Important instructions:
+- Do not repeat customer summary or job summary sections.
+- Start directly at section 3.
+- Be specific, visual, and business-relevant.
+- Use the customer’s actual language wherever possible.
+- Preserve the strategic meaning of the job and each step.
+- Make the outputs suitable for executive storytelling, product strategy, and visual concept generation.
+- Avoid generic marketing fluff.
+- Keep each step visually distinct but stylistically consistent.
+- Where possible, use capabilities, KPIs, and outcomes as visual anchors.
+- If there are multiple jobsToBeDone, repeat the full structure for each job separa

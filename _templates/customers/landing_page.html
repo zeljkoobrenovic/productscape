@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>${customer_name}</title>
+    ${common_style}
+    ${tokens_style}
+    ${tabs_style}
+    ${breadcrumbs_style}
+    <style>
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .review-image {
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+            width: 400px;
+            margin: 10px;
+            padding: 10px
+        }
+
+        .review-image-small {
+            width: 100%;
+        }
+
+        .tab-image {
+            width: 24px;
+            margin: 2px;
+            padding: 2px;
+        }
+
+        .tab-image-selected {
+            width: 24px;
+            margin: 2px;
+            padding: 2px;
+            border-bottom: 4px solid blue;
+        }
+
+        .group {
+            margin-top: 2px;
+            margin-bottom: 40px;
+            padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+            overflow: hidden;
+            border: 1px solid lightgrey;
+            vertical-align: top;
+        }
+
+        .kpi {
+            margin-top: -3px;
+            margin-bottom: -6px;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+            overflow: hidden;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            vertical-align: top;
+            display: block;
+            background-color: #f0f0f0;
+        }
+
+        .step {
+            margin: 12px;
+            padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+            overflow: hidden;
+            border: 1px solid lightgrey;
+            display: inline-block;
+            width: 280px;
+            vertical-align: top;
+        }
+
+        .outcome {
+            margin: 12px;
+            padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+            overflow: hidden;
+            border: 3px solid blue;
+            vertical-align: top;
+            font-size: 130%;
+            display: inline-block;
+        }
+
+        .repo {
+            overflow: hidden;
+            margin: 10px;
+            padding: 7px;
+            border-radius: 6px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+        }
+
+        .aws {
+            overflow: hidden;
+            margin: 10px;
+            padding: 7px;
+            border-radius: 6px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+        }
+
+
+        .person {
+            text-align: center;
+            padding: 6px;
+            margin: 4px;
+            display: inline-block;
+            font-size: 11px;
+            width: 110px;
+            overflow: hidden;
+            white-space: nowrap;
+            vertical-align: top;
+        }
+
+        .docs {
+            text-align: center;
+            padding: 6px;
+            margin: 4px;
+            display: inline-block;
+            font-size: 11px;
+            width: 110px;
+            overflow: hidden;
+            vertical-align: top;
+        }
+
+        .team {
+            text-align: center;
+            padding: 6px;
+            margin: 8px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 13px;
+            width: 110px;
+            overflow: hidden;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+            white-space: nowrap;
+            vertical-align: top;
+            border: 2px solid grey;
+            height: 140px;
+        }
+
+        .legacy-team {
+            text-align: center;
+            padding: 6px;
+            margin: 8px;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 13px;
+            width: 110px;
+            overflow: hidden;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+            white-space: nowrap;
+            vertical-align: top;
+            border: 2px dashed grey;
+            height: 140px;
+        }
+
+        .number {
+            display: inline-block;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+            margin: 8px;
+            width: 100px;
+        }
+
+        .dependency-icon {
+            height: 32px;
+            margin-left: 8px;
+            margin-right: 8px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+            padding: 4px;
+            border-radius: 5px;
+        }
+
+        .kpi-title {
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .kpi-icon {
+            height: 50px;
+            padding: 0;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 40px 0px 40px 80px;
+            border-color: transparent transparent transparent black;
+            transform: rotate(0deg);
+        }
+
+        .activity-summary {
+            margin: 14px 0;
+            padding: 14px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+        }
+
+        .activity-stat {
+            display: inline-block;
+            margin-right: 18px;
+            min-width: 110px;
+        }
+
+        .activity-stat-value {
+            font-size: 30px;
+            color: #1d4ed8;
+        }
+
+        .activity-stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .activity-table th,
+        .activity-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .activity-table th {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .activity-link {
+            color: #1d4ed8;
+            font-weight: bold;
+        }
+
+        .activity-muted {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .activity-block {
+            margin-bottom: 8px;
+            padding-left: 10px;
+            border-left: 3px solid #d7dce1;
+        }
+
+        .activity-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 8px 8px 0;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background-color: #eef2f6;
+            font-size: 12px;
+        }
+
+        .activity-pill-highlight {
+            background-color: #dbeafe;
+            border: 1px solid #60a5fa;
+        }
+
+        .activity-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            border-radius: 4px;
+            border: 1px solid #d7dce1;
+            background-color: white;
+        }
+
+        .activity-icon-round {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .jobs-view-toggle {
+            display: inline-flex;
+            gap: 8px;
+            margin: 0 0 18px 24px;
+            padding: 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            background-color: #f8fafc;
+        }
+
+        .jobs-view-button {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 16px;
+            background-color: transparent;
+            color: #475569;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .jobs-view-button-active {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .job-summary-table {
+            margin: 24px;
+            font-size: 120%;
+        }
+
+        .job-detail-group {
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        .job-detail-hero {
+            width: 900px;
+            object-fit: contain;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        }
+
+        .job-step-image {
+            max-width: 240px;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        }
+
+        .comic-job {
+            margin: 20px 24px 36px 24px;
+            padding: 24px;
+            border: 1px solid #d1d5db;
+            border-radius: 16px;
+            background-color: #f8fafc;
+            box-shadow: rgba(0, 0, 0, 0.08) 0px 8px 24px;
+        }
+
+        .comic-job-title {
+            color: #2563eb;
+            font-size: 220%;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .comic-job-media {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .comic-job-media img {
+            width: min(100%, 900px);
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 12px;
+            background: white;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 8px 28px;
+        }
+
+        .comic-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .comic-step {
+            width: 500px;
+            max-width: 100%;
+            padding: 18px;
+            border: 1px solid #d7dce1;
+            border-radius: 14px;
+            background-color: white;
+            box-shadow: rgba(0, 0, 0, 0.08) 0px 6px 18px;
+        }
+
+        .comic-step-title {
+            color: #2563eb;
+            font-size: 135%;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .comic-step-media {
+            text-align: center;
+        }
+
+        .comic-step-media img {
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #f8fafc;
+            box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 14px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+</head>
+<body onload="initTab('HomeTab')" onhashchange="initTab('HomeTab')">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../../start/index.html">Home</a><a href="../../customers/index.html" class="active">Customers</a><a href="../../product-deployments/index.html">Products</a><a href="../../product-bricks/index.html">Bricks &amp; Streams</a><a href="../../teams/index.html">Teams</a><a href="../../competition/index.html">Competition</a><a href="../../residuality/index.html">Stress Test</a></nav>
+<div id="breadcrumbs" style="margin-left: 18px"></div>
+${tabs_script}
+
+<script>
+    const config = ${config};
+    const all_customers = ${all_customers};
+    const customer = ${customer};
+    // id -> 'stream' | 'brick'; lets JTBD tiles link to the owning page.
+    const streamBrickKinds = ${stream_brick_kinds};
+    function streamBrickHref(id) {
+        const kind = streamBrickKinds[id];
+        if (kind === 'stream') return '../../product-bricks/stream_pages/' + id + '.html';
+        if (kind === 'brick') return '../../product-bricks/landing_pages/' + id + '.html';
+        return null;
+    }
+    const customerInsights = ${customer_insights};
+</script>
+<div id="Navigation"></div>
+<div style="margin: 20px">
+    <div id="Header"></div>
+
+    <div style="margin: 0; margin-top: 12px">
+        <div class="tab">
+            <button class="tablinks active" id="tab_HomeTab" onclick="openTab('HomeTab')">Home</button>
+            <button class="tablinks" id="tab_JobsTab" onclick="openTab('JobsTab')">Jobs To Be Done</button>
+            <button class="tablinks" id="tab_JourneysTab" onclick="openTab('JourneysTab')">Journeys</button>
+            <button class="tablinks" id="tab_KPITab" onclick="openTab('KPITab')">KPIs</button>
+            <button class="tablinks" id="tab_RoadmapTab" onclick="openTab('RoadmapTab')">Product Vision</button>
+            <button class="tablinks" id="tab_InsightsTab" onclick="openTab('InsightsTab')">Insights</button>
+        </div>
+
+        <div id="tab_content_HomeTab" class="tabcontent" style="padding: 10px">
+            <div id="Home"></div>
+        </div>
+        <div id="tab_content_JobsTab" class="tabcontent" style="padding: 10px;">
+            <div id="Jobs"></div>
+        </div>
+        <div id="tab_content_JourneysTab" class="tabcontent" style="padding: 10px;">
+            <div id="Journeys"></div>
+        </div>
+        <div id="tab_content_KPITab" class="tabcontent" style="padding: 10px;">
+            <div id="KPI"></div>
+        </div>
+        <div id="tab_content_RoadmapTab" class="tabcontent" style="padding: 10px;">
+            <div id="Roadmap"></div>
+        </div>
+        <div id="tab_content_InsightsTab" class="tabcontent" style="padding: 10px;">
+            <div id="Insights"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addNavigation() {
+        let html = '';
+        html += '<div style="margin: 4px 20px 10px 20px; font-size: 85%; color: black">';
+        let prev_domain = all_customers[0].domain;
+        all_customers.forEach(per => {
+            if (prev_domain.toLowerCase() !== per.domain.toLowerCase()) {
+                prev_domain = per.domain;
+                html += '<div style="margin-top: 5px; margin-left: 4px; vertical-align: top; display: inline-block; border-left: 2px solid lightgrey; height: 30px;">&nbsp;</div>';
+            }
+            html += '<a href="' + per.id + '.html">';
+            const tabClass = per.id === customer.id ? 'tab-image-selected' : 'tab-image';
+            html += '<img src="../icons/' + per.icon + '" style="" class="' + tabClass + '" onerror="this.onerror=null;this.src=\'../icons/customer.png\'">';
+            html += '</a>';
+        });
+        html += '</div>';
+
+        document.getElementById('Navigation').innerHTML = html;
+    }
+
+    addNavigation();
+
+    function addHeader() {
+        let html = '';
+
+        html += '<table>';
+        html += '<tr>';
+        html += '<td>';
+        html += '<div>';
+        html += '<img src="../icons/' + customer.icon + '" style="width: 200px" onerror="this.onerror=null;this.src=\'../icons/customer.png\'">';
+        html += '</div>';
+        html += '</td>';
+        html += '<td style="vertical-align: top">';
+        html += '<div style="margin-left: 20px; font-size: 90%; color: grey; vertical-align: top">';
+        html += '<div class="page-type-badge" style="">Customer</div>';
+        html += '</div>';
+        html += '<div style="font-size: 50px; margin-left: 20px">';
+        html += customer.name;
+        html += '</div>';
+        html += '<div style="font-size: 16px; margin-left: 20px; color: grey; margin-top: 3px">';
+        html += customer.description ? customer.description : '';
+        html += '</div>';
+        html += '</td>';
+        html += '</tr>';
+        html += '</table>';
+
+        document.getElementById('Header').innerHTML = html;
+    }
+
+    function addHome() {
+        let html = '';
+
+        html += '<div class="doc" style="text-align: center; margin-bottom: 22px; margin-left: 24px">';
+        html += '<table>';
+        html += '<tr>';
+        html += '<td style="width: 48px; vertical-align: top">';
+        html += '<img src="../icons/care.png" style="height: 64px; margin: 8px">';
+        html += '<div style="color: darkgreen; font-size: 90%">care about</div>';
+        html += '<div style="color: black; font-size: 100%; width: 240px">';
+        customer.careAbout.forEach(item => {
+            html += '<div style="background-color: rgba(0, 100, 0, 0.1); margin-top: 4px; margin-bottom: 4px; padding: 6px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += item;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+
+        html += '<td style="width: 22px"></td>';
+
+        html += '<td style="width: 24px; vertical-align: top">';
+        html += '<img src="../icons/win.png" style="height: 64px; margin: 8px">';
+
+        html += '<div style="color: blue; font-size: 90%">wins them</div>';
+        html += '<div style="color: black; font-size: 100%; width: 240px">';
+        customer.winsThem.forEach(item => {
+            html += '<div style="background-color: rgba(0, 0, 100, 0.1); margin-top: 4px; margin-bottom: 4px; padding: 6px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += item;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '<td style="width: 22px"></td>';
+        html += '<td style="width: 24px; vertical-align: top">';
+        html += '<img src="../icons/fear.png" style="height: 64px; margin: 8px">';
+
+        html += '<div style="color: crimson; font-size: 90%">their fear</div>';
+        html += '<div style="color: black; font-size: 100%; width: 240px">';
+        customer.theirFear.forEach(item => {
+            html += '<div style="background-color: rgba(100, 0, 0, 0.1); margin-top: 4px; margin-bottom: 4px; padding: 6px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += item;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '</tr>';
+        html += '</table>';
+
+        html += '</div>';
+
+        document.getElementById('Home').innerHTML = html;
+    }
+
+    function jobNamesForCustomer(jobIds) {
+        const jobs = (customer.jobsToBeDone || []);
+        const jobLookup = {};
+        jobs.forEach(job => {
+            if (job.id) {
+                jobLookup[job.id] = job.name || job.id;
+            }
+        });
+        return (jobIds || []).map(jobId => jobLookup[jobId] || jobId);
+    }
+
+    function kpiNamesForLink(link) {
+        // Prefer stable KPI IDs resolved against this customer's KPI pyramid; fall back to legacy display-name kpis.
+        if (link && link.kpiIds && link.kpiIds.length) {
+            const lookup = {};
+            function walk(node) {
+                if (!node) return;
+                if (node.id) {
+                    lookup[node.id] = node.name || node.id;
+                }
+                (node.branches || []).forEach(walk);
+                (node.children || []).forEach(walk);
+            }
+            const pyramids = (customer || {}).kpiPyramids || {};
+            ['customerOutcomes', 'businessOutcomes'].forEach(key => {
+                const pyramid = pyramids[key];
+                if (!pyramid) return;
+                walk(pyramid.top);
+                (pyramid.branches || []).forEach(walk);
+            });
+            return link.kpiIds.map(kpiId => lookup[kpiId] || kpiId);
+        }
+        return (link && link.kpis) || [];
+    }
+
+    function addInsights() {
+        let html = '';
+
+        html += '<div style="margin: 24px">';
+
+        if (!customerInsights || customerInsights.length === 0) {
+            html += '<div class="group">No customer-linked insights defined for this domain yet.</div>';
+        } else {
+            customerInsights.forEach(insight => {
+                html += '<div class="group" style="width: 250px; display: inline-block; margin: 8px; padding: 16px; background: white">';
+                html += '<div style="font-size: 150%; color: #1d4ed8; margin-bottom: 8px">' + escapeHtml(insight.title) + '</div>';
+                html += '<div style="margin-bottom: 10px">' + escapeHtml(insight.summary) + '</div>';
+                if (insight.implication) {
+                    html += '<div style="margin-bottom: 10px"><b>Product implication:</b> ' + escapeHtml(insight.implication) + '</div>';
+                }
+                if (insight.link) {
+                    if (insight.link.jobIds && insight.link.jobIds.length) {
+                        html += '<div style="font-size: 13px; color: #4b5563; margin-bottom: 4px"><b>Jobs:</b> ' + escapeHtml(jobNamesForCustomer(insight.link.jobIds).join(', ')) + '</div>';
+                    }
+                    const kpiNames = kpiNamesForLink(insight.link);
+                    if (kpiNames.length) {
+                        html += '<div style="font-size: 13px; color: #4b5563; margin-bottom: 4px"><b>KPIs:</b> ' + escapeHtml(kpiNames.join(', ')) + '</div>';
+                    }
+                }
+                if (insight.tags && insight.tags.length) {
+                    html += '<div style="margin-top: 8px; margin-bottom: 10px">';
+                    insight.tags.forEach(tag => {
+                        html += '<span style="display:inline-block; margin:0 8px 6px 0; padding:4px 10px; border-radius:999px; background:#eef2f6; font-size:12px">' + escapeHtml(tag) + '</span>';
+                    });
+                    html += '</div>';
+                }
+                if (insight.sources && insight.sources.length) {
+                    html += '<div style="margin-top: 8px">';
+                    html += '<div style="font-size: 13px; color: #6b7280; margin-bottom: 4px">Sources</div>';
+                    insight.sources.forEach(source => {
+                        html += '<div style="font-size: 13px; margin-bottom: 4px">';
+                        html += '<a class="activity-link" target="_blank" href="' + escapeHtml(source.url) + '">' + escapeHtml(source.title) + '</a>';
+                        html += '<span class="activity-muted"> (' + escapeHtml(source.publisher || '') + (source.date ? ', ' + escapeHtml(source.date) : '') + ')</span>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+        }
+        html += '</div>';
+
+        document.getElementById('Insights').innerHTML = html;
+    }
+
+    function addJBTD() {
+        let html = '';
+
+        html += '<div class="jobs-view-toggle">';
+        html += '<button id="jobs-view-default" class="jobs-view-button jobs-view-button-active" onclick="setJobsView(\'default\')">Default View</button>';
+        html += '<button id="jobs-view-comic" class="jobs-view-button" onclick="setJobsView(\'comic\')">Comic View</button>';
+        html += '</div>';
+
+        html += '<div id="jobs-default-view">';
+        html += '<table class="job-summary-table">';
+        html += '<tr style="font-size: 80%; color: grey">';
+        html += '<td>Job</td>';
+        html += '<td></td>';
+        html += '<td>Outcome</td>';
+        html += '</tr>';
+
+        customer.jobsToBeDone.forEach(job => {
+            html += '<tr>';
+            html += '<td>';
+            html += '<div style="text-align: left">';
+            html += '<div style="font-size: 100%; color: blue;">' + job.name + '</div>';
+            html += '</div>';
+            html += '<ul style="font-size: 70%">';
+            job.steps.forEach(step => {
+                html += '<li>';
+                html += step.step;
+                html += '</li>';
+            });
+            html += '</ul>';
+            html += '</td>';
+            html += '<td style="width: 20px">';
+            html += '</td>';
+            html += '<td style="vertical-align: top">';
+            html += '<div style="">' + job.outcome + '</div>';
+            html += '<div style="font-size: 80%; color: grey; margin-top: 8px;">(' + job.whatItIs + ')</div>';
+            html += '</td>';
+            html += '</tr>';
+        });
+        html += '</table>';
+
+        html += '<div style="height: 50px"></div>';
+
+        customer.jobsToBeDone.forEach(job => {
+            html += '<div class="group job-detail-group">';
+            if (job.media) {
+                html += '<div style="margin-top: 10px">';
+                job.media.forEach(item => {
+                    html += '<div style="display: inline-block">';
+                    const src = '../' + item.src;
+                    html += '<a target="_blank" href="' + src + '">';
+                    html += '<img src="' + src + '" class="job-detail-hero">';
+                    html += '</a>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+            html += '<div style="font-size: 210%; color: blue; margin-bottom: 12px">' + job.name + '</div>';
+            html += '<div style="">' + job.whatItIs + '</div>';
+            html += '<div style="text-align: center; margin-top: 24px; background-color: white" class="group">';
+            html += '<div  class="outcome">';
+            html += '<div style="">' + job.outcome + '</div>';
+            html += '</div>';
+            html += '<div style=""><img src="../icons/up.png" style="width: 60px"></div>';
+            job.steps.forEach(step => {
+                html += '<div style="" class="step">';
+                html += '<div style="color: blue; font-size: 140%; margin-bottom: 20px">' + step.step + '</div>';
+                html += '<div style="">' + step.description + '</div>';
+                html += '<div style="margin-top: 14px">';
+                html += '<table>';
+                (step.streamsNeeded || []).forEach(stream => {
+                    html += '<tr>';
+                    html += '<td style=" text-align: left; padding: 0;">';
+                    html += '<div style="margin: 6px; border: 1px dashed lightgrey; padding: 6px; ">';
+                    html += '<div style="color: blue; font-size: 80%; white-space: nowrap; overflow: hidden; ">';
+                    const streamHref = streamBrickHref(stream.id);
+                    html += streamHref
+                        ? '<a href="' + streamHref + '" style="color: blue; text-decoration: none;">' + stream.name + '</a>'
+                        : stream.name;
+                    html += '</div>';
+                    html += '<div style="font-size: 70%;">';
+                    html += stream.howItSupports;
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+                (step.bricksNeeded || []).forEach(brick => {
+                    html += '<tr>';
+                    html += '<td style=" text-align: left; padding: 0;">';
+                    html += '<div style="margin: 6px 6px 6px 24px; border-left: 2px solid #eee; padding: 2px 6px; ">';
+                    html += '<div style="color: #888; font-size: 70%; white-space: nowrap; overflow: hidden; ">';
+                    const brickHref = streamBrickHref(brick.id);
+                    html += '&#8627; ' + (brickHref
+                        ? '<a href="' + brickHref + '" style="color: #888; text-decoration: none;">' + brick.name + '</a>'
+                        : brick.name);
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+                html += '</table>';
+                html += '</div>';
+                if (step.media) {
+                    html += '<div style="margin-top: 10px">';
+                    step.media.forEach(item => {
+                        html += '<div style="display: inline-block">';
+                        const src = '../' + item.src;
+                        html += '<a target="_blank" href="' + src + '">';
+                        html += '<img src="' + src + '" class="job-step-image">';
+                        html += '</a>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+        });
+        html += '</div>';
+
+        html += '<div id="jobs-comic-view" style="display: none">';
+        customer.jobsToBeDone.forEach(job => {
+            html += '<div class="comic-job">';
+            html += '<div class="comic-job-title">' + job.name + '</div>';
+            if (job.media) {
+                html += '<div class="comic-job-media">';
+                job.media.forEach(item => {
+                    const src = '../' + item.src;
+                    html += '<a target="_blank" href="' + src + '">';
+                    html += '<img src="' + src + '">';
+                    html += '</a>';
+                });
+                html += '</div>';
+            }
+            html += '<div class="comic-steps">';
+            job.steps.forEach(step => {
+                html += '<div class="comic-step">';
+                html += '<div class="comic-step-title">' + step.step + '</div>';
+                if (step.media) {
+                    html += '<div class="comic-step-media">';
+                    step.media.forEach(item => {
+                        const src = '../' + item.src;
+                        html += '<a target="_blank" href="' + src + '">';
+                        html += '<img src="' + src + '">';
+                        html += '</a>';
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+        });
+        html += '</div>';
+
+        document.getElementById('Jobs').innerHTML = html;
+        setJobsView('default');
+    }
+
+    function addJourneys() {
+        const journeys = customer.customerJourneyStories || [];
+        if (!journeys.length) {
+            document.getElementById('Journeys').innerHTML = '<div class="group">No customer journeys defined for this customer yet.</div>';
+            return;
+        }
+
+        let html = '';
+        html += '<div class="jobs-view-toggle">';
+        html += '<button id="journeys-view-default" class="jobs-view-button jobs-view-button-active" onclick="setJourneysView(\'default\')">Default View</button>';
+        html += '<button id="journeys-view-comic" class="jobs-view-button" onclick="setJourneysView(\'comic\')">Comics View</button>';
+        html += '</div>';
+
+        html += '<div id="journeys-default-view">';
+        html += '<div style="height: 50px"></div>';
+
+        journeys.forEach(journey => {
+            const stages = journey.stages || [];
+            html += '<div class="group job-detail-group">';
+            if (journey.media && journey.media.length) {
+                html += '<div style="margin-top: 10px">';
+                journey.media.forEach(item => {
+                    if (!item || !item.src) {
+                        return;
+                    }
+                    html += '<div style="display: inline-block">';
+                    const src = '../' + item.src;
+                    html += '<a target="_blank" href="' + src + '">';
+                    html += '<img src="' + src + '" class="job-detail-hero">';
+                    html += '</a>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+            html += '<div style="font-size: 210%; color: blue; margin-bottom: 12px">' + escapeHtml(journey.name || '') + '</div>';
+            if (journey.summary) {
+                html += '<div style="margin-bottom: 12px">' + escapeHtml(journey.summary) + '</div>';
+            }
+            if (journey.linkedJobIds && journey.linkedJobIds.length) {
+                html += '<div style="font-size: 80%; color: grey; margin-top: 8px;">Linked jobs: ' + escapeHtml(journey.linkedJobIds.join(', ')) + '</div>';
+            }
+            html += '<div style="text-align: center; margin-top: 24px; background-color: white" class="group">';
+            stages.forEach((stage, index) => {
+                html += '<div class="step">';
+                html += '<div style="font-size: 70%; color: grey; margin-bottom: 8px">Stage ' + (index + 1) + '</div>';
+                html += '<div style="font-size: 130%; color: blue; margin-bottom: 12px">' + escapeHtml(stage.stage || '') + '</div>';
+                if (stage.media && stage.media.length) {
+                    stage.media.forEach(item => {
+                        if (!item || !item.src) {
+                            return;
+                        }
+                        const src = '../' + item.src;
+                        html += '<div style="margin-bottom: 12px">';
+                        html += '<a target="_blank" href="' + src + '">';
+                        html += '<img src="' + src + '" class="review-image-small">';
+                        html += '</a>';
+                        html += '</div>';
+                    });
+                }
+                if (stage.narrative) {
+                    html += '<div style="font-size: 90%; margin-top: 8px">' + escapeHtml(stage.narrative) + '</div>';
+                }
+                html += '</div>';
+                if (index < stages.length - 1) {
+                    html += '<div style="display: inline-block; vertical-align: top; margin-top: 120px;">';
+                    html += '<img src="../icons/right.png" style="width: 32px; margin-left: 8px; margin-right: 8px">';
+                    html += '</div>';
+                }
+            });
+            html += '</div>';
+            html += '</div>';
+        });
+
+        html += '</div>';
+
+        html += '<div id="journeys-comic-view" style="display: none">';
+        journeys.forEach(journey => {
+            const stages = journey.stages || [];
+            html += '<div class="comic-job">';
+            html += '<div class="comic-job-title">' + escapeHtml(journey.name || '') + '</div>';
+            if (journey.summary) {
+                html += '<div style="text-align: center; margin-bottom: 16px">' + escapeHtml(journey.summary) + '</div>';
+            }
+            if (journey.media && journey.media.length) {
+                html += '<div class="comic-job-media">';
+                journey.media.forEach(item => {
+                    if (!item || !item.src) {
+                        return;
+                    }
+                    const src = '../' + item.src;
+                    html += '<a target="_blank" href="' + src + '">';
+                    html += '<img src="' + src + '">';
+                    html += '</a>';
+                });
+                html += '</div>';
+            }
+            html += '<div class="comic-steps">';
+            stages.forEach((stage, index) => {
+                html += '<div class="comic-step">';
+                html += '<div style="font-size: 75%; color: grey; margin-bottom: 8px; text-align: center">Stage ' + (index + 1) + '</div>';
+                html += '<div class="comic-step-title">' + escapeHtml(stage.stage || '') + '</div>';
+                if (stage.media && stage.media.length) {
+                    html += '<div class="comic-step-media">';
+                    stage.media.forEach(item => {
+                        if (!item || !item.src) {
+                            return;
+                        }
+                        const src = '../' + item.src;
+                        html += '<a target="_blank" href="' + src + '">';
+                        html += '<img src="' + src + '">';
+                        html += '</a>';
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+            html += '</div>';
+        });
+        html += '</div>';
+
+        document.getElementById('Journeys').innerHTML = html;
+        setJourneysView('default');
+    }
+
+    function setJobsView(view) {
+        const defaultView = document.getElementById('jobs-default-view');
+        const comicView = document.getElementById('jobs-comic-view');
+        const defaultButton = document.getElementById('jobs-view-default');
+        const comicButton = document.getElementById('jobs-view-comic');
+
+        if (!defaultView || !comicView || !defaultButton || !comicButton) {
+            return;
+        }
+
+        const showComic = view === 'comic';
+        defaultView.style.display = showComic ? 'none' : 'block';
+        comicView.style.display = showComic ? 'block' : 'none';
+
+        defaultButton.className = 'jobs-view-button' + (showComic ? '' : ' jobs-view-button-active');
+        comicButton.className = 'jobs-view-button' + (showComic ? ' jobs-view-button-active' : '');
+    }
+
+    function setJourneysView(view) {
+        const defaultView = document.getElementById('journeys-default-view');
+        const comicView = document.getElementById('journeys-comic-view');
+        const defaultButton = document.getElementById('journeys-view-default');
+        const comicButton = document.getElementById('journeys-view-comic');
+
+        if (!defaultView || !comicView || !defaultButton || !comicButton) {
+            return;
+        }
+
+        const showComic = view === 'comic';
+        defaultView.style.display = showComic ? 'none' : 'block';
+        comicView.style.display = showComic ? 'block' : 'none';
+
+        defaultButton.className = 'jobs-view-button' + (showComic ? '' : ' jobs-view-button-active');
+        comicButton.className = 'jobs-view-button' + (showComic ? ' jobs-view-button-active' : '');
+    }
+
+    function kpiIconFile(node) {
+        return (node && node.icon) ? node.icon : 'kpi.png';
+    }
+
+    function kpiCurrentValue(node) {
+        if (!node || !node.currentValue) {
+            return '';
+        }
+        return String(node.currentValue) + (node.unit ? ' (' + String(node.unit) + ')' : '');
+    }
+
+    function kpiValueStatusLabel(node) {
+        if (!node || !node.valueStatus) {
+            return '';
+        }
+        const labels = {
+            example: 'illustrative example',
+            baseline: 'measured baseline',
+            target: 'target',
+            placeholder: 'placeholder'
+        };
+        return labels[node.valueStatus] || String(node.valueStatus);
+    }
+
+    function renderKpiMeta(node) {
+        let html = '';
+        if (node && node.currentValue) {
+            const statusLabel = kpiValueStatusLabel(node);
+            const valueLabel = (node.valueStatus === 'target') ? 'Target:' : 'Current:';
+            html += '<div style="font-size: 80%; color: #1d4ed8; margin-top: 4px"><b>' + valueLabel + '</b> ' + escapeHtml(kpiCurrentValue(node));
+            if (statusLabel) {
+                html += ' <span style="color:#888; font-style: italic;">(' + escapeHtml(statusLabel) + ')</span>';
+            }
+            html += '</div>';
+        }
+        if (node && node.target) {
+            html += '<div style="font-size: 80%; color: #047857; margin-top: 2px"><b>Target:</b> ' + escapeHtml(String(node.target)) + '</div>';
+        }
+        if (node && node.guardrailRole) {
+            html += '<div style="font-size: 78%; color: #b91c1c; margin-top: 2px"><b>Guardrail:</b> ' + escapeHtml(String(node.guardrailRole)) + '</div>';
+        }
+        if (node && (node.period || node.calculationMethod || node.valueSource)) {
+            html += '<div style="font-size: 76%; color: #6b7280; margin-top: 3px">';
+            if (node.period) { html += '<div><b>Period:</b> ' + escapeHtml(String(node.period)) + '</div>'; }
+            if (node.calculationMethod) { html += '<div><b>How measured:</b> ' + escapeHtml(String(node.calculationMethod)) + '</div>'; }
+            if (node.valueSource) { html += '<div><b>Value source:</b> ' + escapeHtml(String(node.valueSource)) + '</div>'; }
+            html += '</div>';
+        }
+        if (node && node.guardrail) {
+            html += '<div style="font-size: 76%; color: #7c3aed; margin-top: 3px"><b>Composite guardrail:</b> ' + escapeHtml(String(node.guardrail)) + '</div>';
+        }
+        if (node && node.link) {
+            html += '<div style="font-size: 80%; margin-top: 4px"><a target="_blank" rel="noopener noreferrer" href="' + escapeHtml(node.link) + '">' + escapeHtml(node.linkLabel || 'Open link') + '</a></div>';
+        }
+        return html;
+    }
+
+    function renderKpiTitle(node) {
+        let html = '';
+        html += '<div class="kpi-title">';
+        html += '<div><img class="kpi-icon" src="../icons/' + escapeHtml(kpiIconFile(node)) + '" onerror="this.onerror=null;this.src=\'../icons/kpi.png\'"></div>';
+        html += '<div><div>' + escapeHtml(node.name || '') + '</div>' + renderKpiMeta(node) + '</div>';
+        html += '</div>';
+        return html;
+    }
+
+    function addKPIChild(child, color) {
+        let html = '';
+
+        html += '<div style="text-align: center; vertical-align: top">';
+        html += '|';
+        html += '<table style="vertical-align: top; width: 100%; max-width:800px">';
+        html += '<tr>';
+        html += '<td colspan="' + (child.children ? child.children.length : 1) + '" style="vertical-align: top">';
+        html += '<div class="kpi" style="background-color: ' + color + '">';
+        html += '<div style="font-size: 100%; padding: 4px">';
+        html += renderKpiTitle(child);
+        html += '</div>';
+        html += '<div style="background-color: white; font-size: 80%; padding: 2px">';
+        html += child.description ? child.description : '&nbsp;';
+        html += '</div>';
+        html += '</div>';
+        html += '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        if (child.children) {
+            child.children.forEach(c => {
+                html += '<td style="vertical-align: top">';
+                html += addKPIChild(c, color);
+                html += '</td>';
+            });
+        }
+        html += '</tr>';
+        html += '</table>';
+        html += '</div>';
+
+        return html;
+    }
+
+    function addKPIPyramid(pyramid, color) {
+        let html = '';
+
+        html += '<div style="text-align: center; vertical-align: top">';
+        html += '<table style="vertical-align: top">';
+        html += '<tr>';
+        html += '<td colspan="' + pyramid.branches.length + '">';
+        html += '<div class="kpi" style="background-color: ' + color + '">';
+        html += '<div style="font-size: 120%; padding: 4px">';
+        html += renderKpiTitle(pyramid.top);
+        html += '</div>';
+        html += '<div style="background-color: white; font-size: 80%; padding: 2px">';
+        html += pyramid.top.description ? pyramid.top.description : '&nbsp;';
+        html += '</div>';
+        html += '</div>';
+        html += '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        pyramid.branches.forEach(c => {
+            html += '<td style="vertical-align: top;">';
+            html += addKPIChild(c, color);
+            html += '</td>';
+        });
+        html += '</tr>';
+        html += '</table>';
+        html += '</div>';
+
+        return html;
+    }
+
+    function addKPIs() {
+        if (!customer.kpiPyramids || !customer.kpiPyramids.customerOutcomes || !customer.kpiPyramids.businessOutcomes) {
+            document.getElementById('KPI').innerHTML = '<div class="group">No KPI pyramid defined for this customer yet.</div>';
+            return;
+        }
+
+        let html = '';
+
+        html += '<div class="group">';
+        html += '<div style="text-align: left; font-size: 150%; color: blue; margin-bottom: 12px">Customer Outcomes</div>'
+        html += addKPIPyramid(customer.kpiPyramids.customerOutcomes, '#C0F3EA');
+        html += '</div>'
+
+        html += '<div class="group">'
+        html += '<div style="text-align: left; font-size: 150%; color: blue; margin-bottom: 12px">Business Outcomes</div>'
+        html += addKPIPyramid(customer.kpiPyramids.businessOutcomes, '#B7BDF7');
+        html += '</div>'
+
+        document.getElementById('KPI').innerHTML = html;
+    }
+
+    function normalizeRoadmapKpi(value, supportingKey) {
+        if (!value) {
+            return {northStar: '', [supportingKey]: []};
+        }
+        if (typeof value === 'string') {
+            return {northStar: value, [supportingKey]: []};
+        }
+        const normalized = Object.assign({}, value);
+        normalized.northStar = normalized.northStar || normalized.name || '';
+        normalized[supportingKey] = normalized[supportingKey] || [];
+        return normalized;
+    }
+
+    function renderCategoryGate(horizon) {
+        if (!horizon || !horizon.categoryGate) {
+            return '';
+        }
+        return '<div style="padding: 8px 10px; margin: 4px 6px; font-size: 72%; background:#fff8e1; border-left: 3px solid #f0b429; color:#5c4400">'
+            + '<b>Category gate:</b> ' + horizon.categoryGate + '</div>';
+    }
+
+    function addProductVision() {
+        if (!customer.productStrategy || !customer.productStrategy.timeHorizons) {
+            document.getElementById('Roadmap').innerHTML = '<div class="group">No product vision defined for this customer yet.</div>';
+            return;
+        }
+
+        let strategy = customer.productStrategy;
+        const timeHorizon1 = strategy.timeHorizons['year1'];
+        const timeHorizon2 = strategy.timeHorizons['year3'];
+        const timeHorizon3 = strategy.timeHorizons['year5'];
+        const businessKpi1 = normalizeRoadmapKpi(timeHorizon1.businessKPI, 'revenueStreams');
+        const businessKpi2 = normalizeRoadmapKpi(timeHorizon2.businessKPI, 'revenueStreams');
+        const businessKpi3 = normalizeRoadmapKpi(timeHorizon3.businessKPI, 'revenueStreams');
+        const customerKpi1 = normalizeRoadmapKpi(timeHorizon1.customerKPI, 'supporting');
+        const customerKpi2 = normalizeRoadmapKpi(timeHorizon2.customerKPI, 'supporting');
+        const customerKpi3 = normalizeRoadmapKpi(timeHorizon3.customerKPI, 'supporting');
+
+        let html = '';
+
+        html += '<div class="group">';
+        html += '<table>';
+        html += '<tr style="font-size: 80%; color: #a0a0a0">';
+        html += '<td></td>';
+        html += '<td style="padding-left: 16px">Year 1</td>';
+        html += '<td style="padding-left: 16px">Year 3</td>';
+        html += '<td style="padding-left: 16px">Year 5</td>';
+        html += '<td style="padding-left: 16px"></td>';
+        html += '<td rowspan="10" style="width: 280px; vertical-align: top; padding: 20px">';
+        html += '<div style="font-size: 120%; margin-bottom: 24px">';
+        html += 'VISION';
+        html += '</div>';
+        html += '<div style="font-size: 120%">';
+        html += '<img src="../icons/' + customer.icon + '" style="width: 100px" onerror="this.onerror=null;this.src=\'../icons/customer.png\'">';
+        html += '</div>';
+        html += '<div style="font-size: 140%">';
+        html += strategy.vision;
+        html += '</div>';
+        html += '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td></td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + timeHorizon1.productTheme + '</div>';
+        html += '<div style="padding: 10px; font-size: 80%">' + timeHorizon1.focus + '</div>';
+        html += renderCategoryGate(timeHorizon1);
+        html += '</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + timeHorizon2.productTheme + '</div>';
+        html += '<div style="padding: 10px; font-size: 80%">' + timeHorizon2.focus + '</div>';
+        html += renderCategoryGate(timeHorizon2);
+        html += '</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + timeHorizon3.productTheme + '</div>';
+        html += '<div style="padding: 10px; font-size: 80%">' + timeHorizon3.focus + '</div>';
+        html += renderCategoryGate(timeHorizon3);
+        html += '</td>';
+        html += '<td style="padding: 10px"></td>';
+        html += '<td>';
+        html += '</td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td></td>';
+        html += '<td style="height: 40px; background-color: black; color: #f0f0f0; padding: 20px">Milestone 1 (Year 1)</td>';
+        html += '<td style="height: 40px; background-color: black; color: #f0f0f0; padding: 20px">Milestone 2 (Year 3)</td>';
+        html += '<td style="height: 40px; background-color: black; color: #f0f0f0; padding: 20px">Milestone 3 (Year 5)</td>';
+        html += '<td><div class="triangle"></div></td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td>Business<br>KPI</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + businessKpi1.northStar + '</div>';
+        html += '<div style="padding: 6px; width: 250px; font-size: 80%">';
+        businessKpi1.revenueStreams.forEach(stream => {
+            html += '<div style="margin-top: 2px; margin-bottom: 2px; padding: 2px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += stream;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + businessKpi2.northStar + '</div>';
+        html += '<div style="padding: 6px; width: 250px; font-size: 80%">';
+        businessKpi2.revenueStreams.forEach(stream => {
+            html += '<div style="margin-top: 2px; margin-bottom: 2px; padding: 2px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += stream;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + businessKpi3.northStar + '</div>';
+        html += '<div style="padding: 6px; width: 250px; font-size: 80%">';
+        businessKpi3.revenueStreams.forEach(stream => {
+            html += '<div style="margin-top: 2px; margin-bottom: 2px; padding: 2px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += stream;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '<td></td>';
+        html += '</tr>';
+        html += '<tr>';
+        html += '<td>Customer<br>KPI</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + customerKpi1.northStar + '</div>';
+        html += '<div style="padding: 6px; width: 250px; font-size: 80%">';
+        customerKpi1.supporting.forEach(stream => {
+            html += '<div style="margin-top: 2px; margin-bottom: 2px; padding: 2px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += stream;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + customerKpi2.northStar + '</div>';
+        html += '<div style="padding: 6px; width: 250px; font-size: 80%">';
+        customerKpi2.supporting.forEach(stream => {
+            html += '<div style="margin-top: 2px; margin-bottom: 2px; padding: 2px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += stream;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '<td style="padding: 6px; width: 250px; border-left: 2px solid grey; vertical-align: top">';
+        html += '<div style="padding: 6px; width: 250px">' + customerKpi3.northStar + '</div>';
+        html += '<div style="padding: 6px; width: 250px; font-size: 80%">';
+        customerKpi3.supporting.forEach(stream => {
+            html += '<div style="margin-top: 2px; margin-bottom: 2px; padding: 2px; border: 1px solid lightgrey; border-radius: 7px">';
+            html += stream;
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '</td>';
+        html += '<td>';
+        html += '';
+        html += '</td>';
+        html += '</tr>';
+        html += '</table>';
+        html += '</div>'
+
+
+        document.getElementById('Roadmap').innerHTML = html;
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function formatDate(dateValue) {
+        if (!dateValue) return 'No date';
+        const date = new Date(dateValue + 'T00:00:00');
+        if (isNaN(date.getTime())) return dateValue;
+        return date.toLocaleDateString('en-GB', {year: 'numeric', month: 'short', day: 'numeric'});
+    }
+
+    function renderKpis(items) {
+        let html = '';
+        items.forEach(item => {
+            html += '<div><b>' + escapeHtml(item.kpi) + '</b>';
+            if (item.unit) {
+                html += ' <span class="activity-muted">(' + escapeHtml(item.unit) + ')</span>';
+            }
+            if (item.expectedImpact) {
+                html += ': ' + escapeHtml(item.expectedImpact);
+            }
+            if (item.currentValue) {
+                html += '<div class="activity-muted"><b>Current:</b> ' + escapeHtml(String(item.currentValue)) + '</div>';
+            }
+            if (item.description) {
+                html += '<div class="activity-muted">' + escapeHtml(item.description) + '</div>';
+            }
+            if (item.link) {
+                html += '<div class="activity-muted"><a target="_blank" rel="noopener noreferrer" href="' + escapeHtml(item.link) + '">' + escapeHtml(item.linkLabel || 'Open link') + '</a></div>';
+            }
+            html += '</div>';
+        });
+        return html;
+    }
+
+    function renderImpactCell(item, currentCustomerId) {
+        let html = '';
+        (item.customerImpact || []).forEach(impact => {
+            const isCurrent = impact.customerId === currentCustomerId;
+            html += '<div class="activity-block' + (isCurrent ? ' activity-pill-highlight' : '') + '">';
+            html += '<div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">';
+            html += '<img class="activity-icon activity-icon-round" src="../icons/' + escapeHtml(impact.customer.icon) + '" onerror="this.onerror=null;this.src=\'../icons/customer.png\'">';
+            html += '<div><div style="font-weight:bold; color:' + (isCurrent ? '#1d4ed8' : '#111827') + '">' + escapeHtml(impact.customer.name) + ' <span class="activity-muted">(' + escapeHtml(impact.customerId) + ')</span></div></div>';
+            html += '</div>';
+            html += renderKpis(impact.customerKPIs || []);
+            html += renderKpis(impact.businessKPIs || []);
+            html += '</div>';
+        });
+        return html || '<span class="activity-muted">No customer impact listed</span>';
+    }
+
+    function renderBrickCell(item) {
+        let html = '';
+        (item.productBricks || []).forEach(brick => {
+            html += '<div class="activity-pill">';
+            html += '<img class="activity-icon" src="../../product-bricks/icons/' + escapeHtml(brick.brick.icon) + '" onerror="this.onerror=null;this.src=\'../../product-bricks/icons/logo.png\'">';
+            html += '<div><div><b>' + escapeHtml(brick.brick.name) + '</b> <span class="activity-muted">(#' + escapeHtml(brick.brickId) + ')</span></div><div class="activity-muted">' + escapeHtml(brick.change) + '</div></div>';
+            html += '</div>';
+        });
+        return html || '<span class="activity-muted">No product bricks listed</span>';
+    }
+
+    function renderChannelCell(item) {
+        let html = '';
+        (item.deliveryChannels || []).forEach(channel => {
+            html += '<div class="activity-pill">';
+            html += '<img class="activity-icon" src="../../product-deployments/icons/' + escapeHtml(channel.channel.icon) + '" onerror="this.onerror=null;this.src=\'../../product-deployments/icons/product.png\'">';
+            html += '<div><div><b>' + escapeHtml(channel.channel.name) + '</b> <span class="activity-muted">(' + escapeHtml(channel.channelId) + ')</span></div><div class="activity-muted">' + escapeHtml(channel.change) + '</div></div>';
+            html += '</div>';
+        });
+        return html || '<span class="activity-muted">No delivery channels listed</span>';
+    }
+
+    function renderActivityTable(data, kind, currentCustomerId) {
+        const items = (data && data.items) ? data.items : [];
+        let html = '';
+        html += '<div class="activity-summary">';
+        html += '<div class="activity-stat"><div class="activity-stat-value">' + items.length + '</div><div class="activity-stat-label">' + kind + '</div></div>';
+        html += '<div class="activity-stat"><div class="activity-stat-value">' + items.filter(item => (item.customerImpact || []).length > 0).length + '</div><div class="activity-stat-label">With customer impact</div></div>';
+        html += '<div class="activity-stat"><div class="activity-stat-value">' + items.filter(item => (item.productBricks || []).length > 0).length + '</div><div class="activity-stat-label">With bricks</div></div>';
+        html += '</div>';
+
+        if (!items.length) {
+            html += '<div class="group" style="margin-top:0">No related ' + kind.toLowerCase() + ' found for this customer.</div>';
+            return html;
+        }
+
+        html += '<table class="activity-table">';
+        html += '<tr><th>Date</th><th>Description</th><th>Customer Impact</th><th>Product Bricks</th><th>Delivery Channels</th></tr>';
+        items.forEach(item => {
+            html += '<tr>';
+            html += '<td style="white-space:nowrap">' + escapeHtml(formatDate(item.date)) + '</td>';
+            html += '<td><a class="activity-link" target="_blank" rel="noopener noreferrer" href="../../' + kind.toLowerCase() + '/landing_pages/' + item.landingPageIndex + '.html">' + escapeHtml(item.description || item.name || kind) + '</a></td>';
+            html += '<td>' + renderImpactCell(item, currentCustomerId) + '</td>';
+            html += '<td>' + renderBrickCell(item) + '</td>';
+            html += '<td>' + renderChannelCell(item) + '</td>';
+            html += '</tr>';
+        });
+        html += '</table>';
+        return html;
+    }
+
+    addHeader();
+    addHome();
+    addJBTD();
+    addJourneys();
+    addKPIs();
+    addProductVision();
+    addInsights();
+
+
+</script>
+
+${breadcrumbs_script}
+</body>
+</html>

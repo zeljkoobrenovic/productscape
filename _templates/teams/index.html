@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>Teams (${domain_name})</title>
+    ${tokens_style}
+    ${tabs_style}
+    ${breadcrumbs_style}
+    <style>
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+            margin: 8px 28px 28px;
+            color: #202124;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .hero {
+            margin-bottom: 20px;
+        }
+
+        .hero-table {
+            border-collapse: collapse;
+            width: auto;
+        }
+
+        .hero-logo {
+            width: 108px;
+            height: 108px;
+            margin-right: 12px;
+        }
+
+        .hero-logo-cell {
+            border: none;
+            vertical-align: top;
+            padding-top: 12px;
+            padding-right: 12px;
+        }
+
+        .hero-copy-cell {
+            vertical-align: top;
+            border: none;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            margin-bottom: 4px;
+        }
+
+        .hero-note {
+            max-width: 960px;
+            line-height: 1.5;
+            color: #4b5563;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 0 0 10px 0;
+        }
+
+        .team-search {
+            flex: 1;
+            max-width: 520px;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #202124;
+        }
+
+        .team-search:focus {
+            outline: none;
+            border-color: #1d4ed8;
+            box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
+        }
+
+        .search-clear {
+            padding: 9px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            color: #4b5563;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .search-clear:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .search-summary {
+            margin: 0 4px 18px 0;
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .search-summary strong {
+            color: #1f2937;
+        }
+
+        .search-summary .search-term {
+            color: #1d4ed8;
+        }
+
+        .tab-intro {
+            margin-bottom: 18px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        /* hierarchy */
+        .hierarchy {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .group {
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background-color: #fbfbfc;
+            padding: 16px;
+        }
+
+        .group.nested {
+            margin-top: 14px;
+            background-color: #ffffff;
+        }
+
+        .group-head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .group-name {
+            font-size: 22px;
+        }
+
+        .group-hc {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .group-mission {
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 14px;
+            max-width: 900px;
+        }
+
+        .group-direct {
+            display: inline-block;
+            margin-bottom: 14px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background-color: #eef2f6;
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        .group-direct-text {
+            margin-bottom: 6px;
+        }
+
+        .group-direct .hc-dots {
+            margin-bottom: 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .team-card {
+            display: block;
+            color: inherit;
+            border: 1px solid #d1d5db;
+            border-left-width: 4px;
+            border-radius: 10px;
+            padding: 14px;
+            background-color: white;
+            box-shadow: rgba(0, 0, 0, 0.05) 0 1px 3px;
+            transition: 0.15s;
+        }
+
+        .team-card:hover {
+            box-shadow: rgba(0, 0, 0, 0.12) 0 2px 8px;
+            transform: translateY(-1px);
+        }
+
+        .team-type {
+            display: inline-block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            border-radius: 999px;
+            padding: 3px 9px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .team-name {
+            font-size: 19px;
+            color: #1f2937;
+            margin-bottom: 6px;
+            line-height: 1.25;
+        }
+
+        .team-card:hover .team-name {
+            color: #1d4ed8;
+        }
+
+        .team-desc {
+            color: #4b5563;
+            line-height: 1.45;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        /* dependency icon rows */
+        .link-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .link-group {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .link-sep {
+            color: #cbd5e1;
+            margin: 0 4px;
+            font-weight: bold;
+        }
+
+        .link-icon {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            border-radius: 4px;
+            border: 1px solid #d7dce1;
+            background-color: white;
+        }
+
+        .link-icon.round {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* headcount dots */
+        .hc-dots {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 3px;
+            margin-bottom: 12px;
+        }
+
+        .hc-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 1px solid rgba(17, 24, 39, 0.12);
+        }
+
+        .hc-dots-label {
+            margin-left: 6px;
+            font-size: 11px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+
+        /* legend */
+        .type-legend {
+            margin-top: 26px;
+            padding-top: 18px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .legend-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 10px 0 0 0;
+        }
+
+        .legend-pill {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            background-color: #f8fafc;
+            font-size: 12px;
+            color: #4b5563;
+            max-width: 320px;
+        }
+
+        .legend-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 999px;
+            display: inline-block;
+            border: 1px solid rgba(17, 24, 39, 0.12);
+            margin-top: 2px;
+            flex: none;
+        }
+
+        .legend-text {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .legend-name {
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .legend-desc {
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .legend-count {
+            color: #9ca3af;
+            font-size: 11px;
+            font-weight: normal;
+        }
+
+        /* dependencies tab */
+        .dependencies-layout {
+            display: grid;
+            grid-template-columns: 300px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .dependency-controls {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            padding: 14px;
+        }
+
+        .dependency-control-group {
+            margin-bottom: 16px;
+        }
+
+        .dependency-control-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .dependency-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .dependency-action {
+            border: 1px solid #d1d5db;
+            background-color: white;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .dependency-checklist {
+            max-height: 340px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .dependency-check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            font-size: 13px;
+            color: #374151;
+        }
+
+        .dependency-swatch {
+            flex: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-top: 3px;
+            border: 1px solid rgba(17, 24, 39, 0.15);
+        }
+
+        .dependency-check-meta {
+            display: block;
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .dependency-summary {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .dependency-summary strong {
+            color: #1f2937;
+        }
+
+        .dependency-view {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 6px;
+        }
+
+        .view-toggle-btn {
+            border: 1px solid #d1d5db;
+            background-color: #f8fafc;
+            color: #4b5563;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .view-toggle-btn:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .view-toggle-btn.active {
+            background-color: #202124;
+            border-color: #202124;
+            color: white;
+        }
+
+        .force-label-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 4px;
+            font-size: 13px;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .force-label-toggle[hidden] {
+            display: none;
+        }
+
+        .dependency-graph {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            padding: 14px;
+            overflow: auto;
+            min-height: 560px;
+        }
+
+        .dependency-graph.force {
+            padding: 0;
+            overflow: hidden;
+            height: 620px;
+        }
+
+        .dependency-empty {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        @media (max-width: 1080px) {
+            .dependencies-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/force-graph@1.51.4/dist/force-graph.min.js"></script>
+</head>
+<body onload="initTab('home')" onhashchange="initTab('home')">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../start/index.html">Home</a><a href="../customers/index.html">Customers</a><a href="../product-deployments/index.html">Products</a><a href="../product-bricks/index.html">Bricks &amp; Streams</a><a href="../teams/index.html" class="active">Teams</a><a href="../competition/index.html">Competition</a><a href="../residuality/index.html">Stress Test</a></nav>
+<div id="breadcrumbs"></div>
+${tabs_script}
+<div class="hero">
+    <table class="hero-table">
+        <tr>
+            <td class="hero-logo-cell"><img class="hero-logo" src="icons/logo.png" alt="Teams"></td>
+            <td class="hero-copy-cell">
+                <div class="hero-title">Teams</div>
+                <div id="HeroNote" class="hero-note">A lean team index: the group hierarchy with headcount roll-ups, and each team's links to customers, streams, product bricks, and other teams. Click a team to open its page.</div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="tab">
+    <button class="tablinks" id="tab_home" onclick="openTab('home')">Team Index</button>
+    <button class="tablinks" id="tab_dependencies" onclick="openTab('dependencies')">Dependencies</button>
+</div>
+
+<div id="tab_content_home" class="tabcontent">
+    <div class="search-bar" style="margin-top: 12px">
+        <input type="search" id="TeamSearch" class="team-search" placeholder="Search teams by name, description, type, or group…" autocomplete="off">
+        <button type="button" id="TeamSearchClear" class="search-clear" onclick="clearTeamSearch()" hidden>Clear</button>
+    </div>
+    <div id="SearchSummary" class="search-summary"></div>
+    <div id="Hierarchy"></div>
+    <div id="TypeLegend" class="type-legend"></div>
+</div>
+
+<div id="tab_content_dependencies" class="tabcontent">
+    <div class="tab-intro">Cross-team dependency graph. Filter by team and by dependency type.</div>
+    <div id="DependenciesContent"></div>
+</div>
+
+<script>
+    const teamsData = ${teams};
+    const orgDesign = teamsData.orgDesign || {};
+    const teamTypes = orgDesign.teamTypes || [];
+    const dependencyTypes = orgDesign.teamDependencyTypes || [];
+
+    const typeColorMap = {};
+    teamTypes.forEach(type => { typeColorMap[type.id] = type.color || '#6b7280'; });
+    const typeNameMap = {};
+    teamTypes.forEach(type => { typeNameMap[type.id] = type.name || type.id; });
+
+    const dependencyTypePalette = ['#1d4ed8', '#047857', '#b45309', '#9333ea', '#dc2626', '#0891b2'];
+    const dependencyTypeColorMap = {};
+    dependencyTypes.forEach((type, index) => {
+        dependencyTypeColorMap[type.id] = dependencyTypePalette[index % dependencyTypePalette.length];
+    });
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function formatNumber(value) {
+        return new Intl.NumberFormat('en-US').format(value || 0);
+    }
+
+    function typeColor(typeId) {
+        return typeColorMap[typeId] || '#6b7280';
+    }
+
+    // Convert a #rrggbb color to rgba with the given alpha so overlapping
+    // force-graph nodes blend instead of forming a solid color block.
+    function withAlpha(hexColor, alpha) {
+        const hex = String(hexColor || '').replace('#', '');
+        if (hex.length !== 6) {
+            return hexColor;
+        }
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+    }
+
+    // flatten teams across the recursive group tree
+    const flatTeams = [];
+    const flatGroups = [];
+    (function walk(groups) {
+        (groups || []).forEach(group => {
+            flatGroups.push(group);
+            (group.teams || []).forEach(team => flatTeams.push(team));
+            walk(group.groups || []);
+        });
+    })(teamsData.groups || []);
+
+    const totalHeadcount = (teamsData.groups || []).reduce((sum, group) => sum + (group.rollupHeadcount || 0), 0);
+    const typeCounts = {};
+    flatTeams.forEach(team => {
+        typeCounts[team.type] = (typeCounts[team.type] || 0) + 1;
+    });
+
+    function renderTypeLegend() {
+        let html = '<div class="section-title">Team Types</div><div class="legend-row">';
+        teamTypes.forEach(type => {
+            const count = typeCounts[type.id] || 0;
+            if (!count) return;
+            html += '<span class="legend-pill">' +
+                '<span class="legend-swatch" style="background-color:' + typeColor(type.id) + '"></span>' +
+                '<span class="legend-text">' +
+                '<span class="legend-name">' + escapeHtml(type.name || type.id) +
+                ' <span class="legend-count">(' + escapeHtml(String(count)) + ')</span></span>' +
+                (type.description ? '<span class="legend-desc">' + escapeHtml(type.description) + '</span>' : '') +
+                '</span></span>';
+        });
+        html += '</div>';
+        document.getElementById('TypeLegend').innerHTML = html;
+    }
+
+    function renderHeadcountDots(count, color, showLabel) {
+        const total = Math.max(Number(count) || 0, 0);
+        let dots = '';
+        for (let i = 0; i < total; i++) {
+            dots += '<span class="hc-dot" style="background-color:' + color + '"></span>';
+        }
+        const label = showLabel === false ? '' : '<span class="hc-dots-label">' + escapeHtml(String(total)) + ' FTE</span>';
+        return '<div class="hc-dots" title="' + escapeHtml(String(total)) + ' FTE">' + dots + label + '</div>';
+    }
+
+    function renderTeamCard(team) {
+        const color = typeColor(team.type);
+        const hc = (team.teamHeadcount || {}).headcount || 0;
+        let html = '<a class="team-card" target="_blank" style="border-left-color:' + color + '" href="landing_pages/' + escapeHtml(team.id) + '.html">';
+        html += '<span class="team-type" style="background-color:' + color + '">' + escapeHtml(typeNameMap[team.type] || team.type || 'team') + '</span>';
+        html += '<div class="team-name">' + escapeHtml(team.name) + '</div>';
+        if (team.description) {
+            html += '<div class="team-desc">' + escapeHtml(team.description) + '</div>';
+        }
+        html += renderHeadcountDots(hc, color);
+        const groups = [
+            renderLinkIconGroup('Customer', team.customerDependencies || [], '../customers/icons/', 'customer.png', 'round'),
+            renderLinkIconGroup('Stream', team.streamDependencies || [], '../product-bricks/icons/', 'brick.png', ''),
+            renderLinkIconGroup('Brick', team.brickDependencies || [], '../product-bricks/icons/', 'brick.png', ''),
+            renderLinkIconGroup('Team', team.otherTeamDependencies || [], 'icons/', 'logo.png', 'round')
+        ].filter(Boolean);
+        if (groups.length) {
+            html += '<div class="link-row">' +
+                groups.join('<span class="link-sep">&middot;</span>') + '</div>';
+        }
+        html += '</a>';
+        return html;
+    }
+
+    function renderLinkIconGroup(label, items, iconBase, defaultIcon, shape) {
+        if (!items || !items.length) {
+            return '';
+        }
+        const fallback = iconBase + defaultIcon;
+        let icons = '';
+        items.forEach(item => {
+            const src = item.icon ? iconBase + item.icon : fallback;
+            const cls = 'link-icon' + (shape === 'round' ? ' round' : '');
+            const title = label + ': ' + (item.name || '');
+            icons += '<img class="' + cls + '" src="' + escapeHtml(src) + '" alt="" title="' + escapeHtml(title) + '" ' +
+                'onerror="this.onerror=null;this.src=\'' + fallback + '\'">';
+        });
+        return '<span class="link-group">' + icons + '</span>';
+    }
+
+    let searchQuery = '';
+
+    function teamMatchesQuery(team, query) {
+        if (!query) return true;
+        const haystack = [
+            team.name,
+            team.description,
+            typeNameMap[team.type] || team.type,
+            team.groupName
+        ].filter(Boolean).join(' ').toLowerCase();
+        return query.split(/\s+/).filter(Boolean).every(word => haystack.indexOf(word) !== -1);
+    }
+
+    // Returns { html, teams, headcount } for a group, keeping only teams that match
+    // the query (and groups that still contain a match anywhere in their subtree).
+    function renderGroup(group, nested, query) {
+        const matchedTeams = (group.teams || []).filter(team => teamMatchesQuery(team, query));
+        const childResults = (group.groups || []).map(child => renderGroup(child, true, query)).filter(Boolean);
+
+        if (query && !matchedTeams.length && !childResults.length) {
+            return null;
+        }
+
+        const teamCount = matchedTeams.length + childResults.reduce((sum, child) => sum + child.teams, 0);
+        const headcount = matchedTeams.reduce((sum, team) => sum + ((team.teamHeadcount || {}).headcount || 0), 0)
+            + childResults.reduce((sum, child) => sum + child.headcount, 0);
+
+        let html = '<div class="group' + (nested ? ' nested' : '') + '">';
+        html += '<div class="group-head">';
+        html += '<span class="group-name">' + escapeHtml(group.name || group.id) + '</span>';
+        html += '<span class="group-hc">' + formatNumber(group.rollupHeadcount || 0) + ' FTE total</span>';
+        html += '</div>';
+        if (group.mission) {
+            html += '<div class="group-mission">' + escapeHtml(group.mission) + '</div>';
+        }
+        const direct = group.groupDirectHeadcount || {};
+        if (direct.headcount && !query) {
+            html += '<div class="group-direct">' +
+                '<div class="group-direct-text">Group leadership &amp; support: <strong>' + escapeHtml(String(direct.headcount)) + ' FTE</strong>' +
+                (direct.description ? ' &mdash; ' + escapeHtml(direct.description) : '') + '</div>' +
+                renderHeadcountDots(direct.headcount, '#94a3b8', false) +
+                '</div>';
+        }
+        if (matchedTeams.length) {
+            html += '<div class="team-grid">';
+            matchedTeams.forEach(team => { html += renderTeamCard(team); });
+            html += '</div>';
+        }
+        childResults.forEach(child => { html += child.html; });
+        html += '</div>';
+        return {html: html, teams: teamCount, headcount: headcount};
+    }
+
+    function renderHierarchy() {
+        const query = searchQuery;
+        const results = (teamsData.groups || []).map(group => renderGroup(group, false, query)).filter(Boolean);
+        let html = '<div class="hierarchy">';
+        if (!results.length) {
+            html += '<div class="dependency-empty">No teams match &ldquo;' + escapeHtml(query) + '&rdquo;.</div>';
+        } else {
+            results.forEach(result => { html += result.html; });
+        }
+        html += '</div>';
+        document.getElementById('Hierarchy').innerHTML = html;
+
+        const visibleTeams = results.reduce((sum, result) => sum + result.teams, 0);
+        const visibleHeadcount = results.reduce((sum, result) => sum + result.headcount, 0);
+        renderSearchSummary(visibleTeams, visibleHeadcount);
+    }
+
+    function renderSearchSummary(visibleTeams, visibleHeadcount) {
+        const el = document.getElementById('SearchSummary');
+        if (searchQuery) {
+            el.innerHTML = 'showing ' +
+                '<strong>' + formatNumber(visibleTeams) + '</strong> of ' + formatNumber(flatTeams.length) + ' teams' +
+                ' &middot; <strong>' + formatNumber(visibleHeadcount) + '</strong> FTE';
+        } else {
+            el.innerHTML = 'showing all <strong>' + formatNumber(flatTeams.length) + '</strong> teams &middot; <strong>' + formatNumber(totalHeadcount) + '</strong> FTE total';
+        }
+    }
+
+    function onTeamSearch(value) {
+        searchQuery = String(value || '').trim().toLowerCase();
+        document.getElementById('TeamSearchClear').hidden = !searchQuery;
+        renderHierarchy();
+    }
+
+    function clearTeamSearch() {
+        const input = document.getElementById('TeamSearch');
+        input.value = '';
+        onTeamSearch('');
+        input.focus();
+    }
+
+    document.getElementById('TeamSearch').addEventListener('input', event => onTeamSearch(event.target.value));
+
+    renderTypeLegend();
+    renderHierarchy();
+
+    /* ---------- Dependencies tab ---------- */
+    let dependenciesInitialized = false;
+
+    mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'loose',
+        flowchart: {htmlLabels: false}
+    });
+
+    window.afterOpenTab = function (tabName) {
+        if (tabName === 'dependencies') {
+            renderDependenciesView();
+        }
+    };
+
+    function sanitizeMermaidId(value) {
+        return String(value || 'team').replace(/[^a-zA-Z0-9_]/g, '_').replace(/_+/g, '_');
+    }
+
+    function escapeMermaidLabel(value) {
+        return String(value || '')
+            .replaceAll('&', 'and').replaceAll('"', '').replaceAll("'", '')
+            .replaceAll('<', '').replaceAll('>', '')
+            .replaceAll('[', '(').replaceAll(']', ')')
+            .replaceAll('{', '(').replaceAll('}', ')').replaceAll('|', '/');
+    }
+
+    const teamNameMap = {};
+    flatTeams.forEach(team => { teamNameMap[team.id] = team.name || team.id; });
+
+    function buildEdges() {
+        const edges = [];
+        flatTeams.forEach(team => {
+            (team.otherTeamDependencies || []).forEach(dependency => {
+                if (!teamNameMap[dependency.teamId]) return;
+                edges.push({
+                    source: team.id,
+                    target: dependency.teamId,
+                    type: dependency.dependencyType || 'other',
+                    typeLabel: dependency.dependencyTypeName || dependency.dependencyType || 'depends on'
+                });
+            });
+        });
+        return edges;
+    }
+
+    function teamCatalog() {
+        return flatTeams.slice().sort((left, right) => (left.name || '').localeCompare(right.name || ''));
+    }
+
+    function renderChecklistItems(items, kind) {
+        if (!items.length) {
+            return '<div class="dependency-empty">No items available.</div>';
+        }
+        return items.map(item => {
+            const meta = kind === 'team' ? [item.groupName || '', typeNameMap[item.type] || item.type || ''].filter(Boolean).join(' | ') : (item.description || '');
+            const swatchColor = kind === 'team' ? typeColor(item.type) : (dependencyTypeColorMap[item.id] || '#9ca3af');
+            return '<label class="dependency-check-item">' +
+                '<input type="checkbox" class="dependency-' + kind + '-checkbox" value="' + escapeHtml(item.id) + '" checked onchange="renderDependenciesView()">' +
+                '<span class="dependency-swatch" style="background-color:' + swatchColor + '"></span>' +
+                '<span><span>' + escapeHtml(item.name) + '</span>' +
+                (meta ? '<span class="dependency-check-meta">' + escapeHtml(meta) + '</span>' : '') +
+                '</span></label>';
+        }).join('');
+    }
+
+    function setAllCheckboxes(selector, checked) {
+        document.querySelectorAll(selector).forEach(input => { input.checked = checked; });
+        renderDependenciesView();
+    }
+
+    function selectedValues(selector) {
+        return new Set(Array.from(document.querySelectorAll(selector)).filter(input => input.checked).map(input => input.value));
+    }
+
+    function renderDependenciesControls() {
+        const teams = teamCatalog();
+        const types = dependencyTypes.map(type => ({id: type.id, name: type.name || type.id, description: type.description || ''}));
+        return '<div class="dependency-controls">' +
+            '<div class="dependency-control-group">' +
+            '<div class="dependency-control-title">Teams</div>' +
+            '<div class="dependency-actions">' +
+            '<button class="dependency-action" type="button" onclick="setAllCheckboxes(\'.dependency-team-checkbox\', true)">Show all</button>' +
+            '<button class="dependency-action" type="button" onclick="setAllCheckboxes(\'.dependency-team-checkbox\', false)">Hide all</button>' +
+            '</div><div class="dependency-checklist">' +
+            renderChecklistItems(teams, 'team') +
+            '</div></div>' +
+            '<div class="dependency-control-group">' +
+            '<div class="dependency-control-title">Dependency Types</div>' +
+            '<div class="dependency-checklist">' +
+            renderChecklistItems(types, 'type') +
+            '</div></div>' +
+            '<div id="DependenciesSummary" class="dependency-summary"></div>' +
+            '</div>';
+    }
+
+    let dependencyView = 'force';
+    let forceGraphInstance = null;
+    let forceShowLabels = false;
+
+    function setDependencyView(view) {
+        dependencyView = view;
+        document.querySelectorAll('.view-toggle-btn').forEach(button => {
+            button.classList.toggle('active', button.getAttribute('data-view') === view);
+        });
+        const labelToggle = document.getElementById('ForceLabelToggle');
+        if (labelToggle) {
+            labelToggle.hidden = view !== 'force';
+        }
+        renderDependenciesView();
+    }
+
+    function setForceLabels(show) {
+        forceShowLabels = show;
+        if (forceGraphInstance && dependencyView === 'force') {
+            // trigger a redraw so nodeCanvasObject re-evaluates the flag
+            forceGraphInstance.nodeCanvasObjectMode(() => 'after');
+        }
+    }
+
+    function renderDependenciesView() {
+        const container = document.getElementById('DependenciesContent');
+        if (!container) return;
+
+        if (!dependenciesInitialized) {
+            container.innerHTML = '<div class="dependencies-layout">' +
+                renderDependenciesControls() +
+                '<div class="dependency-view">' +
+                '<div class="view-toggle">' +
+                '<button type="button" class="view-toggle-btn active" data-view="force" onclick="setDependencyView(\'force\')">2D force graph</button>' +
+                '<button type="button" class="view-toggle-btn" data-view="mermaid" onclick="setDependencyView(\'mermaid\')">Flow diagram</button>' +
+                '<label id="ForceLabelToggle" class="force-label-toggle"><input type="checkbox" onchange="setForceLabels(this.checked)"> Show labels</label>' +
+                '</div>' +
+                '<div id="DependenciesGraph" class="dependency-graph"></div>' +
+                '</div></div>';
+            dependenciesInitialized = true;
+        }
+
+        const selectedTeamIds = selectedValues('.dependency-team-checkbox');
+        const selectedTypeIds = selectedValues('.dependency-type-checkbox');
+        const edges = buildEdges().filter(edge =>
+            selectedTeamIds.has(edge.source) && selectedTeamIds.has(edge.target) && selectedTypeIds.has(edge.type));
+        const visibleTeamIds = new Set();
+        edges.forEach(edge => { visibleTeamIds.add(edge.source); visibleTeamIds.add(edge.target); });
+
+        document.getElementById('DependenciesSummary').innerHTML =
+            'Showing <strong>' + formatNumber(visibleTeamIds.size) + '</strong> connected teams &middot; ' +
+            '<strong>' + formatNumber(edges.length) + '</strong> dependencies &middot; ' +
+            '<strong>' + formatNumber(selectedTypeIds.size) + '</strong> of ' + formatNumber(dependencyTypes.length) + ' types active.';
+
+        const graphContainer = document.getElementById('DependenciesGraph');
+        forceGraphInstance = null;
+        graphContainer.classList.toggle('force', dependencyView === 'force');
+
+        if (!edges.length) {
+            graphContainer.innerHTML = '<div class="dependency-empty">Select at least two connected teams and one dependency type.</div>';
+            return;
+        }
+
+        if (dependencyView === 'force') {
+            renderForceGraph(graphContainer, edges, visibleTeamIds);
+        } else {
+            renderMermaidGraph(graphContainer, edges, visibleTeamIds);
+        }
+    }
+
+    function renderMermaidGraph(graphContainer, edges, visibleTeamIds) {
+        let diagram = 'flowchart LR\n';
+        visibleTeamIds.forEach(teamId => {
+            const team = flatTeams.find(candidate => candidate.id === teamId) || {};
+            const color = typeColor(team.type);
+            const id = sanitizeMermaidId(teamId);
+            diagram += id + '["' + escapeMermaidLabel(teamNameMap[teamId] || teamId) + '"]\n';
+            diagram += 'style ' + id + ' fill:#ffffff,stroke:' + color + ',stroke-width:2px\n';
+        });
+        edges.forEach((edge, index) => {
+            const sourceId = sanitizeMermaidId(edge.source);
+            const targetId = sanitizeMermaidId(edge.target);
+            diagram += sourceId + ' -->|' + escapeMermaidLabel(edge.typeLabel) + '| ' + targetId + '\n';
+            const linkColor = dependencyTypeColorMap[edge.type] || '#6b7280';
+            diagram += 'linkStyle ' + index + ' stroke:' + linkColor + ',stroke-width:1.5px\n';
+        });
+
+        const graphId = 'teams-dependency-graph';
+        graphContainer.innerHTML = '<div class="mermaid" id="' + graphId + '">' + diagram + '</div>';
+        mermaid.run({querySelector: '#' + graphId});
+    }
+
+    function renderForceGraph(graphContainer, edges, visibleTeamIds) {
+        if (typeof ForceGraph === 'undefined') {
+            graphContainer.innerHTML = '<div class="dependency-empty">Force graph library failed to load.</div>';
+            return;
+        }
+        graphContainer.innerHTML = '';
+
+        // Node size scales with the number of dependency links touching the team.
+        const degree = {};
+        edges.forEach(edge => {
+            degree[edge.source] = (degree[edge.source] || 0) + 1;
+            degree[edge.target] = (degree[edge.target] || 0) + 1;
+        });
+        const nodes = Array.from(visibleTeamIds).map(teamId => {
+            const team = flatTeams.find(candidate => candidate.id === teamId) || {};
+            return {id: teamId, name: teamNameMap[teamId] || teamId, type: team.type || '', val: (degree[teamId] || 1)};
+        });
+        const links = edges.map(edge => ({source: edge.source, target: edge.target, type: edge.type, typeLabel: edge.typeLabel}));
+
+        const Graph = ForceGraph()(graphContainer)
+            .nodeRelSize(5)
+            .nodeVal(() => 1)
+            .nodeLabel(node => escapeHtml(node.name))
+            .nodeColor(node => withAlpha(typeColor(node.type), 0.65))
+            .nodeCanvasObjectMode(() => 'after')
+            .nodeCanvasObject((node, ctx, globalScale) => {
+                if (!forceShowLabels) return;
+                const label = node.name;
+                const fontSize = 12 / globalScale;
+                ctx.font = fontSize + 'px Ubuntu, Arial, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = '#374151';
+                ctx.fillText(label, node.x, node.y + 7);
+            })
+            .linkColor(link => dependencyTypeColorMap[link.type] || '#9ca3af')
+            .linkWidth(1.5)
+            .linkDirectionalArrowLength(4)
+            .linkDirectionalArrowRelPos(1)
+            .linkDirectionalParticles(1)
+            .linkDirectionalParticleSpeed(0.006)
+            .linkLabel(link => escapeHtml(link.typeLabel || link.type))
+            .onNodeClick(node => { window.open('landing_pages/' + node.id + '.html', '_blank'); })
+            .graphData({nodes: nodes, links: links});
+
+        forceGraphInstance = Graph;
+        sizeForceGraph();
+    }
+
+    function sizeForceGraph() {
+        if (!forceGraphInstance) return;
+        const container = document.getElementById('DependenciesGraph');
+        if (!container) return;
+        const w = container.clientWidth || container.offsetWidth;
+        const h = container.clientHeight || container.offsetHeight;
+        if (w > 0 && h > 0) {
+            forceGraphInstance.width(w).height(h);
+            if (typeof forceGraphInstance.d3ReheatSimulation === 'function') {
+                forceGraphInstance.d3ReheatSimulation();
+            }
+        }
+    }
+
+    window.addEventListener('resize', sizeForceGraph);
+</script>
+${breadcrumbs_script}
+</body>
+</html>

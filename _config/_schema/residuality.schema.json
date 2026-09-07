@@ -1,0 +1,207 @@
+{
+  "$comment": "residuality/residuality.json — business-context stressors, attractors, residues, looping, and explicit impacts on the modeled productscape",
+  "type": "object",
+  "required": [
+    "metadata",
+    "stressors"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "title",
+        "description",
+        "modelVersion",
+        "naiveArchitecture",
+        "residualArchitecture"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "modelVersion": {
+          "type": "string"
+        },
+        "naiveArchitecture": {
+          "type": "string"
+        },
+        "residualArchitecture": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "author": {
+              "type": "string"
+            },
+            "year": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "stressors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "group",
+          "detection",
+          "attractor",
+          "businessReaction",
+          "residue",
+          "status",
+          "impacts"
+        ],
+        "not": {
+          "anyOf": [
+            {
+              "required": [
+                "probability"
+              ]
+            },
+            {
+              "required": [
+                "likelihood"
+              ]
+            }
+          ]
+        },
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]*$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "detection": {
+            "type": "string"
+          },
+          "attractor": {
+            "type": "string"
+          },
+          "businessReaction": {
+            "type": "string"
+          },
+          "residue": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "candidate",
+              "integrated",
+              "already-survived"
+            ]
+          },
+          "reusesResidueIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true
+          },
+          "media": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "type",
+                "src"
+              ],
+              "properties": {
+                "type": {
+                  "const": "image"
+                },
+                "src": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "alt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "impacts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "targetType",
+                "targetId",
+                "effect"
+              ],
+              "properties": {
+                "targetType": {
+                  "enum": [
+                    "vision",
+                    "job",
+                    "journey",
+                    "kpi",
+                    "product",
+                    "stream",
+                    "brick",
+                    "team",
+                    "competitor"
+                  ]
+                },
+                "targetId": {
+                  "type": "string"
+                },
+                "effect": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "freshStressorTest": {
+      "type": "object",
+      "required": [
+        "naiveSurvivals",
+        "residualSurvivals",
+        "stressors"
+      ],
+      "properties": {
+        "naiveSurvivals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "residualSurvivals": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "stressors": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

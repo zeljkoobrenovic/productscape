@@ -1,0 +1,23 @@
+{
+  "$comment": "customers/links.json — curated external reference links",
+  "type": "object",
+  "properties": {
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "url"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

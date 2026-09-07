@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>${asset_name} — Data Asset (${domain_name})</title>
+
+    ${common_style}
+    ${tokens_style}
+    ${tabs_style}
+    ${breadcrumbs_style}
+
+    <style>
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .page {
+            margin: 20px;
+        }
+
+        .nav-strip {
+            margin: 2px 20px 10px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+
+        .nav-link {
+            padding: 2px;
+            font-size: 12px;
+        }
+
+        .tab-image {
+            width: 24px;
+            margin: 2px;
+            padding: 2px;
+        }
+
+        .tab-image-selected {
+            width: 24px;
+            margin: 2px;
+            padding: 2px;
+            border-bottom: 4px solid blue;
+        }
+
+        .header {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .header-icon {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+        }
+
+        .header-meta {
+            font-size: 90%;
+            color: grey;
+        }
+
+        .header-title {
+            font-size: 50px;
+            line-height: 1.05;
+        }
+
+        .header-copy {
+            font-size: 16px;
+            color: grey;
+            margin-top: 6px;
+            max-width: 950px;
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: #eef2f6;
+            color: #374151;
+            border: 1px solid #dbe2ea;
+        }
+
+        .badge-critical { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+        .badge-high { background: #ffedd5; color: #9a3412; border-color: #fdba74; }
+        .badge-pii { background: #ede9fe; color: #5b21b6; border-color: #c4b5fd; }
+        .badge-restricted { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+
+        .group {
+            margin-top: 2px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+            overflow: hidden;
+            border: 1px solid lightgrey;
+            background: #fff;
+        }
+
+        .section-title {
+            font-size: 12px;
+            color: blue;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 14px;
+            background: #fff;
+            color: inherit;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: white;
+            border: 1px solid #dbe2ea;
+            padding: 4px;
+            flex: 0 0 auto;
+        }
+
+        .card-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #315b7c;
+            line-height: 1.4;
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+
+        .card-copy {
+            color: #4b5563;
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .list {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .list li {
+            margin-bottom: 6px;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .meta-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 10px 12px;
+            background: #fbfdff;
+        }
+
+        .meta-label {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            color: #315b7c;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .muted {
+            color: #6b7280;
+            font-size: 90%;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+
+    ${tabs_script}
+
+</head>
+
+<body>
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../../start/index.html">Home</a><a href="../../customers/index.html">Customers</a><a href="../../product-deployments/index.html">Products</a><a href="../../product-bricks/index.html" class="active">Bricks &amp; Streams</a><a href="../../teams/index.html">Teams</a><a href="../../competition/index.html">Competition</a><a href="../../residuality/index.html">Stress Test</a></nav>
+
+<div id="breadcrumbs" style="margin-left: 20px"></div>
+
+<script src="../shared_data.js"></script>
+<script>
+    const config = ${config};
+    const all_bricks = window.SHARED_DOMAIN_DATA.allBricks;
+    const allAssets = window.SHARED_DOMAIN_DATA.allAssets;
+    const currentAsset = ${asset_data};
+    const allStores = window.SHARED_DOMAIN_DATA.allStores;
+    const producingBricks = ${producing_bricks};
+    const consumingBricks = ${consuming_bricks};
+    const ownerTeam = ${owner_team};
+    const stewardTeams = ${steward_teams};
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function titleCase(value) {
+        return String(value || '')
+            .split('-')
+            .filter(Boolean)
+            .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+            .join(' ');
+    }
+
+    function storeById(storeId) {
+        return allStores.find(item => item.id === storeId) || { id: storeId, name: storeId };
+    }
+
+    function assetMetaPath(asset) {
+        const parts = [];
+        if (asset.rootGroup) {
+            parts.push(asset.rootGroup);
+        }
+        if (asset.group && asset.group !== asset.rootGroup) {
+            parts.push(asset.group);
+        }
+        if (!parts.length) {
+            parts.push('Data Asset');
+        }
+        return parts.join(' / ');
+    }
+</script>
+
+<div id="Header"></div>
+
+<div class="page" id="MainContent"></div>
+
+<script>
+    let headerHtml = '<div class="nav-strip">';
+    allAssets.forEach(item => {
+        headerHtml += '<a class="nav-link" href="' + escapeHtml(item.id) + '.html" title="' + escapeHtml(item.name || item.id) + '">';
+        headerHtml += '<img src="../icons/data.png" class="' + (item.id === currentAsset.id ? 'tab-image-selected' : 'tab-image') + '" alt="" onerror="this.onerror=null;this.src=\'../icons/brick.png\'">';
+        headerHtml += '</a>';
+    });
+    headerHtml += '</div>';
+
+    headerHtml += '<div class="page">';
+    headerHtml += '<div class="header">';
+    headerHtml += '<img class="header-icon" src="../icons/data.png" alt="" onerror="this.onerror=null;this.src=\'../icons/brick.png\'">';
+    headerHtml += '<div>';
+    headerHtml += '<div class="header-meta">';
+    headerHtml += '<div class="page-type-badge">Data Asset</div>';
+    headerHtml += escapeHtml(assetMetaPath(currentAsset)) + ' / <span style="color:blue;font-weight:bold;">' + escapeHtml((currentAsset.id || '').toUpperCase()) + '</span></div>';
+    headerHtml += '<div class="header-title">' + escapeHtml(currentAsset.name || currentAsset.id) + '</div>';
+    headerHtml += '<div class="header-copy">' + escapeHtml(currentAsset.description || '') + '</div>';
+
+    headerHtml += '<div class="badge-row">';
+    if (currentAsset.kind) {
+        headerHtml += '<span class="badge">' + escapeHtml(titleCase(currentAsset.kind)) + '</span>';
+    }
+    const classification = String(currentAsset.classification || '').toLowerCase();
+    if (classification) {
+        headerHtml += '<span class="badge ' + (classification === 'restricted' ? 'badge-restricted' : '') + '">' + escapeHtml(titleCase(classification)) + '</span>';
+    }
+    const pii = String(currentAsset.personalDataLevel || 'none').toLowerCase();
+    if (pii && pii !== 'none') {
+        headerHtml += '<span class="badge badge-pii">' + escapeHtml(titleCase(pii)) + ' Data</span>';
+    }
+    const criticality = String(currentAsset.securityCriticality || '').toLowerCase();
+    if (criticality) {
+        const critClass = criticality === 'critical' ? 'badge-critical' : (criticality === 'high' ? 'badge-high' : '');
+        headerHtml += '<span class="badge ' + critClass + '">' + escapeHtml(titleCase(criticality)) + ' Criticality</span>';
+    }
+    (currentAsset.legalTags || []).forEach(tag => {
+        headerHtml += '<span class="badge">' + escapeHtml(String(tag).toUpperCase()) + '</span>';
+    });
+    headerHtml += '</div>';
+
+    headerHtml += '</div></div></div>';
+    document.getElementById('Header').innerHTML = headerHtml;
+
+    function renderMetaItem(label, value) {
+        if (!value) {
+            return '';
+        }
+        return '<div class="meta-item"><div class="meta-label">' + escapeHtml(label) + '</div><div class="meta-value">' + escapeHtml(value) + '</div></div>';
+    }
+
+    function renderBrickPills(items, emptyLabel) {
+        if (!items.length) {
+            return '<div class="muted">' + escapeHtml(emptyLabel) + '</div>';
+        }
+        let html = '<div class="card-grid">';
+        items.forEach(brick => {
+            html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../landing_pages/' + escapeHtml(brick.id) + '.html">';
+            html += '<div class="card-meta">' + escapeHtml(titleCase(brick.role || '') || 'Brick') + '</div>';
+            html += '<div class="card-header">';
+            html += '<img class="card-icon" src="../icons/' + escapeHtml(brick.id) + '.png" alt="" onerror="this.onerror=null;this.src=\'../icons/brick.png\'">';
+            html += '<div class="card-title">' + escapeHtml(brick.name || brick.id) + '</div>';
+            html += '</div>';
+            if (brick.description) {
+                html += '<div class="card-copy">' + escapeHtml(brick.description) + '</div>';
+            }
+            html += '</a>';
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderMain() {
+        let html = '';
+
+        // Overview / governance
+        html += '<div class="group"><div class="section-title">Overview & Governance</div>';
+        html += '<div class="meta-grid">';
+        html += renderMetaItem('Kind', titleCase(currentAsset.kind || ''));
+        html += renderMetaItem('Status', titleCase(currentAsset.status || ''));
+        html += renderMetaItem('Classification', titleCase(currentAsset.classification || ''));
+        html += renderMetaItem('Personal Data', titleCase(currentAsset.personalDataLevel || ''));
+        html += renderMetaItem('Security Criticality', titleCase(currentAsset.securityCriticality || ''));
+        html += renderMetaItem('Data Subjects', (currentAsset.dataSubjects || []).map(titleCase).join(', '));
+        html += renderMetaItem('Legal Tags', (currentAsset.legalTags || []).map(tag => String(tag).toUpperCase()).join(', '));
+        html += renderMetaItem('Access Scope', currentAsset.accessScope || '');
+        html += renderMetaItem('System Of Record Brick', currentAsset.systemOfRecordBrickId || '');
+        const gov = currentAsset.governance || {};
+        html += renderMetaItem('Retention', gov.retention || '');
+        html += renderMetaItem('Residency', (gov.residency || '').toUpperCase());
+        html += renderMetaItem('Sharing Policy', gov.sharingPolicy || '');
+        html += '</div>';
+        if (currentAsset.businessMeaning && currentAsset.businessMeaning !== currentAsset.description) {
+            html += '<div class="card-copy" style="margin-top:14px;"><strong>Business meaning:</strong> ' + escapeHtml(currentAsset.businessMeaning) + '</div>';
+        }
+        html += '</div>';
+
+        // Stores
+        html += '<div class="group"><div class="section-title">Stores</div>';
+        const storeLinks = currentAsset.stores || [];
+        if (!storeLinks.length) {
+            html += '<div class="muted">No stores linked to this asset.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            storeLinks.forEach(link => {
+                const store = storeById(link.storeId);
+                html += '<div class="card">';
+                html += '<div class="card-meta">' + escapeHtml(titleCase(link.role || 'store')) + '</div>';
+                html += '<div class="card-title">' + escapeHtml(store.name || link.storeId) + '</div>';
+                const storeMeta = [store.kind ? titleCase(store.kind) : '', store.technology || ''].filter(Boolean).join(' | ');
+                if (storeMeta) {
+                    html += '<div class="muted">' + escapeHtml(storeMeta) + '</div>';
+                }
+                if (store.description) {
+                    html += '<div class="card-copy">' + escapeHtml(store.description) + '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        // Producing bricks
+        html += '<div class="group"><div class="section-title">Producing Bricks</div>';
+        html += renderBrickPills(producingBricks, 'No bricks own, write, or publish this asset.');
+        html += '</div>';
+
+        // Consuming bricks
+        html += '<div class="group"><div class="section-title">Consuming Bricks</div>';
+        html += renderBrickPills(consumingBricks, 'No bricks read or query this asset.');
+        html += '</div>';
+
+        // Interfaces
+        html += '<div class="group"><div class="section-title">Interfaces</div>';
+        const interfaces = currentAsset.interfaces || [];
+        if (!interfaces.length) {
+            html += '<div class="muted">No access interfaces listed.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            interfaces.forEach(iface => {
+                html += '<div class="card">';
+                html += '<div class="card-meta">' + escapeHtml(titleCase(iface.type || 'interface')) + '</div>';
+                html += '<div class="card-title">' + escapeHtml(iface.name || iface.type || 'Interface') + '</div>';
+                if (iface.description) {
+                    html += '<div class="card-copy">' + escapeHtml(iface.description) + '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        // Ownership
+        html += '<div class="group"><div class="section-title">Ownership</div>';
+        if (!ownerTeam && !stewardTeams.length) {
+            html += '<div class="muted">No owning or steward teams listed for this asset.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            if (ownerTeam) {
+                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../../teams/landing_pages/' + escapeHtml(ownerTeam.teamId) + '.html">';
+                html += '<div class="card-meta">Owner Team</div>';
+                html += '<div class="card-title">' + escapeHtml(ownerTeam.teamName || ownerTeam.teamId) + '</div>';
+                html += '<div class="card-copy">' + escapeHtml(ownerTeam.groupName || '') + '</div>';
+                html += '</a>';
+            }
+            stewardTeams.forEach(team => {
+                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../../teams/landing_pages/' + escapeHtml(team.teamId) + '.html">';
+                html += '<div class="card-meta">Steward Team</div>';
+                html += '<div class="card-title">' + escapeHtml(team.teamName || team.teamId) + '</div>';
+                html += '<div class="card-copy">' + escapeHtml(team.groupName || '') + '</div>';
+                html += '</a>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        // Lineage
+        const derivedIds = currentAsset.derivedFromAssetIds || [];
+        if (derivedIds.length) {
+            html += '<div class="group"><div class="section-title">Derived From</div>';
+            html += '<div class="card-grid">';
+            derivedIds.forEach(id => {
+                const source = allAssets.find(item => item.id === id) || { id: id, name: id };
+                html += '<a class="card" href="' + escapeHtml(id) + '.html">';
+                html += '<div class="card-meta">Source Asset</div>';
+                html += '<div class="card-title">' + escapeHtml(source.name || id) + '</div>';
+                if (source.description) {
+                    html += '<div class="card-copy">' + escapeHtml(source.description) + '</div>';
+                }
+                html += '</a>';
+            });
+            html += '</div>';
+            html += '</div>';
+        }
+
+        document.getElementById('MainContent').innerHTML = html;
+    }
+
+    renderMain();
+</script>
+
+${breadcrumbs_script}
+
+</body>
+</html>

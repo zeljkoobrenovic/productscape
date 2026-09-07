@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>Product Deployments (${domain_name})</title>
+    ${tokens_style}
+    ${tabs_style}
+    ${breadcrumbs_style}
+    <style>
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+            margin: 8px 28px 28px;
+            color: #202124;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .section-link {
+            display: inline-block;
+            padding: 8px 14px;
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            background-color: #f8fafc;
+            transition: 0.3s;
+        }
+
+        .section-link:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .section-link.active {
+            background-color: #202124;
+            border-color: #202124;
+            color: white;
+        }
+
+        .hero {
+            margin-bottom: 14px;
+        }
+
+        .hero-table {
+            border-collapse: collapse;
+            width: auto;
+        }
+
+        .hero-logo {
+            width: 108px;
+            height: 108px;
+            margin-right: 12px;
+        }
+
+        .hero-logo-cell {
+            border: none;
+            vertical-align: top;
+            padding-top: 12px;
+            padding-right: 12px;
+        }
+
+        .hero-copy-cell {
+            vertical-align: top;
+            border: none;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            margin-bottom: 4px;
+        }
+
+        .hero-subtitle {
+            color: #6b7280;
+            font-size: 18px;
+            margin-bottom: 14px;
+            max-width: 960px;
+            line-height: 1.4;
+        }
+
+        .view-toggle {
+            margin: 0;
+            padding: 12px 0 0 0;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        .view-toggle label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .deployment-panel {
+            padding: 18px;
+            background: white;
+        }
+
+        .deployment-icon-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        /* channel cards with embedded environments + brick circles */
+        .deployment-channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .deployment-channel-card {
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background-color: white;
+            padding: 14px;
+        }
+
+        .deployment-channel-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .deployment-channel-head:hover .deployment-channel-name {
+            color: #1d4ed8;
+        }
+
+        .deployment-channel-head .deployment-grid-icon {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            flex: none;
+        }
+
+        .deployment-channel-name {
+            font-size: 16px;
+            color: #1f2937;
+            line-height: 1.25;
+        }
+
+        .deployment-channel-type {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 2px;
+        }
+
+        .env-list {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .env-block {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .env-name {
+            font-size: 12px;
+            font-weight: bold;
+            color: #374151;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 8px;
+        }
+
+        .env-brick-count {
+            color: #9ca3af;
+            font-weight: normal;
+        }
+
+        .env-brick-circles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .env-brick-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #d7dce1;
+            background-color: white;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .env-brick-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        .env-empty {
+            font-size: 12px;
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .deployment-icon-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: left;
+            width: 240px;
+            overflow: hidden;
+            height: 74px;
+            border: 1px solid #d1d5db;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
+            padding: 6px 12px;
+        }
+
+        .deployment-icon-link:hover {
+            border-color: #93c5fd;
+            background: #eff6ff;
+        }
+
+        .deployment-grid-icon {
+            width: 82px;
+            height: 82px;
+            object-fit: contain;
+        }
+
+        .deployment-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .deployment-stat {
+            display: inline-block;
+            min-width: 120px;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .deployment-stat-value {
+            font-size: 28px;
+            color: #1d4ed8;
+        }
+
+        .deployment-stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .deployment-group {
+            margin-bottom: 24px;
+            border: 1px solid grey;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .deployment-group-title {
+            font-size: 15px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        .deployment-group-copy {
+            color: #4b5563;
+            margin-bottom: 12px;
+            max-width: 960px;
+            line-height: 1.5;
+        }
+
+        .deployment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 14px;
+        }
+
+        .deployment-card {
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 16px;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
+        }
+
+        .deployment-card-title {
+            font-size: 32px;
+            color: black;
+            margin-bottom: 4px;
+        }
+
+        .deployment-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .deployment-card-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 5px;
+        }
+
+        .deployment-card-meta {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        .deployment-card-copy {
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .deployment-subtitle {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+
+        .deployment-environment {
+            padding: 8px 10px;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            background: #eff6ff;
+            margin-bottom: 10px;
+        }
+
+        .deployment-environment-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+
+        .deployment-environment-copy {
+            color: #4b5563;
+            font-size: 13px;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .deployment-link-row {
+            margin-top: 6px;
+        }
+
+        .deployment-link {
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #1d4ed8;
+        }
+
+        .brick-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .entity-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .brick-chip {
+            display: inline-flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+        }
+
+        .brick-chip-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .chip-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            border-radius: 6px;
+            background: white;
+            border: 2px solid #d1d5db;
+            padding: 2px;
+            flex: 0 0 auto;
+            margin-top: 1px;
+        }
+
+        .chip-icon-interface {
+            border-color: #7c3aed;
+        }
+
+        .chip-icon-channel {
+            border-color: #2563eb;
+        }
+
+        .chip-icon-brick {
+            border-color: #059669;
+        }
+
+
+        .chip-icon-large {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .icon-only-chip {
+            display: inline-flex;
+        }
+
+        .icon-only-chip-link {
+            display: inline-flex;
+        }
+
+        .icon-badge-wrap {
+            position: relative;
+            display: inline-flex;
+        }
+
+        .icon-badge {
+            position: absolute;
+            min-width: 16px;
+            height: 16px;
+            padding: 1px;
+            border-radius: 999px;
+            background: #111827;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            line-height: 16px;
+            text-align: center;
+            box-shadow: 0 0 0 2px white;
+        }
+
+        .icon-badge-top {
+            top: -5px;
+            right: -5px;
+        }
+
+        .icon-badge-bottom {
+            right: -5px;
+            bottom: -5px;
+        }
+
+        .icon-badge-interface {
+            background: #7c3aed;
+        }
+
+        .icon-badge-channel {
+            background: #2563eb;
+        }
+
+        .icon-badge-brick {
+            background: #059669;
+        }
+
+        .brick-chip-body.hidden {
+            display: none;
+        }
+
+        .brick-chip-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .brick-chip-copy {
+            font-size: 11px;
+            color: #4b5563;
+            line-height: 1.35;
+        }
+
+        .deployment-muted {
+            color: #6b7280;
+            font-size: 90%;
+        }
+
+        .product-chip {
+            display: inline-flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #eef2ff;
+            border: 1px solid #c7d2fe;
+        }
+
+        .product-chip-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #312e81;
+        }
+
+        .product-chip-copy {
+            font-size: 11px;
+            color: #4338ca;
+            line-height: 1.35;
+        }
+
+        .dependency-panel {
+            padding: 18px;
+            background: white;
+        }
+
+        .dependency-product {
+            margin-bottom: 22px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
+        }
+
+        .dependency-product-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px 8px 16px;
+        }
+
+        .dependency-product-copy {
+            font-size: 12px;
+            color: #6b7280;
+            padding: 0 16px 12px 16px;
+        }
+
+        .dependency-table-wrap {
+            overflow-x: auto;
+            padding: 0 16px 16px 16px;
+        }
+
+        .dependency-table {
+            border-collapse: collapse;
+            min-width: 720px;
+            width: 100%;
+        }
+
+        .dependency-table th,
+        .dependency-table td {
+            border: 1px solid #e5e7eb;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+            background: white;
+        }
+
+        .dependency-table th {
+            background: #f8fafc;
+        }
+
+        .dependency-row-label {
+            min-width: 220px;
+            text-align: left;
+            background: #fbfdff;
+        }
+
+        .dependency-row-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dependency-row-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dependency-row-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .dependency-row-copy {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .dependency-marker-icon {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 2px;
+        }
+
+        .dependency-empty {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        .dependency-section-row td {
+            background: #eef2f7;
+            color: #4b5563;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-align: left;
+            padding: 10px 12px;
+        }
+
+        .products-table-wrap {
+            padding: 18px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .products-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 1120px;
+            width: 100%;
+        }
+
+        .products-table th,
+        .products-table td {
+            border: 1px solid #e5e7eb;
+            padding: 14px;
+            vertical-align: top;
+            background: white;
+        }
+
+        .products-table td {
+            text-align: center;
+        }
+
+        .products-table thead th {
+            background: #f8fafc;
+        }
+
+        .products-table-product-cell {
+            min-width: 280px;
+        }
+
+        .products-table-section-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6b7280;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .products-table-empty {
+            font-size: 12px;
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .products-table-head {
+        }
+
+        .products-table-head-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .products-table-name {
+            font-size: 24px;
+            line-height: 1.1;
+            color: #111827;
+            margin-top: 12px;
+        }
+
+        .products-table-product-icon {
+            width: 100px;
+            height: 100px;
+            padding: 6px;
+        }
+
+        .products-table-meta {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .products-table-cell-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .products-table-cell-stack .brick-chip {
+            width: 100%;
+            box-sizing: border-box;
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .products-table-cell-stack.compact {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .products-table-cell-stack.compact .brick-chip {
+            width: auto;
+        }
+
+        /* product dependency graph */
+        .pdg-section {
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+        .pdg-title {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .pdg-intro {
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            max-width: 880px;
+        }
+
+        .pdg-layout {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .pdg-controls {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            padding: 14px;
+        }
+
+        .pdg-control-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .pdg-check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #374151;
+            padding: 6px 2px;
+        }
+
+        .pdg-swatch {
+            flex: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(17, 24, 39, 0.15);
+        }
+
+        .pdg-check-count {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-left: auto;
+        }
+
+        .pdg-search {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+
+        .pdg-search:focus {
+            outline: none;
+            border-color: #1d4ed8;
+            box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
+        }
+
+        .pdg-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .pdg-action {
+            border: 1px solid #d1d5db;
+            background-color: white;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .pdg-action:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .pdg-checklist {
+            max-height: 460px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdg-type-header {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #6b7280;
+            margin: 10px 0 2px 0;
+            padding-top: 8px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .pdg-type-header:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .pdg-check-item.node {
+            cursor: pointer;
+        }
+
+        .pdg-check-item.node span.label {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pdg-empty-list {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 12px;
+            padding: 8px 2px;
+        }
+
+        .pdg-graph-shell {
+            min-width: 0;
+        }
+
+        .pdg-view-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .pdg-view-btn {
+            border: 1px solid #d1d5db;
+            background-color: #f8fafc;
+            color: #4b5563;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .pdg-view-btn:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .pdg-view-btn.active {
+            background-color: #202124;
+            border-color: #202124;
+            color: white;
+        }
+
+        .pdg-labels-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 4px;
+            font-size: 13px;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .pdg-graph {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            padding: 14px;
+            overflow: auto;
+            min-height: 560px;
+        }
+
+        .pdg-graph.force {
+            padding: 0;
+            overflow: hidden;
+            height: 620px;
+        }
+
+        .pdg-summary {
+            margin-top: 12px;
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .pdg-summary strong {
+            color: #1f2937;
+        }
+
+        .pdg-empty {
+            color: #6b7280;
+            font-style: italic;
+        }
+    </style>
+    <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/force-graph@1.51.4/dist/force-graph.min.js"></script>
+</head>
+<body onload="initTab('products')" onhashchange="initTab('products')">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../start/index.html">Home</a><a href="../customers/index.html">Customers</a><a href="../product-deployments/index.html" class="active">Products</a><a href="../product-bricks/index.html">Bricks &amp; Streams</a><a href="../teams/index.html">Teams</a><a href="../competition/index.html">Competition</a><a href="../residuality/index.html">Stress Test</a></nav>
+<div id="breadcrumbs"></div>
+${tabs_script}
+<div class="hero">
+    <table class="hero-table">
+        <tr>
+            <td class="hero-logo-cell"><img class="hero-logo" src="icons/logo.png" alt="Products"></td>
+            <td class="hero-copy-cell">
+                <div class="hero-title">Product Deployments</div>
+                <div class="hero-subtitle">Products organize the customer value proposition into concrete offers, journeys, channels, and delivery structures. This page shows an overview of the
+                    product landscape and how products are exposed across deployment channels.
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="tab">
+    <button class="tablinks active" id="tab_products" onclick="openTab('products')">Products</button>
+    <button class="tablinks" id="tab_deployment" onclick="openTab('deployment')">Deployment Channels</button>
+    <button class="tablinks" id="tab_dependencies" onclick="openTab('dependencies')">Dependencies</button>
+    <button class="tablinks" id="tab_matrix" onclick="openTab('matrix')">Matrix</button>
+</div>
+<div>
+    <div id="tab_content_products" class="tabcontent">
+        <div class="view-toggle">
+            <label><input type="checkbox" id="show_text_toggle" onchange="update()"> Show text</label>
+        </div>
+        <div id="products_content"></div>
+    </div>
+    <div id="tab_content_deployment" class="tabcontent"></div>
+    <div id="tab_content_dependencies" class="tabcontent">
+        <div class="pdg-section">
+            <div class="pdg-intro">All dependencies between products, deployment channels, and product bricks. Filter node types on the left.</div>
+            <div class="pdg-layout">
+                <div class="pdg-controls" id="pdg_controls"></div>
+                <div class="pdg-graph-shell">
+                    <div class="pdg-view-toggle">
+                        <button type="button" class="pdg-view-btn active" data-pdgview="force" onclick="setPdgView('force')">2D force graph</button>
+                        <button type="button" class="pdg-view-btn" data-pdgview="mermaid" onclick="setPdgView('mermaid')">Flow diagram</button>
+                        <label class="pdg-labels-toggle"><input type="checkbox" onchange="setPdgLabels(this.checked)"> Show labels</label>
+                    </div>
+                    <div class="pdg-graph" id="pdg_graph"></div>
+                    <div class="pdg-summary" id="pdg_summary"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tab_content_matrix" class="tabcontent"></div>
+</div>
+
+<script>
+    const products = ${products};
+    const deployment = ${deployment};
+
+    function updateTabCounts() {
+        const productCount = ((products.portfolio || {}).products || []).length;
+        const deploymentChannelCount = (deployment.channels || []).reduce((sum, group) => sum + ((group.channels || []).length), 0);
+        document.getElementById('tab_products').textContent = 'Products (' + productCount + ')';
+        document.getElementById('tab_deployment').textContent = 'Deployment Channels (' + deploymentChannelCount + ')';
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function buildDeploymentChannelLookup() {
+        const lookup = {};
+        (deployment.channels || []).forEach(group => {
+            (group.channels || []).forEach(channel => {
+                const ref = (group.groupId || '') + '/' + (channel.subChannelId || '');
+                lookup[ref] = {
+                    groupId: group.groupId || '',
+                    groupName: group.groupName || '',
+                    channelId: channel.subChannelId || '',
+                    channelName: channel.subChannelName || channel.subChannelId || '',
+                    channelType: channel.channelType || ''
+                };
+            });
+        });
+        return lookup;
+    }
+
+    // Bricks live directly on a channel (subchannel): channel.deployedBricks.
+    function channelDeployedBricks(channel) {
+        return (channel && channel.deployedBricks) || [];
+    }
+
+    // Derive each product's deployed bricks and the channels they ship to from
+    // deployment.json (deployedBricks[].usedInProducts), since products.json no longer
+    // carries brick/channel links. Returns { byProduct: {pid: {bricks, brickChannelRefs}} }.
+    let productDeploymentIndexCache = null;
+
+    function buildProductDeploymentIndex() {
+        if (productDeploymentIndexCache) {
+            return productDeploymentIndexCache;
+        }
+        const byProduct = {};
+
+        function ensure(pid) {
+            if (!byProduct[pid]) {
+                byProduct[pid] = {bricks: {}, brickChannelRefs: {}};
+            }
+            return byProduct[pid];
+        }
+
+        (deployment.channels || []).forEach(group => {
+            (group.channels || []).forEach(channel => {
+                const ref = (group.groupId || '') + '/' + (channel.subChannelId || '');
+                channelDeployedBricks(channel).forEach(brick => {
+                    (brick.usedInProducts || []).forEach(use => {
+                        const pid = use.productId;
+                        if (!pid) {
+                            return;
+                        }
+                        const entry = ensure(pid);
+                        if (!entry.bricks[brick.brickId]) {
+                            entry.bricks[brick.brickId] = {
+                                brickId: brick.brickId,
+                                brickName: brick.brickName || brick.brickId,
+                                description: use.description || '',
+                                channelRefs: new Set()
+                            };
+                        }
+                        entry.bricks[brick.brickId].channelRefs.add(ref);
+                        if (!entry.brickChannelRefs[brick.brickId]) {
+                            entry.brickChannelRefs[brick.brickId] = new Set();
+                        }
+                        entry.brickChannelRefs[brick.brickId].add(ref);
+                    });
+                });
+            });
+        });
+        productDeploymentIndexCache = {byProduct: byProduct};
+        return productDeploymentIndexCache;
+    }
+
+    function productBricks(productId) {
+        const entry = buildProductDeploymentIndex().byProduct[productId];
+        return entry ? Object.values(entry.bricks) : [];
+    }
+
+    function productBrickChannelRefs(productId, brickId) {
+        const entry = buildProductDeploymentIndex().byProduct[productId];
+        if (!entry || !entry.brickChannelRefs[brickId]) {
+            return new Set();
+        }
+        return entry.brickChannelRefs[brickId];
+    }
+
+    function collectProductDeliveryChannels(product, deploymentLookup) {
+        const channels = {};
+        productBricks(product.id).forEach(brick => {
+            brick.channelRefs.forEach(ref => {
+                if (!ref || channels[ref]) {
+                    return;
+                }
+                const resolved = deploymentLookup[ref] || {};
+                channels[ref] = {
+                    ref: ref,
+                    channelName: resolved.channelName || ref,
+                    groupName: resolved.groupName || '',
+                    channelType: resolved.channelType || ''
+                };
+            });
+        });
+        return Object.values(channels).sort((left, right) => left.channelName.localeCompare(right.channelName));
+    }
+
+    function renderBrickIcon(brickId, brickName) {
+        const safeId = escapeHtml(brickId || '');
+        const safeName = escapeHtml(brickName || brickId || 'Product brick');
+        const fallback = "if(!this.dataset.fallbackStage){this.dataset.fallbackStage='jpeg';this.src='../product-bricks/icons/" + safeId + ".jpeg';}else if(this.dataset.fallbackStage==='jpeg'){this.dataset.fallbackStage='jpg';this.src='../product-bricks/icons/" + safeId + ".jpg';}else{this.onerror=null;this.src='../product-bricks/icons/logo.png';}";
+        return '<img src="../product-bricks/icons/' + safeId + '.png" alt="' + safeName + '" title="' + safeName + '" style="width: 40px; height: 40px; object-fit: contain; border-radius: 10px; background: white; border: 1px solid #d1d5db; padding: 4px;" onerror="' + fallback + '">';
+    }
+
+    function renderBrickLandingLink(brickId, brickName) {
+        const safeId = escapeHtml(brickId || '');
+        const safeName = escapeHtml(brickName || brickId || 'Product brick');
+        return '<a target="_blank" href="../product-bricks/landing_pages/' + safeId + '.html" title="' + safeName + '">' + renderBrickIcon(brickId, brickName) + '</a>';
+    }
+
+    function showTextEnabled() {
+        const toggle = document.getElementById('show_text_toggle');
+        return !!(toggle && toggle.checked);
+    }
+
+    function chipIconClass() {
+        return showTextEnabled() ? 'chip-icon' : 'chip-icon chip-icon-large';
+    }
+
+    function deploymentIconFile(channel, group) {
+        const text = [
+            group && group.groupId,
+            group && group.groupName,
+            channel && channel.subChannelId,
+            channel && channel.subChannelName,
+            channel && channel.channelType
+        ].join(' ').toLowerCase();
+
+        if (text.includes('ios')) {
+            return 'app_store_ios.png';
+        }
+        if (text.includes('android') || text.includes('play store') || text.includes('play-store')) {
+            return 'app_store_android.png';
+        }
+        if (text.includes('private cloud') || text.includes('private-cloud')) {
+            return 'private_cloud.png';
+        }
+        if (text.includes('cloud') || text.includes('runtime') || text.includes('edge') || text.includes('cdn')) {
+            return 'public_cloud.png';
+        }
+        if (text.includes('saas') || text.includes('analytics') || text.includes('crm') || text.includes('datadog') || text.includes('snowflake') || text.includes('databricks') || text.includes('salesforce')) {
+            return 'saas.png';
+        }
+        return 'deployment.png';
+    }
+
+    function renderDeploymentIcon(channel, group) {
+        const fileName = deploymentIconFile(channel, group);
+        const label = escapeHtml((channel && (channel.subChannelName || channel.subChannelId)) || 'Deployment channel');
+        return '<img class="deployment-card-icon" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
+    }
+
+    function renderBrickCircle(brick) {
+        const label = escapeHtml((brick.brickName || brick.brickId || 'Product brick') + (brick.deploymentRole ? ' — ' + brick.deploymentRole : ''));
+        return '<a class="env-brick-circle" href="../product-bricks/landing_pages/' + escapeHtml(brick.brickId || '') + '.html" target="_blank" title="' + label + '">' +
+            '<img src="../product-bricks/icons/' + escapeHtml(brick.brickId || '') + '.png" alt="' + escapeHtml(brick.brickName || brick.brickId || '') + '" onerror="this.onerror=null;this.src=\'../product-bricks/icons/logo.png\'">' +
+            '</a>';
+    }
+
+    function renderDeploymentChannelLink(channel, group) {
+        const fileName = deploymentIconFile(channel, group);
+        const label = escapeHtml((channel && (channel.subChannelName || channel.subChannelId)) || 'Deployment channel');
+        const channelHref = 'deployment/' + escapeHtml(channel.subChannelId || '') + '.html';
+        const bricks = channel.deployedBricks || [];
+
+        let html = '<div class="deployment-channel-card">';
+        html += '<a class="deployment-channel-head" href="' + channelHref + '" title="' + label + '">';
+        html += '<img class="deployment-grid-icon" src="icons/deployment/' + fileName + '" alt="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
+        html += '<div>';
+        if (channel.channelType) {
+            html += '<div class="deployment-channel-type">' + escapeHtml(channel.channelType) + '</div>';
+        }
+        html += '<div class="deployment-channel-name">' + label +
+            ' <span class="env-brick-count">(' + bricks.length + ')</span></div>';
+        html += '</div></a>';
+
+        if (bricks.length) {
+            html += '<div class="env-block"><div class="env-brick-circles">';
+            bricks.forEach(brick => {
+                html += renderBrickCircle(brick);
+            });
+            html += '</div></div>';
+        } else {
+            html += '<div class="env-block"><div class="env-empty">No bricks deployed.</div></div>';
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    function renderDeploymentChipIcon(channel) {
+        const fileName = deploymentIconFile({
+            subChannelId: channel && channel.channelId,
+            subChannelName: channel && channel.channelName,
+            channelType: channel && channel.channelType
+        }, {
+            groupName: channel && channel.groupName
+        });
+        const label = escapeHtml((channel && channel.channelName) || 'Delivery channel');
+        return '<img class="' + chipIconClass() + ' chip-icon-channel" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
+    }
+
+    function renderDeploymentChipIconWithLabel(channel, labelText) {
+        const fileName = deploymentIconFile({
+            subChannelId: channel && channel.channelId,
+            subChannelName: channel && channel.channelName,
+            channelType: channel && channel.channelType
+        }, {
+            groupName: channel && channel.groupName
+        });
+        const label = escapeHtml(labelText || (channel && channel.channelName) || 'Delivery channel');
+        return '<img class="' + chipIconClass() + ' chip-icon-channel" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
+    }
+
+    function renderCustomerChipIcon(customer) {
+        const label = escapeHtml((customer && (customer.name || customer.id)) || 'Customer');
+        return '<img class="' + chipIconClass() + '" src="../customers/icons/' + escapeHtml((customer && customer.icon) || 'customer.png') + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'../customers/icons/customer.png\'">';
+    }
+
+    function renderBrickChipIcon(brickId, brickName) {
+        const safeId = escapeHtml(brickId || '');
+        const safeName = escapeHtml(brickName || brickId || 'Product brick');
+        const fallback = "if(!this.dataset.fallbackStage){this.dataset.fallbackStage='jpeg';this.src='../product-bricks/icons/" + safeId + ".jpeg';}else if(this.dataset.fallbackStage==='jpeg'){this.dataset.fallbackStage='jpg';this.src='../product-bricks/icons/" + safeId + ".jpg';}else{this.onerror=null;this.src='../product-bricks/icons/logo.png';}";
+        return '<img class="' + chipIconClass() + ' chip-icon-brick" src="../product-bricks/icons/' + safeId + '.png" alt="' + safeName + '" title="' + safeName + '" onerror="' + fallback + '">';
+    }
+
+    function renderBrickChipIconWithLabel(brickId, brickName, labelText) {
+        const safeId = escapeHtml(brickId || '');
+        const safeName = escapeHtml(labelText || brickName || brickId || 'Product brick');
+        const fallback = "if(!this.dataset.fallbackStage){this.dataset.fallbackStage='jpeg';this.src='../product-bricks/icons/" + safeId + ".jpeg';}else if(this.dataset.fallbackStage==='jpeg'){this.dataset.fallbackStage='jpg';this.src='../product-bricks/icons/" + safeId + ".jpg';}else{this.onerror=null;this.src='../product-bricks/icons/logo.png';}";
+        return '<img class="' + chipIconClass() + ' chip-icon-brick" src="../product-bricks/icons/' + safeId + '.png" alt="' + safeName + '" title="' + safeName + '" onerror="' + fallback + '">';
+    }
+
+    function renderIconChip(iconHtml, title, copy, href) {
+        const showText = showTextEnabled();
+        const safeTitle = escapeHtml(title || '');
+        const safeCopy = escapeHtml(copy || '');
+        const bodyClass = showText ? 'brick-chip-body' : 'brick-chip-body hidden';
+        let chip = '<div class="' + (showText ? 'brick-chip' : 'icon-only-chip') + '">';
+        chip += iconHtml;
+        chip += '<div class="' + bodyClass + '">';
+        chip += '<div class="brick-chip-title">' + safeTitle + '</div>';
+        if (safeCopy) {
+            chip += '<div class="brick-chip-copy">' + safeCopy + '</div>';
+        }
+        chip += '</div>';
+        chip += '</div>';
+        if (href) {
+            return '<a class="' + (showText ? '' : 'icon-only-chip-link') + '" target="_blank" href="' + href + '" title="' + safeTitle + '">' + chip + '</a>';
+        }
+        return chip;
+    }
+
+    function renderIconWithBadges(iconHtml, topBadgeClass, topBadge, bottomBadgeClass, bottomBadge) {
+        if (showTextEnabled()) {
+            return iconHtml;
+        }
+        let html = '<div class="icon-badge-wrap">' + iconHtml;
+        if (typeof topBadge === 'number') {
+            html += '<span class="icon-badge icon-badge-top ' + escapeHtml(topBadgeClass || '') + '">' + escapeHtml(String(topBadge)) + '</span>';
+        }
+        if (typeof bottomBadge === 'number') {
+            html += '<span class="icon-badge icon-badge-bottom ' + escapeHtml(bottomBadgeClass || '') + '">' + escapeHtml(String(bottomBadge)) + '</span>';
+        }
+        html += '</div>';
+        return html;
+    }
+
+    function renderMatrixHeaderIcon(channel) {
+        const fileName = deploymentIconFile({
+            subChannelId: channel && channel.channelId,
+            subChannelName: channel && channel.channelName,
+            channelType: channel && channel.channelType
+        }, {
+            groupId: channel && channel.groupId,
+            groupName: channel && channel.groupName
+        });
+        const label = escapeHtml((channel && channel.channelName) || 'Delivery channel');
+        return '<img class="chip-icon chip-icon-large" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
+    }
+
+    function renderDependencyMarkerIcon(channel) {
+        const fileName = deploymentIconFile({
+            subChannelId: channel && channel.channelId,
+            subChannelName: channel && channel.channelName,
+            channelType: channel && channel.channelType
+        }, {
+            groupId: channel && channel.groupId,
+            groupName: channel && channel.groupName
+        });
+        const label = escapeHtml((channel && channel.channelName) || 'Delivery channel');
+        return '<img class="dependency-marker-icon" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
+    }
+
+    function renderProductsTableCell(innerHtml) {
+        return '<div class="products-table-product-cell">' + innerHtml + '</div>';
+    }
+
+    function renderProductsTableLabeledCell(label, count, innerHtml) {
+        let fullLabel = label || '';
+        if (typeof count === 'number' && label) {
+            fullLabel += ' (' + count + ')';
+        }
+        return renderProductsTableCell('<div class="products-table-section-label">' + escapeHtml(fullLabel) + '</div>' + innerHtml);
+    }
+
+    function renderProductsTableEmpty(label) {
+        return '<div class="products-table-empty">' + escapeHtml(label) + '</div>';
+    }
+
+    function renderProductsTableNameCell(product) {
+        let html = '<a target="_blank" href="landing_pages/' + escapeHtml(product.id) + '.html">';
+        html += '<div class="products-table-head">';
+        html += '<img src="icons/' + escapeHtml(product.icon) + '" class="deployment-card-icon products-table-product-icon" onerror="this.onerror=null;this.src=\'icons/product.png\'">';
+        html += '<div class="products-table-head-copy">';
+        html += '<div class="products-table-name">' + escapeHtml(product.name) + '</div>';
+        html += '</div>';
+        html += '</div>';
+        html += '</a>';
+        return html;
+    }
+
+    function renderProductsTableCustomersCell(product) {
+        if (!(product.primaryCustomers || []).length) {
+            return renderProductsTableEmpty('No customers mapped');
+        }
+        let html = '<div class="products-table-cell-stack' + (showTextEnabled() ? '' : ' compact') + '">';
+        (product.primaryCustomers || []).forEach(customer => {
+            html += renderIconChip(
+                renderCustomerChipIcon(customer),
+                customer.name || customer.id,
+                customer.id || '',
+                '../customers/landing_pages/' + escapeHtml(customer.id || '') + '.html'
+            );
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderProductsTableDeliveryChannelsCell(product, deliveryChannels) {
+        if (!deliveryChannels.length) {
+            return renderProductsTableEmpty('No delivery channels mapped');
+        }
+        let html = '<div class="products-table-cell-stack' + (showTextEnabled() ? '' : ' compact') + '">';
+        deliveryChannels.forEach(channel => {
+            const meta = [channel.groupName, channel.channelType].filter(Boolean).join(' · ');
+            const brickCount = productBricks(product.id).filter(brick => brick.channelRefs.has(channel.ref)).length;
+            const detailLabel = (channel.channelName || 'Delivery channel') + ' | ' + brickCount + ' bricks';
+            html += renderIconChip(
+                renderIconWithBadges(
+                    renderDeploymentChipIconWithLabel(channel, detailLabel),
+                    'icon-badge-brick',
+                    brickCount
+                ),
+                channel.channelName,
+                (meta || channel.ref) + ' | ' + brickCount + ' bricks'
+            );
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderProductsTableBricksCell(product) {
+        const bricks = productBricks(product.id);
+        if (!bricks.length) {
+            return renderProductsTableEmpty('No product bricks mapped');
+        }
+        let html = '<div class="products-table-cell-stack' + (showTextEnabled() ? '' : ' compact') + '">';
+        bricks.forEach(brick => {
+            const channelCount = brick.channelRefs.size;
+            const detailLabel = (brick.brickName || brick.brickId || 'Product brick') + ' | ' + channelCount + ' channels';
+            html += renderIconChip(
+                renderIconWithBadges(
+                    renderBrickChipIconWithLabel(brick.brickId, brick.brickName, detailLabel),
+                    'icon-badge-channel',
+                    channelCount
+                ),
+                brick.brickName || brick.brickId,
+                channelCount + ' channels' + (brick.description ? ' · ' + brick.description : ''),
+                '../product-bricks/landing_pages/' + escapeHtml(brick.brickId) + '.html'
+            );
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function collectProductDependencyModel(product, deploymentLookup) {
+        const channels = {};
+        const bricks = {};
+
+        productBricks(product.id).forEach(brick => {
+            bricks[brick.brickId] = {
+                key: brick.brickId,
+                name: brick.brickName || brick.brickId,
+                brickId: brick.brickId
+            };
+            brick.channelRefs.forEach(ref => {
+                if (!ref || channels[ref]) {
+                    return;
+                }
+                const resolved = deploymentLookup[ref] || {};
+                channels[ref] = {
+                    ref: ref,
+                    groupId: resolved.groupId || '',
+                    groupName: resolved.groupName || '',
+                    channelId: resolved.channelId || '',
+                    channelName: resolved.channelName || ref,
+                    channelType: resolved.channelType || ''
+                };
+            });
+        });
+
+        return {
+            channels: Object.values(channels).sort((a, b) => a.channelName.localeCompare(b.channelName)),
+            bricks: Object.values(bricks).sort((a, b) => a.name.localeCompare(b.name))
+        };
+    }
+
+    function hasBrickChannelDependency(productId, brickId, channelRef) {
+        return productBrickChannelRefs(productId, brickId).has(channelRef);
+    }
+
+    function renderDependencyMatrix() {
+        const container = document.getElementById('tab_content_matrix');
+        const deploymentLookup = buildDeploymentChannelLookup();
+        let html = '<div class="dependency-panel">';
+
+        ((products.portfolio || {}).products || []).forEach(product => {
+            const model = collectProductDependencyModel(product, deploymentLookup);
+            html += '<section class="dependency-product">';
+            html += '<div class="dependency-product-header">';
+            html += '<img src="icons/' + escapeHtml(product.icon) + '" class="deployment-card-icon" onerror="this.onerror=null;this.src=\'icons/product.png\'">';
+            html += '<div><div class="deployment-card-title">' + escapeHtml(product.name) + '</div>';
+            html += '<div class="deployment-card-meta">' + escapeHtml((product.primaryCustomers || []).map(customer => customer.name).join(' | ')) + '</div></div>';
+            html += '</div>';
+            html += '<div class="dependency-product-copy">Brick-to-channel dependencies are derived from deployment channels whose deployed bricks are used in this product.</div>';
+            if (!model.channels.length) {
+                html += '<div class="dependency-product-copy">No deployment channels mapped for this product.</div>';
+                html += '</section>';
+                return;
+            }
+
+            html += '<div class="dependency-table-wrap">';
+            html += '<table class="dependency-table">';
+            html += '<thead><tr><th class="dependency-row-label"></th>';
+            model.channels.forEach(channel => {
+                html += '<th title="' + escapeHtml(channel.channelName) + '">' + renderMatrixHeaderIcon(channel) + '</th>';
+            });
+            html += '</tr></thead><tbody>';
+
+            html += '<tr class="dependency-section-row"><td colspan="' + (model.channels.length + 1) + '">Product Bricks</td></tr>';
+            model.bricks.forEach(brickMeta => {
+                html += '<tr>';
+                html += '<td class="dependency-row-label">';
+                html += '<div class="dependency-row-cell">';
+                html += renderBrickChipIcon(brickMeta.brickId, brickMeta.name);
+                html += '<div class="dependency-row-text"><div class="dependency-row-title">' + escapeHtml(brickMeta.name) + '</div></div>';
+                html += '</div>';
+                html += '</td>';
+                model.channels.forEach(channel => {
+                    html += '<td>' + (hasBrickChannelDependency(product.id, brickMeta.brickId, channel.ref) ? renderDependencyMarkerIcon(channel) : '<span class="dependency-empty"> </span>') + '</td>';
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table></div></section>';
+        });
+
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function renderDeploymentChannels() {
+        const container = document.getElementById('tab_content_deployment');
+        const groups = deployment.channels || [];
+        const channels = groups.flatMap(group => group.channels || []);
+        const deployedBrickCount = channels.reduce((sum, channel) => sum + channelDeployedBricks(channel).length, 0);
+        const productChannelMap = {};
+        groups.forEach(group => {
+            (group.channels || []).forEach(channel => {
+                const ref = (group.groupId || '') + '/' + (channel.subChannelId || '');
+                channelDeployedBricks(channel).forEach(brick => {
+                    (brick.usedInProducts || []).forEach(use => {
+                        if (!use.productId) {
+                            return;
+                        }
+                        if (!productChannelMap[ref]) {
+                            productChannelMap[ref] = {};
+                        }
+                        productChannelMap[ref][use.productId] = true;
+                    });
+                });
+            });
+        });
+
+        const deployedProductCount = Object.values(productChannelMap).reduce((sum, byProduct) => sum + Object.keys(byProduct).length, 0);
+
+        let html = '<div class="deployment-panel">';
+
+        if (deployment.metadata && deployment.metadata.description) {
+            html += '<div class="deployment-group-copy" style="margin-bottom:18px;">' + escapeHtml(deployment.metadata.description) + '</div>';
+        }
+
+        groups.forEach(group => {
+            html += '<section class="deployment-group">';
+            html += '<div class="deployment-group-title">' + escapeHtml(group.groupName || group.groupId) + '</div>';
+            if (group.description) {
+                html += '<div class="deployment-group-copy">' + escapeHtml(group.description) + '</div>';
+            }
+            html += '<div class="deployment-channel-grid">';
+
+            (group.channels || []).forEach(channel => {
+                html += renderDeploymentChannelLink(channel, group);
+            });
+
+            html += '</div>';
+            html += '</section>';
+        });
+
+        html += '</div>';
+        container.innerHTML = html;
+    }
+
+    function update() {
+        const deploymentLookup = buildDeploymentChannelLookup();
+        const portfolioProducts = ((products.portfolio || {}).products || []);
+        let html = '<div class="products-table-wrap">';
+
+        portfolioProducts.forEach(product => {
+            html += '<div style="margin: 30px; padding: 22px; padding-top: 0; display: inline-block; width: 400px; vertical-align: top; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; border-radius: 20px; border: 1px solid #f0f0f0;">';
+            html += renderProductsTableLabeledCell('', null, renderProductsTableNameCell(product));
+            const deliveryChannels = collectProductDeliveryChannels(product, deploymentLookup);
+            html += renderProductsTableLabeledCell('Delivery Channels', deliveryChannels.length, renderProductsTableDeliveryChannelsCell(product, deliveryChannels));
+            html += renderProductsTableLabeledCell('Bricks', productBricks(product.id).length, renderProductsTableBricksCell(product));
+            html += '</div>';
+        });
+
+        html += '</div>';
+
+        document.getElementById('products_content').innerHTML = html;
+    }
+
+    /* ---------- Product dependency graph (force 2D / mermaid) ---------- */
+    const PDG_NODE_TYPES = [
+        {id: 'product', label: 'Products', color: '#ea580c'},
+        {id: 'subchannel', label: 'Subchannels', color: '#2563eb'},
+        {id: 'brick', label: 'Bricks', color: '#059669'}
+    ];
+    const pdgColorMap = {};
+    PDG_NODE_TYPES.forEach(type => {
+        pdgColorMap[type.id] = type.color;
+    });
+    let pdgView = 'force';
+    let pdgShowLabels = false;
+    let pdgForceInstance = null;
+    let pdgInitialized = false;
+    let pdgSelectedNodeIds = null;   // Set of selected node ids (null = all selected)
+    let pdgNodeSearch = '';
+
+    function pdgWithAlpha(hexColor, alpha) {
+        const hex = String(hexColor || '').replace('#', '');
+        if (hex.length !== 6) {
+            return hexColor;
+        }
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+    }
+
+    // Blend a #rrggbb color toward white to a solid hex tint (mermaid classDef fills
+    // must be a single token, so rgba() with spaces/commas breaks the parser).
+    function pdgTint(hexColor, amount) {
+        const hex = String(hexColor || '').replace('#', '');
+        if (hex.length !== 6) {
+            return hexColor;
+        }
+        const mix = channel => {
+            const value = Math.round(channel + (255 - channel) * amount);
+            return ('0' + value.toString(16)).slice(-2);
+        };
+        return '#' + mix(parseInt(hex.substring(0, 2), 16)) +
+            mix(parseInt(hex.substring(2, 4), 16)) +
+            mix(parseInt(hex.substring(4, 6), 16));
+    }
+
+    // Build the {nodes, edges} model across products, subchannels, and bricks.
+    function buildProductDependencyGraph() {
+        const nodes = {};
+        const edgeSet = {};
+        const counts = {product: 0, subchannel: 0, brick: 0};
+        const productSet = {};
+        ((products.portfolio || {}).products || []).forEach(product => {
+            productSet[product.id] = product;
+        });
+
+        function addNode(id, name, nodeType, productId, groupKey, groupName) {
+            if (!nodes[id]) {
+                nodes[id] = {id: id, name: name || id, nodeType: nodeType, productId: productId || '', groupKey: groupKey || '', groupName: groupName || ''};
+                counts[nodeType] += 1;
+            }
+        }
+
+        function addEdge(source, target) {
+            if (!source || !target) {
+                return;
+            }
+            const key = source + '||' + target;
+            if (!edgeSet[key]) {
+                edgeSet[key] = {source: source, target: target};
+            }
+        }
+
+        // Chain: brick -> subchannel -> product, derived from deployment.json
+        // (subchannel.deployedBricks[].usedInProducts). One node per real entity: each brick,
+        // subchannel, and product appears exactly once. Subchannels carry their channel (group)
+        // so they group per channel (mermaid subgraphs / force clustering). Shared entities are
+        // shared nodes, which is the truthful picture of the data.
+        (deployment.channels || []).forEach(group => {
+            const groupName = group.groupName || group.groupId || 'Channel';
+            (group.channels || []).forEach(subChannel => {
+                const ref = (group.groupId || '') + '/' + (subChannel.subChannelId || '');
+                const subChannelName = subChannel.subChannelName || subChannel.subChannelId || ref;
+                const subChannelNodeId = 'subchannel:' + ref;
+                (subChannel.deployedBricks || []).forEach(deployed => {
+                    const products = (deployed.usedInProducts || [])
+                        .map(use => productSet[use.productId])
+                        .filter(Boolean);
+                    if (!products.length) {
+                        return;
+                    }
+                    const brickNodeId = 'brick:' + deployed.brickId;
+                    addNode(brickNodeId, deployed.brickName || deployed.brickId, 'brick');
+                    addNode(subChannelNodeId, subChannelName, 'subchannel', '', 'channelgroup:' + (group.groupId || ''), groupName);
+                    addEdge(brickNodeId, subChannelNodeId);   // brick -> subchannel
+
+                    products.forEach(product => {
+                        const productNodeId = 'product:' + product.id;
+                        addNode(productNodeId, product.name || product.id, 'product');
+                        addEdge(subChannelNodeId, productNodeId); // subchannel -> product
+                    });
+                });
+            });
+        });
+
+        return {nodes: Object.values(nodes), edges: Object.values(edgeSet), counts: counts};
+    }
+
+    function pdgTypeLabel(typeId) {
+        const type = PDG_NODE_TYPES.find(item => item.id === typeId);
+        return type ? type.label : typeId;
+    }
+
+    // All nodes are selected by default; pdgSelectedNodeIds === null means "all".
+    function pdgIsNodeSelected(nodeId) {
+        return pdgSelectedNodeIds === null || pdgSelectedNodeIds.has(nodeId);
+    }
+
+    function pdgEnsureSelectionState(allNodes) {
+        if (pdgSelectedNodeIds === null) {
+            pdgSelectedNodeIds = new Set(allNodes.map(node => node.id));
+        }
+    }
+
+    function renderPdgControls(allNodes) {
+        pdgEnsureSelectionState(allNodes);
+        const query = pdgNodeSearch.trim().toLowerCase();
+        const matches = allNodes.filter(node => !query || (node.name || '').toLowerCase().indexOf(query) !== -1);
+
+        let html = '<div class="pdg-control-title">Nodes</div>';
+        html += '<input type="search" class="pdg-search" placeholder="Search nodes…" autocomplete="off" oninput="onPdgSearch(this.value)" value="' + escapeHtml(pdgNodeSearch) + '">';
+        html += '<div class="pdg-actions">' +
+            '<button type="button" class="pdg-action" onclick="setAllPdgNodes(true)">Show all</button>' +
+            '<button type="button" class="pdg-action" onclick="setAllPdgNodes(false)">Hide all</button>' +
+            (query ? '<button type="button" class="pdg-action" onclick="showOnlyPdgMatches()">Only matching</button>' : '') +
+            '</div>';
+
+        html += '<div class="pdg-checklist">';
+        if (!matches.length) {
+            html += '<div class="pdg-empty-list">No nodes match the search.</div>';
+        } else {
+            PDG_NODE_TYPES.forEach(type => {
+                const typeNodes = matches.filter(node => node.nodeType === type.id);
+                if (!typeNodes.length) {
+                    return;
+                }
+                html += '<div class="pdg-type-header">' + escapeHtml(type.label) + ' (' + typeNodes.length + ')</div>';
+                typeNodes.sort((a, b) => (a.name || '').localeCompare(b.name || '')).forEach(node => {
+                    html += '<label class="pdg-check-item node" title="' + escapeHtml(node.name) + '">' +
+                        '<input type="checkbox" class="pdg-node-checkbox" value="' + escapeHtml(node.id) + '"' +
+                        (pdgIsNodeSelected(node.id) ? ' checked' : '') + ' onchange="togglePdgNode(this.value, this.checked)">' +
+                        '<span class="pdg-swatch" style="background-color:' + type.color + '"></span>' +
+                        '<span class="label">' + escapeHtml(node.name) + '</span>' +
+                        '</label>';
+                });
+            });
+        }
+        html += '</div>';
+        document.getElementById('pdg_controls').innerHTML = html;
+    }
+
+    // ---- URL state: ?view=mermaid and ?gq=<node search> keep the dependency
+    // graph view shareable (node selections are too large for a URL). ----
+    let pdgUrlRestored = false;
+
+    function restorePdgStateFromUrl() {
+        if (pdgUrlRestored) return;
+        pdgUrlRestored = true;
+        const params = new URLSearchParams(window.location.search);
+        const view = params.get('view');
+        if (view === 'mermaid' || view === 'force') pdgView = view;
+        const graphQuery = params.get('gq');
+        if (graphQuery) pdgNodeSearch = graphQuery;
+    }
+
+    function syncPdgUrl() {
+        if (!pdgUrlRestored || !window.history || !window.history.replaceState) return;
+        const params = new URLSearchParams(window.location.search);
+        if (pdgView === 'mermaid') params.set('view', 'mermaid'); else params.delete('view');
+        if (pdgNodeSearch.trim()) params.set('gq', pdgNodeSearch.trim()); else params.delete('gq');
+        const qs = params.toString();
+        window.history.replaceState({}, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+    }
+
+    function onPdgSearch(value) {
+        pdgNodeSearch = value || '';
+        renderPdgControls(buildProductDependencyGraph().nodes);
+        syncPdgUrl();
+    }
+
+    function togglePdgNode(nodeId, checked) {
+        const allNodes = buildProductDependencyGraph().nodes;
+        pdgEnsureSelectionState(allNodes);
+        if (checked) {
+            pdgSelectedNodeIds.add(nodeId);
+        } else {
+            pdgSelectedNodeIds.delete(nodeId);
+        }
+        renderProductDependencyGraph();
+    }
+
+    function setAllPdgNodes(selected) {
+        const allNodes = buildProductDependencyGraph().nodes;
+        pdgSelectedNodeIds = selected ? new Set(allNodes.map(node => node.id)) : new Set();
+        renderPdgControls(allNodes);
+        renderProductDependencyGraph();
+    }
+
+    function showOnlyPdgMatches() {
+        const allNodes = buildProductDependencyGraph().nodes;
+        const query = pdgNodeSearch.trim().toLowerCase();
+        pdgSelectedNodeIds = new Set(
+            allNodes.filter(node => !query || (node.name || '').toLowerCase().indexOf(query) !== -1).map(node => node.id)
+        );
+        renderPdgControls(allNodes);
+        renderProductDependencyGraph();
+    }
+
+    function setPdgView(view) {
+        pdgView = view;
+        document.querySelectorAll('.pdg-view-btn').forEach(button => {
+            button.classList.toggle('active', button.getAttribute('data-pdgview') === view);
+        });
+        renderProductDependencyGraph();
+    }
+
+    function setPdgLabels(show) {
+        pdgShowLabels = show;
+        if (pdgForceInstance && pdgView === 'force') {
+            pdgForceInstance.nodeCanvasObjectMode(() => 'after');
+        }
+    }
+
+    function pdgMermaidId(value) {
+        return 'n_' + String(value).replace(/[^a-zA-Z0-9_]/g, '_');
+    }
+
+    function pdgMermaidLabel(value) {
+        return String(value || '')
+            .replaceAll('&', 'and').replaceAll('"', '').replaceAll("'", '')
+            .replaceAll('<', '').replaceAll('>', '')
+            .replaceAll('[', '(').replaceAll(']', ')')
+            .replaceAll('{', '(').replaceAll('}', ')').replaceAll('|', '/');
+    }
+
+    function renderProductDependencyGraph() {
+        restorePdgStateFromUrl();
+        const graph = buildProductDependencyGraph();
+        pdgEnsureSelectionState(graph.nodes);
+        if (!pdgInitialized) {
+            renderPdgControls(graph.nodes);
+            pdgInitialized = true;
+        }
+        document.querySelectorAll('.pdg-view-btn').forEach(button => {
+            button.classList.toggle('active', button.getAttribute('data-pdgview') === pdgView);
+        });
+        syncPdgUrl();
+        const nodes = graph.nodes.filter(node => pdgIsNodeSelected(node.id));
+        const visibleIds = new Set(nodes.map(node => node.id));
+        const edges = graph.edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target));
+
+        const summary = document.getElementById('pdg_summary');
+        if (summary) {
+            summary.innerHTML = 'Showing <strong>' + nodes.length + '</strong> of ' + graph.nodes.length + ' nodes &middot; <strong>' + edges.length + '</strong> dependencies.';
+        }
+
+        const container = document.getElementById('pdg_graph');
+        if (!container) {
+            return;
+        }
+        container.classList.toggle('force', pdgView === 'force');
+        pdgForceInstance = null;
+
+        if (!nodes.length || !edges.length) {
+            container.innerHTML = '<div class="pdg-empty">Select nodes that share dependencies to render the graph.</div>';
+            return;
+        }
+
+        if (pdgView === 'force') {
+            renderPdgForce(container, nodes, edges);
+        } else {
+            renderPdgMermaid(container, nodes, edges);
+        }
+    }
+
+    function renderPdgForce(container, nodes, edges) {
+        if (typeof ForceGraph === 'undefined') {
+            container.innerHTML = '<div class="pdg-empty">Force graph library failed to load.</div>';
+            return;
+        }
+        container.innerHTML = '';
+        const degree = {};
+        edges.forEach(edge => {
+            degree[edge.source] = (degree[edge.source] || 0) + 1;
+            degree[edge.target] = (degree[edge.target] || 0) + 1;
+        });
+        const graphNodes = nodes.map(node => ({
+            id: node.id, name: node.name, nodeType: node.nodeType, groupKey: node.groupKey || '', val: (degree[node.id] || 1)
+        }));
+        const graphLinks = edges.map(edge => ({source: edge.source, target: edge.target}));
+
+        const Graph = ForceGraph()(container)
+            .nodeRelSize(5)
+            .nodeVal(() => 1)
+            .nodeLabel(node => escapeHtml(node.name))
+            .nodeColor(node => pdgWithAlpha(pdgColorMap[node.nodeType] || '#6b7280', 0.65))
+            .nodeCanvasObjectMode(() => 'after')
+            .nodeCanvasObject((node, ctx, globalScale) => {
+                if (!pdgShowLabels) return;
+                const fontSize = 12 / globalScale;
+                ctx.font = fontSize + 'px Ubuntu, Arial, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = '#374151';
+                ctx.fillText(node.name, node.x, node.y + 7);
+            })
+            .linkColor(() => 'rgba(100,116,139,0.5)')
+            .linkWidth(1.5)
+            .linkDirectionalArrowLength(4)
+            .linkDirectionalArrowRelPos(1)
+            .linkDirectionalParticles(1)
+            .linkDirectionalParticleSpeed(0.006)
+            .onNodeClick(node => {
+                if (node.id.indexOf('brick:') === 0) {
+                    window.open('../product-bricks/landing_pages/' + node.id.substring('brick:'.length) + '.html', '_blank');
+                }
+            })
+            .onEngineStop(() => {
+                // Keep the whole clustered graph inside the visible rectangle once it settles.
+                if (pdgForceInstance === Graph && typeof Graph.zoomToFit === 'function') {
+                    Graph.zoomToFit(400, 40);
+                }
+            })
+            .graphData({nodes: graphNodes, links: graphLinks});
+
+        // Pull subchannels that belong to the same channel (group) toward their shared
+        // centroid so subchannels group per channel.
+        const channelGroupStrength = 0.14;
+        Graph.d3Force('pdgCluster', (alpha) => {
+            const data = Graph.graphData();
+            const centroids = {};
+            data.nodes.forEach(node => {
+                if (node.nodeType === 'subchannel' && node.groupKey) {
+                    const c = centroids[node.groupKey] || (centroids[node.groupKey] = {x: 0, y: 0, n: 0});
+                    c.x += node.x;
+                    c.y += node.y;
+                    c.n += 1;
+                }
+            });
+            data.nodes.forEach(node => {
+                if (node.nodeType === 'subchannel' && node.groupKey) {
+                    const c = centroids[node.groupKey];
+                    if (c && c.n > 1) {
+                        const k = channelGroupStrength * alpha;
+                        node.vx = (node.vx || 0) + (c.x / c.n - node.x) * k;
+                        node.vy = (node.vy || 0) + (c.y / c.n - node.y) * k;
+                    }
+                }
+            });
+        });
+        if (typeof Graph.d3ReheatSimulation === 'function') {
+            Graph.d3ReheatSimulation();
+        }
+
+        pdgForceInstance = Graph;
+        sizePdgForce();
+        // The container may not have its final size on first paint; re-size on the next
+        // frames so the simulation expands to fill and recenters instead of cooling in a corner.
+        requestAnimationFrame(sizePdgForce);
+        setTimeout(sizePdgForce, 300);
+        // After the clusters settle, fit the whole graph into view.
+        if (typeof Graph.zoomToFit === 'function') {
+            setTimeout(() => {
+                if (pdgForceInstance === Graph) Graph.zoomToFit(400, 40);
+            }, 1400);
+        }
+    }
+
+    function sizePdgForce() {
+        if (!pdgForceInstance) {
+            return;
+        }
+        const container = document.getElementById('pdg_graph');
+        if (!container) {
+            return;
+        }
+        const w = container.clientWidth || container.offsetWidth;
+        const h = container.clientHeight || container.offsetHeight;
+        if (w > 0 && h > 0) {
+            pdgForceInstance.width(w).height(h);
+            if (typeof pdgForceInstance.d3ReheatSimulation === 'function') {
+                pdgForceInstance.d3ReheatSimulation();
+            }
+        }
+    }
+
+    window.addEventListener('resize', sizePdgForce);
+    if (typeof ResizeObserver !== 'undefined') {
+        const pdgGraphEl = document.getElementById('pdg_graph');
+        if (pdgGraphEl) {
+            new ResizeObserver(sizePdgForce).observe(pdgGraphEl);
+        }
+    }
+
+    function renderPdgMermaid(container, nodes, edges) {
+        if (typeof mermaid === 'undefined') {
+            container.innerHTML = '<div class="pdg-empty">Diagram library failed to load.</div>';
+            return;
+        }
+        let chart = 'flowchart LR\n\n';
+        // Non-subchannel nodes at top level.
+        nodes.filter(node => node.nodeType !== 'subchannel').forEach(node => {
+            chart += pdgMermaidId(node.id) + '["' + pdgMermaidLabel(node.name) + '"]\n';
+        });
+        // Subchannel nodes grouped into a subgraph per channel (group).
+        const subByGroup = {};
+        const groupNameByKey = {};
+        nodes.filter(node => node.nodeType === 'subchannel').forEach(node => {
+            const key = node.groupKey || 'group-other';
+            (subByGroup[key] = subByGroup[key] || []).push(node);
+            groupNameByKey[key] = node.groupName || 'Channel';
+        });
+        Object.keys(subByGroup).forEach((groupKey, index) => {
+            chart += 'subgraph pdgsub' + index + '["' + pdgMermaidLabel(groupNameByKey[groupKey]) + '"]\n';
+            subByGroup[groupKey].forEach(node => {
+                chart += pdgMermaidId(node.id) + '["' + pdgMermaidLabel(node.name) + '"]\n';
+            });
+            chart += 'end\n';
+        });
+        edges.forEach(edge => {
+            chart += pdgMermaidId(edge.source) + ' --> ' + pdgMermaidId(edge.target) + '\n';
+        });
+        PDG_NODE_TYPES.forEach(type => {
+            chart += 'classDef ' + type.id + 'Cls fill:' + pdgTint(type.color, 0.82) + ',stroke:' + type.color + ',color:#111827,stroke-width:2px;\n';
+            const ids = nodes.filter(node => node.nodeType === type.id).map(node => pdgMermaidId(node.id));
+            if (ids.length) {
+                chart += 'class ' + ids.join(',') + ' ' + type.id + 'Cls;\n';
+            }
+        });
+        container.innerHTML = '<div class="mermaid">' + chart + '</div>';
+        Promise.resolve(mermaid.run({querySelector: '#pdg_graph .mermaid'})).catch(() => {
+        });
+    }
+
+    if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({startOnLoad: false, securityLevel: 'loose', flowchart: {htmlLabels: false}});
+    }
+
+    // The dependency graph lives in its own tab now; (re)render and size it when the tab opens
+    // so the force-graph canvas gets real dimensions.
+    window.afterOpenTab = function (tabName) {
+        if (tabName === 'dependencies') {
+            renderProductDependencyGraph();
+            sizePdgForce();
+        }
+    };
+
+    updateTabCounts();
+    update();
+    renderDeploymentChannels();
+    renderDependencyMatrix();
+    renderProductDependencyGraph();
+</script>
+${breadcrumbs_script}
+</body>
+</html>

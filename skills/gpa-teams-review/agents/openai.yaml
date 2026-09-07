@@ -1,0 +1,4 @@
+interface:
+  display_name: "GPA Teams Review"
+  short_description: "Review GPA product teams"
+  default_prompt: "Use $gpa-teams-review to review this Productscape team model and save the review to its REVIEW.md."

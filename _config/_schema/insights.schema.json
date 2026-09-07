@@ -1,0 +1,65 @@
+{
+  "$comment": "customers/insights.json — evidence-backed insights linked to customers by id-joins",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ]
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "linkedCustomers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "customerId"
+              ],
+              "x-banned": [
+                "kpis"
+              ],
+              "properties": {
+                "customerId": {
+                  "type": "string"
+                },
+                "jobIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "kpiIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

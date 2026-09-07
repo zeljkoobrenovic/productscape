@@ -1,0 +1,67 @@
+{
+  "$comment": "data/data-assets.json — logical data assets with governance",
+  "type": "object",
+  "required": [
+    "rootGroups"
+  ],
+  "properties": {
+    "rootGroups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "subGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "ownerTeamId": {
+                "type": "string"
+              },
+              "stewardTeamIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "derivedFromAssetIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

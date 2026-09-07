@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence Explorer</title>
+    <style>
+        :root {
+            --bg: #f6f8fb;
+            --panel: #ffffff;
+            --ink: #1f2430;
+            --ink-soft: #5b6472;
+            --muted: #8a94a6;
+            --line: #e5e9f0;
+            --line-strong: #d4dae6;
+            --accent: #2563eb;
+            --accent-ink: #1d4ed8;
+            --accent-soft: #eff4ff;
+            --accent-line: #c9dbff;
+            --radius: 14px;
+            --radius-sm: 10px;
+            --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 6px 18px rgba(16, 24, 40, 0.06);
+            --shadow-hover: 0 2px 6px rgba(16, 24, 40, 0.08), 0 14px 30px rgba(16, 24, 40, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Ubuntu, Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+            margin: 0;
+            padding: 8px 28px 40px;
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ---- Hero ---- */
+        .hero {
+            margin-bottom: 6px;
+            padding: 22px 0 6px;
+        }
+
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr);
+            gap: 20px;
+            align-items: center;
+        }
+
+        .hero-logo {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            background: var(--panel);
+            padding: 0;
+        }
+
+        .hero-title {
+            font-size: 54px;
+            line-height: 0.98;
+            letter-spacing: -0.02em;
+            margin: 0 0 10px;
+        }
+
+        .hero-breadcrumb {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .hero-breadcrumb a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .hero-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .hero-subtitle {
+            color: var(--ink-soft);
+            font-size: 15px;
+            line-height: 1.5;
+            max-width: 880px;
+            margin: 0;
+        }
+
+        /* ---- Controls (sticky search bar) ---- */
+        .controls {
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin: 18px 0 0;
+            padding: 10px 0;
+        }
+
+        .search-box {
+            flex: 1 1 340px;
+            min-width: 220px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-soft), var(--shadow);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--ink);
+            background: transparent;
+        }
+
+        .search-icon {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1;
+        }
+
+        .result-count {
+            color: var(--ink-soft);
+            font-size: 13px;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+            padding-right: 4px;
+        }
+
+        /* ---- Type tabs (pill / underline hybrid) ---- */
+        .tab {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 14px 0 16px;
+            padding-bottom: 0;
+            border: none;
+            background: transparent;
+        }
+
+        .tab button {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            float: none;
+            border: 1px solid var(--line-strong);
+            outline: none;
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--panel);
+            color: var(--ink-soft);
+            font-size: 13.5px;
+            font-family: inherit;
+            transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .tab button:hover {
+            border-color: var(--accent-line);
+            color: var(--ink);
+            background: var(--accent-soft);
+        }
+
+        .tab button.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28);
+        }
+
+        .tab button.hidden {
+            display: none;
+        }
+
+        .tab-count {
+            display: inline-flex;
+            align-items: center;
+            min-width: 20px;
+            justify-content: center;
+            padding: 1px 1px;
+            border-radius: 999px;
+            color: var(--accent-ink);
+            font-size: 11.5px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .tab button.active .tab-count {
+            color: #fff;
+        }
+
+        .tabcontent {
+            padding: 0;
+            border: none;
+        }
+
+        /* ---- No-tabs mode: stacked sections ---- */
+        body.no-tabs .tabcontent {
+            padding: 0;
+            border: none;
+        }
+
+        .type-section {
+            margin-top: 26px;
+        }
+
+        .type-section:first-child {
+            margin-top: 0;
+        }
+
+        .type-section-title {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--line);
+        }
+
+        .type-section-title .count {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        /* ---- Source groups ---- */
+        .evidence-group {
+            margin-top: 16px;
+            padding: 18px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: linear-gradient(180deg, #fbfcfe 0%, #f7f9fc 100%);
+        }
+
+        .evidence-group:first-child {
+            margin-top: 0;
+        }
+
+        .evidence-group-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 12px;
+        }
+
+        .evidence-group-title .count {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .evidence-group-description {
+            color: var(--ink-soft);
+            margin-bottom: 14px;
+        }
+
+        /* ---- Summable facts summary ---- */
+        .evidence-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .evidence-summary-chip {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--accent-line);
+            background: var(--accent-soft);
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .evidence-summary-value {
+            font-weight: 700;
+            color: var(--accent-ink);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ---- Card grid ---- */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+            gap: 14px;
+        }
+
+        .evidence-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+        }
+
+        .evidence-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--line-strong);
+        }
+
+        .evidence-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: linear-gradient(180deg, #fafbfe 0%, #f3f6fb 100%);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .evidence-card-header-top {
+            display: contents;
+        }
+
+        .evidence-card-icon {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            flex: 0 0 auto;
+            padding: 2px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+        }
+
+        .evidence-card-meta {
+            color: var(--accent-ink);
+            font-size: 10.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 2px;
+        }
+
+        .evidence-card-title {
+            font-size: 15.5px;
+            font-weight: 700;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .evidence-card-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 14px 16px 16px;
+            flex: 1;
+        }
+
+        .evidence-id {
+            font-family: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+            font-size: 11.5px;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .evidence-card-summary {
+            line-height: 1.5;
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        /* ---- Facts ---- */
+        .facts {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .fact {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--ink-soft);
+        }
+
+        .fact-value {
+            flex: 0 0 auto;
+            padding: 1px 8px;
+            border-radius: 6px;
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-line);
+            color: var(--accent-ink);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ---- Tags ---- */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: #f4f6fa;
+            color: var(--ink-soft);
+            font-size: 11px;
+        }
+
+        /* ---- Links ---- */
+        .evidence-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px solid var(--line);
+        }
+
+        .evidence-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 11px;
+            border-radius: 999px;
+            border: 1px solid var(--accent-line);
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+            font-size: 12px;
+            font-weight: 600;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .evidence-link:hover {
+            background: #e2ecff;
+            border-color: var(--accent);
+        }
+
+        .evidence-link img {
+            height: 11px;
+            opacity: 0.75;
+        }
+
+        .empty {
+            padding: 56px 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 15px;
+            border: 1px dashed var(--line-strong);
+            border-radius: var(--radius);
+            background: var(--panel);
+        }
+
+        /* ---- Embed mode: drop hero chrome, tighten spacing ---- */
+        body.embed {
+            padding: 10px 14px;
+            background: var(--panel);
+        }
+
+        body.embed .hero {
+            display: none;
+        }
+
+        body.embed .controls {
+            background: linear-gradient(var(--panel) 70%, rgba(255, 255, 255, 0));
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 8px 14px 28px;
+            }
+
+            .hero-layout {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .hero-logo {
+                width: 76px;
+                height: 76px;
+            }
+
+            .hero-title {
+                font-size: 34px;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
+</head>
+<body>
+<header class="hero">
+    <div class="hero-layout">
+        <img class="hero-logo" src="icons/logo.png" alt="Evidence Explorer">
+        <div>
+            <nav class="hero-breadcrumb"><a href="../index.html">All Product Domains</a> &rsaquo; Evidence Explorer</nav>
+            <div class="hero-title">Evidence Explorer</div>
+            <div class="hero-subtitle">Search across all evidence fragments by name, id, or type. Each fragment links strategy
+                and product bricks to concrete observed signals from source code, cloud accounts, org data, and product evidence.
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="controls">
+    <label class="search-box">
+        <span class="search-icon">&#128269;</span>
+        <input id="search" type="search" placeholder="Search by name, id, or type&hellip;" autocomplete="off" aria-label="Search evidence">
+    </label>
+    <span id="count" class="result-count"></span>
+</div>
+<div id="embed-info" style="margin-left: 8px; font-size: 80%; color: #303030; margin-bottom: 12px;">Embed URL: evidence-explorer/index.html?q=query&embed=true</div>
+
+<div class="tab" id="tabbar" role="tablist"></div>
+<div class="tabcontent" id="list"></div>
+<div id="empty" class="empty" style="display:none;">No evidence matches your search.</div>
+
+<script>
+    // Evidence data is inlined by the generator (_wiring/evidence-explorer).
+    const EVIDENCE_DATA = ${evidence_data};
+    // Base path for evidence icons, relative to this page.
+    const ICON_BASE = "${icon_base}";
+    const FALLBACK_ICON = "evidence.png";
+
+    // ---- Flatten groups -> fragments, keep group name for context. ----
+    const FRAGMENTS = [];
+    for (const group of EVIDENCE_DATA) {
+        const groupName = (group.group && group.group.name) || "";
+        for (const f of (group.fragments || [])) {
+            f._group = groupName;
+            FRAGMENTS.push(f);
+        }
+    }
+
+    // ---- Embed mode: ?embed=1 and ?ids=pattern1,pattern2 ----
+    const params = new URLSearchParams(window.location.search);
+    const isEmbed = params.has("embed") || params.has("ids");
+    if (isEmbed) document.body.classList.add("embed");
+
+    // In embed mode, ?useTabs=false renders all types as stacked sections
+    // (no tabs); otherwise (default, or outside embed mode) tabs are used.
+    function parseBool(value, fallback) {
+        if (value == null) return fallback;
+        const v = value.trim().toLowerCase();
+        if (v === "false" || v === "0" || v === "no") return false;
+        if (v === "true" || v === "1" || v === "yes") return true;
+        return fallback;
+    }
+
+    const useTabs = !isEmbed ? true : parseBool(params.get("useTabs"), true);
+    if (!useTabs) document.body.classList.add("no-tabs");
+
+    function globToRegExp(pattern) {
+        // Support * and ? wildcards on ids; everything else escaped. Case-insensitive.
+        const escaped = pattern.trim()
+            .replace(/[.+^${}()|[\]\\]/g, "\\$&")
+            .replace(/\*/g, ".*")
+            .replace(/\?/g, ".");
+        return new RegExp("^" + escaped + "$", "i");
+    }
+
+    // id patterns restricting the embed view. Comma- or newline-separated.
+    const idPatternsRaw = params.get("ids") || "";
+    const idPatterns = idPatternsRaw
+        .split(/[,\n]/)
+        .map(s => s.trim())
+        .filter(Boolean)
+        .map(globToRegExp);
+
+    function matchesIdPatterns(fragment) {
+        if (idPatterns.length === 0) return true;
+        return idPatterns.some(rx => rx.test(fragment.id || ""));
+    }
+
+    // Pool = all fragments, optionally pre-filtered by the embed id patterns.
+    const POOL = FRAGMENTS.filter(matchesIdPatterns);
+
+    // ---- One tab per evidence type, sorted by name. ----
+    const TYPES = Array.from(new Set(POOL.map(f => f.type || "untyped"))).sort();
+
+    // ---- HTML rendering (mirrors _imports/evidence/script.html) ----
+    function escapeEvidenceHtml(value) {
+        return (value || "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+    }
+
+    // Format a fact/aggregate value for display:
+    //  - numbers round to an integer with US English thousand separators
+    //  - a non-zero magnitude below 1 shows "<1" (or ">-1" when negative)
+    //  - non-numeric values (months, roles, etc.) pass through unchanged
+    const numberFormatter = new Intl.NumberFormat("en-US", {maximumFractionDigits: 0});
+
+    function formatFactValue(value) {
+        if (typeof value !== "number") {
+            const asNumber = Number(value);
+            if (value === "" || value == null || !Number.isFinite(asNumber)) {
+                return value == null ? "" : String(value);
+            }
+            value = asNumber;
+        }
+        if (!Number.isFinite(value)) return String(value);
+        if (value !== 0 && Math.abs(value) < 1) return value > 0 ? "<1" : ">-1";
+        return numberFormatter.format(Math.round(value));
+    }
+
+    function renderEvidenceLinks(links) {
+        if (!links || !links.length) return "";
+        let html = '<div class="evidence-links">';
+        links.forEach(link => {
+            const label = escapeEvidenceHtml(link.label || "Open link");
+            const url = link.url || "";
+            html += '<a class="evidence-link" target="_blank" rel="noopener noreferrer" href="' + escapeEvidenceHtml(url) + '">' +
+                label + '<img src="' + ICON_BASE + 'new-window.png" alt=""></a>';
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderEvidenceIcon(fragment) {
+        const icon = escapeEvidenceHtml(fragment.icon || FALLBACK_ICON);
+        return '<img class="evidence-card-icon" src="' + ICON_BASE + icon +
+            '" onerror="this.onerror=null;this.src=\'' + ICON_BASE + FALLBACK_ICON + '\'">';
+    }
+
+    function aggregateSummableFacts(fragments) {
+        const totals = {};
+        fragments.forEach(fragment => {
+            (fragment.facts || []).forEach(fact => {
+                if (!fact || fact.summable !== true) return;
+                const numericValue = Number(fact.value);
+                if (!Number.isFinite(numericValue)) return;
+                const label = fact.label || "Value";
+                totals[label] = (totals[label] || 0) + numericValue;
+            });
+        });
+        return Object.entries(totals).map(([label, value]) => ({label, value}));
+    }
+
+    function renderSummableFactsSummary(fragments) {
+        const totals = aggregateSummableFacts(fragments);
+        if (!totals.length) return "";
+        let html = '<div class="evidence-summary">';
+        totals.forEach(item => {
+            html += '<div class="evidence-summary-chip">';
+            html += '<span class="evidence-summary-value">' + escapeEvidenceHtml(formatFactValue(item.value)) + '</span>';
+            html += '<span>' + escapeEvidenceHtml(item.label) + '</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+        return html;
+    }
+
+    function renderCard(fragment) {
+        let html = '<div class="evidence-card">';
+        html += '<div class="evidence-card-header">';
+        html += renderEvidenceIcon(fragment);
+        html += '<div>';
+        html += '<div class="evidence-card-meta">' + escapeEvidenceHtml(fragment.type || "Evidence fragment") + '</div>';
+        html += '<div class="evidence-card-title">' + escapeEvidenceHtml(fragment.title || fragment.id) + '</div>';
+        html += '</div></div>';
+
+        html += '<div class="evidence-card-body">';
+        if (fragment.id) {
+            html += '<div class="evidence-id">' + escapeEvidenceHtml(fragment.id) + '</div>';
+        }
+        if (fragment.description) {
+            html += '<div class="evidence-card-summary">' + escapeEvidenceHtml(fragment.description) + '</div>';
+        }
+        if (fragment.facts && fragment.facts.length) {
+            html += '<div class="facts">';
+            fragment.facts.forEach(fact => {
+                html += '<div class="fact"><span class="fact-value">' + escapeEvidenceHtml(formatFactValue(fact.value)) +
+                    '</span><span>' + escapeEvidenceHtml(fact.label) + '</span></div>';
+            });
+            html += '</div>';
+        }
+        if (fragment.tags && fragment.tags.length) {
+            html += '<div class="tags">';
+            fragment.tags.forEach(tag => {
+                html += '<span class="tag">' + escapeEvidenceHtml(tag) + '</span>';
+            });
+            html += '</div>';
+        }
+        html += renderEvidenceLinks(fragment.links);
+        html += '</div></div>';
+        return html;
+    }
+
+    // ---- Filtering & display ----
+    const searchInput = document.getElementById("search");
+    const tabbarEl = document.getElementById("tabbar");
+    const listEl = document.getElementById("list");
+    const emptyEl = document.getElementById("empty");
+    const countEl = document.getElementById("count");
+
+    let activeType = TYPES[0] || null;
+
+    // ---- URL state: ?q= and ?type= are readable, shareable, and kept in sync
+    // (standalone page only; embeds keep their iframe URL untouched). ----
+    const initialType = params.get("type");
+    if (initialType && TYPES.includes(initialType)) activeType = initialType;
+    const initialQuery = params.get("q");
+    if (initialQuery) document.getElementById("search").value = initialQuery;
+
+    function syncUrl(q) {
+        if (isEmbed || !window.history || !window.history.replaceState) return;
+        const url = new URLSearchParams(window.location.search);
+        if (q) url.set("q", q); else url.delete("q");
+        if (useTabs && activeType && activeType !== TYPES[0]) url.set("type", activeType);
+        else url.delete("type");
+        const qs = url.toString();
+        window.history.replaceState({}, "", window.location.pathname + (qs ? "?" + qs : ""));
+    }
+
+    function fragmentMatchesQuery(f, q) {
+        if (!q) return true;
+        let searchScope = [f.title, f.id];
+        if (f.tags) {
+            console.log("Adding tags to search scope for fragment", f.id, ":", f.tags);
+            searchScope = searchScope.concat(f.tags);
+        }
+        const haystack = searchScope
+            .filter(Boolean).join(" ").toLowerCase();
+        return haystack.includes(q);
+    }
+
+    // Fragments of one type that match the current search query.
+    function matchesForType(type, q) {
+        return POOL.filter(f => (f.type || "untyped") === type && fragmentMatchesQuery(f, q));
+    }
+
+    // ---- Build the tab buttons once; counts/visibility update on search. ----
+    // Skipped when tabs are disabled (embed ?useTabs=false).
+    const tabButtons = new Map();
+    if (useTabs) {
+        for (const type of TYPES) {
+            const btn = document.createElement("button");
+            btn.className = "tablinks";
+            1
+            btn.type = "button";
+            btn.dataset.type = type;
+            btn.innerHTML = escapeEvidenceHtml(type) + ' <span class="tab-count"></span>';
+            btn.addEventListener("click", () => {
+                activeType = type;
+                render();
+            });
+            tabbarEl.appendChild(btn);
+            tabButtons.set(type, btn);
+        }
+    } else {
+        tabbarEl.style.display = "none";
+    }
+
+    function renderCards(frags) {
+        // Group the active type's matches by their source group into bordered panels.
+        const order = [];
+        const byGroup = new Map();
+        for (const f of frags) {
+            const key = f._group || "";
+            if (!byGroup.has(key)) {
+                byGroup.set(key, []);
+                order.push(key);
+            }
+            byGroup.get(key).push(f);
+        }
+        let html = "";
+        for (const key of order) {
+            const groupFrags = byGroup.get(key);
+            html += '<div class="evidence-group">';
+            html += '<div class="evidence-group-title">' + escapeEvidenceHtml(key || "Evidence") +
+                ' <span class="count">' + groupFrags.length + '</span></div>';
+            html += renderSummableFactsSummary(groupFrags);
+            html += '<div class="card-grid">';
+            groupFrags.forEach(f => {
+                html += renderCard(f);
+            });
+            html += '</div></div>';
+        }
+        return html;
+    }
+
+    function renderTabs(q) {
+        // Per-type counts for the current query; hide zero-result tabs while searching.
+        let total = 0;
+        const visibleTypes = [];
+        for (const type of TYPES) {
+            const n = matchesForType(type, q).length;
+            total += n;
+            const btn = tabButtons.get(type);
+            btn.querySelector(".tab-count").textContent = "(" + n + ")";
+            // When searching, drop empty tabs; with no query, keep every type visible.
+            const hide = q && n === 0;
+            btn.classList.toggle("hidden", hide);
+            if (!hide) visibleTypes.push(type);
+        }
+
+        countEl.textContent = total + " of " + POOL.length + " fragments";
+
+        // Keep the active tab valid: if it got hidden, fall back to the first visible one.
+        if (!activeType || !visibleTypes.includes(activeType)) {
+            activeType = visibleTypes[0] || null;
+        }
+
+        for (const [type, btn] of tabButtons) {
+            btn.classList.toggle("active", type === activeType);
+        }
+
+        if (!activeType) {
+            listEl.style.display = "none";
+            emptyEl.style.display = "block";
+            return;
+        }
+        listEl.style.display = "block";
+        emptyEl.style.display = "none";
+        listEl.innerHTML = renderCards(matchesForType(activeType, q));
+    }
+
+    function renderSections(q) {
+        // No tabs: render every type with matches as a stacked section.
+        let total = 0;
+        let html = "";
+        for (const type of TYPES) {
+            const frags = matchesForType(type, q);
+            total += frags.length;
+            if (!frags.length) continue;
+            html += '<section class="type-section">';
+            html += '<div class="type-section-title">' + escapeEvidenceHtml(type) +
+                ' <span class="count">' + frags.length + '</span></div>';
+            html += renderCards(frags);
+            html += '</section>';
+        }
+
+        countEl.textContent = total + " of " + POOL.length + " fragments";
+
+        if (!total) {
+            listEl.style.display = "none";
+            emptyEl.style.display = "block";
+            return;
+        }
+        listEl.style.display = "block";
+        emptyEl.style.display = "none";
+        listEl.innerHTML = html;
+    }
+
+    function render() {
+        const q = searchInput.value.trim().toLowerCase();
+        if (useTabs) renderTabs(q);
+        else renderSections(q);
+        syncUrl(q);
+    }
+
+    searchInput.addEventListener("input", render);
+    render();
+</script>
+</body>
+</html>

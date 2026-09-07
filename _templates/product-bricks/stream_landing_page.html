@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>${stream_name} — Stream (${domain_name})</title>
+
+    ${common_style}
+    ${tokens_style}
+    ${tabs_style}
+    ${breadcrumbs_style}
+
+    <style>
+
+        .links-group {
+            margin-bottom: 20px;
+            padding: 16px 18px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .links-group-title {
+            font-size: 12px;
+            color: #1d4ed8;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+
+        .links-group-description {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .link-entry { margin-bottom: 16px; }
+        .link-entry:last-child { margin-bottom: 0; }
+
+        .link-entry-title {
+            color: #1d4ed8;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .link-entry-title:hover { text-decoration: underline; }
+
+        .link-entry-copy {
+            color: #4b5563;
+            font-size: 13px;
+            margin: 4px 0 8px;
+            line-height: 1.45;
+        }
+
+        .link-embed {
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #fff;
+            margin-top: 4px;
+        }
+
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .page {
+            margin: 20px;
+        }
+
+        .nav-strip {
+            margin: 2px 20px 10px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+        }
+
+        .nav-link {
+            padding: 2px;
+            font-size: 12px;
+        }
+
+        .nav-link.active {
+            border-bottom: 4px solid blue;
+        }
+
+        .tab-image {
+            width: 24px;
+            margin: 2px;
+            padding: 2px;
+        }
+
+        .tab-image-selected {
+            width: 24px;
+            margin: 2px;
+            padding: 2px;
+            border-bottom: 4px solid blue;
+        }
+
+        .header {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .header-icon {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+        }
+
+        .header-meta {
+            font-size: 90%;
+            color: grey;
+        }
+
+        .header-title {
+            font-size: 50px;
+            line-height: 1.05;
+        }
+
+        .header-copy {
+            font-size: 16px;
+            color: grey;
+            margin-top: 6px;
+            max-width: 950px;
+        }
+
+        .activity-summary {
+            margin: 0;
+            padding: 14px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+        }
+
+        .activity-stat {
+            display: inline-block;
+            margin-right: 18px;
+            min-width: 110px;
+        }
+
+        .activity-stat-value {
+            font-size: 30px;
+            color: #1d4ed8;
+        }
+
+        .activity-stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .group {
+            margin-top: 2px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+            overflow: hidden;
+            border: 1px solid lightgrey;
+            background: #fff;
+        }
+
+        .section-title {
+            font-size: 12px;
+            color: blue;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 14px;
+            background: #fff;
+            color: inherit;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: white;
+            border: 1px solid #dbe2ea;
+            padding: 4px;
+            flex: 0 0 auto;
+        }
+
+        .card-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #315b7c;
+            line-height: 1.4;
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+
+        .card-copy {
+            color: #4b5563;
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .list {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .list li {
+            margin-bottom: 6px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 8px 8px 0;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background-color: #eef2f6;
+            color: #374151;
+            font-size: 12px;
+        }
+
+        .pill img {
+            width: 18px;
+            height: 18px;
+        }
+
+        .muted {
+            color: #6b7280;
+            font-size: 90%;
+        }
+
+        .dependency-diagram {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 12px;
+            background: #fff;
+            overflow-x: auto;
+        }
+
+        .flow-title {
+            font-size: 24px;
+            color: #315b7c;
+            margin-bottom: 6px;
+        }
+
+        .flow-description {
+            color: #6b7280;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .flow-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .flow-step-card {
+            border: 1px solid #dbe2ea;
+            border-radius: 10px;
+            padding: 12px 14px;
+            background: #fbfdff;
+        }
+
+        .flow-step-number {
+            font-size: 11px;
+            color: #1d4ed8;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 8px;
+        }
+
+        .flow-step-title {
+            font-size: 18px;
+            color: #315b7c;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .flow-step-copy {
+            color: #4b5563;
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .flow-step-meta {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .flow-step-meta-item {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 8px;
+        }
+
+        .flow-step-meta-label {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 3px;
+        }
+
+        .flow-step-dependencies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .flow-matrix-wrap {
+            overflow-x: auto;
+        }
+
+        .flow-matrix {
+            width: 100%;
+            min-width: 1080px;
+            border-collapse: collapse;
+            background: #fff;
+            font-size: 90%;
+        }
+
+        .flow-matrix th,
+        .flow-matrix td {
+            border: 1px solid #dbe2ea;
+            vertical-align: top;
+            padding: 10px 12px;
+        }
+
+        .flow-matrix th {
+            background: #f8fafc;
+            text-align: left;
+        }
+
+        .flow-dependency-col {
+            min-width: 250px;
+            width: 250px;
+        }
+
+        .flow-dependency-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .flow-dependency-icon {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+            flex: 0 0 auto;
+            border: 1px solid #dbe2ea;
+            border-radius: 8px;
+            background: white;
+            padding: 4px;
+        }
+
+        .flow-step-col {
+            min-width: 220px;
+        }
+
+        .flow-step-label {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 4px;
+        }
+
+        .flow-dependency-name {
+            font-weight: bold;
+            color: #315b7c;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .flow-insight-row th {
+            background: #f1f5f9;
+            color: #315b7c;
+        }
+
+        .flow-insight-row td {
+            background: #f8fafc;
+        }
+
+        .flow-insight-list {
+            margin: 0;
+            padding-left: 16px;
+            line-height: 1.45;
+        }
+
+        .flow-insight-list li {
+            margin-bottom: 5px;
+        }
+
+        .flow-cell-empty {
+            background: #fbfdff;
+            color: #9ca3af;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .flow-cell-active {
+            background: #eef6ff;
+        }
+
+        .flow-cell-copy {
+            color: #374151;
+            line-height: 1.45;
+            margin-bottom: 8px;
+        }
+
+        .flow-cell-copy:last-child {
+            margin-bottom: 0;
+        }
+
+        .flow-cell-bricks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .flow-cell-brick {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 11px;
+        }
+
+        .flow-cell-brick-icon {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+    ${tabs_script}
+
+</head>
+
+<body onload="initTab('home')" onhashchange="initTab()">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../../start/index.html">Home</a><a href="../../customers/index.html">Customers</a><a href="../../product-deployments/index.html">Products</a><a href="../../product-bricks/index.html" class="active">Bricks &amp; Streams</a><a href="../../teams/index.html">Teams</a><a href="../../competition/index.html">Competition</a><a href="../../residuality/index.html">Stress Test</a></nav>
+
+<div id="breadcrumbs" style="margin-left: 20px"></div>
+
+<script src="../shared_data.js"></script>
+<script>
+    const config = ${config};
+    const all_bricks = window.SHARED_DOMAIN_DATA.allBricks;
+    const allStreams = window.SHARED_DOMAIN_DATA.allStreams;
+    const currentStream = ${stream_data};
+    const related_bricks = ${related_bricks};
+    const linked_products = ${linked_products};
+    const related_teams = ${related_teams};
+    const supported_jobs = ${supported_jobs};
+
+    mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'loose',
+        flowchart: {
+            htmlLabels: false
+        }
+    });
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function dedupe(items, keyFn) {
+        const seen = new Set();
+        const ordered = [];
+        items.forEach(item => {
+            const key = keyFn(item);
+            if (seen.has(key)) {
+                return;
+            }
+            seen.add(key);
+            ordered.push(item);
+        });
+        return ordered;
+    }
+
+    function getFlows() {
+        return currentStream.flows || [];
+    }
+
+    function getFlowDependencies(flow) {
+        const dependencyIndex = new Map();
+        (flow.steps || []).forEach(step => {
+            (step.dependencies || []).forEach(dependency => {
+                if ((dependency.type || 'brick') !== 'brick') {
+                    return;
+                }
+                const key = [dependency.type || 'dependency', dependency.id || dependency.name || 'unknown'].join('::');
+                if (!dependencyIndex.has(key)) {
+                    dependencyIndex.set(key, dependency);
+                }
+            });
+        });
+        return Array.from(dependencyIndex.values());
+    }
+
+    function getStepDependency(step, dependency) {
+        return (step.dependencies || []).find(item => (item.type || '') === (dependency.type || '') && (item.id || '') === (dependency.id || '')) || null;
+    }
+
+    function getPrimaryActors() {
+        const streamJobs = currentStream.supportedCustomerJobs || [];
+        const allJobs = streamJobs.length ? streamJobs : supported_jobs;
+        return dedupe(allJobs.map(item => item.customerName || item.customerGroup || '').filter(Boolean), item => item);
+    }
+
+    function summarizeFlow(flow) {
+        const steps = flow.steps || [];
+        const firstStep = steps[0] || {};
+        const lastStep = steps[steps.length - 1] || {};
+        return {
+            actor: flow.primaryActor || firstStep.actor || '',
+            trigger: flow.trigger || firstStep.trigger || '',
+            result: flow.successSignal || flow.outcome || lastStep.successSignal || lastStep.output || ''
+        };
+    }
+
+    function renderStepMeta(label, value) {
+        if (!value) {
+            return '';
+        }
+        return '<div class="flow-step-meta-item"><div class="flow-step-meta-label">' + escapeHtml(label) + '</div><div class="flow-step-copy">' + escapeHtml(value) + '</div></div>';
+    }
+
+    function flowDependencyIconFile(dependency) {
+        const dependencyId = dependency.id || '';
+        const linkedBrick = related_bricks.find(brick => brick.id === dependencyId) || all_bricks.find(brick => brick.id === dependencyId) || {};
+        return dependency.icon || linkedBrick.icon || (dependencyId ? dependencyId + '.png' : 'brick.png');
+    }
+
+    function renderFlowDependencyIcon(dependency, className) {
+        return '<img class="' + escapeHtml(className) + '" src="../icons/' + escapeHtml(flowDependencyIconFile(dependency)) + '" alt="" onerror="this.onerror=null;this.src=\'../icons/brick.png\'">';
+    }
+
+    function renderStepDependencyPills(step) {
+        const dependencies = step.dependencies || [];
+        if (!dependencies.length) {
+            return '<div class="muted">No step-specific dependencies listed.</div>';
+        }
+
+        return '<div class="flow-step-dependencies">' + dependencies.map(dep => {
+            const label = dep.name || dep.id || 'Dependency';
+            const kind = 'Brick';
+            return '<span class="flow-cell-brick">' + renderFlowDependencyIcon(dep, 'flow-cell-brick-icon') + '<span>' + escapeHtml(kind + ': ' + label) + '</span></span>';
+        }).join('') + '</div>';
+    }
+
+    function simplifySupportCopy(value) {
+        const text = String(value || '').trim();
+        if (!text) {
+            return '';
+        }
+        const simplified = text.replace(/^Supports .*? by helping users help /i, 'Facilitate ');
+        return simplified;
+    }
+</script>
+
+<div id="Header"></div>
+
+<div class="page">
+    <div class="tab" id="primary_tabs">
+        <button class="tablinks active" id="tab_home" onclick="openTab('home')">Home</button>
+        <button class="tablinks" id="tab_flows" onclick="openTab('flows')">Flows Narratives (0)</button>
+        <button class="tablinks" id="tab_links" onclick="openTab('links')">Links</button>
+    </div>
+
+    <div id="tab_content_home" class="tabcontent"></div>
+    <div id="tab_content_flows" class="tabcontent"></div>
+    <div id="tab_content_links" class="tabcontent"></div>
+
+
+</div>
+
+<script>
+    function streamMetaPath(stream) {
+        const parts = [];
+        if (stream.group) {
+            parts.push(stream.group);
+        }
+        if (stream.rootGroup && stream.rootGroup !== stream.group) {
+            parts.push(stream.rootGroup);
+        }
+        if (!parts.length) {
+            parts.push('Stream');
+        }
+        return parts.join(' / ');
+    }
+
+    let headerHtml = '<div class="nav-strip">';
+    allStreams.forEach(item => {
+        headerHtml += '<a class="nav-link" href="' + escapeHtml(item.id) + '.html">';
+        headerHtml += '<img src="../icons/' + escapeHtml(item.icon || 'stream.png') + '" class="' + (item.id === currentStream.id ? 'tab-image-selected' : 'tab-image') + '" alt="" onerror="this.onerror=null;this.src=\'../icons/stream.png\'">';
+        headerHtml += '</a>';
+    });
+    headerHtml += '</div>';
+
+    headerHtml += '<div class="page">';
+    headerHtml += '<div class="header">';
+    headerHtml += '<img class="header-icon" src="../icons/' + escapeHtml(currentStream.icon || 'stream.png') + '" alt="" onerror="this.onerror=null;this.src=\'../icons/stream.png\'">';
+    headerHtml += '<div>';
+    headerHtml += '<div class="header-meta">';
+    headerHtml += '<div class="page-type-badge">Stream</div>';
+    headerHtml += escapeHtml(streamMetaPath(currentStream)) + ' / <span style="color:blue;font-weight:bold;">' + escapeHtml((currentStream.id || '').toUpperCase()) + '</span></div>';
+    headerHtml += '<div class="header-title">' + escapeHtml(currentStream.name || currentStream.id) + '</div>';
+    headerHtml += '<div class="header-copy">' + escapeHtml(currentStream.description || '') + '</div>';
+    headerHtml += '</div></div></div>';
+    document.getElementById('Header').innerHTML = headerHtml;
+
+    function renderHome() {
+        const flows = getFlows();
+        const totalSteps = flows.reduce((count, flow) => count + ((flow.steps || []).length), 0);
+        const primaryActors = getPrimaryActors();
+        let html = '';
+
+        html += '<div class="group"><div class="section-title">Flow Narratives (' + flows.length + ')</div>';
+        if (!flows.length) {
+            html += '<div class="muted">No flows listed for this stream.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            flows.forEach(flow => {
+                const summary = summarizeFlow(flow);
+                html += '<div class="card">';
+                html += '<div class="card-meta">' + escapeHtml(streamMetaPath(currentStream)) + '</div>';
+                html += '<div class="card-title">' + escapeHtml(flow.title || flow.id) + '</div>';
+                html += '<div class="card-copy">' + escapeHtml(flow.description || '') + '</div>';
+                html += '<div class="muted">' + ((flow.steps || []).length) + ' steps</div>';
+                if (summary.actor) {
+                    html += '<div class="card-copy"><strong>Actor:</strong> ' + escapeHtml(summary.actor) + '</div>';
+                }
+                if (summary.trigger) {
+                    html += '<div class="card-copy"><strong>Trigger:</strong> ' + escapeHtml(summary.trigger) + '</div>';
+                }
+                if (summary.result) {
+                    html += '<div class="card-copy"><strong>Success looks like:</strong> ' + escapeHtml(summary.result) + '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        html += '<div class="group"><div class="section-title">Outcomes</div>';
+        if (!(currentStream.outcomes || []).length) {
+            html += '<div class="muted">No outcomes listed for this stream.</div>';
+        } else {
+            html += '<div class="card"><ul class="list">' + currentStream.outcomes.map(outcome => '<li>' + escapeHtml(outcome) + '</li>').join('') + '</ul></div>';
+        }
+        html += '</div>';
+
+        html += '<div class="group"><div class="section-title">Supporting Product Bricks</div>';
+        if (!related_bricks.length) {
+            html += '<div class="muted">No linked product bricks.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            related_bricks.forEach(brick => {
+                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../landing_pages/' + escapeHtml(brick.id) + '.html">';
+                html += '<div class="card-meta">' + escapeHtml((brick.group || brick.domain || 'Product Brick')) + '</div>';
+                html += '<div class="card-header">';
+                html += '<img class="card-icon" src="../icons/' + escapeHtml(brick.id) + '.png" alt="" onerror="this.onerror=null;this.src=\'../icons/brick.png\'">';
+                html += '<div class="card-title">' + escapeHtml(brick.name || brick.id) + '</div>';
+                html += '</div>';
+                html += '<div class="card-copy">' + escapeHtml(brick.description || '') + '</div>';
+                html += '</a>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        html += '<div class="group"><div class="section-title">Linked Products</div>';
+        if (!linked_products.length) {
+            html += '<div class="muted">No linked products were inferred from the supporting bricks.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            linked_products.forEach(product => {
+                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../../product-deployments/landing_pages/' + escapeHtml(product.id) + '.html">';
+                html += '<div class="card-meta">' + escapeHtml(product.type || 'Product') + '</div>';
+                html += '<div class="card-header">';
+                html += '<img class="card-icon" src="../../product-deployments/icons/' + escapeHtml(product.icon) + '" alt="" onerror="this.onerror=null;this.src=\'../../product-deployments/icons/product.png\'">';
+                html += '<div class="card-title">' + escapeHtml(product.name || product.id) + '</div>';
+                html += '</div>';
+                html += '<div class="card-copy">' + escapeHtml(product.whyUsed || '') + '</div>';
+                html += '</a>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        html += '<div class="group"><div class="section-title">Related Teams</div>';
+        if (!related_teams.length) {
+            html += '<div class="muted">No teams were inferred from the supporting bricks.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            related_teams.forEach(team => {
+                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../../teams/landing_pages/' + escapeHtml(team.teamId) + '.html">';
+                html += '<div class="card-meta">' + escapeHtml(team.roleLabel || team.teamType || 'Team') + '</div>';
+                html += '<div class="card-title">' + escapeHtml(team.teamName || team.teamId) + '</div>';
+                html += '<div class="card-copy">' + escapeHtml(team.groupName || '') + '</div>';
+                html += '</a>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        html += '<div class="group"><div class="section-title">Supported Customer Jobs</div>';
+        if (!supported_jobs.length) {
+            html += '<div class="muted">No customer jobs were inferred from the supporting bricks.</div>';
+        } else {
+            html += '<div class="card-grid">';
+            supported_jobs.forEach(job => {
+                html += '<div class="card">';
+                html += '<div class="card-meta">' + escapeHtml(job.customerGroup || '') + (job.productName ? ' | ' + escapeHtml(job.productName) : '') + '</div>';
+                html += '<div class="card-title">' + escapeHtml(job.jobName || job.jobId) + '</div>';
+                html += '<div class="card-copy">' + escapeHtml(job.jobOutcome || job.jobWhatItIs || '') + '</div>';
+                if (job.supportRationale) {
+                    html += '<div class="card-copy"><strong>Why this stream matters here:</strong> ' + escapeHtml(job.supportRationale) + '</div>';
+                }
+                if ((job.usedInSteps || []).length) {
+                    html += '<ul class="list">' + job.usedInSteps.map(step => '<li>' + escapeHtml(step.step || step.description || '') + '</li>').join('') + '</ul>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        }
+        html += '</div>';
+
+        document.getElementById('tab_content_home').innerHTML = html;
+    }
+
+    function renderFlows() {
+        const flows = getFlows();
+        const totalSteps = flows.reduce((count, flow) => count + ((flow.steps || []).length), 0);
+        let html = '';
+
+        document.getElementById('tab_flows').innerHTML = 'Flow Narratives (' + flows.length + ')';
+
+        flows.forEach(flow => {
+            const dependenciesInFlow = getFlowDependencies(flow);
+            const summary = summarizeFlow(flow);
+            html += '<div class="group">';
+            html += '<div class="section-title">Flow</div>';
+            html += '<div class="flow-title">' + escapeHtml(flow.title || flow.id) + '</div>';
+            html += '<div class="flow-description">' + escapeHtml(flow.description || '') + '</div>';
+            if (summary.actor || summary.trigger || summary.result) {
+                html += '<div class="card" style="margin-bottom:16px;">';
+                if (summary.actor) {
+                    html += '<div class="card-copy"><strong>Primary actor:</strong> ' + escapeHtml(summary.actor) + '</div>';
+                }
+                if (summary.trigger) {
+                    html += '<div class="card-copy"><strong>Trigger:</strong> ' + escapeHtml(summary.trigger) + '</div>';
+                }
+                if (summary.result) {
+                    html += '<div class="card-copy"><strong>Success looks like:</strong> ' + escapeHtml(summary.result) + '</div>';
+                }
+                html += '</div>';
+            }
+
+            html += '<div class="section-title">Dependency Traceability</div>';
+            html += '<div class="flow-matrix-wrap">';
+            html += '<table class="flow-matrix">';
+            html += '<thead>';
+            html += '<tr><th class="flow-dependency-col"></th>';
+            (flow.steps || []).forEach((step, index) => {
+                html += '<th class="flow-step-col"><div class="flow-step-label">Step ' + (index + 1) + '</div><div class="card-title">' + escapeHtml(step.title || step.id) + '</div></th>';
+            });
+            html += '</tr>';
+
+            html += '<tr class="flow-insight-row"><th style="text-align: right">Key Facts</th>';
+            (flow.steps || []).forEach(step => {
+                html += '<td style="color: darkblue">';
+                if ((step.keyFacts || []).length) {
+                    html += '<ul class="flow-insight-list">' + step.keyFacts.map(item => '<li>' + escapeHtml(item) + '</li>').join('') + '</ul>';
+                } else {
+                    html += '<span class="muted">No key facts listed.</span>';
+                }
+                html += '</td>';
+            });
+            html += '</tr>';
+
+            html += '<tr class="flow-insight-row"><th style="text-align: right; color: darkred">Pain Points</th>';
+            (flow.steps || []).forEach(step => {
+                html += '<td style="color: darkred">';
+                if ((step.painPoints || []).length) {
+                    html += '<ul class="flow-insight-list">' + step.painPoints.map(item => '<li>' + escapeHtml(item) + '</li>').join('') + '</ul>';
+                } else {
+                    html += '<span class="muted">No pain points listed.</span>';
+                }
+                html += '</td>';
+            });
+            html += '</tr>';
+            html += '</thead><tbody>';
+
+            dependenciesInFlow.forEach(dependency => {
+                const dependencyTypeLabel = 'Product Brick';
+                html += '<tr>';
+                html += '<td>';
+                html += '<div class="flow-dependency-header">';
+                html += renderFlowDependencyIcon(dependency, 'flow-dependency-icon');
+                html += '<div>';
+                html += '<a class="flow-dependency-name" href="../landing_pages/' + escapeHtml(dependency.id) + '.html">' + escapeHtml(dependency.name || dependency.id) + '</a>';
+                if (dependency.interface) {
+                    html += '<div class="muted">' + escapeHtml(dependency.interface) + '</div>';
+                }
+                html += '</div>';
+                html += '</div>';
+                html += '</td>';
+                (flow.steps || []).forEach(step => {
+                    const stepDependency = getStepDependency(step, dependency);
+                    if (!stepDependency) {
+                        html += '<td class="flow-cell-empty">-</td>';
+                        return;
+                    }
+                    html += '<td class="flow-cell-active">';
+                    html += '<div class="flow-cell-copy">' + escapeHtml(simplifySupportCopy(stepDependency.how || stepDependency.description || 'Supports this step.')) + '</div>';
+                    html += '</td>';
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            html += '</div>';
+            html += '</div>';
+        });
+
+        document.getElementById('tab_content_flows').innerHTML = html;
+    }
+
+    function renderLinks() {
+        // Grouped links from config: [{group, description, links: [{label, link,
+        // description, embedLink?, embedHeight?}]}]. embedLink renders an iframe
+        // (default height 400px) while the label still opens `link` directly.
+        const groups = currentStream.links || [];
+        let html = '<div class="page">';
+        let count = 0;
+        if (!groups.length) {
+            html += '<div class="muted">No links are configured for this stream.</div>';
+        }
+        groups.forEach(group => {
+            html += '<div class="links-group">';
+            html += '<div class="links-group-title">' + escapeHtml(group.group || 'Links') + '</div>';
+            if (group.description) {
+                html += '<div class="links-group-description">' + escapeHtml(group.description) + '</div>';
+            }
+            (group.links || []).forEach(link => {
+                count++;
+                html += '<div class="link-entry">';
+                html += '<a class="link-entry-title" target="_blank" rel="noopener noreferrer" href="' + escapeHtml(link.link || '#') + '">'
+                    + escapeHtml(link.label || link.link || 'Reference') + ' &#8599;</a>';
+                if (link.description) {
+                    html += '<div class="link-entry-copy">' + escapeHtml(link.description) + '</div>';
+                }
+                if (link.embedLink) {
+                    const embedHeight = Number(link.embedHeight) || 400;
+                    html += '<iframe class="link-embed" loading="lazy" src="' + escapeHtml(link.embedLink)
+                        + '" style="height: ' + embedHeight + 'px" title="' + escapeHtml(link.label || 'Embedded link') + '"></iframe>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+        });
+        html += '</div>';
+        document.getElementById('tab_content_links').innerHTML = html;
+        const linksTab = document.getElementById('tab_links');
+        if (linksTab) {
+            linksTab.textContent = 'Links (' + count + ')';
+        }
+    }
+
+    renderHome();
+    renderFlows();
+    renderLinks();
+</script>
+
+
+${breadcrumbs_script}
+
+
+</body>
+</html>

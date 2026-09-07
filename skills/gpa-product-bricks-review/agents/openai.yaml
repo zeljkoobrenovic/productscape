@@ -1,0 +1,4 @@
+interface:
+  display_name: "GPA Product Bricks Review"
+  short_description: "Review GPA bricks streams data"
+  default_prompt: "Use $gpa-product-bricks-review to review this Productscape product-brick model and save the review to its REVIEW.md."

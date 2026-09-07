@@ -1,0 +1,99 @@
+{
+  "config": {
+    "openInNewTab": true,
+    "enableSearch": true,
+    "showGlobalNav": true
+  },
+  "apps": [
+    {
+      "tab": "Product",
+      "apps": [
+        {
+          "group": "strategy",
+          "apps": [
+            {
+              "name": "Customers-Centric<br>Product Vision",
+              "link": "../customers/index.html",
+              "icon": "../customers/icons/logo.png",
+              "description": "customer groups, personas, and JTBDs",
+              "source": ""
+            },
+            {
+              "name": "Insights",
+              "link": "../customers/index.html#insights",
+              "icon": "../customers/icons/insights.png",
+              "description": "customer groups, personas, and JTBDs",
+              "source": ""
+            },
+            {
+              "name": "Competition",
+              "link": "../competition/index.html",
+              "icon": "../competition/icons/logo.png",
+              "description": "key players, stats, and geography",
+              "source": ""
+            },
+            {
+              "name": "Residuality<br>(Stress Test)",
+              "link": "../residuality/index.html",
+              "icon": "icons/residuality.png",
+              "description": "unexpected business changes, and response they require",
+              "source": ""
+            }
+          ]
+        },
+        {
+          "group": "org design",
+          "apps": [
+            {
+              "name": "Teams",
+              "link": "../teams/index.html",
+              "icon": "../teams/icons/logo.png",
+              "description": "teams, topology, and staffing",
+              "source": ""
+            }
+          ]
+        },
+        {
+          "group": "product architecture",
+          "apps": [
+            {
+              "name": "Product Bricks",
+              "link": "../product-bricks/index.html",
+              "icon": "../product-bricks/icons/logo.png",
+              "description": "basic building blocks",
+              "source": ""
+            },
+            {
+              "name": "Streams",
+              "link": "../product-bricks/index.html#streams",
+              "icon": "../product-bricks/icons/stream.png",
+              "description": "grouping of product bricks by user journey",
+              "source": ""
+            },
+            {
+              "name": "Data Assets",
+              "link": "../product-bricks/index.html#data",
+              "icon": "../product-bricks/icons/data-asset.png",
+              "description": "data assets and data flows",
+              "source": ""
+            },
+            {
+              "name": "Product<br>Deployments",
+              "link": "../product-deployments/index.html",
+              "icon": "../product-deployments/icons/logo.png",
+              "description": "product deployments and environments",
+              "source": ""
+            },
+            {
+              "name": "Evidence Explorer",
+              "link": "../../../evidence-explorer/index.html",
+              "icon": "../../../evidence-explorer/icons/logo.png",
+              "description": "searchable evidence: repos, cloud resources, contacts",
+              "source": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "$comment": "customers/customers.json — groups of personas with JTBDs and KPI pyramids",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "group",
+      "customers"
+    ],
+    "properties": {
+      "group": {
+        "type": "string"
+      },
+      "customers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "name"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "jobsToBeDone": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "steps": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "streamsNeeded": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        },
+                        "bricksNeeded": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "kpiPyramids": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}

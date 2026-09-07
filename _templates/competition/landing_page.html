@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>${player_name} — Competition (${domain_name})</title>
+    ${common_style}
+    ${tokens_style}
+    ${tabs_style}
+    ${tabs_script}
+    ${breadcrumbs_style}
+    <style>
+        :root {
+            --page-bg: #f8fafc;
+            --panel: #ffffff;
+            --panel-border: #d8e0ea;
+            --text: #202124;
+            --muted: #667085;
+            --accent: #1d4ed8;
+            --accent-soft: #dbeafe;
+            --accent-ink: #1e3a8a;
+            --shadow: rgba(15, 23, 42, 0.06) 0 10px 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 8px 28px 28px;
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+            color: var(--text);
+            background: linear-gradient(180deg, #f8fafc 0%, #eef4fb 100%);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .hero {
+            margin-top: 28px;
+            margin-bottom: 20px;
+        }
+
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .hero-logo {
+            width: 96px;
+            height: 96px;
+            object-fit: contain;
+            border-radius: 20px;
+            background: white;
+            border: 1px solid #d8e0ea;
+            padding: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-logo-wrap {
+            position: relative;
+            width: 96px;
+            height: 96px;
+        }
+
+        .hero-logo-fallback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 96px;
+            height: 96px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+            font-size: 34px;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 58px;
+            line-height: 0.94;
+            margin: 0 0 8px;
+        }
+
+        .hero-subtitle {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.45;
+            max-width: 980px;
+            margin-bottom: 16px;
+        }
+
+        .hero-meta {
+            display: inline-block;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .meta-chip,
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid #d8e0ea;
+            font-size: 13px;
+            color: #475467;
+        }
+
+        .panel,
+        .stats-table-wrap,
+        .geo-card,
+        .map-card,
+        .source-card {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel,
+        .source-card,
+        .geo-card {
+            padding: 18px 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .overview-copy,
+        .muted-copy {
+            color: #475467;
+            line-height: 1.6;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .summary-card {
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1px solid #d8e0ea;
+            background: #fbfdff;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-size: 30px;
+            color: var(--accent-ink);
+            margin-bottom: 4px;
+        }
+
+        .summary-copy {
+            color: #475467;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .home-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .pill-row,
+        .links-grid,
+        .sources-grid,
+        .regions-row,
+        .geo-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 10px;
+        }
+
+        .link-card {
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid #e4e7ec;
+            background: #fbfdff;
+        }
+
+        .link-meta {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+            margin-top: 4px;
+        }
+
+        .stats-table-wrap {
+            overflow: hidden;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stats-table th,
+        .stats-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e4e7ec;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .stats-table th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            background: #f8fbff;
+        }
+
+        .stats-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .stat-source {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .geo-layout {
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr);
+            gap: 16px;
+        }
+
+        .geo-stack {
+            display: grid;
+            gap: 16px;
+        }
+
+        .geo-key {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .geo-value {
+            font-size: 20px;
+            color: #101828;
+        }
+
+        .map-card {
+            padding: 18px 20px 20px;
+        }
+
+        .region-map {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .region-tile {
+            min-height: 120px;
+            padding: 14px;
+            border-radius: 18px;
+            border: 1px solid #d8e0ea;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+        }
+
+        .region-tile-active {
+            background: linear-gradient(180deg, #dbeafe 0%, #eff6ff 100%);
+            border-color: #93c5fd;
+        }
+
+        .region-tile-hq {
+            box-shadow: inset 0 0 0 2px #1d4ed8;
+        }
+
+        .region-name {
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+
+        .region-meta {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .region-state {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            background: #eef2f7;
+            color: #475467;
+        }
+
+        .region-state-active {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .region-state-hq {
+            background: #111827;
+            color: white;
+        }
+
+        .tab {
+            margin-top: 18px;
+        }
+
+        .tabcontent {
+            background: transparent;
+            border: 1px solid var(--panel-border);
+            border-top: none;
+            padding: 18px;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                margin: 12px;
+            }
+
+            .hero-layout,
+            .home-grid,
+            .geo-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .region-map {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
+</head>
+<body onload="initTab('HomeTab')" onhashchange="initTab('HomeTab')">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../../start/index.html">Home</a><a href="../../customers/index.html">Customers</a><a href="../../product-deployments/index.html">Products</a><a href="../../product-bricks/index.html">Bricks &amp; Streams</a><a href="../../teams/index.html">Teams</a><a href="../../competition/index.html" class="active">Competition</a><a href="../../residuality/index.html">Stress Test</a></nav>
+<div id="breadcrumbs"></div>
+
+<div class="hero">
+    <div class="hero-layout">
+        <div id="heroLogo"></div>
+        <div>
+            <div>
+                <div class="eyebrow">Competition Player</div>
+                <div class="hero-meta" id="heroMeta"></div>
+            </div>
+            <div class="hero-title" id="heroTitle"></div>
+            <div class="hero-subtitle" id="heroSubtitle"></div>
+        </div>
+    </div>
+</div>
+
+<div class="tab">
+    <button class="tablinks active" id="tab_HomeTab" onclick="openTab('HomeTab')">Home</button>
+    <button class="tablinks" id="tab_GeographyTab" onclick="openTab('GeographyTab')">Geography</button>
+</div>
+
+<div id="tab_content_HomeTab" class="tabcontent">
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div class="home-grid">
+        <div class="panel">
+            <div class="section-title">Overview</div>
+            <div class="overview-copy" id="overviewCopy"></div>
+        </div>
+        <div class="panel">
+            <div class="section-title">Primary Regions</div>
+            <div class="pill-row" id="regionsRow"></div>
+        </div>
+    </div>
+
+    <div class="panel" style="margin-bottom: 18px;">
+        <div class="section-title">Official Links</div>
+        <div class="links-grid" id="linksGrid"></div>
+    </div>
+
+    <div class="stats-table-wrap" style="margin-bottom: 18px;">
+        <table class="stats-table">
+            <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+                <th>Period</th>
+                <th>Scope</th>
+                <th>Source</th>
+            </tr>
+            </thead>
+            <tbody id="statsTableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="source-card">
+        <div class="section-title">Source Coverage</div>
+        <div class="sources-grid" id="sourcesGrid"></div>
+    </div>
+</div>
+
+<div id="tab_content_GeographyTab" class="tabcontent">
+    <div class="geo-layout">
+        <div class="geo-stack">
+            <div class="geo-card">
+                <div class="section-title">Headquarters</div>
+                <div class="geo-key">City</div>
+                <div class="geo-value" id="hqCity"></div>
+                <div class="geo-key" style="margin-top: 14px;">Country</div>
+                <div class="geo-value" id="hqCountry"></div>
+                <div class="geo-key" style="margin-top: 14px;">Mapped Region</div>
+                <div class="geo-value" id="hqRegion"></div>
+            </div>
+            <div class="geo-card">
+                <div class="section-title">Active Regions</div>
+                <div class="regions-row" id="geographyRegions"></div>
+                <div class="muted-copy" style="margin-top: 12px;" id="geographyCopy"></div>
+            </div>
+        </div>
+        <div class="map-card">
+            <div class="section-title">Regional Footprint</div>
+            <div class="region-map" id="regionMap"></div>
+        </div>
+    </div>
+</div>
+
+${breadcrumbs_script}
+
+<script>
+    const player = ${player};
+    const competitionScope = ${scope};
+
+    const regionMeta = {
+        north_america: {label: 'North America', copy: 'United States and Canada oriented footprint.'},
+        latin_america: {label: 'Latin America', copy: 'Spanish and Portuguese speaking Americas footprint.'},
+        europe: {label: 'Europe', copy: 'European markets and city mobility footprint.'},
+        middle_east: {label: 'Middle East', copy: 'Gulf and broader Middle East footprint.'},
+        africa: {label: 'Africa', copy: 'African market footprint.'},
+        asia_pacific: {label: 'Asia Pacific', copy: 'Broader Asia Pacific footprint.'},
+        southeast_asia: {label: 'Southeast Asia', copy: 'SEA-focused operating footprint.'},
+        china: {label: 'China', copy: 'China-focused footprint.'},
+        india: {label: 'India', copy: 'India-focused footprint.'},
+        spain: {label: 'Spain', copy: 'Spain-focused footprint.'},
+        cis: {label: 'CIS', copy: 'Commonwealth of Independent States footprint.'},
+        indonesia: {label: 'Indonesia', copy: 'Indonesia-focused footprint.'},
+        singapore: {label: 'Singapore', copy: 'Singapore-focused footprint.'},
+        north_africa: {label: 'North Africa', copy: 'North Africa footprint.'},
+        pakistan: {label: 'Pakistan', copy: 'Pakistan-focused footprint.'}
+    };
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function titleCase(value) {
+        return String(value || '')
+            .split('_')
+            .filter(Boolean)
+            .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+            .join(' ');
+    }
+
+    function parseHq(hq) {
+        const parts = String(hq || '').split(',').map(part => part.trim()).filter(Boolean);
+        return {
+            city: parts.slice(0, Math.max(1, parts.length - 1)).join(', ') || parts[0] || '',
+            country: parts.length > 1 ? parts[parts.length - 1] : parts[0] || ''
+        };
+    }
+
+    function inferHqRegion(country, regions) {
+        const normalized = String(country || '').toLowerCase();
+        const countryMap = {
+            'united states': 'north_america',
+            'canada': 'north_america',
+            'singapore': 'southeast_asia',
+            'china': 'china',
+            'india': 'india',
+            'estonia': 'europe',
+            'spain': 'spain',
+            'germany': 'europe',
+            'united arab emirates': 'middle_east',
+            'indonesia': 'indonesia'
+        };
+        return countryMap[normalized] || (regions && regions[0]) || '';
+    }
+
+    function renderHeroLogo() {
+        const fallback = '<div class="hero-logo-fallback">' + escapeHtml((player.name || '?').charAt(0).toUpperCase()) + '</div>';
+        document.getElementById('heroLogo').innerHTML = player.logo_path
+            ? ''
+            + '<div class="hero-logo-wrap">'
+            + '<img class="hero-logo" src="../' + escapeHtml(player.logo_path) + '" alt="' + escapeHtml(player.name) + ' logo"'
+            + ' onerror="this.style.display=\'none\'; if (this.nextElementSibling) { this.nextElementSibling.style.display=\'flex\'; }">'
+            + '<div class="hero-logo-fallback" style="display:none;">' + escapeHtml((player.name || '?').charAt(0).toUpperCase()) + '</div>'
+            + '</div>'
+            : fallback;
+    }
+
+    function renderHero() {
+        document.getElementById('heroTitle').textContent = player.name || '';
+        document.getElementById('heroSubtitle').textContent = player.description || '';
+        const roleColors = { direct: 'background:#fdecea;color:#b71c1c', substitute: 'background:#fff4e5;color:#8a4b00', benchmark: 'background:#eef2f7;color:#37474f' };
+        const roleLabels = { direct: 'Direct competitor', substitute: 'Substitute', benchmark: 'Benchmark' };
+        let roleChip = '';
+        if (player.role) {
+            roleChip = '<div class="meta-chip" style="' + (roleColors[player.role] || '') + '">' + escapeHtml(roleLabels[player.role] || titleCase(player.role)) + '</div>';
+        }
+        document.getElementById('heroMeta').innerHTML = ''
+            + roleChip
+            + '<div class="meta-chip">' + escapeHtml(titleCase(player.category || 'competitor')) + '</div>'
+            + '<div class="meta-chip">' + escapeHtml(player.hq || '') + '</div>'
+            + (player.regionRelevance ? '<div class="meta-chip">' + escapeHtml(player.regionRelevance) + '</div>' : '')
+            + (player.categoryRelevance ? '<div class="meta-chip">' + escapeHtml(player.categoryRelevance) + '</div>' : '')
+    }
+
+    function renderSummary() {
+        const linksCount = Object.keys(player.links || {}).length;
+        const uniqueScopes = new Set((player.businessStats || []).map(item => item.scope).filter(Boolean));
+        const uniqueSources = new Set((player.businessStats || []).map(item => item.sourceUrl).filter(Boolean));
+    }
+
+    function renderOverview() {
+        document.getElementById('overviewCopy').textContent = player.description || '';
+        document.getElementById('regionsRow').innerHTML = (player.primaryRegions || []).map(region => '<div class="pill">' + escapeHtml((regionMeta[region] && regionMeta[region].label) || titleCase(region)) + '</div>').join('');
+    }
+
+    function renderLinks() {
+        document.getElementById('linksGrid').innerHTML = Object.entries(player.links || {}).map(([key, value]) => ''
+            + '<a class="link-card" href="' + escapeHtml(value) + '" target="_blank" rel="noopener noreferrer">'
+            + '<div><strong>' + escapeHtml(titleCase(key)) + '</strong></div>'
+            + '<div class="link-meta">' + escapeHtml(value) + '</div>'
+            + '</a>'
+        ).join('');
+    }
+
+    function renderStats() {
+        document.getElementById('statsTableBody').innerHTML = (player.businessStats || []).map(stat => ''
+            + '<tr>'
+            + '<td><strong>' + escapeHtml(titleCase(stat.metric || '')) + '</strong></td>'
+            + '<td>' + escapeHtml(stat.value || '') + '</td>'
+            + '<td>' + escapeHtml(stat.period || '') + '</td>'
+            + '<td>' + escapeHtml(titleCase(stat.scope || '')) + '</td>'
+            + '<td><div>' + escapeHtml(stat.sourceTitle || '') + '</div><div class="stat-source"><a href="' + escapeHtml(stat.sourceUrl || '#') + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(stat.sourceUrl || '') + '</a></div></td>'
+            + '</tr>'
+        ).join('');
+    }
+
+    function renderSources() {
+        const seen = {};
+        (player.businessStats || []).forEach(stat => {
+            if (stat.sourceUrl && !seen[stat.sourceUrl]) {
+                seen[stat.sourceUrl] = stat.sourceTitle || stat.sourceUrl;
+            }
+        });
+        document.getElementById('sourcesGrid').innerHTML = Object.entries(seen).map(([url, title]) => ''
+            + '<a class="pill" href="' + escapeHtml(url) + '" target="_blank" rel="noopener noreferrer">'
+            + escapeHtml(title)
+            + '</a>'
+        ).join('');
+    }
+
+    function renderGeography() {
+        const hq = parseHq(player.hq);
+        const hqRegionId = inferHqRegion(hq.country, player.primaryRegions || []);
+        document.getElementById('hqCity').textContent = hq.city || 'Unknown';
+        document.getElementById('hqCountry').textContent = hq.country || 'Unknown';
+        document.getElementById('hqRegion').textContent = (regionMeta[hqRegionId] && regionMeta[hqRegionId].label) || titleCase(hqRegionId) || 'Unknown';
+        document.getElementById('geographyRegions').innerHTML = (player.primaryRegions || []).map(region => '<div class="pill">' + escapeHtml((regionMeta[region] && regionMeta[region].label) || titleCase(region)) + '</div>').join('');
+        document.getElementById('geographyCopy').textContent = (competitionScope.notes || [])[1] || 'Region labels reflect the operating footprint captured in the competition dataset.';
+
+        const orderedRegions = [
+            'north_america', 'latin_america', 'europe',
+            'middle_east', 'africa', 'asia_pacific',
+            'southeast_asia', 'china', 'india',
+            'spain', 'cis', 'indonesia',
+            'singapore', 'north_africa', 'pakistan'
+        ];
+        const activeRegions = new Set(player.primaryRegions || []);
+        document.getElementById('regionMap').innerHTML = orderedRegions.map(regionId => {
+            const meta = regionMeta[regionId] || {label: titleCase(regionId), copy: ''};
+            const classes = ['region-tile'];
+            let stateClass = '';
+            let stateLabel = 'Not highlighted';
+            if (activeRegions.has(regionId)) {
+                classes.push('region-tile-active');
+                stateClass = ' region-state-active';
+                stateLabel = 'Active region';
+            }
+            if (hqRegionId === regionId) {
+                classes.push('region-tile-hq');
+                stateClass = ' region-state-hq';
+                stateLabel = activeRegions.has(regionId) ? 'HQ + active region' : 'Headquarters region';
+            }
+            return ''
+                + '<div class="' + classes.join(' ') + '">'
+                + '<div class="region-name">' + escapeHtml(meta.label) + '</div>'
+                + '<div class="region-meta">' + escapeHtml(meta.copy) + '</div>'
+                + '<div class="region-state' + stateClass + '">' + escapeHtml(stateLabel) + '</div>'
+                + '</div>';
+        }).join('');
+    }
+
+    renderHeroLogo();
+    renderHero();
+    renderSummary();
+    renderOverview();
+    renderLinks();
+    renderStats();
+    renderSources();
+    renderGeography();
+</script>
+</body>
+</html>

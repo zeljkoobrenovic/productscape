@@ -1,0 +1,56 @@
+{
+  "teamTypes": [
+    {
+      "id": "stream-aligned",
+      "name": "Stream-aligned",
+      "color": "#2563eb",
+      "description": "Aligned to a product, service, or customer journey; owns end-to-end delivery and outcomes."
+    },
+    {
+      "id": "platform",
+      "name": "Platform",
+      "color": "#0891b2",
+      "description": "Provides reusable capabilities, services, or infrastructure to multiple stream-aligned teams."
+    },
+    {
+      "id": "enabling",
+      "name": "Enabling",
+      "color": "#16a34a",
+      "description": "Helps stream-aligned teams overcome obstacles, adopt technologies, or improve practices."
+    },
+    {
+      "id": "complicated-subsystem",
+      "name": "Complicated subsystem",
+      "color": "#9333ea",
+      "description": "Owns a complex subsystem that requires specialized knowledge and skills."
+    },
+    {
+      "id": "other",
+      "name": "Other",
+      "color": "#6b7280",
+      "description": "Does not fit the other categories (e.g. a temporary or cross-functional team)."
+    }
+  ],
+  "teamDependencyTypes": [
+    {
+      "id": "collaboration",
+      "name": "Collaboration",
+      "description": "Working closely together with another team."
+    },
+    {
+      "id": "x-as-a-service",
+      "name": "X-as-a-Service",
+      "description": "Consuming or providing something with minimal collaboration."
+    },
+    {
+      "id": "facilitating",
+      "name": "Facilitating",
+      "description": "Helping (or being helped by) another team to clear impediments."
+    },
+    {
+      "id": "other",
+      "name": "Other",
+      "description": "Any other type of dependency not covered above."
+    }
+  ]
+}

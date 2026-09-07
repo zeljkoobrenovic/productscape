@@ -1,0 +1,77 @@
+<style>
+    .tab {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 4px;
+    }
+
+    .tab button {
+        position: relative;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 11px 16px;
+        margin-bottom: -1px;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        color: #6b7280;
+        border-bottom: 2px solid transparent;
+        border-radius: 8px 8px 0 0;
+        transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .tab button:hover {
+        color: #1f2937;
+        background-color: #f3f4f6;
+    }
+
+    .tab button:focus-visible {
+        outline: 2px solid #1d4ed8;
+        outline-offset: -2px;
+    }
+
+    .tab button.active {
+        color: #1d4ed8;
+        border-bottom-color: #1d4ed8;
+    }
+
+    .tabcontent {
+        display: none;
+        padding: 2px 2px;
+        animation: tabContentFade 0.2s ease;
+    }
+
+    @keyframes tabContentFade {
+        from {
+            opacity: 0;
+            transform: translateY(3px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 720px) {
+        .tab {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .tab button {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 0;
+            border-bottom: 1px solid #e5e7eb;
+            border-radius: 0;
+        }
+
+        .tab button.active {
+            border-bottom-color: #1d4ed8;
+        }
+    }
+</style>

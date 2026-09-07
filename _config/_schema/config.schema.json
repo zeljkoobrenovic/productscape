@@ -1,0 +1,22 @@
+{
+  "$comment": "start/config.json — the domain registration record",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "description"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

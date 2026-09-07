@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>${sub_channel_name} — Deployment (${domain_name})</title>
+    ${common_style}
+    ${tokens_style}
+    ${tabs_style}
+    ${breadcrumbs_style}
+    <style>
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+            margin: 8px 28px 28px;
+            color: #202124;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .channel-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+            margin-bottom: 18px;
+        }
+
+        .channel-nav-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #f8fafc;
+        }
+
+        .channel-nav-link.active {
+            border-bottom: 2px solid blue;
+        }
+
+        .channel-nav-icon {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            padding: 2px;
+        }
+
+        .hero {
+            margin-bottom: 18px;
+        }
+
+        .hero-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 14px;
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 8px;
+        }
+
+        .hero-title {
+            font-size: 44px;
+            line-height: 1.05;
+            margin-bottom: 4px;
+        }
+
+        .hero-subtitle {
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.5;
+            max-width: 960px;
+            margin-top: 10px;
+        }
+
+        .deployment-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .deployment-stat {
+            display: inline-block;
+            min-width: 120px;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .deployment-stat-value {
+            font-size: 28px;
+            color: #1d4ed8;
+        }
+
+        .deployment-stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .deployment-copy {
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 18px;
+            max-width: 980px;
+        }
+
+        .deployment-section-title {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 20px 0 10px 0;
+        }
+
+        .deployment-environment {
+            padding: 10px 12px;
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            background: #eff6ff;
+            margin-bottom: 10px;
+        }
+
+        .deployment-environment-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1d4ed8;
+        }
+
+        .deployment-environment-copy {
+            color: #4b5563;
+            font-size: 13px;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .deployment-link-row {
+            margin-top: 6px;
+        }
+
+        .deployment-link {
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #1d4ed8;
+        }
+
+        .chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .env-brick-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .env-brick-count {
+            color: #9ca3af;
+            font-weight: normal;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+        }
+
+        .chip-icon {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid #d1d5db;
+            padding: 2px;
+        }
+
+        .chip-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .chip-copy {
+            font-size: 12px;
+            color: #4b5563;
+            line-height: 1.35;
+            display: inline-block;
+        }
+
+        .empty-state {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .bpd-layout {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 16px;
+            align-items: start;
+        }
+
+        .bpd-controls {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            padding: 12px;
+        }
+
+        .bpd-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .pdg-action {
+            border: 1px solid #d1d5db;
+            background-color: white;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .pdg-action:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .bpd-checklist {
+            max-height: 460px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdg-type-header {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #6b7280;
+            margin: 10px 0 2px 0;
+            padding-top: 8px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .pdg-type-header:first-child {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .pdg-check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #374151;
+            padding: 5px 2px;
+            cursor: pointer;
+        }
+
+        .pdg-check-item .label {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pdg-swatch {
+            flex: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(17, 24, 39, 0.15);
+        }
+
+        .bpd-graph {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            padding: 14px;
+            overflow: auto;
+            min-height: 300px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+</head>
+<body onload="initTab('HomeTab')" onhashchange="initTab('HomeTab')">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../../start/index.html">Home</a><a href="../../customers/index.html">Customers</a><a href="../../product-deployments/index.html" class="active">Products</a><a href="../../product-bricks/index.html">Bricks &amp; Streams</a><a href="../../teams/index.html">Teams</a><a href="../../competition/index.html">Competition</a><a href="../../residuality/index.html">Stress Test</a></nav>
+<div id="breadcrumbs"></div>
+${tabs_script}
+<script>
+    const products = ${products};
+    const deployment = ${deployment};
+    const channelRef = ${channel_ref};
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function deploymentIconFile(channel, group) {
+        const text = [
+            group && group.groupId,
+            group && group.groupName,
+            channel && channel.subChannelId,
+            channel && channel.subChannelName,
+            channel && channel.channelType
+        ].join(' ').toLowerCase();
+
+        if (text.includes('ios')) return 'app_store_ios.png';
+        if (text.includes('android') || text.includes('play store') || text.includes('play-store')) return 'app_store_android.png';
+        if (text.includes('private cloud') || text.includes('private-cloud')) return 'private_cloud.png';
+        if (text.includes('cloud') || text.includes('runtime') || text.includes('edge') || text.includes('cdn')) return 'public_cloud.png';
+        if (text.includes('saas') || text.includes('analytics') || text.includes('crm') || text.includes('datadog') || text.includes('snowflake') || text.includes('databricks') || text.includes('salesforce')) return 'saas.png';
+        return 'deployment.png';
+    }
+
+    function interfaceIconFile(iface) {
+        const text = [iface && iface.type, iface && iface.name].join(' ').toLowerCase();
+        if (text.includes('partner_api')) return 'partner_api.png';
+        if (text.includes('public_api') || text.includes('public api')) return 'public_api.png';
+        if (text.includes('api')) return 'api.png';
+        if (text.includes('mobile web')) return 'mobile_web.png';
+        if (text.includes('mobile') || text.includes('app')) return 'mobile_app.png';
+        if (text.includes('dashboard') || text.includes('cockpit')) return 'dashboard.png';
+        if (text.includes('notification')) return 'notification.png';
+        if (text.includes('search')) return 'search_engine.png';
+        if (text.includes('social')) return 'social_media.png';
+        return 'web.png';
+    }
+
+    function buildDeploymentChannelRecords() {
+        const records = [];
+        (deployment.channels || []).forEach(group => {
+            (group.channels || []).forEach(channel => {
+                records.push({
+                    ref: (group.groupId || '') + '/' + (channel.subChannelId || ''),
+                    group: group,
+                    channel: channel
+                });
+            });
+        });
+        return records;
+    }
+
+    function findCurrentRecord() {
+        return buildDeploymentChannelRecords().find(record => record.ref === channelRef) || null;
+    }
+
+    // Bricks live directly on a channel (subchannel): channel.deployedBricks.
+    function channelDeployedBricks(channel) {
+        return (channel && channel.deployedBricks) || [];
+    }
+
+    function buildChannelProductUsage(record) {
+        // Derive products from this channel's deployedBricks[].usedInProducts.
+        const productLookup = {};
+        ((products.portfolio || {}).products || []).forEach(product => {
+            productLookup[product.id] = product;
+        });
+        const byProduct = {};
+        channelDeployedBricks(record.channel).forEach(brick => {
+            (brick.usedInProducts || []).forEach(use => {
+                const pid = use.productId;
+                if (!pid) return;
+                if (!byProduct[pid]) {
+                    const product = productLookup[pid] || {};
+                    byProduct[pid] = {
+                        id: pid,
+                        name: product.name || pid,
+                        icon: product.icon || 'product.png',
+                        brickCount: 0
+                    };
+                }
+                byProduct[pid].brickCount += 1;
+            });
+        });
+        return Object.values(byProduct).sort((left, right) => left.name.localeCompare(right.name));
+    }
+
+    function renderChip(iconPath, fallbackPath, title, copy, href) {
+        let html = '';
+        if (href) html += '<a href="' + href + '" target="_blank">';
+        html += '<div class="chip">';
+        html += '<img class="chip-icon" src="' + iconPath + '" alt="' + escapeHtml(title) + '" onerror="this.onerror=null;this.src=\'' + fallbackPath + '\'">';
+        html += '<div><div class="chip-title">' + escapeHtml(title) + '</div>';
+        if (copy) html += '<div class="chip-copy">' + escapeHtml(copy) + '</div>';
+        html += '</div></div>';
+        if (href) html += '</a>';
+        return html;
+    }
+
+    function renderNavAndHeader() {
+        const current = findCurrentRecord();
+        let navHtml = '<div class="channel-nav">';
+        buildDeploymentChannelRecords().forEach(record => {
+            const fileName = deploymentIconFile(record.channel, record.group);
+            const activeClass = record.ref === channelRef ? ' active' : '';
+            navHtml += '<a class="channel-nav-link' + activeClass + '" href="' + escapeHtml(record.channel.subChannelId || '') + '.html" title="' + escapeHtml(record.channel.subChannelName || record.channel.subChannelId || 'Deployment channel') + '">';
+            navHtml += '<img class="channel-nav-icon" src="../icons/deployment/' + fileName + '" alt="' + escapeHtml(record.channel.subChannelName || record.channel.subChannelId || 'Deployment channel') + '" onerror="this.onerror=null;this.src=\'../icons/deployment/deployment.png\'">';
+            navHtml += '</a>';
+        });
+        navHtml += '</div>';
+        document.getElementById('ChannelNav').innerHTML = navHtml;
+
+        if (!current) {
+            document.getElementById('Header').innerHTML = '<div class="empty-state">Deployment channel not found.</div>';
+            return;
+        }
+
+        let header = '<div class="hero-header">';
+        header += '<img class="hero-icon" src="../icons/deployment/' + deploymentIconFile(current.channel, current.group) + '" alt="' + escapeHtml(current.channel.subChannelName || current.channel.subChannelId || 'Deployment channel') + '" onerror="this.onerror=null;this.src=\'../icons/deployment/deployment.png\'">';
+        header += '<div>';
+        header += '<div class="page-type-badge" style="margin-top: 8px;">Deployment Channel</div>';
+        header += '<div class="chip-copy">' + escapeHtml(current.group.groupName || current.group.groupId || '') + ' · ' + escapeHtml(current.channel.channelType || 'channel') + '</div>';
+        header += '<div class="hero-title">' + escapeHtml(current.channel.subChannelName || current.channel.subChannelId || 'Deployment channel') + '</div>';
+        if (current.channel.description) {
+            header += '<div class="hero-subtitle">' + escapeHtml(current.channel.description) + '</div>';
+        }
+        header += '</div>';
+        header += '</div>';
+        document.getElementById('Header').innerHTML = header;
+    }
+
+    function renderHome() {
+        const current = findCurrentRecord();
+        const container = document.getElementById('tab_content_HomeTab');
+        if (!current) {
+            container.innerHTML = '<div class="empty-state">Deployment channel not found.</div>';
+            return;
+        }
+
+        const productUsage = buildChannelProductUsage(current);
+        const deployedBricks = channelDeployedBricks(current.channel);
+
+        let html = '';
+
+        const intro = [deployment.metadata && deployment.metadata.description, current.group.description, current.channel.description].filter(Boolean).join(' ');
+        if (intro) html += '<div class="deployment-copy">' + escapeHtml(intro) + '</div>';
+
+        html += '<div class="deployment-section-title">Deployed Bricks (' + deployedBricks.length + ')</div>';
+        if (deployedBricks.length) {
+            html += '<div class="chip-row">';
+            deployedBricks.forEach(brick => {
+                const productCount = (brick.usedInProducts || []).length;
+                const meta = [brick.deploymentRole || '', productCount ? 'Used in ' + productCount + (productCount === 1 ? ' product' : ' products') : ''].filter(Boolean).join(' · ');
+                html += renderChip('../../product-bricks/icons/' + escapeHtml(brick.brickId) + '.png', '../../product-bricks/icons/logo.png', brick.brickName || brick.brickId || 'Product brick', meta, '../../product-bricks/landing_pages/' + escapeHtml(brick.brickId) + '.html');
+            });
+            html += '</div>';
+        } else {
+            html += '<div class="empty-state">No bricks deployed in this channel.</div>';
+        }
+
+        html += '<div class="deployment-section-title">Products Using This Channel (' + productUsage.length + ')</div>';
+        if (productUsage.length) {
+            html += '<div class="chip-row">';
+            productUsage.forEach(product => {
+                const meta = product.brickCount + (product.brickCount === 1 ? ' brick' : ' bricks');
+                html += renderChip('../icons/' + escapeHtml(product.icon), '../icons/product.png', product.name, meta, '../landing_pages/' + escapeHtml(product.id) + '.html');
+            });
+            html += '</div>';
+        } else {
+            html += '<div class="empty-state">No products currently reference this channel.</div>';
+        }
+
+        html += '<div class="deployment-section-title">Brick to Product Dependencies</div>';
+        html += '<div class="bpd-layout">';
+        html += '<div class="bpd-controls" id="BpdControls"></div>';
+        html += '<div class="bpd-graph" id="BpdGraph"></div>';
+        html += '</div>';
+
+        container.innerHTML = html;
+        renderBrickProductDependencies(current);
+    }
+
+    // --- Brick -> Product dependency diagram (mermaid) ---
+    let bpdSelected = null; // Set of selected node ids (null = all)
+
+    function bpdNodes(record) {
+        const productLookup = {};
+        ((products.portfolio || {}).products || []).forEach(product => { productLookup[product.id] = product; });
+        const bricks = [];
+        const productMap = {};
+        const edges = [];
+        channelDeployedBricks(record.channel).forEach(brick => {
+            const uses = (brick.usedInProducts || []).filter(use => productLookup[use.productId]);
+            if (!uses.length) return;
+            const brickNodeId = 'brick:' + brick.brickId;
+            bricks.push({id: brickNodeId, name: brick.brickName || brick.brickId, type: 'brick'});
+            uses.forEach(use => {
+                const product = productLookup[use.productId];
+                const productNodeId = 'product:' + product.id;
+                if (!productMap[productNodeId]) {
+                    productMap[productNodeId] = {id: productNodeId, name: product.name || product.id, type: 'product'};
+                }
+                edges.push({source: brickNodeId, target: productNodeId});
+            });
+        });
+        // dedupe brick nodes (a brick appears once)
+        const seen = {};
+        const brickNodes = bricks.filter(n => seen[n.id] ? false : (seen[n.id] = true));
+        return {bricks: brickNodes, products: Object.values(productMap), edges: edges};
+    }
+
+    function bpdAllNodeIds(model) {
+        return model.bricks.concat(model.products).map(n => n.id);
+    }
+
+    function bpdIsSelected(id) {
+        return bpdSelected === null || bpdSelected.has(id);
+    }
+
+    function renderBrickProductDependencies(record) {
+        const model = bpdNodes(record);
+        if (bpdSelected === null) {
+            bpdSelected = new Set(bpdAllNodeIds(model));
+        }
+        renderBpdControls(model);
+        renderBpdGraph(model);
+    }
+
+    function renderBpdControls(model) {
+        const groups = [
+            {label: 'Bricks', color: '#059669', nodes: model.bricks.slice().sort((a, b) => a.name.localeCompare(b.name))},
+            {label: 'Products', color: '#ea580c', nodes: model.products.slice().sort((a, b) => a.name.localeCompare(b.name))}
+        ];
+        let html = '<div class="bpd-actions">' +
+            '<button type="button" class="pdg-action" onclick="setAllBpdNodes(true)">Show all</button>' +
+            '<button type="button" class="pdg-action" onclick="setAllBpdNodes(false)">Hide all</button>' +
+            '</div><div class="bpd-checklist">';
+        groups.forEach(group => {
+            if (!group.nodes.length) return;
+            html += '<div class="pdg-type-header">' + escapeHtml(group.label) + ' (' + group.nodes.length + ')</div>';
+            group.nodes.forEach(node => {
+                html += '<label class="pdg-check-item node" title="' + escapeHtml(node.name) + '">' +
+                    '<input type="checkbox" value="' + escapeHtml(node.id) + '"' + (bpdIsSelected(node.id) ? ' checked' : '') + ' onchange="toggleBpdNode(this.value, this.checked)">' +
+                    '<span class="pdg-swatch" style="background-color:' + group.color + '"></span>' +
+                    '<span class="label">' + escapeHtml(node.name) + '</span>' +
+                    '</label>';
+            });
+        });
+        html += '</div>';
+        document.getElementById('BpdControls').innerHTML = html;
+    }
+
+    function toggleBpdNode(id, checked) {
+        if (bpdSelected === null) {
+            bpdSelected = new Set(bpdAllNodeIds(bpdNodes(findCurrentRecord())));
+        }
+        if (checked) { bpdSelected.add(id); } else { bpdSelected.delete(id); }
+        renderBpdGraph(bpdNodes(findCurrentRecord()));
+    }
+
+    function setAllBpdNodes(selected) {
+        const model = bpdNodes(findCurrentRecord());
+        bpdSelected = selected ? new Set(bpdAllNodeIds(model)) : new Set();
+        renderBpdControls(model);
+        renderBpdGraph(model);
+    }
+
+    function bpdMermaidId(value) {
+        return 'n_' + String(value).replace(/[^a-zA-Z0-9_]/g, '_');
+    }
+
+    function bpdMermaidLabel(value) {
+        return String(value || '')
+            .replaceAll('&', 'and').replaceAll('"', '').replaceAll("'", '')
+            .replaceAll('<', '').replaceAll('>', '')
+            .replaceAll('[', '(').replaceAll(']', ')')
+            .replaceAll('{', '(').replaceAll('}', ')').replaceAll('|', '/');
+    }
+
+    function renderBpdGraph(model) {
+        const container = document.getElementById('BpdGraph');
+        if (!container) return;
+        const bricks = model.bricks.filter(n => bpdIsSelected(n.id));
+        const productsSel = model.products.filter(n => bpdIsSelected(n.id));
+        const visible = new Set(bricks.concat(productsSel).map(n => n.id));
+        const edges = model.edges.filter(e => visible.has(e.source) && visible.has(e.target));
+
+        if (typeof mermaid === 'undefined') {
+            container.innerHTML = '<div class="empty-state">Diagram library failed to load.</div>';
+            return;
+        }
+        if (!bricks.length || !productsSel.length || !edges.length) {
+            container.innerHTML = '<div class="empty-state">Select bricks and products that share dependencies to render the diagram.</div>';
+            return;
+        }
+
+        let chart = 'flowchart LR\n\n';
+        // Bricks grouped in one unnamed subgraph.
+        chart += 'subgraph bpdBricks [" "]\n';
+        bricks.forEach(node => { chart += bpdMermaidId(node.id) + '["' + bpdMermaidLabel(node.name) + '"]\n'; });
+        chart += 'end\n';
+        productsSel.forEach(node => { chart += bpdMermaidId(node.id) + '["' + bpdMermaidLabel(node.name) + '"]\n'; });
+        edges.forEach(edge => { chart += bpdMermaidId(edge.source) + ' --> ' + bpdMermaidId(edge.target) + '\n'; });
+        chart += 'classDef brickCls fill:#dcfce7,stroke:#059669,color:#065f46,stroke-width:2px;\n';
+        chart += 'classDef productCls fill:#ffedd5,stroke:#ea580c,color:#7c2d12,stroke-width:2px;\n';
+        const brickIds = bricks.map(n => bpdMermaidId(n.id));
+        const productIds = productsSel.map(n => bpdMermaidId(n.id));
+        if (brickIds.length) chart += 'class ' + brickIds.join(',') + ' brickCls;\n';
+        if (productIds.length) chart += 'class ' + productIds.join(',') + ' productCls;\n';
+
+        const renderId = 'bpd-mermaid-' + (bpdRenderCounter++);
+        Promise.resolve(mermaid.render(renderId, chart)).then(result => {
+            container.innerHTML = result.svg;
+        }).catch(() => {
+            container.innerHTML = '<div class="empty-state">Unable to render the dependency diagram.</div>';
+        });
+    }
+    let bpdRenderCounter = 0;
+</script>
+<div id="ChannelNav"></div>
+<div class="hero" id="Header"></div>
+<div class="tab">
+    <button class="tablinks active" id="tab_HomeTab" onclick="openTab('HomeTab')">Channel</button>
+</div>
+<div id="tab_content_HomeTab" class="tabcontent"></div>
+<script>
+    if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({startOnLoad: false, securityLevel: 'loose', flowchart: {htmlLabels: false}});
+    }
+    renderNavAndHeader();
+    renderHome();
+</script>
+${breadcrumbs_script}
+</body>
+</html>

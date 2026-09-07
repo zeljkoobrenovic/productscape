@@ -1,0 +1,11 @@
+{
+  "breadcrumbs": [
+    {
+      "link": "../start/index.html",
+      "label": "${domain_name} Home"
+    },
+    {
+      "label": "Teams"
+    }
+  ]
+}

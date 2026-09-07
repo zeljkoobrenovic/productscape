@@ -1,0 +1,4 @@
+interface:
+  display_name: "GPA Product Domain Review"
+  short_description: "Review GPA domain strategy"
+  default_prompt: "Use $gpa-product-domain-review to review this Productscape domain and save the review to its REVIEW.md."

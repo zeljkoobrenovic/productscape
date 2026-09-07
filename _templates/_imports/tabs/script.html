@@ -1,0 +1,93 @@
+<script>
+    function resolveHashTabName() {
+        if (window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById('tab_' + hash) && document.getElementById('tab_content_' + hash)) {
+                return hash;
+            }
+        }
+
+        return '';
+    }
+
+    function resolveFallbackTabName(tabName) {
+        if (tabName && document.getElementById('tab_' + tabName) && document.getElementById('tab_content_' + tabName)) {
+            return tabName;
+        }
+
+        const firstTab = document.querySelector('.tablinks[id^="tab_"]');
+        if (firstTab) {
+            return firstTab.id.substring(4);
+        }
+
+        return '';
+    }
+
+    function initTab(tabName) {
+        setupTabAccessibility();
+        const resolvedTabName = resolveHashTabName() || resolveFallbackTabName(tabName);
+        openTab(resolvedTabName, { updateHistory: false });
+    }
+
+    // WAI-ARIA tab pattern: roles, aria-selected, and arrow-key navigation.
+    // Applied once; safe to call repeatedly.
+    function setupTabAccessibility() {
+        document.querySelectorAll('.tab').forEach(bar => {
+            if (bar.dataset.a11yReady) return;
+            bar.dataset.a11yReady = '1';
+            bar.setAttribute('role', 'tablist');
+            const buttons = Array.from(bar.querySelectorAll('.tablinks'));
+            buttons.forEach(btn => {
+                btn.setAttribute('role', 'tab');
+                const name = btn.id && btn.id.startsWith('tab_') ? btn.id.substring(4) : '';
+                if (name && document.getElementById('tab_content_' + name)) {
+                    btn.setAttribute('aria-controls', 'tab_content_' + name);
+                    const panel = document.getElementById('tab_content_' + name);
+                    panel.setAttribute('role', 'tabpanel');
+                }
+            });
+            bar.addEventListener('keydown', event => {
+                if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+                const current = buttons.indexOf(document.activeElement);
+                if (current === -1) return;
+                event.preventDefault();
+                const offset = event.key === 'ArrowRight' ? 1 : -1;
+                const next = buttons[(current + offset + buttons.length) % buttons.length];
+                next.focus();
+                next.click();
+            });
+        });
+    }
+
+    function openTab(tabName, options) {
+        const resolvedTabName = resolveFallbackTabName(tabName);
+        if (!resolvedTabName) {
+            return '';
+        }
+
+        const tabcontent = document.getElementsByClassName('tabcontent');
+        for (let i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = 'none';
+        }
+        const tablinks = document.getElementsByClassName('tablinks');
+        for (let i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(' active', '');
+            tablinks[i].setAttribute('aria-selected', 'false');
+        }
+
+        const shouldUpdateHistory = !options || options.updateHistory !== false;
+        if (shouldUpdateHistory && window.location.hash !== '#' + resolvedTabName) {
+            history.pushState({}, '', '#' + resolvedTabName);
+        }
+
+        document.getElementById('tab_content_' + resolvedTabName).style.display = 'block';
+        const activeTab = document.getElementById('tab_' + resolvedTabName);
+        activeTab.className += ' active';
+        activeTab.setAttribute('aria-selected', 'true');
+        if (typeof window.afterOpenTab === 'function') {
+            window.afterOpenTab(resolvedTabName);
+        }
+
+        return resolvedTabName;
+    }
+</script>

@@ -1,0 +1,30 @@
+{
+  "$comment": "business/competition.json — competitor landscape; links keys are free-form pending normalization",
+  "type": "object",
+  "required": [
+    "players"
+  ],
+  "properties": {
+    "players": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "links": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>Competition (${domain_name})</title>
+    ${breadcrumbs_style}
+    ${tokens_style}
+    ${tabs_style}
+
+    <style>
+        :root {
+            --page-bg: #f8fafc;
+            --panel: #ffffff;
+            --panel-border: #d8e0ea;
+            --text: #202124;
+            --muted: #667085;
+            --accent: #1d4ed8;
+            --accent-soft: #dbeafe;
+            --accent-ink: #1e3a8a;
+            --shadow: rgba(15, 23, 42, 0.06) 0 10px 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+            margin: 8px 28px 28px;
+            color: var(--text);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .section-link {
+            display: inline-block;
+            padding: 8px 14px;
+            color: #4b5563;
+            font-size: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            background-color: rgba(255, 255, 255, 0.82);
+            transition: 0.3s;
+        }
+
+        .section-link:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .hero {
+            margin-bottom: 10px;
+            padding: 20px 0 6px;
+        }
+
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 110px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .hero-logo {
+            width: 116px;
+            height: 116px;
+            object-fit: contain;
+            border-radius: 20px;
+            background: white;
+            border: 1px solid #d8e0ea;
+            padding: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 4px 4px;
+            margin-bottom: 12px;
+            border-radius: 999px;
+            font-size: 10px;
+            color: grey;
+            border: 1px solid lightgrey;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            font-size: 58px;
+            line-height: 0.94;
+            margin: 0 0 8px;
+        }
+
+        .hero-subtitle {
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.45;
+            max-width: 980px;
+            margin-bottom: 16px;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .meta-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid #d8e0ea;
+            font-size: 13px;
+            color: #475467;
+        }
+
+        .scope-card,
+        .player-card {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .scope-card {
+            padding: 18px 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .scope-copy {
+            color: #475467;
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 11px;
+            border-radius: 999px;
+            border: 1px solid #d8e0ea;
+            background: #f8fbff;
+            color: #344054;
+            font-size: 12px;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+
+        .player-card {
+            padding: 18px;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+
+        .player-card:hover {
+            transform: translateY(-2px);
+            border-color: #bfd2ec;
+            box-shadow: rgba(15, 23, 42, 0.1) 0 14px 30px;
+        }
+
+        .player-header {
+            display: grid;
+            grid-template-columns: 90px minmax(0, 1fr);
+            gap: 14px;
+            margin-bottom: 14px;
+            align-items: start;
+        }
+
+        .player-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 16px;
+            background: #fff;
+            border: 1px solid #d8e0ea;
+            padding: 10px;
+        }
+
+        .player-logo-wrap {
+            position: relative;
+            width: 90px;
+            height: 90px;
+        }
+
+        .player-logo-fallback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .player-name {
+            font-size: 28px;
+            line-height: 1;
+            margin: 2px 0 6px;
+        }
+
+        .player-meta {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .category-chip {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eef4ff;
+            color: #1e3a8a;
+            border: 1px solid #c7d7fe;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .player-description {
+            color: #475467;
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .stats-list,
+        .links-list {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .details-hidden {
+            display: none;
+        }
+
+        .stat-item,
+        .link-item {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid #e4e7ec;
+            background: #fbfdff;
+        }
+
+        .stat-metric {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            color: #101828;
+            margin-bottom: 4px;
+        }
+
+        .stat-meta,
+        .link-meta {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .regions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tabcontent .toggle-row {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .toggle-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.88);
+            color: #334155;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .toggle-button-active {
+            background: #202124;
+            border-color: #202124;
+            color: white;
+        }
+
+        .about-layout {
+            display: grid;
+            gap: 18px;
+        }
+
+        @media (max-width: 800px) {
+            body {
+                margin: 12px;
+            }
+
+            .hero-layout,
+            .player-header {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
+    ${tabs_script}
+</head>
+<body onload="initTab('PlayersTab')" onhashchange="initTab()">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../start/index.html">Home</a><a href="../customers/index.html">Customers</a><a href="../product-deployments/index.html">Products</a><a href="../product-bricks/index.html">Bricks &amp; Streams</a><a href="../teams/index.html">Teams</a><a href="../competition/index.html" class="active">Competition</a><a href="../residuality/index.html">Stress Test</a></nav>
+<div id="breadcrumbs"></div>
+
+<div class="hero" id="overview">
+    <div class="hero-layout">
+        <img class="hero-logo" src="icons/logo.png" alt="Competition">
+        <div>
+            <div class="eyebrow">Competition Analysis</div>
+            <div class="hero-title">Competition</div>
+            <div class="hero-subtitle" id="heroSubtitle"></div>
+        </div>
+    </div>
+</div>
+
+<div class="tab">
+    <button class="tablinks active" id="tab_PlayersTab" onclick="openTab('PlayersTab')">Players</button>
+    <button class="tablinks" id="tab_AboutTab" onclick="openTab('AboutTab')">About</button>
+</div>
+
+<div id="tab_content_PlayersTab" class="tabcontent">
+    <div class="toggle-row">
+        <button class="toggle-button" id="detailsToggleButton" type="button" onclick="toggleDetails()">Show details</button>
+    </div>
+    <div class="players-grid" id="playersGrid"></div>
+</div>
+
+<div id="tab_content_AboutTab" class="tabcontent">
+    <div class="about-layout">
+        <div class="scope-card" id="scope">
+            <div class="section-title">Scope</div>
+            <div class="scope-copy" id="scopeCopy"></div>
+        </div>
+        <div class="scope-card">
+            <div class="section-title">Notes</div>
+            <div class="pill-row" id="scopeNotes"></div>
+        </div>
+        <div class="hero-meta" id="heroMeta"></div>
+    </div>
+</div>
+
+${breadcrumbs_script}
+
+<script>
+    const competitionData = ${data};
+    let showDetails = false;
+
+    function escapeHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function titleCase(value) {
+        return String(value || '')
+            .split('_')
+            .filter(Boolean)
+            .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+            .join(' ');
+    }
+
+    function firstLetterLogo(player) {
+        return '<div class="player-logo-fallback">' + escapeHtml((player.name || '?').charAt(0).toUpperCase()) + '</div>';
+    }
+
+    function renderPlayerLogo(player) {
+        const fallback = firstLetterLogo(player);
+        if (!player.logo_path) {
+            return fallback;
+        }
+
+        return ''
+            + '<div class="player-logo-wrap">'
+            + '<img class="player-logo" src="' + escapeHtml(player.logo_path) + '" alt="' + escapeHtml(player.name) + ' logo"'
+            + ' onerror="this.style.display=\'none\'; if (this.nextElementSibling) { this.nextElementSibling.style.display=\'flex\'; }">'
+            + '<div class="player-logo-fallback" style="display:none;">' + escapeHtml((player.name || '?').charAt(0).toUpperCase()) + '</div>'
+            + '</div>';
+    }
+
+    function renderHero() {
+        const players = competitionData.players || [];
+        document.getElementById('heroSubtitle').innerHTML = escapeHtml(competitionData.scope && competitionData.scope.description || '');
+        document.getElementById('heroMeta').innerHTML = ''
+            + '<div class="meta-chip">Updated ' + escapeHtml(competitionData.generatedOn || '') + '</div>';
+    }
+
+    function renderScope() {
+        const scope = competitionData.scope || {};
+        document.getElementById('scopeCopy').textContent = scope.description || '';
+        const notes = Array.isArray(scope.notes) ? scope.notes : (scope.notes ? [scope.notes] : []);
+        document.getElementById('scopeNotes').innerHTML = notes.map(item => '<div class="pill">' + escapeHtml(item) + '</div>').join('');
+    }
+
+    function renderPlayer(player) {
+        const logoHtml = renderPlayerLogo(player);
+        const detailUrl = 'landing_pages/' + encodeURIComponent(player.id) + '.html';
+
+        const stats = (player.businessStats || []).slice(0, 3).map(stat => ''
+            + '<div class="stat-item">'
+            + '<div class="stat-metric">' + escapeHtml(titleCase(stat.metric)) + '</div>'
+            + '<div class="stat-value">' + escapeHtml(stat.value || '') + '</div>'
+            + '<div class="stat-meta">' + escapeHtml((stat.period || '') + (stat.scope ? ' • ' + titleCase(stat.scope) : '')) + '</div>'
+            + '</div>'
+        ).join('');
+
+        const links = Object.entries(player.links || {}).slice(0, 4).map(([key, value]) => ''
+            + '<a class="link-item" href="' + escapeHtml(value) + '" target="_blank" rel="noopener noreferrer">'
+            + '<div><strong>' + escapeHtml(titleCase(key)) + '</strong></div>'
+            + '<div class="link-meta">' + escapeHtml(value) + '</div>'
+            + '</a>'
+        ).join('');
+
+        const regions = (player.primaryRegions || []).map(region => '<div class="pill">' + escapeHtml(titleCase(region)) + '</div>').join('');
+
+        return ''
+            + '<div class="player-card" data-detail-url="' + escapeHtml(detailUrl) + '">'
+            + '<div class="player-header">'
+            + logoHtml
+            + '<div>'
+            + '<div class="category-chip">' + escapeHtml(titleCase(player.category || 'competitor')) + '</div>'
+            + (player.role ? '<div class="category-chip" style="' + ({ direct: 'background:#fdecea;color:#b71c1c', substitute: 'background:#fff4e5;color:#8a4b00', benchmark: 'background:#eef2f7;color:#37474f' }[player.role] || '') + '">' + escapeHtml(({ direct: 'Direct', substitute: 'Substitute', benchmark: 'Benchmark' }[player.role] || player.role)) + '</div>' : '')
+            + '<div class="player-name">' + escapeHtml(player.name || '') + '</div>'
+            + '<div class="player-meta">' + escapeHtml(player.hq || '') + (player.regionRelevance ? ' · ' + escapeHtml(player.regionRelevance) : '') + '</div>'
+            + '</div>'
+            + '</div>'
+            + '<div class="player-description">' + escapeHtml(player.description || '') + '</div>'
+            + '<div class="section-title">Primary Regions</div>'
+            + '<div class="regions-row">' + regions + '</div>'
+            + '<div class="player-details-block' + (showDetails ? '' : ' details-hidden') + '">'
+            + '<div class="section-title">Selected Stats</div>'
+            + '<div class="stats-list">' + stats + '</div>'
+            + '<div class="section-title">Official Links</div>'
+            + '<div class="links-list">' + links + '</div>'
+            + '</div>'
+            + '</div>';
+    }
+
+    function renderPlayers() {
+        document.getElementById('playersGrid').innerHTML = (competitionData.players || []).map(renderPlayer).join('');
+        bindPlayerCardNavigation();
+        syncDetailsToggle();
+        syncPlayerTabLabel();
+    }
+
+    function bindPlayerCardNavigation() {
+        document.querySelectorAll('.player-card').forEach(card => {
+            card.addEventListener('click', function (event) {
+                const interactive = event.target.closest('a, button');
+                if (interactive) {
+                    return;
+                }
+                const detailUrl = card.getAttribute('data-detail-url');
+                if (detailUrl) {
+                    window.open(detailUrl, '_blank');
+                }
+            });
+        });
+    }
+
+    function syncDetailsToggle() {
+        const button = document.getElementById('detailsToggleButton');
+        if (!button) {
+            return;
+        }
+        button.textContent = showDetails ? 'Hide details' : 'Show details';
+        button.className = 'toggle-button' + (showDetails ? ' toggle-button-active' : '');
+    }
+
+    function toggleDetails() {
+        showDetails = !showDetails;
+        renderPlayers();
+    }
+
+    function syncPlayerTabLabel() {
+        const button = document.getElementById('tab_PlayersTab');
+        if (!button) {
+            return;
+        }
+        button.textContent = 'Players (' + String((competitionData.players || []).length) + ')';
+    }
+
+    renderHero();
+    renderScope();
+    renderPlayers();
+</script>
+</body>
+</html>

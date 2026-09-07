@@ -1,0 +1,39 @@
+<style>
+    /* Shared design tokens for all generated pages.
+       Canonical palette promoted from the evidence-explorer page, plus the
+       de-facto grays/blues already used across templates. New CSS should use
+       these instead of hex literals; existing literals migrate opportunistically. */
+    :root {
+        /* surfaces */
+        --bg: #f6f8fb;
+        --panel: #ffffff;
+        --surface: #f8fafc;
+        --surface-muted: #eef2f7;
+        --surface-fallback: #f8fafc;
+
+        /* text */
+        --ink: #1f2430;
+        --ink-soft: #5b6472;
+        --muted: #6b7280;
+        --muted-strong: #8a94a6;
+
+        /* lines and borders */
+        --line: #e5e7eb;
+        --line-strong: #d1d5db;
+        --group-border: #d8e0ea;
+
+        /* accent */
+        --accent: #2563eb;
+        --accent-ink: #1d4ed8;
+        --accent-soft: #eff4ff;
+        --accent-line: #c9dbff;
+        --highlight-color: #dbeafe;
+
+        /* shape and depth */
+        --radius: 14px;
+        --radius-sm: 10px;
+        --shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 6px 18px rgba(16, 24, 40, 0.06);
+        --shadow-hover: 0 2px 6px rgba(16, 24, 40, 0.08), 0 14px 30px rgba(16, 24, 40, 0.12);
+        --card-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+    }
+</style>

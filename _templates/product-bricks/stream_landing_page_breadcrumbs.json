@@ -1,0 +1,15 @@
+{
+  "breadcrumbs": [
+    {
+      "link": "../../start/index.html",
+      "label": "${domain_name} Home"
+    },
+    {
+      "link": "../index.html",
+      "label": "Streams Index"
+    },
+    {
+      "label": "${stream_name}"
+    }
+  ]
+}

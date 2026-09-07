@@ -1,0 +1,44 @@
+{
+  "$comment": "product-deployments/products.json — the product portfolio",
+  "type": "object",
+  "required": [
+    "portfolio"
+  ],
+  "properties": {
+    "portfolio": {
+      "type": "object",
+      "required": [
+        "products"
+      ],
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "primaryCustomers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

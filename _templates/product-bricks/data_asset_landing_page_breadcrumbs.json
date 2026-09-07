@@ -1,0 +1,15 @@
+{
+  "breadcrumbs": [
+    {
+      "link": "../../start/index.html",
+      "label": "${domain_name} Home"
+    },
+    {
+      "link": "../index.html#data",
+      "label": "Data Assets"
+    },
+    {
+      "label": "${asset_name}"
+    }
+  ]
+}

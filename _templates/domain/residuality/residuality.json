@@ -1,0 +1,11 @@
+{
+  "metadata": {
+    "domainId": "__DOMAIN_ID__",
+    "title": "__DOMAIN_NAME__",
+    "description": "Describe unexpected business changes and their effects.",
+    "modelVersion": "1.0",
+    "naiveArchitecture": "Not authored yet. Describe the simplest architecture that satisfies current needs.",
+    "residualArchitecture": "Not authored yet. Describe how useful changes combine into a more adaptable architecture."
+  },
+  "stressors": []
+}

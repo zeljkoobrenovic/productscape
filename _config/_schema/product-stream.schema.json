@@ -1,0 +1,110 @@
+{
+  "$comment": "product-bricks/product-stream.json — outcome-based streams",
+  "type": "object",
+  "required": [
+    "rootGroups"
+  ],
+  "properties": {
+    "rootGroups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "subGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "streams": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "brickDependencies": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "targetBrickId"
+                  ]
+                }
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "group",
+                    "links"
+                  ],
+                  "properties": {
+                    "group": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "links": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "label",
+                          "link"
+                        ],
+                        "x-banned": [
+                          "url",
+                          "note"
+                        ],
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          },
+                          "link": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "embedLink": {
+                            "type": "string"
+                          },
+                          "embedHeight": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

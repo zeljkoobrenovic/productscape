@@ -1,0 +1,3230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <title>Product Bricks (${domain_name})</title>
+
+    ${breadcrumbs_style}
+    ${tokens_style}
+    ${tabs_style}
+
+    <style>
+        body {
+            font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
+            margin-left: 28px;
+            margin-right: 28px;
+            margin-bottom: 28px;
+            color: #202124;
+            --text-color: #111;
+            --surface-muted: #f0f0f0;
+            --surface-fallback: #f3f3f3;
+            --group-border: lightgrey;
+            --card-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+            --highlight-color: crimson;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .section-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .section-link {
+            display: inline-block;
+            padding: 8px 14px;
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            background-color: #f8fafc;
+            transition: 0.3s;
+        }
+
+        .section-link:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .section-link.active {
+            background-color: #202124;
+            border-color: #202124;
+            color: white;
+        }
+
+        .hero {
+            margin-bottom: 14px;
+        }
+
+        .hero-table {
+            border-collapse: collapse;
+            width: auto;
+        }
+
+        .hero-logo {
+            width: 108px;
+            height: 108px;
+            margin-right: 12px;
+        }
+
+        .hero-logo-cell {
+            border: none;
+            vertical-align: top;
+            padding-top: 12px;
+            padding-right: 12px;
+        }
+
+        .hero-copy-cell {
+            vertical-align: top;
+            border: none;
+        }
+
+        .hero-title {
+            font-size: 64px;
+            margin-bottom: 4px;
+        }
+
+        .hero-subtitle {
+            color: #6b7280;
+            font-size: 18px;
+            margin-bottom: 14px;
+            max-width: 960px;
+            line-height: 1.4;
+        }
+
+        .bricks-panel {
+            padding: 18px;
+            background-color: white;
+        }
+
+        .bricks-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 18px;
+            margin-bottom: 18px;
+        }
+
+        .brick-search {
+            flex: 1;
+            min-width: 220px;
+            max-width: 520px;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #202124;
+        }
+
+        .brick-search-summary {
+            font-size: 13px;
+            color: #6b7280;
+            margin: -8px 0 12px 0;
+            min-height: 16px;
+        }
+
+        .bricks-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        .bricks-toggle input {
+            margin: 0;
+        }
+
+        .bricks-status-filters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 12px;
+        }
+
+        .bricks-status-filter {
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            background-color: #f8fafc;
+        }
+
+        .status-swatch {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(17, 17, 17, 0.16);
+        }
+
+        .map {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .map-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            overflow-x: auto;
+        }
+
+        .domain-column {
+            min-width: 220px;
+            width: 100%;
+        }
+
+        .domain-title {
+            background-color: var(--surface-muted);
+            font-size: 12px;
+            padding: 4px;
+            text-align: center;
+        }
+
+        .domain-groups {
+            text-align: center;
+        }
+
+        .group {
+            border: 1px dashed var(--group-border);
+            display: inline-block;
+            margin: 4px;
+            vertical-align: top;
+        }
+
+        .group-title {
+            font-size: 80%;
+            margin-top: 12px;
+        }
+
+        .group-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .brick-card {
+            margin: 4px;
+            padding: 4px;
+            font-size: 12px;
+            width: 140px;
+            max-width: 144px;
+            box-sizing: border-box;
+            overflow: hidden;
+            background-color: var(--surface-fallback);
+            box-shadow: var(--card-shadow);
+            text-align: left;
+            min-height: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 6px;
+            border: 1px solid black;
+        }
+
+        .brick-card-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .brick-card.highlighted {
+            border: 4px solid var(--highlight-color);
+        }
+
+        .brick-icon {
+            width: 36px;
+        }
+
+        .brick-name {
+            overflow: hidden;
+            width: calc(100% - 40px);
+        }
+
+        .brick-name-title {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .brick-structure-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .brick-structure-card {
+            display: block;
+            padding: 4px 5px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 1.00);
+            font-size: 9px;
+            line-height: 1.05;
+            width: 100%;
+        }
+
+        .brick-structure-card.structure-ui {
+            border-color: black;
+        }
+
+        .brick-structure-card.structure-interfaces {
+            border-color: black;
+        }
+
+        .brick-structure-card.structure-worker {
+            border-color: black;
+        }
+
+        .brick-structure-card.structure-stateless-service {
+            border-color: black;
+        }
+
+        .brick-structure-card.structure-service {
+            border-color: black;
+        }
+
+        .brick-structure-card.structure-integration {
+            border-color: black;
+        }
+
+        .brick-structure-card .structure-card-type {
+            font-size: 8px;
+            text-transform: uppercase;
+            color: #4b5563;
+            white-space: nowrap;
+        }
+
+        .brick-structure-card .structure-card-name {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #111827;
+        }
+
+        .legend {
+            width: 160px;
+            padding: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 80%;
+            display: inline-block;
+        }
+
+        .legend-title {
+            margin-bottom: 3px;
+        }
+
+        .legend-item {
+            padding: 8px;
+        }
+
+        .dependencies-panel {
+            padding: 18px;
+            background-color: white;
+        }
+
+        .dependency-subtabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        .dependency-subtab {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            color: #374151;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+
+        .dependency-subtab.active {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+            color: white;
+        }
+
+        .streams-panel {
+            padding: 18px;
+            background-color: white;
+        }
+
+        .data-panel {
+            padding: 18px;
+            background-color: white;
+        }
+
+        .data-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .data-option {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .data-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .data-group {
+            padding-top: 16px;
+            margin-top: 18px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .data-group:first-child {
+            margin-top: 0;
+        }
+
+        .data-group-depth-1 {
+            margin-left: 14px;
+            padding-left: 14px;
+            border-left: 3px solid #e5e7eb;
+        }
+
+        .data-group-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .data-group-title {
+            font-size: 22px;
+            color: #111827;
+        }
+
+        .data-group-count {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .data-group-description {
+            color: #4b5563;
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .data-card {
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            background-color: #f8fafc;
+            padding: 14px;
+        }
+
+        .data-card-title {
+            font-size: 20px;
+            color: #1d4ed8;
+            margin-bottom: 6px;
+        }
+
+        .data-card-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .data-card-icon {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            background-color: white;
+            padding: 4px;
+            flex: 0 0 auto;
+        }
+
+        .data-card-copy {
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .data-card-subtitle {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+
+        .data-store-list,
+        .data-meta-list {
+            margin: 0;
+            padding-left: 18px;
+            color: #374151;
+        }
+
+        .data-store-list li,
+        .data-meta-list li {
+            margin-bottom: 6px;
+        }
+
+        .streams-toolbar {
+            margin-bottom: 18px;
+        }
+
+        .streams-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        .streams-toggle input {
+            margin: 0;
+        }
+
+        .streams-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .stream-area {
+            display: inline-block;
+            margin-bottom: 24px;
+            vertical-align: top;
+            border: 1px dashed black;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .stream-area-title {
+            font-size: 24px;
+            color: blue;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 8px;
+        }
+
+        .stream-group-title {
+            font-size: 18px;
+            color: blue;
+            margin: 8px;
+            font-weight: 700;
+        }
+
+        .stream-group-copy {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0 8px 8px 8px;
+        }
+
+        .stream-depth-1 {
+            display: block;
+            margin: 10px;
+            border-color: #d1d5db;
+        }
+
+        .stream-depth-2 {
+            display: block;
+            margin: 10px;
+            border-color: #e5e7eb;
+        }
+
+        .stream-grid {
+            display: inline-block;
+            margin: 6px;
+        }
+
+        .stream-card {
+            display: inline-block;
+            border: 1px solid grey;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
+            margin: 12px;
+            width: 320px;
+            vertical-align: top;
+        }
+
+        .stream-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .stream-card-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: white;
+            padding: 4px;
+            flex: 0 0 auto;
+        }
+
+        .stream-card-title {
+            font-size: 20px;
+            color: black;
+            margin-bottom: 0;
+        }
+
+        .stream-card-copy {
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            font-size: 80%;
+        }
+
+        .stream-card-subtitle {
+            font-size: 11px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+
+        .stream-list {
+            margin: 0;
+            padding-left: 18px;
+            color: #374151;
+        }
+
+        .stream-list li {
+            margin-bottom: 6px;
+        }
+
+        .stream-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .stream-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px;
+            border-radius: 9px;
+            font-size: 12px;
+            border: 1px solid #d1d5db;
+            background-color: #f8fafc;
+            color: #202124;
+        }
+
+        .stream-pill.external {
+            border-color: #bbf7d0;
+            background-color: #f0fdf4;
+            color: #166534;
+        }
+
+        .stream-pill img {
+            width: 28px;
+            height: 28px;
+        }
+
+        .dependencies-layout {
+            display: grid;
+            grid-template-columns: 340px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .dependency-controls {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            padding: 14px;
+        }
+
+        .dependency-control-group {
+            margin-bottom: 18px;
+        }
+
+        .dependency-top-options {
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+        }
+
+        .dependency-option {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .dependency-option input {
+            margin: 0;
+        }
+
+        .dependency-control-title {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+        }
+
+        .dependency-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .dependency-action {
+            border: 1px solid #d1d5db;
+            border-radius: 999px;
+            background-color: white;
+            padding: 6px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .dependency-checklist {
+            max-height: 260px;
+            overflow: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background-color: white;
+            padding: 8px;
+        }
+
+        .dependency-check-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 4px;
+            font-size: 13px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .dependency-check-item:last-child {
+            border-bottom: none;
+        }
+
+        .dependency-check-item input {
+            margin: 0;
+        }
+
+        .dependency-check-meta {
+            color: #6b7280;
+            font-size: 11px;
+        }
+
+        .dependency-graph-shell {
+            min-width: 0;
+        }
+
+        .dependency-node-legend {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 14px;
+            margin-top: 6px;
+        }
+
+        .dependency-node-legend-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dependency-node-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .dependency-node-legend-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid #9ca3af;
+            flex: 0 0 auto;
+        }
+
+        .dependency-controls-column {
+            min-width: 0;
+        }
+
+        .dependency-labels-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .dependency-graph-summary {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .dependency-graph-summary strong {
+            color: #1f2937;
+        }
+
+        .dependency-view-toggle {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .dependency-view-btn {
+            border: 1px solid #d1d5db;
+            background-color: #f8fafc;
+            color: #4b5563;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-family: inherit;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .dependency-view-btn:hover {
+            background-color: #eef2f7;
+            border-color: #9ca3af;
+        }
+
+        .dependency-view-btn.active {
+            background-color: #202124;
+            border-color: #202124;
+            color: white;
+        }
+
+        .dependency-graph-stat {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .dependency-graph-stat-value {
+            font-size: 14px;
+            color: #1d4ed8;
+        }
+
+        .activity-muted {
+            color: #6b7280;
+            font-size: 90%;
+        }
+
+        .empty-state {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .dependency-graph-stat-label {
+            color: #6b7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .dependency-graph {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            padding: 14px;
+            overflow: auto;
+            min-height: 560px;
+        }
+
+        .dependency-graph.force {
+            padding: 0;
+            overflow: hidden;
+            height: 620px;
+        }
+
+        .dependency-empty {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .matrix-panel {
+            padding: 18px;
+            background-color: white;
+        }
+
+        .matrix-layout {
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .matrix-controls {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            padding: 14px;
+        }
+
+        .matrix-shell {
+            min-width: 0;
+        }
+
+        .matrix-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .matrix-table-wrap {
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            overflow: auto;
+            max-height: 75vh;
+        }
+
+        .matrix-table {
+            border-collapse: collapse;
+            width: max-content;
+            min-width: 100%;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            border-bottom: 1px solid #e5e7eb;
+            border-right: 1px solid #f3f4f6;
+            padding: 6px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .matrix-table th {
+            position: sticky;
+            top: 0;
+            background-color: #f8fafc;
+            z-index: 1;
+        }
+
+        .matrix-row-head {
+            position: sticky;
+            left: 0;
+            background-color: white;
+            min-width: 220px;
+            text-align: left;
+            z-index: 1;
+        }
+
+        .matrix-corner {
+            position: sticky;
+            left: 0;
+            top: 0;
+            z-index: 2;
+            background-color: #f8fafc;
+            min-width: 220px;
+            text-align: left;
+        }
+
+        .matrix-col-icon {
+            width: 14px;
+            height: 14px;
+            object-fit: contain;
+        }
+
+        .matrix-col-count {
+            font-size: 10px;
+            color: #6b7280;
+            min-width: 24px;
+        }
+
+        .matrix-row-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 80%;
+            text-align: left;
+        }
+
+        .matrix-row-count {
+            margin-left: auto;
+            font-size: 11px;
+            color: #6b7280;
+            padding-left: 8px;
+            white-space: nowrap;
+        }
+
+        .matrix-row-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
+
+        .matrix-hit {
+            background-color: #dbeafe;
+            color: #1e3a8a;
+            font-size: 11px;
+            line-height: 1.2;
+            max-width: 6px;
+        }
+
+        .matrix-hit-external {
+            background-color: #ecfccb;
+            color: #365314;
+            font-size: 10px;
+            line-height: 1.2;
+            max-width: 6px;
+        }
+
+        .matrix-empty-cell {
+            color: #d1d5db;
+        }
+
+        @media (max-width: 1080px) {
+            .dependencies-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .matrix-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/force-graph@1.51.4/dist/force-graph.min.js"></script>
+    <script>
+        function updateTabLabels() {
+            const brickCount = getBrickCatalog().length;
+            const streamCount = getStreamCatalogItems().length;
+            const dataAssetCount = (dataAssetsPayload.assets || []).length;
+            document.getElementById('tab_bricks').textContent = 'Bricks (' + brickCount + ')';
+            document.getElementById('tab_streams').textContent = 'Streams (' + streamCount + ')';
+            document.getElementById('tab_data').textContent = 'Data (' + dataAssetCount + ')';
+        }
+
+        // The shared tabs script (_imports/tabs) calls this hook after a tab opens.
+        // Render the lazily-built views for the tab that just became visible.
+        window.afterOpenTab = function (tabName) {
+            if (tabName === 'dependencies') {
+                renderDependenciesView();
+            } else if (tabName === 'streams') {
+                renderStreamsView();
+            } else if (tabName === 'data') {
+                renderDataView();
+            }
+        };
+
+        function scrollPageToTop() {
+            window.scrollTo(0, 0);
+            requestAnimationFrame(() => window.scrollTo(0, 0));
+            setTimeout(() => window.scrollTo(0, 0), 0);
+        }
+
+        const bricksPayload = ${bricks};
+        const streamsPayload = ${product_streams};
+        const dataAssetsPayload = ${data_assets};
+        const bricksMetadata = bricksPayload.metadata || {};
+        const streamsMetadata = streamsPayload.metadata || {};
+        const rootGroups = bricksPayload.rootGroups || bricksPayload.bricks || [];
+        const streamRootGroups = streamsPayload.rootGroups || [];
+        const explicitStreams = streamsPayload.streams || [];
+        const brickRendering = bricksMetadata.rendering || bricksMetadata.render || {};
+        const brickTypes = bricksMetadata.brickTypes || [];
+        const brickStatuses = bricksMetadata.brickStatuses || [];
+        const modulesConfig = bricksMetadata.modulesConfig || {};
+        const typeColorMap = {};
+        const statusMap = {};
+        let brickStatusControlsInitialized = false;
+        let dependenciesInitialized = false;
+        let activeDependencySubtab = 'declared';
+        let dataShowBricks = false;
+        let dataShowDetail = false;
+        const dependencySelectionState = {
+            declared: {
+                streamIds: null,
+                typeIds: null
+            },
+            data: {
+                brickIds: null,
+                assetIds: null,
+                aggregate: false
+            },
+            streams: {
+                brickIds: null,
+                streamIds: null,
+                aggregate: false
+            }
+        };
+        let matrixInitialized = false;
+
+        brickTypes.forEach(type => {
+            typeColorMap[type.id.toLowerCase()] = type;
+            typeColorMap[type.name.toLowerCase()] = type;
+        });
+
+        brickStatuses.forEach(status => {
+            if (status.id) {
+                statusMap[String(status.id).toLowerCase()] = status;
+            }
+            if (status.name) {
+                statusMap[String(status.name).toLowerCase()] = status;
+            }
+        });
+
+        mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            flowchart: {
+                htmlLabels: false
+            }
+        });
+
+        function colorOf(type) {
+            if (type && typeColorMap[type.toLowerCase()]) {
+                return typeColorMap[type.toLowerCase()].color;
+            }
+            return 'var(--surface-fallback)';
+        }
+
+        function normalizeStatus(value) {
+            return String(value || '').trim().toLowerCase();
+        }
+
+        function statusDefinitionOf(status) {
+            const normalized = normalizeStatus(status);
+            return statusMap[normalized] || {
+                id: normalized || 'unspecified',
+                name: status || 'unspecified',
+                color: '#6b7280'
+            };
+        }
+
+        function statusColorOf(status) {
+            return statusDefinitionOf(status).color || '#6b7280';
+        }
+
+        function slugify(value) {
+            const normalized = String(value || '').trim().toLowerCase();
+            let output = '';
+            let lastDash = false;
+            for (const ch of normalized) {
+                if ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) {
+                    output += ch;
+                    lastDash = false;
+                } else if (!lastDash) {
+                    output += '-';
+                    lastDash = true;
+                }
+            }
+            return output.replace(/^-+|-+$/g, '');
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function normalizeBrick(item) {
+            return {
+                ...item,
+                color: colorOf(item.type),
+                isHighlighted: Boolean(item.name && item.name.includes('*'))
+            };
+        }
+
+        function normalizeGroup(group) {
+            return {
+                ...group,
+                subGroups: (group.subGroups || []).map(normalizeGroup),
+                bricks: (group.bricks || []).map(normalizeBrick)
+            };
+        }
+
+        const configuredLayerTypes = modulesConfig.layerTypes || [];
+        const moduleLayerOrder = configuredLayerTypes.length
+            ? configuredLayerTypes.map(layer => layer.id).filter(Boolean)
+            : ['ui', 'interfaces', 'worker', 'stateless-service', 'service', 'integration'];
+        const moduleLayerLabels = configuredLayerTypes.reduce((lookup, layer) => {
+            lookup[layer.id] = layer.name || layer.id;
+            return lookup;
+        }, {
+            'ui': 'UI',
+            'interfaces': 'Interfaces',
+            'worker': 'Worker',
+            'stateless-service': 'Stateless Service',
+            'service': 'Service',
+            'integration': 'Integration'
+        });
+        const moduleTypeDefinitions = (modulesConfig.moduleTypes || []).reduce((lookup, moduleType) => {
+            if (moduleType && moduleType.id) {
+                lookup[moduleType.id] = moduleType;
+            }
+            return lookup;
+        }, {});
+
+        function moduleLayerLabel(layerId) {
+            return moduleLayerLabels[layerId] || String(layerId || '').replaceAll('-', ' ');
+        }
+
+        function moduleLayerClass(layerId) {
+            return 'structure-' + slugify(layerId || 'service');
+        }
+
+        function moduleTypeColor(moduleTypeId) {
+            const moduleType = moduleTypeDefinitions[String(moduleTypeId || '').toLowerCase()] || {};
+            return moduleType.color || '#f3f4f6';
+        }
+
+        function normalizeLayerModules(layerId, layerConfig) {
+            const modules = layerConfig && layerConfig.modules ? layerConfig.modules : {};
+            if (Array.isArray(modules)) {
+                return modules.map((module, index) => {
+                    const moduleInfo = module && typeof module === 'object' ? module : { title: String(module || '') };
+                    return {
+                        ...moduleInfo,
+                        layerId,
+                        layerLabel: moduleLayerLabel(layerId),
+                        displayName: moduleInfo.title || moduleInfo.name || moduleInfo.id || moduleLayerLabel(layerId) + ' module ' + (index + 1)
+                    };
+                });
+            }
+            return Object.entries(modules).map(([moduleName, module]) => {
+                const moduleInfo = module && typeof module === 'object' ? module : { title: String(module || '') };
+                return {
+                    ...moduleInfo,
+                    layerId,
+                    layerLabel: moduleLayerLabel(layerId),
+                    displayName: moduleInfo.title || moduleInfo.name || moduleInfo.id || moduleName
+                };
+            });
+        }
+
+        function layerItemsOf(brick) {
+            const layers = brick.layers || [];
+            if (Array.isArray(layers)) {
+                return [
+                    ...layers.filter(layer => moduleLayerOrder.includes(layer.layer)),
+                    ...layers.filter(layer => !moduleLayerOrder.includes(layer.layer))
+                ].sort((left, right) => {
+                    const leftIndex = moduleLayerOrder.includes(left.layer) ? moduleLayerOrder.indexOf(left.layer) : moduleLayerOrder.length;
+                    const rightIndex = moduleLayerOrder.includes(right.layer) ? moduleLayerOrder.indexOf(right.layer) : moduleLayerOrder.length;
+                    return leftIndex - rightIndex || String(left.layer || '').localeCompare(String(right.layer || ''));
+                });
+            }
+            return [
+                ...moduleLayerOrder.filter(layerId => layers[layerId]).map(layerId => ({ layer: layerId, ...layers[layerId] })),
+                ...Object.keys(layers).filter(layerId => !moduleLayerOrder.includes(layerId)).map(layerId => ({ layer: layerId, ...layers[layerId] }))
+            ];
+        }
+
+        function layeredModulesOf(brick) {
+            return layerItemsOf(brick).flatMap(layer => normalizeLayerModules(layer.layer, layer));
+        }
+
+        function moduleByIdForBrick(brick, moduleId) {
+            if (!moduleId) {
+                return null;
+            }
+            return layeredModulesOf(brick || {}).find(module => module.id === moduleId) || null;
+        }
+
+        function moduleNameForBrick(brick, moduleId) {
+            const moduleInfo = moduleByIdForBrick(brick, moduleId);
+            if (!moduleInfo) {
+                return moduleId || '';
+            }
+            return moduleInfo.displayName || moduleInfo.name || moduleInfo.id || moduleId;
+        }
+
+        function brickDependencyEdgeLabel(sourceBrick, targetBrick, dependency) {
+            const dependencyType = dependency.type || 'unspecified';
+            const sourceModule = moduleNameForBrick(sourceBrick, dependency.sourceModuleId);
+            const targetModule = moduleNameForBrick(targetBrick, dependency.moduleId);
+            const modulePath = [sourceModule, targetModule].filter(Boolean).join(' -> ');
+            return [dependencyType, modulePath].filter(Boolean).join(' / ');
+        }
+
+        function dataDependencyModuleNames(brick, dependency) {
+            const moduleIds = Array.isArray(dependency.moduleIds) ? dependency.moduleIds : (dependency.moduleIds ? [dependency.moduleIds] : []);
+            return moduleIds.map(moduleId => moduleNameForBrick(brick, moduleId)).filter(Boolean).join(', ');
+        }
+
+        function shouldShowBrickStructure() {
+            const toggle = document.getElementById('brickStructureToggle');
+            return !toggle || toggle.checked;
+        }
+
+        function shouldShowBrickStatus() {
+            const toggle = document.getElementById('brickStatusToggle');
+            return Boolean(toggle && toggle.checked);
+        }
+
+        function getBrickStatusOptions() {
+            const counts = {};
+            getBrickCatalog().forEach(brick => {
+                const statusId = normalizeStatus(brick.status) || 'unspecified';
+                counts[statusId] = (counts[statusId] || 0) + 1;
+            });
+            const options = brickStatuses.map(status => {
+                const statusId = normalizeStatus(status.id || status.name);
+                return {
+                    id: statusId,
+                    name: status.name || status.id || statusId,
+                    color: status.color || '#6b7280',
+                    count: counts[statusId] || 0
+                };
+            });
+            Object.keys(counts).forEach(statusId => {
+                if (!options.some(option => option.id === statusId)) {
+                    const status = statusDefinitionOf(statusId);
+                    options.push({
+                        id: statusId,
+                        name: status.name || statusId,
+                        color: status.color || '#6b7280',
+                        count: counts[statusId] || 0
+                    });
+                }
+            });
+            return options;
+        }
+
+        function ensureBrickStatusControls() {
+            const container = document.getElementById('BrickStatusFilters');
+            if (!container || brickStatusControlsInitialized) {
+                return;
+            }
+            const options = getBrickStatusOptions();
+            if (!options.length) {
+                container.style.display = 'none';
+                brickStatusControlsInitialized = true;
+                return;
+            }
+            container.innerHTML = options.map(status => {
+                const id = 'brickStatusFilter_' + status.id;
+                return `
+                    <label class="bricks-toggle bricks-status-filter" for="${escapeHtml(id)}">
+                        <input type="checkbox" class="brick-status-filter-input" id="${escapeHtml(id)}" value="${escapeHtml(status.id)}" checked onchange="updateBricksView()">
+                        <span class="status-swatch" style="background-color: ${escapeHtml(status.color)}"></span>
+                        <span>${escapeHtml(status.name)} (${status.count})</span>
+                    </label>
+                `;
+            }).join('');
+            brickStatusControlsInitialized = true;
+        }
+
+        function selectedBrickStatuses() {
+            const checkboxes = Array.from(document.querySelectorAll('.brick-status-filter-input'));
+            if (!checkboxes.length) {
+                return new Set(getBrickStatusOptions().map(status => status.id));
+            }
+            return new Set(checkboxes.filter(input => input.checked).map(input => normalizeStatus(input.value)));
+        }
+
+        function brickSearchQuery() {
+            const input = document.getElementById('BrickSearch');
+            return input ? input.value.trim().toLowerCase() : '';
+        }
+
+        function brickMatchesSearch(item, query) {
+            if (!query) return true;
+            const haystack = [item.id, item.name, item.description, item.type, item.status]
+                .filter(Boolean).join(' ').toLowerCase();
+            return haystack.includes(query);
+        }
+
+        function shouldRenderBrick(item) {
+            return selectedBrickStatuses().has(normalizeStatus(item.status) || 'unspecified')
+                && brickMatchesSearch(item, brickSearchQuery());
+        }
+
+        function statusBorderStyle(item) {
+            if (!shouldShowBrickStatus()) {
+                return '';
+            }
+            return `border-color: ${statusColorOf(item.status)}; border-width: 3px;`;
+        }
+
+        function renderBrick(item) {
+            const structureCards = layeredModulesOf(item);
+            const structureMarkup = shouldShowBrickStructure() && structureCards.length
+                ? `<div class="brick-structure-list">${structureCards.map(structure => `
+                    <div class="brick-structure-card ${escapeHtml(moduleLayerClass(structure.layerId))}" style="" title="${escapeHtml(structure.layerLabel + ': ' + structure.displayName)}">
+                        <div class="structure-card-type">${escapeHtml(structure.type || structure.layerLabel)}</div>
+                        <div>${escapeHtml(structure.displayName)}</div>
+                    </div>
+                `).join('')}</div>`
+                : '';
+            const brickCard = `
+                <div class="brick-card${item.isHighlighted ? ' highlighted' : ''}" style="background-color: ${item.color}; ${statusBorderStyle(item)}">
+                    <div class="brick-card-main">
+                        <img class="brick-icon" src="icons/${item.id}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
+                        <div class="brick-name">
+                            <div class="brick-name-title">${item.name || ''}</div>
+                        </div>
+                    </div>
+                    ${structureMarkup}
+                </div>
+            `;
+
+            if (!item.id) {
+                return brickCard;
+            }
+
+            return `<a target="_blank" href="landing_pages/${item.id}.html">${brickCard}</a>`;
+        }
+
+        function renderGroup(group) {
+            const renderedSubGroups = (group.subGroups || []).map(renderGroup).join('');
+            const renderedBricks = (group.bricks || []).map(renderBrick).join('');
+            return `
+                <div class="group">
+                    <div class="group-title">${group.name}</div>
+                    <div class="group-items">${renderedSubGroups}${renderedBricks}</div>
+                </div>
+            `;
+        }
+
+        function renderDomain(domain) {
+            return `
+                <section class="domain-column">
+                    <div class="domain-title">${domain.name}</div>
+                    <div class="domain-groups">${(domain.subGroups || []).map(renderGroup).join('')}${(domain.bricks || []).map(renderBrick).join('')}</div>
+                </section>
+            `;
+        }
+
+        function buildGroupRowLookup() {
+            const lookup = {};
+            ((brickRendering.rows) || []).forEach(rowInfo => {
+                const row = Number(rowInfo.row) || 1;
+                (rowInfo.rootGroupNames || rowInfo.groupNames || rowInfo.brickIds || []).forEach(groupName => {
+                    lookup[slugify(groupName)] = row;
+                });
+            });
+            return lookup;
+        }
+
+        function applyRowsToHierarchy(items, groupRows) {
+            return items.map(group => ({
+                ...normalizeGroup(group),
+                row: groupRows[slugify(group.name)] || Number(group.row) || 1
+            }));
+        }
+
+        function filterGroupByStatus(group) {
+            const subGroups = (group.subGroups || [])
+                .map(filterGroupByStatus)
+                .filter(Boolean);
+            const bricks = (group.bricks || []).filter(shouldRenderBrick);
+            if (!subGroups.length && !bricks.length) {
+                return null;
+            }
+            return {
+                ...group,
+                subGroups,
+                bricks
+            };
+        }
+
+        function filterHierarchyForRow(items, targetRow) {
+            return items.filter(group => group.row === targetRow);
+        }
+
+        function renderMap(items) {
+            const groupRows = buildGroupRowLookup();
+            const normalizedItems = applyRowsToHierarchy(items, groupRows)
+                .map(filterGroupByStatus)
+                .filter(Boolean);
+            const rows = Array.from(new Set(
+                Object.values(groupRows)
+                    .map(value => Number(value) || 1)
+                    .concat([1])
+            )).sort((left, right) => left - right);
+
+            if (!normalizedItems.length) {
+                return '<div class="empty-state">No bricks match the current search and status filters.</div>';
+            }
+
+            return `
+                <div class="map">
+                    ${rows.map(row => {
+                const rowItems = filterHierarchyForRow(normalizedItems, row);
+                if (!rowItems.length) {
+                    return '';
+                }
+                return `
+                            <div class="map-row" data-row="${row}">
+                                ${rowItems.map(renderDomain).join('')}
+                            </div>
+                        `;
+            }).join('')}
+                </div>
+            `;
+        }
+
+        function renderLegend() {
+            return `
+                <div class="legend-title">Legend:</div>
+                ${brickTypes.map(type => `
+                    <div class="legend-item" style="background-color: ${type.color}">${type.name}</div>
+                `).join('')}
+            `;
+        }
+
+        function escapeMermaidLabel(value) {
+            return String(value || '')
+                .replaceAll('&', 'and')
+                .replaceAll('"', '')
+                .replaceAll("'", '')
+                .replaceAll('<', '')
+                .replaceAll('>', '')
+                .replaceAll('[', '(')
+                .replaceAll(']', ')')
+                .replaceAll('{', '(')
+                .replaceAll('}', ')')
+                .replaceAll('|', '/');
+        }
+
+        function flattenBricks(groups, ancestors = []) {
+            let leaves = [];
+            (groups || []).forEach(group => {
+                const nextAncestors = ancestors.concat(group);
+                leaves = leaves.concat(flattenBricks(group.subGroups || [], nextAncestors));
+                const domain = nextAncestors[0] ? nextAncestors[0].name : '';
+                const groupName = nextAncestors.length ? nextAncestors[nextAncestors.length - 1].name : '';
+                (group.bricks || []).forEach(item => {
+                    leaves.push({
+                        ...item,
+                        domain: domain,
+                        group: groupName
+                    });
+                });
+            });
+            return leaves;
+        }
+
+        function getBrickCatalog() {
+            return flattenBricks(rootGroups);
+        }
+
+        function getStreamCatalogItems() {
+            const fallbackStreams = getBrickCatalog().map(item => ({
+                ...item,
+                sourceType: 'brick-fallback'
+            }));
+
+            return explicitStreams.length ? explicitStreams : fallbackStreams;
+        }
+
+        function normalizeStreamGroups(groups) {
+            return (groups || []).map(group => ({
+                ...group,
+                subGroups: normalizeStreamGroups(group.subGroups || []),
+                streams: (group.streams || []).map(item => ({
+                    ...item,
+                    group: item.group || group.name,
+                    rootGroup: item.rootGroup || ''
+                }))
+            }));
+        }
+
+        function buildBrickLookup() {
+            const lookup = {};
+            getBrickCatalog().forEach(item => {
+                lookup[item.id] = item;
+            });
+            return lookup;
+        }
+
+        function streamAreaOf(stream, brickLookup) {
+            if (stream.group) {
+                return stream.group;
+            }
+            const groups = {};
+            (stream.brickDependencies || []).forEach(dep => {
+                const brick = brickLookup[dep.targetBrickId] || {};
+                const area = brick.group || brick.domain || 'General';
+                groups[area] = (groups[area] || 0) + 1;
+            });
+            const ranked = Object.entries(groups).sort((left, right) => {
+                if (right[1] !== left[1]) {
+                    return right[1] - left[1];
+                }
+                return left[0].localeCompare(right[0]);
+            });
+            return ranked.length ? ranked[0][0] : 'General';
+        }
+
+        function renderStreamPills(stream, brickLookup) {
+            const brickPills = (stream.brickDependencies || []).map(dep => {
+                if (!dep.targetBrickId) {
+                    return '';
+                }
+                const brick = brickLookup[dep.targetBrickId] || {};
+                const pillColor = colorOf(brick.type);
+                return `
+                    <a class="stream-pill" style="background-color: ${pillColor}; border-color: rgba(17,17,17,0.12);" target="_blank" href="landing_pages/${dep.targetBrickId}.html" title="${dep.description || ''}">
+                        <img src="icons/${dep.targetBrickId}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
+                        <span>${brick.name || dep.targetBrickId}</span>
+                    </a>
+                `;
+            }).filter(Boolean).join('');
+
+            return `
+                <div class="stream-pills">${brickPills || ''}</div>
+            `;
+        }
+
+        function renderStreamsView() {
+            const container = document.getElementById('StreamsContent');
+            if (!container) {
+                return;
+            }
+            const descriptionToggle = document.getElementById('streamDescriptionToggle');
+            const showDescriptions = Boolean(descriptionToggle && descriptionToggle.checked);
+
+            const streams = getStreamCatalogItems();
+            const brickLookup = buildBrickLookup();
+            const grouped = {};
+            streams.forEach(stream => {
+                const area = streamAreaOf(stream, brickLookup);
+                if (!grouped[area]) {
+                    grouped[area] = [];
+                }
+                grouped[area].push(stream);
+            });
+
+            function summarizeStreamStory(stream) {
+                const firstFlow = (stream.flows || [])[0] || {};
+                const firstStep = (firstFlow.steps || [])[0] || {};
+                const actor = firstFlow.primaryActor || firstStep.actor || '';
+                const trigger = firstFlow.trigger || firstStep.trigger || '';
+                return {actor, trigger};
+            }
+
+            function renderStreamCard(stream) {
+                const story = summarizeStreamStory(stream);
+                return `
+                    <div class="stream-card" id="stream-${stream.id}">
+                        <div class="stream-card-header">
+                            <img class="stream-card-icon" src="icons/${stream.icon || 'stream.png'}" alt="" onerror="this.onerror=null;this.src='icons/stream.png'">
+                            <div class="stream-card-title"><a target="_blank" href="stream_pages/${stream.id}.html">${stream.name || stream.id}</a></div>
+                        </div>
+                        ${showDescriptions && stream.description ? `<div class="stream-card-copy">${stream.description}</div>` : ''}
+                        ${story.actor ? `<div class="stream-card-copy"><strong>Actor:</strong> ${story.actor}</div>` : ''}
+                        ${story.trigger ? `<div class="stream-card-copy"><strong>Trigger:</strong> ${story.trigger}</div>` : ''}
+                        ${renderStreamPills(stream, brickLookup)}
+                    </div>
+                `;
+            }
+
+            function renderStreamGroup(group, depth = 0) {
+                const childGroups = (group.subGroups || []).map(item => renderStreamGroup(item, depth + 1)).join('');
+                const cards = (group.streams || []).map(renderStreamCard).join('');
+                const titleClass = depth === 0 ? 'stream-area-title' : 'stream-group-title';
+                return `
+                    <div class="stream-area stream-depth-${depth}">
+                        <div class="${titleClass}">${group.name}</div>
+                        ${showDescriptions && group.description ? `<div class="stream-group-copy">${group.description}</div>` : ''}
+                        ${childGroups}
+                        ${cards ? `<div class="stream-grid">${cards}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            function buildBrickUsage() {
+                const usage = {};
+                streams.forEach(stream => {
+                    (stream.brickDependencies || []).forEach(dep => {
+                        if (!dep.targetBrickId) {
+                            return;
+                        }
+                        if (!usage[dep.targetBrickId]) {
+                            usage[dep.targetBrickId] = [];
+                        }
+                        usage[dep.targetBrickId].push(stream);
+                    });
+                });
+                return usage;
+            }
+
+            function renderBrickAuditItem(brick, linkedStreams) {
+                const pillColor = colorOf(brick.type);
+                const meta = linkedStreams.length
+                    ? linkedStreams.map(item => item.name || item.id).join(', ')
+                    : 'Not linked to any stream.';
+                return `
+                    <a class="stream-pill" style="background-color: ${pillColor}; border-color: rgba(17,17,17,0.12);" target="_blank" href="landing_pages/${brick.id}.html" title="${meta}">
+                        <img src="icons/${brick.id}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
+                        <span>${brick.name || brick.id}</span>
+                    </a>
+                `;
+            }
+
+            const hierarchicalGroups = normalizeStreamGroups(streamRootGroups);
+            const brickUsage = buildBrickUsage();
+            const unusedBricks = getBrickCatalog().filter(brick => !brickUsage[brick.id]);
+            const reusedBricks = getBrickCatalog().filter(brick => (brickUsage[brick.id] || []).length >= 2);
+            container.innerHTML = `
+                ${hierarchicalGroups.length
+                ? hierarchicalGroups.map(group => renderStreamGroup(group)).join('')
+                : Object.keys(grouped).sort((left, right) => left.localeCompare(right)).map(area => `
+                        <div class="stream-area">
+                            <div class="stream-area-title">${area}</div>
+                            <div class="stream-grid">
+                                ${grouped[area].map(renderStreamCard).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                <div class="stream-area">
+                    <div class="stream-area-title">Bricks Not Part Of Any Stream</div>
+                    ${showDescriptions ? '<div class="stream-group-copy">Implementation bricks currently not linked from any stream.</div>' : ''}
+                    <div class="stream-pills">${unusedBricks.length ? unusedBricks.map(brick => renderBrickAuditItem(brick, [])).join('') : '<span class="activity-muted">Every brick is linked to at least one stream.</span>'}</div>
+                </div>
+                <div class="stream-area">
+                    <div class="stream-area-title">Bricks In Two Or More Streams</div>
+                    ${showDescriptions ? '<div class="stream-group-copy">Implementation bricks reused across multiple streams.</div>' : ''}
+                    <div class="stream-pills">${reusedBricks.length ? reusedBricks.map(brick => renderBrickAuditItem(brick, brickUsage[brick.id] || [])).join('') : '<span class="activity-muted">No bricks are shared across two or more streams.</span>'}</div>
+                </div>
+            `;
+        }
+
+        function buildDataAssetUsage(assetId) {
+            const producingBricks = [];
+            const consumingBricks = [];
+
+            getBrickCatalog().forEach(brick => {
+                (brick.dataDependencies || []).forEach(dep => {
+                    if (dep.assetId !== assetId) {
+                        return;
+                    }
+                    const role = String(dep.role || '').toLowerCase();
+                    if (['own', 'write', 'publish', 'replicate', 'delete'].includes(role)) {
+                        producingBricks.push({
+                            id: brick.id,
+                            name: brick.name,
+                            role: dep.role || '',
+                            description: dep.description || ''
+                        });
+                    } else {
+                        consumingBricks.push({
+                            id: brick.id,
+                            name: brick.name,
+                            role: dep.role || '',
+                            description: dep.description || ''
+                        });
+                    }
+                });
+            });
+
+            return {producingBricks, consumingBricks};
+        }
+
+        function renderDataBrickPills(items, borderColor, actionIcon) {
+            if (!items.length) {
+                return '<span class="activity-muted">None linked.</span>';
+            }
+
+            return `
+                <div class="stream-pills">
+                    ${items.map(item => {
+                        const linkedBrick = getBrickCatalog().find(candidate => candidate.id === item.id) || {};
+                        const pillColor = colorOf(linkedBrick.type);
+                        return `
+                        <a class="stream-pill" style="background-color: ${pillColor}; border: 3px solid ${borderColor};" target="_blank" href="landing_pages/${item.id}.html" title="${escapeHtml(item.description || item.role || '')}">
+                            <img src="icons/${actionIcon}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
+                            <img src="icons/${item.id}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
+                            <span>${item.name}</span>
+                        </a>
+                    `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function flattenDataAssetGroups(groups) {
+            let assets = [];
+            (groups || []).forEach(group => {
+                assets = assets.concat(group.assets || []);
+                assets = assets.concat(flattenDataAssetGroups(group.subGroups || []));
+            });
+            return assets;
+        }
+
+        function renderDataView() {
+            const container = document.getElementById('DataContent');
+            if (!container) {
+                return;
+            }
+
+            const assetGroups = dataAssetsPayload.rootGroups || [];
+            const assets = dataAssetsPayload.assets || flattenDataAssetGroups(assetGroups);
+            const stores = dataAssetsPayload.stores || [];
+            const totalStoreRefs = assets.reduce((sum, asset) => sum + ((asset.stores || []).length), 0);
+            const governedAssets = assets.filter(asset => String(asset.personalDataLevel || 'none').toLowerCase() !== 'none' || String(asset.classification || '').toLowerCase() === 'restricted').length;
+
+            function storeById(storeId) {
+                return stores.find(item => item.id === storeId) || {};
+            }
+
+            function renderStoreList(asset) {
+                if (!(asset.stores || []).length) {
+                    return '<div class="activity-muted">No stores linked.</div>';
+                }
+                return `
+                    <ul class="data-store-list">
+                        ${(asset.stores || []).map(link => {
+                            const store = storeById(link.storeId);
+                            const parts = [store.name || link.storeId, link.role].filter(Boolean);
+                            return `<li>${escapeHtml(parts.join(' | '))}</li>`;
+                        }).join('')}
+                    </ul>
+                `;
+            }
+
+            function renderMetaList(asset) {
+                const items = [
+                    asset.kind ? 'Kind: ' + asset.kind : '',
+                    asset.classification ? 'Classification: ' + asset.classification : '',
+                    asset.personalDataLevel ? 'Personal data: ' + asset.personalDataLevel : '',
+                    asset.ownerTeamId ? 'Owner team: ' + asset.ownerTeamId : '',
+                    asset.systemOfRecordBrickId ? 'System of record: ' + asset.systemOfRecordBrickId : ''
+                ].filter(Boolean);
+                if (!items.length) {
+                    return '<div class="activity-muted">No governance metadata listed.</div>';
+                }
+                return `<ul class="data-meta-list">${items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+            }
+
+            function renderAssetCard(asset) {
+                let detailMarkup = '';
+                if (dataShowDetail) {
+                    detailMarkup = `
+                        <div class="data-card-subtitle">Metadata</div>
+                        ${renderMetaList(asset)}
+                        <div class="data-card-subtitle">Stores</div>
+                        ${renderStoreList(asset)}
+                    `;
+                }
+                let brickMarkup = '';
+                if (dataShowBricks) {
+                    const usage = buildDataAssetUsage(asset.id);
+                    brickMarkup = `
+                        <div class="data-card-subtitle">Producing Bricks</div>
+                        ${renderDataBrickPills(usage.producingBricks, 'crimson', 'write-data')}
+                        <div class="data-card-subtitle">Consuming Bricks</div>
+                        ${renderDataBrickPills(usage.consumingBricks, 'blue', 'read-data')}
+                    `;
+                }
+                return `
+                    <div class="data-card">
+                        <a class="data-card-head" target="_blank" rel="noopener noreferrer" href="data_pages/${escapeHtml(asset.id)}.html" style="text-decoration:none;color:inherit;">
+                            <img class="data-card-icon" src="icons/data.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
+                            <div class="data-card-title">${escapeHtml(asset.name || asset.id)}</div>
+                        </a>
+                        ${asset.description ? `<div class="data-card-copy">${escapeHtml(asset.description)}</div>` : ''}
+                        ${detailMarkup}
+                        ${brickMarkup}
+                    </div>
+                `;
+            }
+
+            function renderAssetGroup(group, depth = 0) {
+                const directAssets = group.assets || [];
+                const childGroups = group.subGroups || [];
+                const totalAssets = flattenDataAssetGroups([group]).length;
+                const directAssetMarkup = directAssets.length
+                    ? `<div class="data-grid">${directAssets.map(renderAssetCard).join('')}</div>`
+                    : '';
+                const childMarkup = childGroups.map(child => renderAssetGroup(child, depth + 1)).join('');
+                return `
+                    <section class="data-group data-group-depth-${depth}">
+                        <div class="data-group-header">
+                            <div class="data-group-title">${escapeHtml(group.name || 'Data Assets')}</div>
+                            <div class="data-group-count">${totalAssets} ${totalAssets === 1 ? 'asset' : 'assets'}</div>
+                        </div>
+                        ${group.description ? `<div class="data-group-description">${escapeHtml(group.description)}</div>` : ''}
+                        ${directAssetMarkup}
+                        ${childMarkup}
+                    </section>
+                `;
+            }
+
+            const assetMarkup = assetGroups.length
+                ? assetGroups.map(group => renderAssetGroup(group)).join('')
+                : `<div class="data-grid">${assets.map(renderAssetCard).join('')}</div>`;
+
+            container.innerHTML = `
+                <div class="data-options">
+                    <label class="data-option"><input type="checkbox" id="dataShowDetailToggle" ${dataShowDetail ? 'checked' : ''} onchange="setDataShowDetail(this.checked)"> Show detail</label>
+                    <label class="data-option"><input type="checkbox" id="dataShowBricksToggle" ${dataShowBricks ? 'checked' : ''} onchange="setDataShowBricks(this.checked)"> Show bricks</label>
+                </div>
+                <div class="data-summary">
+                    <div class="dependency-graph-stat">
+                        <div class="dependency-graph-stat-value">${assets.length}</div>
+                        <div class="dependency-graph-stat-label">Assets</div>
+                    </div>
+                    <div class="dependency-graph-stat">
+                        <div class="dependency-graph-stat-value">${stores.length}</div>
+                        <div class="dependency-graph-stat-label">Stores</div>
+                    </div>
+                    <div class="dependency-graph-stat">
+                        <div class="dependency-graph-stat-value">${totalStoreRefs}</div>
+                        <div class="dependency-graph-stat-label">Store Links</div>
+                    </div>
+                    <div class="dependency-graph-stat">
+                        <div class="dependency-graph-stat-value">${governedAssets}</div>
+                        <div class="dependency-graph-stat-label">Governed Assets</div>
+                    </div>
+                </div>
+                ${assets.length ? assetMarkup : '<div class="activity-muted">No data assets are defined for this domain yet.</div>'}
+            `;
+        }
+
+        function setDataShowBricks(show) {
+            dataShowBricks = show;
+            renderDataView();
+        }
+
+        function setDataShowDetail(show) {
+            dataShowDetail = show;
+            renderDataView();
+        }
+
+        function sortByDisplayName(left, right) {
+            return (left.name || left.id || '').localeCompare(right.name || right.id || '');
+        }
+
+        function getAllDataAssets() {
+            const assetGroups = dataAssetsPayload.rootGroups || [];
+            return dataAssetsPayload.assets || flattenDataAssetGroups(assetGroups);
+        }
+
+        function getDeclaredDependencyCatalog() {
+            const streams = getStreamCatalogItems().slice().sort(sortByDisplayName);
+            const bricks = getBrickCatalog().slice().sort(sortByDisplayName);
+            const dependencyTypes = new Set();
+            bricks.forEach(brick => {
+                (brick.brickDependencies || []).forEach(dep => {
+                    if (dep.targetBrickId) {
+                        dependencyTypes.add(dep.type || 'unspecified');
+                    }
+                });
+            });
+            return {
+                streams,
+                bricks,
+                dependencyTypes: Array.from(dependencyTypes).sort((left, right) => left.localeCompare(right))
+            };
+        }
+
+        function getDataDependencyCatalog() {
+            const assetLookup = {};
+            getAllDataAssets().forEach(asset => {
+                if (asset.id) {
+                    assetLookup[asset.id] = asset;
+                }
+            });
+
+            const referencedAssetIds = new Set();
+            const bricks = getBrickCatalog().filter(brick => {
+                const dependencies = brick.dataDependencies || [];
+                dependencies.forEach(dep => {
+                    if (dep.assetId) {
+                        referencedAssetIds.add(dep.assetId);
+                    }
+                });
+                return dependencies.some(dep => dep.assetId);
+            }).sort(sortByDisplayName);
+
+            const assets = Array.from(referencedAssetIds).map(assetId => {
+                return assetLookup[assetId] || {
+                    id: assetId,
+                    name: assetId,
+                    kind: 'unlisted'
+                };
+            }).sort(sortByDisplayName);
+
+            return {bricks, assets};
+        }
+
+        function getStreamDependencyCatalog() {
+            const streams = getStreamCatalogItems().slice().sort(sortByDisplayName);
+            const referencedBrickIds = new Set();
+            streams.forEach(stream => {
+                (stream.brickDependencies || []).forEach(dep => {
+                    if (dep.targetBrickId) {
+                        referencedBrickIds.add(dep.targetBrickId);
+                    }
+                });
+            });
+            const bricks = getBrickCatalog()
+                .filter(brick => referencedBrickIds.has(brick.id))
+                .sort(sortByDisplayName);
+            return {streams, bricks};
+        }
+
+        function renderDependencySubtabs() {
+            const container = document.getElementById('DependencySubtabs');
+            if (!container) {
+                return;
+            }
+            const tabs = [
+                {id: 'declared', label: 'Declared brick dependencies'},
+                {id: 'data', label: 'Brick dependencies via data assets'},
+                {id: 'streams', label: 'Brick dependencies via streams'}
+            ];
+            container.innerHTML = tabs.map(tab => `
+                <button class="dependency-subtab${activeDependencySubtab === tab.id ? ' active' : ''}" type="button" onclick="setDependencySubtab('${tab.id}')">
+                    ${tab.label}
+                </button>
+            `).join('');
+        }
+
+        function dependencyStateFor(subtab) {
+            return dependencySelectionState[subtab] || {};
+        }
+
+        function renderDependencyControlGroup(title, className, items, checkedValues, renderLabel) {
+            const checkedSet = checkedValues ? new Set(checkedValues) : null;
+            const checklist = items.length
+                ? items.map(item => {
+                    const value = String(item.id || item);
+                    const checked = !checkedSet || checkedSet.has(value) ? 'checked' : '';
+                    return `
+                        <label class="dependency-check-item">
+                            <input type="checkbox" class="${className}" value="${escapeHtml(value)}" ${checked} onchange="renderActiveDependencyGraph()">
+                            ${renderLabel(item)}
+                        </label>
+                    `;
+                }).join('')
+                : '<div class="dependency-empty">No items available.</div>';
+            return `
+                <div class="dependency-control-group">
+                    <div class="dependency-control-title">${title}</div>
+                    <div class="dependency-actions">
+                        <button class="dependency-action" type="button" onclick="setAllDependencyCheckboxes('.${className}', true)">Show all</button>
+                        <button class="dependency-action" type="button" onclick="setAllDependencyCheckboxes('.${className}', false)">Hide all</button>
+                    </div>
+                    <div class="dependency-checklist">${checklist}</div>
+                </div>
+            `;
+        }
+
+        function renderStreamControlLabel(stream) {
+            const meta = [stream.domain, stream.group && stream.group !== stream.domain ? stream.group : '']
+                .filter(Boolean)
+                .join(' / ');
+            return `
+                <span>
+                    <span>${escapeHtml(stream.name || stream.id)}</span>
+                    ${meta ? `<span class="dependency-check-meta">${escapeHtml(meta)}</span>` : ''}
+                </span>
+            `;
+        }
+
+        function renderBrickControlLabel(brick) {
+            const meta = [brick.domain, brick.group && brick.group !== brick.domain ? brick.group : '', brick.type]
+                .filter(Boolean)
+                .join(' / ');
+            return `
+                <span>
+                    <span>${escapeHtml(brick.name || brick.id)}</span>
+                    ${meta ? `<span class="dependency-check-meta">${escapeHtml(meta)}</span>` : ''}
+                </span>
+            `;
+        }
+
+        function renderAssetControlLabel(asset) {
+            const meta = [asset.kind, asset.classification].filter(Boolean).join(' / ');
+            return `
+                <span>
+                    <span>${escapeHtml(asset.name || asset.id)}</span>
+                    ${meta ? `<span class="dependency-check-meta">${escapeHtml(meta)}</span>` : ''}
+                </span>
+            `;
+        }
+
+        function renderTypeControlLabel(type) {
+            return `<span>${escapeHtml(type)}</span>`;
+        }
+
+        function renderDependencyNodeLegend(items) {
+            return `
+                <div class="dependency-node-legend">
+                    <div class="dependency-control-title">Node Legend</div>
+                    <div class="dependency-node-legend-items">
+                        ${items.map(item => `
+                            <div class="dependency-node-legend-item">
+                                <span class="dependency-node-legend-swatch" style="background-color:${item.fill}; border-color:${item.stroke};"></span>
+                                <span>${item.label}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDeclaredDependencyControls() {
+            const catalog = getDeclaredDependencyCatalog();
+            const state = dependencyStateFor('declared');
+            return `
+                <div class="dependency-controls">
+                    ${renderDependencyControlGroup('Product Streams', 'dependency-declared-stream-checkbox', catalog.streams, state.streamIds, renderStreamControlLabel)}
+                    ${renderDependencyControlGroup('Dependency Types', 'dependency-declared-type-checkbox', catalog.dependencyTypes, state.typeIds, renderTypeControlLabel)}
+                    ${renderDependencyNodeLegend([
+                        {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'}
+                    ])}
+                </div>
+            `;
+        }
+
+        function renderDataDependencyControls() {
+            const catalog = getDataDependencyCatalog();
+            const state = dependencyStateFor('data');
+            return `
+                <div class="dependency-controls">
+                    <div class="dependency-top-options">
+                        <label class="dependency-option" for="dependencyDataAggregateToggle">
+                            <input type="checkbox" id="dependencyDataAggregateToggle" ${state.aggregate ? 'checked' : ''} onchange="renderActiveDependencyGraph()">
+                            <span>Aggregate dependencies</span>
+                        </label>
+                    </div>
+                    ${renderDependencyControlGroup('Product Bricks', 'dependency-data-brick-checkbox', catalog.bricks, state.brickIds, renderBrickControlLabel)}
+                    ${renderDependencyControlGroup('Data Assets', 'dependency-data-asset-checkbox', catalog.assets, state.assetIds, renderAssetControlLabel)}
+                    ${renderDependencyNodeLegend([
+                        {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'},
+                        {fill: '#dcfce7', stroke: '#16a34a', label: 'Data asset'}
+                    ])}
+                </div>
+            `;
+        }
+
+        function renderStreamDependencyControls() {
+            const catalog = getStreamDependencyCatalog();
+            const state = dependencyStateFor('streams');
+            return `
+                <div class="dependency-controls">
+                    <div class="dependency-top-options">
+                        <label class="dependency-option" for="dependencyStreamAggregateToggle">
+                            <input type="checkbox" id="dependencyStreamAggregateToggle" ${state.aggregate ? 'checked' : ''} onchange="renderActiveDependencyGraph()">
+                            <span>Aggregate brick links</span>
+                        </label>
+                    </div>
+                    ${renderDependencyControlGroup('Product Streams', 'dependency-stream-stream-checkbox', catalog.streams, state.streamIds, renderStreamControlLabel)}
+                    ${renderDependencyControlGroup('Product Bricks', 'dependency-stream-brick-checkbox', catalog.bricks, state.brickIds, renderBrickControlLabel)}
+                    ${renderDependencyNodeLegend([
+                        {fill: '#fde68a', stroke: '#d97706', label: 'Product stream'},
+                        {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'}
+                    ])}
+                </div>
+            `;
+        }
+
+        function renderActiveDependencyControls() {
+            const container = document.getElementById('DependencyControls');
+            if (!container) {
+                return;
+            }
+            if (activeDependencySubtab === 'data') {
+                container.innerHTML = renderDataDependencyControls();
+                return;
+            }
+            if (activeDependencySubtab === 'streams') {
+                container.innerHTML = renderStreamDependencyControls();
+                return;
+            }
+            container.innerHTML = renderDeclaredDependencyControls();
+        }
+
+        function setAllDependencyCheckboxes(selector, checked) {
+            document.querySelectorAll(selector).forEach(input => {
+                input.checked = checked;
+            });
+            renderActiveDependencyGraph();
+        }
+
+        function readDependencyControlState() {
+            if (!dependenciesInitialized) {
+                return;
+            }
+            if (activeDependencySubtab === 'declared') {
+                dependencySelectionState.declared.streamIds = Array.from(selectedValues('.dependency-declared-stream-checkbox'));
+                dependencySelectionState.declared.typeIds = Array.from(selectedValues('.dependency-declared-type-checkbox'));
+                return;
+            }
+            if (activeDependencySubtab === 'data') {
+                const aggregateToggle = document.getElementById('dependencyDataAggregateToggle');
+                dependencySelectionState.data.brickIds = Array.from(selectedValues('.dependency-data-brick-checkbox'));
+                dependencySelectionState.data.assetIds = Array.from(selectedValues('.dependency-data-asset-checkbox'));
+                dependencySelectionState.data.aggregate = Boolean(aggregateToggle && aggregateToggle.checked);
+                return;
+            }
+            if (activeDependencySubtab === 'streams') {
+                const aggregateToggle = document.getElementById('dependencyStreamAggregateToggle');
+                dependencySelectionState.streams.streamIds = Array.from(selectedValues('.dependency-stream-stream-checkbox'));
+                dependencySelectionState.streams.brickIds = Array.from(selectedValues('.dependency-stream-brick-checkbox'));
+                dependencySelectionState.streams.aggregate = Boolean(aggregateToggle && aggregateToggle.checked);
+            }
+        }
+
+        function setDependencySubtab(subtab) {
+            readDependencyControlState();
+            activeDependencySubtab = subtab;
+            renderDependencySubtabs();
+            renderActiveDependencyControls();
+            renderActiveDependencyGraph();
+        }
+
+        function setAllMatrixCheckboxes(selector, checked) {
+            document.querySelectorAll(selector).forEach(input => {
+                input.checked = checked;
+            });
+            renderMatrixView();
+        }
+
+        function selectedValues(selector) {
+            return new Set(Array.from(document.querySelectorAll(selector))
+                .filter(input => input.checked)
+                .map(input => input.value));
+        }
+
+        function addGraphNode(nodesById, node) {
+            if (node.id && !nodesById[node.id]) {
+                nodesById[node.id] = node;
+            }
+        }
+
+        function graphBrickNode(brick) {
+            return {
+                id: 'brick:' + brick.id,
+                label: brick.name || brick.id,
+                nodeClass: 'brickNode'
+            };
+        }
+
+        function graphStreamNode(stream) {
+            return {
+                id: 'stream:' + stream.id,
+                label: stream.name || stream.id,
+                nodeClass: 'streamNode'
+            };
+        }
+
+        function graphDataAssetNode(asset) {
+            return {
+                id: 'asset:' + asset.id,
+                label: asset.name || asset.id,
+                nodeClass: 'dataAssetNode'
+            };
+        }
+
+        function mermaidNodeId(value) {
+            return String(value || '').replace(/[^a-zA-Z0-9_]/g, '_');
+        }
+
+        function selectedStreamBrickIds(streams, selectedStreamIds, brickLookup) {
+            const brickIds = new Set();
+            const allStreamsSelected = !streams.length || streams.every(stream => selectedStreamIds.has(stream.id));
+            if (allStreamsSelected) {
+                Object.keys(brickLookup).forEach(brickId => brickIds.add(brickId));
+                return brickIds;
+            }
+            streams.forEach(stream => {
+                if (!selectedStreamIds.has(stream.id)) {
+                    return;
+                }
+                if (brickLookup[stream.id]) {
+                    brickIds.add(stream.id);
+                }
+                (stream.brickDependencies || []).forEach(dep => {
+                    if (dep.targetBrickId) {
+                        brickIds.add(dep.targetBrickId);
+                    }
+                });
+            });
+            return brickIds;
+        }
+
+        function buildDeclaredDependencyGraph(catalog, selectedStreamIds, selectedDependencyTypes) {
+            const brickLookup = buildBrickLookup();
+            const scopedBrickIds = selectedStreamBrickIds(catalog.streams, selectedStreamIds, brickLookup);
+            const nodesById = {};
+            const edges = [];
+
+            catalog.bricks.forEach(brick => {
+                if (!scopedBrickIds.has(brick.id)) {
+                    return;
+                }
+                (brick.brickDependencies || []).forEach(dep => {
+                    const dependencyType = dep.type || 'unspecified';
+                    if (!dep.targetBrickId || !selectedDependencyTypes.has(dependencyType)) {
+                        return;
+                    }
+                    const targetBrick = brickLookup[dep.targetBrickId] || {
+                        id: dep.targetBrickId,
+                        name: dep.targetBrickId
+                    };
+                    addGraphNode(nodesById, graphBrickNode(brick));
+                    addGraphNode(nodesById, graphBrickNode(targetBrick));
+                    edges.push({
+                        source: 'brick:' + brick.id,
+                        target: 'brick:' + dep.targetBrickId,
+                        label: brickDependencyEdgeLabel(brick, targetBrick, dep)
+                    });
+                });
+            });
+
+            return {
+                nodes: Object.values(nodesById),
+                edges,
+                scopedBrickCount: scopedBrickIds.size
+            };
+        }
+
+        function isDataProducerRole(role) {
+            return ['own', 'write', 'publish', 'replicate', 'delete'].includes(String(role || '').toLowerCase());
+        }
+
+        function buildDataDependencyGraph(catalog, selectedBrickIds, selectedAssetIds, aggregate) {
+            if (aggregate) {
+                return buildAggregatedDataDependencyGraph(catalog, selectedBrickIds, selectedAssetIds);
+            }
+
+            const assetLookup = {};
+            catalog.assets.forEach(asset => {
+                assetLookup[asset.id] = asset;
+            });
+            const nodesById = {};
+            const edges = [];
+
+            catalog.bricks.forEach(brick => {
+                if (!selectedBrickIds.has(brick.id)) {
+                    return;
+                }
+                (brick.dataDependencies || []).forEach(dep => {
+                    if (!dep.assetId || !selectedAssetIds.has(dep.assetId)) {
+                        return;
+                    }
+                    const asset = assetLookup[dep.assetId] || {
+                        id: dep.assetId,
+                        name: dep.assetId
+                    };
+                    addGraphNode(nodesById, graphBrickNode(brick));
+                    addGraphNode(nodesById, graphDataAssetNode(asset));
+                    const brickNodeId = 'brick:' + brick.id;
+                    const assetNodeId = 'asset:' + dep.assetId;
+                    edges.push({
+                        source: isDataProducerRole(dep.role) ? brickNodeId : assetNodeId,
+                        target: isDataProducerRole(dep.role) ? assetNodeId : brickNodeId,
+                        label: [dep.role || 'uses', dataDependencyModuleNames(brick, dep)].filter(Boolean).join(' / ')
+                    });
+                });
+            });
+
+            return {
+                nodes: Object.values(nodesById),
+                edges
+            };
+        }
+
+        function buildAggregatedDataDependencyGraph(catalog, selectedBrickIds, selectedAssetIds) {
+            const brickLookup = {};
+            catalog.bricks.forEach(brick => {
+                brickLookup[brick.id] = brick;
+            });
+            const assetToBrickIds = {};
+            catalog.bricks.forEach(brick => {
+                if (!selectedBrickIds.has(brick.id)) {
+                    return;
+                }
+                (brick.dataDependencies || []).forEach(dep => {
+                    if (!dep.assetId || !selectedAssetIds.has(dep.assetId)) {
+                        return;
+                    }
+                    if (!assetToBrickIds[dep.assetId]) {
+                        assetToBrickIds[dep.assetId] = new Set();
+                    }
+                    assetToBrickIds[dep.assetId].add(brick.id);
+                });
+            });
+
+            const pairLookup = {};
+            Object.entries(assetToBrickIds).forEach(([assetId, brickIds]) => {
+                const ids = Array.from(brickIds).sort((left, right) => left.localeCompare(right));
+                for (let i = 0; i < ids.length; i++) {
+                    for (let j = i + 1; j < ids.length; j++) {
+                        const key = ids[i] + '::' + ids[j];
+                        if (!pairLookup[key]) {
+                            pairLookup[key] = new Set();
+                        }
+                        pairLookup[key].add(assetId);
+                    }
+                }
+            });
+
+            const nodesById = {};
+            const edges = [];
+            Object.entries(pairLookup).forEach(([key, assetIds]) => {
+                const [sourceId, targetId] = key.split('::');
+                addGraphNode(nodesById, graphBrickNode(brickLookup[sourceId] || {id: sourceId, name: sourceId}));
+                addGraphNode(nodesById, graphBrickNode(brickLookup[targetId] || {id: targetId, name: targetId}));
+                const count = assetIds.size;
+                edges.push({
+                    source: 'brick:' + sourceId,
+                    target: 'brick:' + targetId,
+                    label: String(count)
+                });
+            });
+
+            return {
+                nodes: Object.values(nodesById),
+                edges
+            };
+        }
+
+        function buildStreamDependencyGraph(catalog, selectedStreamIds, selectedBrickIds, aggregate) {
+            if (aggregate) {
+                return buildAggregatedStreamDependencyGraph(catalog, selectedStreamIds, selectedBrickIds);
+            }
+
+            const brickLookup = {};
+            catalog.bricks.forEach(brick => {
+                brickLookup[brick.id] = brick;
+            });
+            const nodesById = {};
+            const edges = [];
+
+            catalog.streams.forEach(stream => {
+                if (!selectedStreamIds.has(stream.id)) {
+                    return;
+                }
+                (stream.brickDependencies || []).forEach(dep => {
+                    if (!dep.targetBrickId || !selectedBrickIds.has(dep.targetBrickId)) {
+                        return;
+                    }
+                    const brick = brickLookup[dep.targetBrickId] || {
+                        id: dep.targetBrickId,
+                        name: dep.targetBrickId
+                    };
+                    addGraphNode(nodesById, graphStreamNode(stream));
+                    addGraphNode(nodesById, graphBrickNode(brick));
+                    edges.push({
+                        source: 'stream:' + stream.id,
+                        target: 'brick:' + dep.targetBrickId,
+                        label: dep.type || 'uses'
+                    });
+                });
+            });
+
+            return {
+                nodes: Object.values(nodesById),
+                edges
+            };
+        }
+
+        function buildAggregatedStreamDependencyGraph(catalog, selectedStreamIds, selectedBrickIds) {
+            const brickLookup = {};
+            catalog.bricks.forEach(brick => {
+                brickLookup[brick.id] = brick;
+            });
+            const pairLookup = {};
+            catalog.streams.forEach(stream => {
+                if (!selectedStreamIds.has(stream.id)) {
+                    return;
+                }
+                const brickIds = Array.from(new Set((stream.brickDependencies || [])
+                    .map(dep => dep.targetBrickId)
+                    .filter(brickId => brickId && selectedBrickIds.has(brickId))))
+                    .sort((left, right) => left.localeCompare(right));
+                for (let i = 0; i < brickIds.length; i++) {
+                    for (let j = i + 1; j < brickIds.length; j++) {
+                        const key = brickIds[i] + '::' + brickIds[j];
+                        if (!pairLookup[key]) {
+                            pairLookup[key] = new Set();
+                        }
+                        pairLookup[key].add(stream.id);
+                    }
+                }
+            });
+
+            const nodesById = {};
+            const edges = [];
+            Object.entries(pairLookup).forEach(([key, streamIds]) => {
+                const [sourceId, targetId] = key.split('::');
+                addGraphNode(nodesById, graphBrickNode(brickLookup[sourceId] || {id: sourceId, name: sourceId}));
+                addGraphNode(nodesById, graphBrickNode(brickLookup[targetId] || {id: targetId, name: targetId}));
+                const count = streamIds.size;
+                edges.push({
+                    source: 'brick:' + sourceId,
+                    target: 'brick:' + targetId,
+                    label: String(count)
+                });
+            });
+
+            return {
+                nodes: Object.values(nodesById),
+                edges
+            };
+        }
+
+        function renderDependencyGraphShell() {
+            return `
+                <div class="dependency-graph-shell">
+                    <div class="dependency-view-toggle">
+                        <button type="button" class="dependency-view-btn active" data-depview="force" onclick="setDependencyGraphView('force')">2D force graph</button>
+                        <button type="button" class="dependency-view-btn" data-depview="mermaid" onclick="setDependencyGraphView('mermaid')">Flow diagram</button>
+                    </div>
+                    <div class="dependency-graph" id="DependenciesGraph"></div>
+                </div>
+            `;
+        }
+
+        let dependencyGraphView = 'force';
+        let dependencyForceInstance = null;
+
+        function setDependencyGraphView(view) {
+            dependencyGraphView = view;
+            document.querySelectorAll('.dependency-view-btn').forEach(button => {
+                button.classList.toggle('active', button.getAttribute('data-depview') === view);
+            });
+            const graphContainer = document.getElementById('DependenciesGraph');
+            if (graphContainer) {
+                graphContainer.classList.toggle('force', view === 'force');
+            }
+            renderActiveDependencyGraph();
+        }
+
+        const dependencyNodeColors = {
+            streamNode: '#f59e0b',
+            brickNode: '#2563eb',
+            dataAssetNode: '#16a34a'
+        };
+
+        // Convert a #rrggbb color to rgba with the given alpha so overlapping
+        // force-graph nodes blend instead of forming a solid color block.
+        function dependencyNodeColorWithAlpha(hexColor, alpha) {
+            const hex = String(hexColor || '').replace('#', '');
+            if (hex.length !== 6) {
+                return hexColor;
+            }
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+        }
+
+        function renderDependencyGraph(graph, emptyMessage) {
+            const graphContainer = document.getElementById('DependenciesGraph');
+            if (!graphContainer) {
+                return;
+            }
+            graphContainer.classList.toggle('force', dependencyGraphView === 'force');
+            dependencyForceInstance = null;
+            if (dependencyGraphView === 'force') {
+                renderDependencyForce(graph, emptyMessage);
+            } else {
+                renderDependencyMermaid(graph, emptyMessage);
+            }
+        }
+
+        function renderDependencyForce(graph, emptyMessage) {
+            const graphContainer = document.getElementById('DependenciesGraph');
+            if (!graphContainer) {
+                return;
+            }
+            if (!graph.nodes.length || !graph.edges.length) {
+                graphContainer.innerHTML = `<div class="dependency-empty">${escapeHtml(emptyMessage)}</div>`;
+                return;
+            }
+            if (typeof ForceGraph === 'undefined') {
+                graphContainer.innerHTML = '<div class="dependency-empty">Force graph library failed to load.</div>';
+                return;
+            }
+            graphContainer.innerHTML = '';
+
+            const degree = {};
+            graph.edges.forEach(edge => {
+                degree[edge.source] = (degree[edge.source] || 0) + 1;
+                degree[edge.target] = (degree[edge.target] || 0) + 1;
+            });
+            const nodes = graph.nodes.map(node => ({
+                id: node.id,
+                name: node.label,
+                nodeClass: node.nodeClass,
+                val: (degree[node.id] || 1)
+            }));
+            const links = graph.edges.map(edge => ({source: edge.source, target: edge.target, label: edge.label || ''}));
+
+            const Graph = ForceGraph()(graphContainer)
+                .nodeRelSize(5)
+                .nodeVal(() => 1)
+                .nodeLabel(node => escapeHtml(node.name))
+                .nodeColor(node => dependencyNodeColorWithAlpha(dependencyNodeColors[node.nodeClass] || '#6b7280', 0.65))
+                .nodeCanvasObjectMode(() => 'after')
+                .nodeCanvasObject((node, ctx, globalScale) => {
+                    if (!dependencyForceShowLabels) return;
+                    const fontSize = 12 / globalScale;
+                    ctx.font = fontSize + 'px Ubuntu, Arial, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'top';
+                    ctx.fillStyle = '#374151';
+                    ctx.fillText(node.name, node.x, node.y + 7);
+                })
+                .linkColor(() => 'rgba(100,116,139,0.5)')
+                .linkWidth(1.5)
+                .linkDirectionalArrowLength(4)
+                .linkDirectionalArrowRelPos(1)
+                .linkDirectionalParticles(1)
+                .linkDirectionalParticleSpeed(0.006)
+                .linkLabel(link => escapeHtml(link.label))
+                .onNodeClick(node => {
+                    if (node.id.indexOf('brick:') === 0) {
+                        window.open('landing_pages/' + node.id.substring('brick:'.length) + '.html', '_blank');
+                    }
+                })
+                .graphData({nodes: nodes, links: links});
+
+            dependencyForceInstance = Graph;
+            sizeDependencyForce();
+        }
+
+        let dependencyForceShowLabels = false;
+
+        function setDependencyForceLabels(show) {
+            dependencyForceShowLabels = show;
+            if (dependencyForceInstance && dependencyGraphView === 'force') {
+                dependencyForceInstance.nodeCanvasObjectMode(() => 'after');
+            }
+        }
+
+        function sizeDependencyForce() {
+            if (!dependencyForceInstance) {
+                return;
+            }
+            const container = document.getElementById('DependenciesGraph');
+            if (!container) {
+                return;
+            }
+            const w = container.clientWidth || container.offsetWidth;
+            const h = container.clientHeight || container.offsetHeight;
+            if (w > 0 && h > 0) {
+                dependencyForceInstance.width(w).height(h);
+                if (typeof dependencyForceInstance.d3ReheatSimulation === 'function') {
+                    dependencyForceInstance.d3ReheatSimulation();
+                }
+            }
+        }
+
+        window.addEventListener('resize', sizeDependencyForce);
+
+        function renderDependencyMermaid(graph, emptyMessage) {
+            const graphContainer = document.getElementById('DependenciesGraph');
+            if (!graphContainer) {
+                return;
+            }
+            if (!graph.nodes.length || !graph.edges.length) {
+                graphContainer.innerHTML = `<div class="dependency-empty">${escapeHtml(emptyMessage)}</div>`;
+                return;
+            }
+
+            let chart = 'flowchart LR\n\n';
+            graph.nodes.forEach(node => {
+                chart += mermaidNodeId(node.id) + '["' + escapeMermaidLabel(node.label) + '"]\n';
+            });
+            graph.edges.forEach(edge => {
+                const label = edge.label ? '|' + escapeMermaidLabel(edge.label) + '|' : '';
+                const operator = edge.direction === 'undirected' && !label ? '---' : '-->';
+                chart += mermaidNodeId(edge.source) + ' ' + operator + label + ' ' + mermaidNodeId(edge.target) + '\n';
+            });
+            chart += '\nclassDef streamNode fill:#fde68a,stroke:#d97706,color:#7c2d12,stroke-width:2px;\n';
+            chart += 'classDef brickNode fill:#dbeafe,stroke:#2563eb,color:#1e3a8a,stroke-width:2px;\n';
+            chart += 'classDef dataAssetNode fill:#dcfce7,stroke:#16a34a,color:#14532d,stroke-width:2px;\n';
+
+            const classGroups = {
+                streamNode: [],
+                brickNode: [],
+                dataAssetNode: []
+            };
+            graph.nodes.forEach(node => {
+                if (classGroups[node.nodeClass]) {
+                    classGroups[node.nodeClass].push(mermaidNodeId(node.id));
+                }
+            });
+            Object.entries(classGroups).forEach(([className, nodeIds]) => {
+                if (nodeIds.length) {
+                    chart += 'class ' + nodeIds.join(',') + ' ' + className + ';\n';
+                }
+            });
+            graphContainer.innerHTML = '<div class="mermaid">' + chart + '</div>';
+            mermaid.run({querySelector: '#DependenciesGraph .mermaid'});
+        }
+
+        function renderDependencySummary(stats) {
+            const summary = document.getElementById('DependenciesSummary');
+            if (!summary) {
+                return;
+            }
+            summary.innerHTML = 'Showing ' + stats.map(stat =>
+                '<strong>' + stat.value + '</strong> ' + escapeHtml(String(stat.label).toLowerCase())
+            ).join(' &middot; ') + '.';
+        }
+
+        function renderDeclaredDependencyGraph() {
+            const catalog = getDeclaredDependencyCatalog();
+            const selectedStreamIds = selectedValues('.dependency-declared-stream-checkbox');
+            const selectedDependencyTypes = selectedValues('.dependency-declared-type-checkbox');
+            const graph = buildDeclaredDependencyGraph(catalog, selectedStreamIds, selectedDependencyTypes);
+            renderDependencySummary([
+                {value: graph.scopedBrickCount, label: 'Scoped Bricks'},
+                {value: graph.edges.length, label: 'Declared Links'}
+            ]);
+            renderDependencyGraph(graph, 'Select streams and dependency types to render declared brick dependencies.');
+        }
+
+        function renderDataDependencyGraph() {
+            const catalog = getDataDependencyCatalog();
+            const selectedBrickIds = selectedValues('.dependency-data-brick-checkbox');
+            const selectedAssetIds = selectedValues('.dependency-data-asset-checkbox');
+            const aggregateToggle = document.getElementById('dependencyDataAggregateToggle');
+            const aggregate = Boolean(aggregateToggle && aggregateToggle.checked);
+            const graph = buildDataDependencyGraph(catalog, selectedBrickIds, selectedAssetIds, aggregate);
+            renderDependencySummary([
+                {value: selectedBrickIds.size, label: 'Bricks'},
+                {value: selectedAssetIds.size, label: 'Assets'},
+                {value: graph.edges.length, label: aggregate ? 'Shared Asset Links' : 'Data Links'}
+            ]);
+            renderDependencyGraph(graph, aggregate
+                ? 'Select at least two bricks sharing selected data assets to render aggregated dependencies.'
+                : 'Select bricks and data assets to render data-asset dependency links.');
+        }
+
+        function renderStreamDependencyGraph() {
+            const catalog = getStreamDependencyCatalog();
+            const selectedStreamIds = selectedValues('.dependency-stream-stream-checkbox');
+            const selectedBrickIds = selectedValues('.dependency-stream-brick-checkbox');
+            const aggregateToggle = document.getElementById('dependencyStreamAggregateToggle');
+            const aggregate = Boolean(aggregateToggle && aggregateToggle.checked);
+            const graph = buildStreamDependencyGraph(catalog, selectedStreamIds, selectedBrickIds, aggregate);
+            renderDependencySummary([
+                {value: selectedStreamIds.size, label: 'Streams'},
+                {value: selectedBrickIds.size, label: 'Bricks'},
+                {value: graph.edges.length, label: aggregate ? 'Shared Stream Links' : 'Stream Links'}
+            ]);
+            renderDependencyGraph(graph, aggregate
+                ? 'Select at least two bricks sharing selected streams to render aggregated brick links.'
+                : 'Select bricks and streams to render stream dependency links.');
+        }
+
+        function renderActiveDependencyGraph() {
+            if (activeDependencySubtab === 'data') {
+                renderDataDependencyGraph();
+                return;
+            }
+            if (activeDependencySubtab === 'streams') {
+                renderStreamDependencyGraph();
+                return;
+            }
+            renderDeclaredDependencyGraph();
+        }
+
+        function renderDependenciesView() {
+            const container = document.getElementById('DependenciesContent');
+            if (!container) {
+                return;
+            }
+
+            if (!dependenciesInitialized) {
+                container.innerHTML = `
+                    <div class="dependency-subtabs" id="DependencySubtabs"></div>
+                    <div class="dependencies-layout">
+                        <div class="dependency-controls-column">
+                            <div id="DependencyControls"></div>
+                            <label class="dependency-labels-toggle"><input type="checkbox" onchange="setDependencyForceLabels(this.checked)"> Show labels</label>
+                            <div class="dependency-graph-summary" id="DependenciesSummary"></div>
+                        </div>
+                        ${renderDependencyGraphShell()}
+                    </div>
+                `;
+                dependenciesInitialized = true;
+                renderDependencySubtabs();
+                renderActiveDependencyControls();
+            }
+
+            renderActiveDependencyGraph();
+        }
+
+        // ---- URL state: ?q=, ?modules=1, ?status=1, ?statuses=a,b keep the
+        // bricks view shareable; the tab itself stays in the #hash. ----
+        let brickUrlStateRestored = false;
+
+        function restoreBricksStateFromUrl() {
+            if (brickUrlStateRestored) return;
+            brickUrlStateRestored = true;
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q');
+            const searchInput = document.getElementById('BrickSearch');
+            if (query && searchInput) searchInput.value = query;
+            const structureToggle = document.getElementById('brickStructureToggle');
+            if (structureToggle && params.get('modules') === '1') structureToggle.checked = true;
+            const statusToggle = document.getElementById('brickStatusToggle');
+            if (statusToggle && params.get('status') === '1') statusToggle.checked = true;
+            const statuses = params.get('statuses');
+            if (statuses !== null) {
+                const wanted = new Set(statuses.split(',').filter(Boolean));
+                document.querySelectorAll('.brick-status-filter-input').forEach(input => {
+                    input.checked = wanted.has(input.value);
+                });
+            }
+        }
+
+        function syncBricksUrl() {
+            if (!brickUrlStateRestored || !window.history || !window.history.replaceState) return;
+            const params = new URLSearchParams(window.location.search);
+            const query = brickSearchQuery();
+            if (query) params.set('q', query); else params.delete('q');
+            if (shouldShowBrickStructure()) params.set('modules', '1'); else params.delete('modules');
+            if (shouldShowBrickStatus()) params.set('status', '1'); else params.delete('status');
+            const checkboxes = Array.from(document.querySelectorAll('.brick-status-filter-input'));
+            const checked = checkboxes.filter(input => input.checked).map(input => input.value);
+            if (checkboxes.length && checked.length !== checkboxes.length) {
+                params.set('statuses', checked.join(','));
+            } else {
+                params.delete('statuses');
+            }
+            const qs = params.toString();
+            window.history.replaceState({}, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+        }
+
+        function countBricks(groups, predicate) {
+            let total = 0;
+            (groups || []).forEach(group => {
+                total += (group.bricks || []).filter(predicate).length;
+                total += countBricks(group.subGroups, predicate);
+            });
+            return total;
+        }
+
+        function renderBrickSearchSummary() {
+            const el = document.getElementById('BrickSearchSummary');
+            if (!el) return;
+            const query = brickSearchQuery();
+            const visible = countBricks(rootGroups, shouldRenderBrick);
+            const total = countBricks(rootGroups, () => true);
+            el.textContent = (query || visible !== total)
+                ? `Showing ${visible} of ${total} bricks`
+                : '';
+        }
+
+        function updateBricksView() {
+            ensureBrickStatusControls();
+            restoreBricksStateFromUrl();
+            document.getElementById('Current').innerHTML = renderMap(rootGroups);
+            document.getElementById('Legend').innerHTML = renderLegend();
+            renderBrickSearchSummary();
+            syncBricksUrl();
+        }
+
+        function getMatrixCatalog() {
+            const streams = getStreamCatalogItems();
+            const brickCatalog = getBrickCatalog();
+            const referencedBrickIds = new Set();
+            const dependencyTypes = new Set();
+            streams.forEach(stream => {
+                (stream.brickDependencies || []).forEach(dep => dependencyTypes.add(dep.type || 'unspecified'));
+                (stream.brickDependencies || []).forEach(dep => referencedBrickIds.add(dep.targetBrickId || ''));
+            });
+            return {
+                streams: streams,
+                bricks: brickCatalog.filter(item => referencedBrickIds.has(item.id)),
+                dependencyTypes: Array.from(dependencyTypes).sort((left, right) => left.localeCompare(right))
+            };
+        }
+
+        function renderMatrixControls(catalog) {
+            return `
+                <div class="matrix-controls">
+                    <div class="dependency-control-group">
+                        <div class="dependency-control-title">Dependency Types</div>
+                        <div class="dependency-actions">
+                            <button class="dependency-action" type="button" onclick="setAllMatrixCheckboxes('.matrix-type-checkbox', true)">Show all</button>
+                            <button class="dependency-action" type="button" onclick="setAllMatrixCheckboxes('.matrix-type-checkbox', false)">Hide all</button>
+                        </div>
+                        <div class="dependency-checklist">
+                            ${catalog.dependencyTypes.map(item => `
+                                <label class="dependency-check-item">
+                                    <input type="checkbox" class="matrix-type-checkbox" value="${item}" checked onchange="renderMatrixView()">
+                                    <span>${item}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildMatrixData(catalog, selectedDependencyTypes) {
+            const streams = catalog.streams;
+            const rows = [];
+            const lookup = {};
+            const rowIndex = {};
+
+            function ensureRow(rowId, row) {
+                if (!rowIndex[rowId]) {
+                    rowIndex[rowId] = row;
+                    rows.push(row);
+                    lookup[rowId] = {};
+                }
+                return rowIndex[rowId];
+            }
+
+            function addMatrixDependency(sourceId, targetId, payload) {
+                if (!lookup[sourceId]) {
+                    lookup[sourceId] = {};
+                }
+                if (!lookup[sourceId][targetId]) {
+                    lookup[sourceId][targetId] = [];
+                }
+                lookup[sourceId][targetId].push(payload);
+            }
+
+            streams.forEach(stream => {
+                ensureRow(stream.id, {
+                    id: stream.id,
+                    kind: 'stream',
+                    name: stream.name || stream.id,
+                    icon: 'stream.png',
+                    href: ''
+                });
+
+                (stream.brickDependencies || []).forEach(dep => {
+                    if (!selectedDependencyTypes.has(dep.type || 'unspecified')) {
+                        return;
+                    }
+                    if (!dep.targetBrickId) {
+                        return;
+                    }
+                    const linkedBrick = catalog.bricks.find(item => item.id === dep.targetBrickId) || {};
+                    ensureRow(dep.targetBrickId, {
+                        id: dep.targetBrickId,
+                        kind: 'brick',
+                        name: linkedBrick.name || dep.targetBrickId,
+                        icon: dep.targetBrickId + '.png',
+                        href: dep.targetBrickId ? 'landing_pages/' + dep.targetBrickId + '.html' : ''
+                    });
+                    addMatrixDependency(stream.id, dep.targetBrickId, {
+                        type: dep.type || 'unspecified',
+                        direction: 'stream_to_brick'
+                    });
+                    addMatrixDependency(dep.targetBrickId, stream.id, {
+                        type: dep.type || 'unspecified',
+                        direction: 'brick_supports_stream'
+                    });
+                });
+
+            });
+
+            rows.sort((left, right) => {
+                if (left.kind !== right.kind) {
+                    const order = {'stream': 0, 'brick': 1};
+                    return (order[left.kind] || 99) - (order[right.kind] || 99);
+                }
+                return (left.name || '').localeCompare(right.name || '');
+            });
+
+            return {
+                columns: rows,
+                rows: rows,
+                lookup: lookup
+            };
+        }
+
+        function renderMatrixTable(matrixData) {
+            const columns = matrixData.columns || [];
+            const rows = matrixData.rows || [];
+            if (!columns.length || !rows.length) {
+                return '<div class="dependency-empty">No matrix data available.</div>';
+            }
+
+            function dependencyCountForParticipant(participantId) {
+                return Object.values(matrixData.lookup[participantId] || {}).reduce((sum, deps) => sum + deps.length, 0);
+            }
+
+            return `
+                <div class="matrix-table-wrap">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th class="matrix-corner">Stream</th>
+                                ${columns.map(column => `
+                                    <th title="${column.name || column.id}">
+                                        ${column.href ? `
+                                            <a target="_blank" href="${column.href}">
+                                                <img class="matrix-col-icon" src="icons/${column.icon}" alt="${column.name || column.id}" onerror="this.onerror=null;this.src='icons/brick.png'">
+                                            </a>
+                                        ` : `
+                                            <img class="matrix-col-icon" src="icons/${column.icon}" alt="${column.name || column.id}" onerror="this.onerror=null;this.src='icons/brick.png'">
+                                        `}
+                                    </th>
+                                `).join('')}
+                            </tr>
+                            <tr>
+                                <th class="matrix-corner">Count</th>
+                                ${columns.map(column => `
+                                    <th class="matrix-col-count" title="Total dependencies shown for ${column.name || column.id}">
+                                        ${dependencyCountForParticipant(column.id)}
+                                    </th>
+                                `).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map(source => `
+                                <tr>
+                                    <td class="matrix-row-head">
+                                        ${source.href ? `
+                                            <a class="matrix-row-label" target="_blank" href="${source.href}">
+                                                <img class="matrix-row-icon" src="icons/${source.icon}" alt="${source.name || source.id}" onerror="this.onerror=null;this.src='icons/brick.png'">
+                                                <span>${source.name || source.id}</span>
+                                                <span class="matrix-row-count">${dependencyCountForParticipant(source.id)}</span>
+                                            </a>
+                                        ` : `
+                                            <div class="matrix-row-label">
+                                                <img class="matrix-row-icon" src="icons/${source.icon}" alt="${source.name || source.id}" onerror="this.onerror=null;this.src='icons/brick.png'">
+                                                <span>${source.name || source.id}</span>
+                                                <span class="matrix-row-count">${dependencyCountForParticipant(source.id)}</span>
+                                            </div>
+                                        `}
+                                    </td>
+                                    ${columns.map(target => {
+                const deps = (((matrixData.lookup[source.id] || {})[target.id]) || []);
+                if (!deps.length) {
+                    return '<td class="matrix-empty-cell">.</td>';
+                }
+                if (source.kind === 'external' || target.kind === 'external') {
+                    const title = deps.map(dep => {
+                        if (dep.direction === 'stream_depends_on_external') {
+                            return 'Stream depends on external system: ' + dep.type;
+                        }
+                        if (dep.direction === 'external_supports_stream') {
+                            return 'External system supports stream dependency: ' + dep.type;
+                        }
+                        if (dep.direction === 'external_depends_on_stream') {
+                            return 'External system depends on stream: ' + dep.type;
+                        }
+                        if (dep.direction === 'stream_used_by_external') {
+                            return 'Stream is used by external system: ' + dep.type;
+                        }
+                        return dep.type;
+                    }).join(', ');
+                    return `<td class="matrix-hit-external" title="${title}">${deps.length}</td>`;
+                }
+                return `<td class="matrix-hit" title="${deps.map(dep => {
+                    if (dep.direction === 'brick_supports_stream') {
+                        return dep.type + ' (reverse link)';
+                    }
+                    return dep.type;
+                }).join(', ')}">${deps.length}</td>`;
+            }).join('')}
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderMatrixView() {
+            const container = document.getElementById('MatrixContent');
+            if (!container) {
+                return;
+            }
+
+            const catalog = getMatrixCatalog();
+            if (!matrixInitialized) {
+                container.innerHTML = `
+                    <div class="matrix-layout">
+                        ${renderMatrixControls(catalog)}
+                        <div class="matrix-shell">
+                            <div class="matrix-summary" id="MatrixSummary"></div>
+                            <div id="MatrixTable"></div>
+                        </div>
+                    </div>
+                `;
+                matrixInitialized = true;
+            }
+
+            const selectedDependencyTypes = new Set(Array.from(document.querySelectorAll('.matrix-type-checkbox'))
+                .filter(input => input.checked)
+                .map(input => input.value));
+
+            const matrixData = buildMatrixData(catalog, selectedDependencyTypes);
+            const dependencyCount = Object.values(matrixData.lookup).reduce((sum, row) => {
+                return sum + Object.values(row).reduce((rowSum, deps) => rowSum + deps.length, 0);
+            }, 0);
+
+            document.getElementById('MatrixSummary').innerHTML = `
+                <div class="dependency-graph-stat">
+                    <div class="dependency-graph-stat-value">${matrixData.columns.length}</div>
+                    <div class="dependency-graph-stat-label">Columns</div>
+                </div>
+                <div class="dependency-graph-stat">
+                    <div class="dependency-graph-stat-value">${matrixData.rows.length}</div>
+                    <div class="dependency-graph-stat-label">Rows</div>
+                </div>
+                <div class="dependency-graph-stat">
+                    <div class="dependency-graph-stat-value">${selectedDependencyTypes.size}</div>
+                    <div class="dependency-graph-stat-label">Types Shown</div>
+                </div>
+                <div class="dependency-graph-stat">
+                    <div class="dependency-graph-stat-value">${dependencyCount}</div>
+                    <div class="dependency-graph-stat-label">Dependency Hits</div>
+                </div>
+            `;
+
+            document.getElementById('MatrixTable').innerHTML = renderMatrixTable(matrixData);
+        }
+    </script>
+</head>
+
+<body onload="updateBricksView(); updateTabLabels(); initTab('bricks');" onhashchange="initTab('bricks')">
+<style>
+    .site-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+        align-items: center;
+        margin: 2px 0 10px 0;
+        padding: 4px 0;
+        border-bottom: 1px solid #e5e7eb;
+        font-family: Ubuntu, Optima, Segoe, sans-serif;
+        font-size: 13px;
+    }
+    .site-nav a {
+        color: #6b7280;
+        text-decoration: none;
+        padding: 4px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+    }
+    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+</style>
+<nav class="site-nav"><a href="../start/index.html">Home</a><a href="../customers/index.html">Customers</a><a href="../product-deployments/index.html">Products</a><a href="../product-bricks/index.html" class="active">Bricks &amp; Streams</a><a href="../teams/index.html">Teams</a><a href="../competition/index.html">Competition</a><a href="../residuality/index.html">Stress Test</a></nav>
+
+<div id="breadcrumbs"></div>
+${tabs_script}
+
+<div class="hero">
+    <table class="hero-table">
+        <tr>
+            <td class="hero-logo-cell"><img class="hero-logo" src="icons/logo.png" alt="Product Bricks"></td>
+            <td class="hero-copy-cell">
+                <div class="hero-title" id="doc-title">...</div>
+                <div class="hero-subtitle" id="doc-description">...</div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <div class="tab">
+        <button class="tablinks active" id="tab_bricks" onclick="openTab('bricks')">Bricks</button>
+        <button class="tablinks" id="tab_streams" onclick="openTab('streams')">Streams</button>
+        <button class="tablinks" id="tab_data" onclick="openTab('data')">Data</button>
+        <button class="tablinks" id="tab_dependencies" onclick="openTab('dependencies')">Dependencies</button>
+    </div>
+    <div id="tab_content_bricks" class="tabcontent">
+        <div class="bricks-panel">
+            <div class="bricks-toolbar">
+                <input type="search" id="BrickSearch" class="brick-search" placeholder="Search bricks by name, id, or description&hellip;"
+                       autocomplete="off" oninput="updateBricksView()">
+                <label class="bricks-toggle" for="brickStructureToggle">
+                    <input type="checkbox" id="brickStructureToggle" onchange="updateBricksView()">
+                    <span>Show modules</span>
+                </label>
+                <label class="bricks-toggle" for="brickStatusToggle">
+                    <input type="checkbox" id="brickStatusToggle" onchange="updateBricksView()">
+                    <span>Show status</span>
+                </label>
+                <div class="bricks-status-filters" id="BrickStatusFilters"></div>
+            </div>
+            <div class="brick-search-summary" id="BrickSearchSummary"></div>
+            <div id="Current"></div>
+            <div class="legend" id="Legend"></div>
+        </div>
+    </div>
+    <div id="tab_content_streams" class="tabcontent">
+        <div class="streams-panel">
+            <div class="streams-toolbar">
+                <label class="streams-toggle" for="streamDescriptionToggle">
+                    <input type="checkbox" checked id="streamDescriptionToggle" onchange="renderStreamsView()">
+                    <span>Show descriptions</span>
+                </label>
+            </div>
+            <div id="StreamsContent"></div>
+        </div>
+    </div>
+    <div id="tab_content_data" class="tabcontent">
+        <div class="data-panel">
+            <div id="DataContent"></div>
+        </div>
+    </div>
+    <div id="tab_content_dependencies" class="tabcontent">
+        <div class="dependencies-panel">
+            <div id="DependenciesContent"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('doc-title').innerText = bricksMetadata.title || 'Product Bricks &amp; Streams';
+    document.getElementById('doc-description').innerText = 'Product bricks connect customer and business needs to concrete implementation building blocks. This page shows an overview of the brick landscape, dependencies, streams, and delivery structure behind the domain.';
+</script>
+
+
+${breadcrumbs_script}
+
+
+</body>
+</html>

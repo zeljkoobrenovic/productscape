@@ -1,0 +1,180 @@
+{
+  "$comment": "product-bricks/product-bricks.json — the layered brick catalog",
+  "type": "object",
+  "required": [
+    "rootGroups"
+  ],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "x-banned": [
+        "types",
+        "statuses"
+      ]
+    },
+    "rootGroups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "subGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "bricks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/brick"
+          }
+        }
+      }
+    },
+    "brick": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "x-banned": [
+        "interfaces",
+        "internalModules"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "layer"
+            ],
+            "properties": {
+              "layer": {
+                "enum": [
+                  "ui",
+                  "interfaces",
+                  "worker",
+                  "stateless-service",
+                  "service",
+                  "integration"
+                ]
+              },
+              "modules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^module-"
+                    },
+                    "type": {
+                      "enum": [
+                        "web-component",
+                        "mobile-component",
+                        "bff",
+                        "api",
+                        "backoffice-interface",
+                        "message-queue",
+                        "message-consumer",
+                        "daemon",
+                        "stateless-service",
+                        "stateful-service",
+                        "service",
+                        "integration"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "dataDependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "assetId"
+            ],
+            "x-banned": [
+              "storeId",
+              "storeIds"
+            ]
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "group",
+              "links"
+            ],
+            "properties": {
+              "group": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "label",
+                    "link"
+                  ],
+                  "x-banned": [
+                    "url",
+                    "note"
+                  ],
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "link": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "embedLink": {
+                      "type": "string"
+                    },
+                    "embedHeight": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
