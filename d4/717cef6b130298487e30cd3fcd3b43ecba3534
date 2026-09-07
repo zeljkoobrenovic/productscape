@@ -1,0 +1,64 @@
+_wiring/evidence-explorer/generate-evidence-explorer-docs.py
+  s_baba5e92413ac7::t_c09c922852a118 10,14-15
+productscapes.py
+  s_baba5e92413ac7::t_c09c922852a118 16,46,57-58,142-143,146,171,175,183-185,233,248-249,276-282
+  s_baba5e92413ac7::t_71325911d2f6a4 144-145
+_wiring/product-domains/product_bricks_support.py
+  s_baba5e92413ac7::t_699afaf5fac0fb 849-853
+_config/scripts/image-generation/README.md
+  s_baba5e92413ac7::t_aa8d1bccdb8d53 5,42,97,101-102,105-107
+  s_baba5e92413ac7::t_73e2d1c6ae9671 100
+_config/scripts/image-generation/test_customer_icons.py
+  s_baba5e92413ac7::t_b00ee9d64e1240 225-227,231-239,241-292
+_wiring/test_domain_paths.py
+  s_baba5e92413ac7::t_f83c0c21b24596 112-119,130,145-147,149,152,162,170
+_wiring/project_paths.py
+  s_baba5e92413ac7::t_71325911d2f6a4 3-5
+  s_baba5e92413ac7::t_f83c0c21b24596 66,70,89-90
+  s_baba5e92413ac7::t_d0db785a74cc86 23-24,27-65,67-69,71-88,91-113
+_wiring/product-domains/generate-teams-docs.py
+  s_baba5e92413ac7::t_2c6966f9ed4ea2 27
+README.md
+  s_baba5e92413ac7::t_fcd84adb7f5c6e 63,74,126,128-131
+  s_baba5e92413ac7::t_ebc7894638bcab 127
+_wiring/product-domains/generate-product-bricks-docs.py
+  s_baba5e92413ac7::t_2c6966f9ed4ea2 24
+_wiring/generate-start-apps-docs.py
+  s_baba5e92413ac7::t_c09c922852a118 10,14-15,156
+_wiring/product-domains/generate-products-docs.py
+  s_baba5e92413ac7::t_2c6966f9ed4ea2 20
+_wiring/product-domains/run.sh
+  s_baba5e92413ac7::t_c09c922852a118 4
+_wiring/product-domains/generate-customers-docs.py
+  s_baba5e92413ac7::t_2c6966f9ed4ea2 17
+_wiring/product-domains/generate-residuality-docs.py
+  s_baba5e92413ac7::t_2c6966f9ed4ea2 391,406,412-419,446
+_wiring/product-domains/generate-competition-docs.py
+  s_baba5e92413ac7::t_2c6966f9ed4ea2 16
+_config/scripts/image-generation/run.sh
+  s_baba5e92413ac7::t_aa8d1bccdb8d53 4,8-9,15,20,24-38
+  s_baba5e92413ac7::t_00f31c63a0e5c0 39
+_wiring/product-domains/generator_common.py
+  s_baba5e92413ac7::t_699afaf5fac0fb 3-5,15-17,27,32-37
+  s_baba5e92413ac7::t_d3ac2ae513a51d 38-39
+_wiring/product-domains/generate-start-docs.py
+  s_baba5e92413ac7::t_2c6966f9ed4ea2 10
+_wiring/product-domains/domain_cli.py
+  s_baba5e92413ac7::t_699afaf5fac0fb 1-4,7-10,13-30,32-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "d4717cef6b130298487e30cd3fcd3b43ecba3534",
+  "prompts": {},
+  "sessions": {
+    "s_baba5e92413ac7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a07c05-2a8a-7a40-9289-0cfee44ca1d6",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
