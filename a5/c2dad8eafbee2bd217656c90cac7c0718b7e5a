@@ -1,0 +1,25 @@
+AGENTS.md
+  s_a97f61da70c557::t_a3653501e35ceb 1
+README.md
+  s_a97f61da70c557::t_a8872866a9571f 1,13,16-17,56
+project-template/AGENTS.md
+  s_a97f61da70c557::t_eb31dc21a19076 9
+project-template/productscapes.py
+  s_a97f61da70c557::t_e4fd7dbad9f244 16,22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "a5c2dad8eafbee2bd217656c90cac7c0718b7e5a",
+  "prompts": {},
+  "sessions": {
+    "s_a97f61da70c557": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a07b7b-faf5-7882-a400-951b234dcfa6",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
