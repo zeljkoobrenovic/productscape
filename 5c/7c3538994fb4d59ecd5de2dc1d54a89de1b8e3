@@ -1,0 +1,23 @@
+_wiring/product-domains/README.md
+  s_baba5e92413ac7::t_fcd84adb7f5c6e 1-79
+tests/test_generator_inputs.py
+  s_baba5e92413ac7::t_71325911d2f6a4 90-91,102-107
+  s_baba5e92413ac7::t_7a1f2062ed7d3d 89,92
+  s_baba5e92413ac7::t_b5fb1eb5024a13 1-88,93-101,108-157
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2",
+  "base_commit_sha": "5c7c3538994fb4d59ecd5de2dc1d54a89de1b8e3",
+  "prompts": {},
+  "sessions": {
+    "s_baba5e92413ac7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a07c05-2a8a-7a40-9289-0cfee44ca1d6",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
