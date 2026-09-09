@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "1.0",
+  "domainId": "tool-lending",
+  "status": "ready",
+  "title": "Borrowing tools: how a lending service works",
+  "updated": "2026-09-08",
+  "audience": "Someone coming from a different field who has never run a lending service. No knowledge of tools, libraries, or software is assumed.",
+  "scope": "An introduction to community tool lending, from choosing an item to making it ready for the next borrower. Commercial equipment hire and detailed tool-use instructions are outside this guide. The historical examples are from Berkeley, California; the people and borrowing case are fictional. Local eligibility and payment rules differ.",
+  "learningGoals": [
+    "Explain why borrowing a tool is useful and who makes it possible.",
+    "Distinguish a reservation from a loan, and a returned tool from a tool ready to lend.",
+    "Follow a borrowing case and explain why another person's delay can affect it.",
+    "Describe the tension between easy access, dependable service, and limited resources."
+  ],
+  "introduction": {
+    "whatItIs": "Imagine needing a drill for one small project. Buying something you will rarely use may feel wasteful, especially if you have little storage space. A tool lending service lets people borrow shared equipment for a limited time, return it, and leave it available for someone else.",
+    "whyItMatters": "The visible moment is handing over a tool. The larger job is making that promise dependable: finding the right item, knowing its condition, agreeing when it will return, and preparing it for another person. A shelf full of tools is useful only if people can actually complete their projects with them.",
+    "familiarComparison": "Think of borrowing a book from a library. Someone keeps track of what exists, who has it, and when it should come back. Sharing allows many people to benefit from one item.",
+    "whereComparisonBreaks": "A tool can come back with missing parts or damage that is not obvious at first glance. The borrower may also need help choosing suitable equipment. Returning it and making it ready to lend again are separate steps."
+  },
+  "participants": [
+    {
+      "name": "The borrower",
+      "role": "Wants to complete a real task and takes temporary responsibility for the equipment.",
+      "caresAbout": "Getting a suitable tool when the project is planned, understanding the terms, and avoiding an unexpected wasted trip."
+    },
+    {
+      "name": "The service team",
+      "role": "Organizes bookings, helps at collection, checks returns, and arranges maintenance. Paid staff, volunteers, or both may do this work.",
+      "caresAbout": "Keeping promises that the available tools, time, and people can support. A very busy desk can make careful return checks harder."
+    },
+    {
+      "name": "The funder or supporting organization",
+      "role": "Provides resources such as money, a building, or equipment. In this example, a community organization supports the service.",
+      "caresAbout": "Whether the service helps people enough to justify continued support, and whether the resources will last."
+    },
+    {
+      "name": "The next borrower",
+      "role": "May already be planning work around the same item, even before the current loan has finished.",
+      "caresAbout": "An accurate expectation of availability. One person's extra day can become another person's canceled project."
+    }
+  ],
+  "concepts": [
+    {
+      "term": "Inventory",
+      "meaning": "The collection of items the service owns or manages, together with records of those items.",
+      "example": "Two drills can look identical but have different records: one is on loan and the other is being repaired.",
+      "whyItMatters": "Counting what the service owns does not tell you what a borrower can use today."
+    },
+    {
+      "term": "Availability",
+      "meaning": "Whether an item can actually be supplied for the period someone needs it.",
+      "example": "A drill on the shelf may be reserved for another person or waiting for a condition check.",
+      "whyItMatters": "The service must consider time, condition, and existing promises, not just physical location."
+    },
+    {
+      "term": "Reservation and loan",
+      "meaning": "A reservation is a booking for future use. A loan starts when the borrower receives the item under the agreed terms.",
+      "example": "Maya reserves a drill for Saturday. When she collects it, the service records a loan and its return date.",
+      "whyItMatters": "A person who cancels a booking has not returned a tool: they never received one. The records describe different real situations."
+    },
+    {
+      "term": "Turnaround",
+      "meaning": "The work and time between an item coming back and becoming ready for another loan.",
+      "example": "After Maya returns the drill, someone checks the case and accessories and decides whether maintenance is needed.",
+      "whyItMatters": "A schedule that allows no time for this work can promise an item before it is ready."
+    }
+  ],
+  "historyNote": "These three Berkeley examples illustrate changes in access, funding, and facilities. They are not a complete or universal history; the lessons attached to them are teaching interpretations.",
+  "history": [
+    {
+      "period": "1979: a service organized around local needs",
+      "change": "Berkeley established its tool lending library using a federal grant and consulted residents about what they needed.",
+      "whyItMatters": "A useful collection starts with people's tasks, rather than simply gathering equipment.",
+      "sourceUrl": "https://www.berkeleypubliclibrary.org/locations/tool-lending-library/tool-lending-library-brief-history"
+    },
+    {
+      "period": "1988: a change in funding",
+      "change": "A voter-approved library tax allowed the tool service to join the library's operating budget.",
+      "whyItMatters": "How a service is funded can shape the access it can offer.",
+      "sourceUrl": "https://www.berkeleypubliclibrary.org/locations/tool-lending-library/tool-lending-library-brief-history"
+    },
+    {
+      "period": "2013: space designed for the work",
+      "change": "The rebuilt branch provided a larger area for storing and repairing tools and accommodating people.",
+      "whyItMatters": "The physical work behind a loan needs attention alongside the collection itself.",
+      "sourceUrl": "https://www.berkeleypubliclibrary.org/locations/tool-lending-library/tool-lending-library-brief-history"
+    }
+  ],
+  "walkthrough": {
+    "title": "Maya borrows a drill for a weekend project",
+    "setup": "This is a fictional teaching case. Maya needs equipment briefly and asks a neighborhood lending service for help. Its booking and return arrangements below are illustrative, not a real library's policies.",
+    "steps": [
+      {
+        "title": "Describe the need",
+        "whatHappens": "Maya explains her project to Alex at the service desk. Together they identify suitable equipment and the accessories she would need.",
+        "whyItMatters": "A request for a familiar tool name may not fully describe the task. Helping someone choose is part of delivering a useful service."
+      },
+      {
+        "title": "Agree on the time",
+        "whatHappens": "Alex checks existing loans, bookings, and condition records. Maya books a drill for Saturday and agrees to bring it back on Monday.",
+        "whyItMatters": "The booking connects a person's plans to the service's ability to supply an item.",
+        "watchOut": "The previous borrower asks to keep that drill longer. Alex checks whether another suitable item can cover Maya's booking before agreeing to the extension. A simple yes would transfer the problem to Maya."
+      },
+      {
+        "title": "Hand over the item",
+        "whatHappens": "At collection, Maya and Alex confirm the equipment and accessories. The service records what she receives, the agreed return date, and how to report a problem.",
+        "whyItMatters": "The reservation has become an actual loan. Both sides now share a record of the handoff."
+      },
+      {
+        "title": "Complete the loan and prepare the next one",
+        "whatHappens": "Maya brings everything back. Alex records the return, checks the contents and condition, and only then marks the item ready for another borrower.",
+        "whyItMatters": "The next person depends on work they will probably never see.",
+        "watchOut": "If a part is missing, the item stays unavailable while the team resolves it. Closing Maya's loan does not by itself make the equipment ready."
+      }
+    ],
+    "outcome": "Maya completes her project without buying and storing a rarely used item. The service can account for the equipment and make a realistic promise to the next borrower. Success includes both today's completed task and tomorrow's dependable loan."
+  },
+  "valueAndIncentives": [
+    {
+      "title": "The benefit is a completed task",
+      "explanation": "The borrower gains temporary access to something useful. The supporting organization may value wider access, less need for individual purchases, or stronger local relationships. These benefits should be checked rather than assumed from loan counts alone.",
+      "example": "Ten loans that help people finish projects may be more useful than twenty loans of unsuitable equipment. Asking whether borrowers completed their tasks adds context to the count."
+    },
+    {
+      "title": "A free loan still uses resources",
+      "explanation": "Someone must cover space, staff time, upkeep, and replacements. Possible arrangements include public funding, memberships, donations, or charges. Different services combine these differently.",
+      "example": "In our fictional service, donated drills expand the collection but also create more checking and storage work. Accepting every donation could make the service harder to run."
+    },
+    {
+      "title": "Individual convenience can conflict with shared access",
+      "explanation": "A longer loan helps the person holding the tool. Shorter loans can let more people use it, but may rush a project or create extra collection trips.",
+      "example": "Giving Maya an automatic extension would be convenient for her. If another person is waiting, that convenience has a cost for someone else."
+    }
+  ],
+  "challenges": [
+    {
+      "title": "Being easy to use while keeping reliable records",
+      "whyHard": "Borrowers want a quick visit, while the team needs enough information to keep equipment and commitments straight. Extra checks take time; missing checks can create confusion later.",
+      "tradeOff": "A shorter handoff is convenient today, but an incomplete record may make the next handoff less dependable.",
+      "example": "Skipping the accessories check saves a moment when Maya collects the drill. Later, neither side knows whether a missing part was included.",
+      "commonApproach": "Use a short, consistent handoff routine focused on what matters. Review whether each step prevents a real problem; a long form alone does not create reliability."
+    },
+    {
+      "title": "Sharing scarce items fairly",
+      "whyHard": "Several people may need the same equipment at the same time. Owning enough for every peak could use resources that other tasks need.",
+      "tradeOff": "More equipment can reduce waiting, but increases storage and maintenance costs. Strict time limits spread access but reduce flexibility.",
+      "example": "Two borrowers need the same drill on Saturday, and the other drill needs repair. A booking screen cannot create another working item.",
+      "commonApproach": "Offer clear booking rules, suitable alternatives, and honest notice of delays. Track unmet requests to learn where extra equipment would help, while checking the cost of supporting it."
+    },
+    {
+      "title": "Growing without losing the work behind each loan",
+      "whyHard": "More loans bring more returns, inspections, questions, and repairs. That work can pile up even when the borrowing desk looks successful.",
+      "tradeOff": "Opening more booking slots improves apparent access, but can reduce actual reliability if the team cannot prepare returned items in time.",
+      "example": "Maya sees many items listed, yet several are waiting for checks. The collection has grown faster than the team's ability to keep it ready.",
+      "commonApproach": "Plan time for return checks and maintenance, and show availability honestly. More staff or simpler equipment may help; software records support the work but do not perform physical inspections."
+    }
+  ],
+  "misconceptions": [
+    {
+      "belief": "If the tool is on the shelf, it is available.",
+      "reality": "It may be awaiting a check, missing a part, or already promised to someone else. Availability depends on condition and commitments as well as location."
+    },
+    {
+      "belief": "More loans always mean a better service.",
+      "reality": "Volume alone does not show whether people finished their tasks or whether the service can maintain its equipment. Reliability and useful outcomes matter too."
+    }
+  ],
+  "takeaways": [
+    "A lending service organizes dependable access, not just a collection of objects.",
+    "Bookings, handoffs, returns, and readiness describe different stages. Keeping them distinct protects people's plans.",
+    "Each borrower's convenience interacts with other borrowers and limited resources.",
+    "The work between loans is central to the value people receive."
+  ],
+  "knowledgeChecks": [
+    {
+      "question": "Maya returns the drill, but Alex has not checked its accessories. Should it immediately appear as available?",
+      "answer": "No. Record that it has returned, and keep its readiness separate until the needed checks are complete.",
+      "explanation": "Returned describes location and the end of a loan. Available also requires confidence that the item can support the next person's task."
+    },
+    {
+      "question": "A borrower asks for one extra day. What should the service consider before agreeing?",
+      "answer": "Check later bookings, suitable alternatives, the next borrower's plans, and the time needed to prepare the item after return.",
+      "explanation": "An extension changes shared availability. The goal is to help the current borrower without silently passing a delay to someone else."
+    },
+    {
+      "question": "Loan counts rise, but complaints about unusable items rise too. What might the count be missing?",
+      "answer": "Whether borrowers can complete their tasks, and whether checking and maintenance are keeping up with demand.",
+      "explanation": "A loan is an activity. The intended result is useful, dependable access. More activity can conceal a growing backlog of preparation work."
+    }
+  ],
+  "nextQuestions": [
+    "Which requests are hardest to fulfill, and why?",
+    "How do you decide that a returned item is ready for someone else?",
+    "What limits access most here: equipment, opening times, preparation work, or something else?"
+  ],
+  "furtherReading": [
+    {
+      "title": "Berkeley Public Library: the history of its tool lending service",
+      "url": "https://www.berkeleypubliclibrary.org/locations/tool-lending-library/tool-lending-library-brief-history",
+      "whyRead": "Read the institution's account behind the historical examples in this guide."
+    }
+  ]
+}

@@ -259,7 +259,7 @@ class CustomerIconTests(unittest.TestCase):
                     )
                     records = [json.loads(line) for line in result.stdout.splitlines()]
                     calls = [record["args"] for record in records]
-                    self.assertEqual(len(calls), 5 if lightweight else 6)
+                    self.assertEqual(len(calls), 6 if lightweight else 7)
                     self.assertTrue(all(record["domain_dir"] == str(domain_dir.resolve()) for record in records))
                     self.assertEqual(Path(calls[0][0]).name, "generate_customer_icons_gemini_nanobanana_api.py")
                     self.assertEqual(

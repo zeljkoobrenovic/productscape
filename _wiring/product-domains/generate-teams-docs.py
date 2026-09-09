@@ -141,6 +141,11 @@ def enrich_team(team, group, team_lookup, customers_lookup, bricks_lookup,
     return enriched
 
 
+def sum_headcounts(counts):
+    counts = list(counts)
+    return None if any(count is None for count in counts) else sum(counts)
+
+
 def enrich_groups(groups, team_lookup, customers_lookup, bricks_lookup,
                   streams_lookup, dependency_type_lookup):
     enriched_groups = []
@@ -156,9 +161,10 @@ def enrich_groups(groups, team_lookup, customers_lookup, bricks_lookup,
             streams_lookup, dependency_type_lookup
         )
 
-        team_headcount = sum((team.get('teamHeadcount', {}) or {}).get('headcount', 0) for team in teams)
-        direct_headcount = direct.get('headcount', 0)
-        rolled_up = team_headcount + direct_headcount + sum(child.get('rollupHeadcount', 0) for child in child_groups)
+        team_headcount = sum_headcounts((team.get('teamHeadcount', {}) or {}).get('headcount') for team in teams)
+        direct_headcount = direct.get('headcount')
+        rolled_up = sum_headcounts([team_headcount, direct_headcount] +
+                                  [child.get('rollupHeadcount') for child in child_groups])
 
         enriched_groups.append({
             'id': group.get('id', ''),

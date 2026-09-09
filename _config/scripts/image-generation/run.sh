@@ -42,6 +42,7 @@ python3 "$script_dir/generate_jtbd_images_gemini_nanobanana_api.py" --domain "$d
 python3 "$script_dir/generate_journey_images_gemini_nanobanana_api.py" --domain "$domain" "${lightweight_args[@]}"
 python3 "$script_dir/generate_customer_relations_images_gemini_nanobanana_api.py" --domain "$domain"
 python3 "$script_dir/generate_residuality_images_gemini_nanobanana_api.py" --domain "$domain"
+python3 "$script_dir/generate_tutorial_images_gemini_nanobanana_api.py" --domain "$domain"
 
 if [[ "${2:-}" != "--lightweight" ]]; then
   python3 "$script_dir/generate_missing_domain_icons_gemini_nanobanana_api.py" --domain "$domain" --skip-customer-icons

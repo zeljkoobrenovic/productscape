@@ -21,6 +21,7 @@ Sources live in `_config/product-domains/<group>/<domain-id>/`. All image script
 - supports `--lightweight` JTBD and journey runs that create only job/journey overviews, without creating step/stage targets or media references
 - generates one rich, square customer-role portrait per customer in the same colored cartoon style as the customer-relations overview, saves it in `customers/icons/`, and updates the existing `icon` field
 - generates one Gemini Nano Banana illustration for every residuality stressor, writes it into `residuality/media/`, and patches the stressor's `media` entry
+- illustrates tutorial concepts, participant maps, and walkthrough overviews; saves images and prompts in `tutorial/media/` and updates their `media` entries in `tutorial/tutorial.json`
 
 ## Requirements
 
@@ -32,6 +33,84 @@ Sources live in `_config/product-domains/<group>/<domain-id>/`. All image script
 The API scripts use only Python's standard library. The general missing-domain-icon generator also needs `ffmpeg` and `ffprobe` for monochrome icon post-processing. The dedicated customer portrait generator preserves the returned image directly and does not need those tools.
 
 ## Usage
+
+### Tutorial illustrations
+
+From a data project, preview and generate with its launcher:
+
+```sh
+python3 productscapes.py images my-domain --kind tutorial --dry-run
+python3 productscapes.py images my-domain --kind tutorial
+python3 productscapes.py build my-domain --sections tutorial
+```
+
+The direct script accepts `--domain-dir`, `--project`, or the usual `--domain` ID.
+For example, from the toolkit checkout:
+
+```sh
+python3 _config/scripts/image-generation/generate_tutorial_images_gemini_nanobanana_api.py \
+  --domain-dir ../productscape-examples/_config/product-domains/vortexcp/venture-capital-and-private-equity \
+  --dry-run --show-prompts
+python3 _config/scripts/image-generation/generate_tutorial_images_gemini_nanobanana_api.py \
+  --domain-dir ../productscape-examples/_config/product-domains/vortexcp/venture-capital-and-private-equity \
+  --limit 1
+```
+
+Concepts use one illustration per `concepts` entry. Prompts use
+the tutorial's audience and scope plus each concept's definition, example, and
+reason it matters. An optional `illustrationPrompt` specifies the teaching scene
+and exact short labels; shared guidance supplies a consistent adult educational
+style. `--concept` selects an exact term or a key printed by `--dry-run`.
+
+Participant maps and walkthrough overviews are optional. Configure a map in
+`participantsOverview` and a walkthrough image directly in `walkthrough`, using
+the same `illustrationPrompt` and `media` fields as concepts. Default runs include
+concepts and overviews already configured with a prompt or media. An ordinary
+tutorial does not automatically gain overview images just because it has people
+and steps. `--concept` always limits work to that concept.
+
+Use `--section participants` or `--section walkthrough` to generate one overview,
+including from prose without a custom prompt. `--section concepts` limits work to
+concepts; `--section all` is the default. For example:
+
+```sh
+python3 _config/scripts/image-generation/generate_tutorial_images_gemini_nanobanana_api.py \
+  --project ../productscape-examples --domain venture-capital-and-private-equity \
+  --section walkthrough --image-size 2K
+```
+
+Overview prompts draw from the authored roles or complete walkthrough, including
+its complications and outcome. Their stable filenames and generated media IDs
+are `participants-overview` and `walkthrough-overview`. A participant map's
+container is added only after an image exists. Existing section prose and other
+images are preserved, including when a run is limited or interrupted.
+
+The default model matches the existing Gemini scripts (`gemini-3-pro-image-preview`),
+with landscape `16:9` images at `1K`. Use `--model`, `--aspect-ratio`, and
+`--image-size` to change these. Supply credentials through `GEMINI_API_KEY`, or
+select `--api-key-env GOOGLE_API_KEY`. API requests follow Google's
+[Gemini image-generation documentation](https://ai.google.dev/gemini-api/docs/generate-content/gemini-3).
+
+Files use `media/concept-<term-slug>.<format>`; reordering concepts does not change
+filenames. PNG, JPEG, and WebP responses retain their actual format. Review the
+images, their labels, and the JSON alt text/captions before publishing. The exact
+prompt is saved alongside each successful image as `.prompt.txt`; only referenced
+images are copied to the generated site.
+
+Existing images are reused by default; `--overwrite` regenerates selected images.
+`--limit` bounds new API images across the entire selected scope. `--json-only`
+links existing files without calling Gemini. `--dry-run` writes nothing and needs
+no credentials. Empty or absent tutorials are skipped, including in `--kind all`
+and `run.sh`. Each successful image is linked immediately, so a failed run can be
+resumed. The script updates its own media entry and preserves other illustrations
+and reviewed captions. Concurrent tutorial edits stop the
+JSON update instead of replacing newer prose.
+
+Builds need no credentials. The tutorial renderer validates local image paths,
+copies them from the source media folder, and adds an accessible image link that
+opens the full image in a new tab. Do not edit generated HTML to add illustrations.
+
+### Other domain images
 
 For a separate data repository, prefer its launcher:
 

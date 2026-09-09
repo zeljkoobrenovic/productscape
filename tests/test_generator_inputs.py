@@ -12,7 +12,7 @@ from urllib.parse import unquote, urlsplit
 from test_cli import CLI, TOOLKIT, Links, snapshot
 
 
-SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality')
+SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality', 'tutorial')
 GENERATORS = TOOLKIT / '_wiring/product-domains'
 
 

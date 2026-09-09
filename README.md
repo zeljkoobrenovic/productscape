@@ -2,7 +2,8 @@
 
 Reusable skills and scripts for turning product-domain research into structured
 JSON and a static website: customers, jobs to be done, strategy, products, product
-bricks, streams, data assets, teams, competition, and residuality stress tests.
+bricks, streams, data assets, teams, competition, residuality stress tests, and
+beginner tutorials.
 
 **Requires Python 3.10+ and Git.** Creating, validating, and building domains uses
 only the Python standard library. No frontend framework, package installation,
@@ -77,9 +78,10 @@ For builds, a domain folder path also selects its data project automatically.
 | `skills --target .agents/skills` | Copy portable authoring/review skills into the project |
 | `skills --target .claude/skills` | Copy the same skills into another agent's skill directory |
 | `images ID --dry-run --lightweight` | Inspect optional image-generation scope |
+| `images ID --kind tutorial` | Generate tutorial concepts and configured overview illustrations |
 
 The CLI builds a domain in this order: start, customers, products, product bricks
-(including streams and data), teams, competition, residuality. It also renders
+(including streams and data), teams, competition, residuality, tutorial. It also renders
 the evidence explorer and optional project start packages. Output goes under
 `docs/<group>/<domain-id>/`, with a catalog at `docs/index.html`.
 
@@ -90,10 +92,18 @@ full builds continue with other generators and domains.
 
 ## Skills and repository boundaries
 
-There are 15 authoring and review skills. Start with
+There are 16 authoring and review skills. Start with
 [product-domain](skills/product-domain/SKILL.md) for routing or
 [new-product-domain](skills/new-product-domain/SKILL.md) for complete authoring.
 The [model reference](skills/_references/domain-model.md) explains shapes and links.
+
+Use [create-domain-tutorial](skills/create-domain-tutorial/SKILL.md) to introduce a
+domain to someone from another field. It teaches the people, key concepts, brief
+history, everyday workflow, economics, and challenges in plain language. The
+source is `tutorial/tutorial.json`; `_templates/tutorial/` renders a reading page
+with contents navigation and revealable answers. Tutorials do not require an
+evidence model. New scaffolds contain an empty draft; older domains can omit the
+file. Rebuild one with `python3 productscapes.py build my-domain --sections tutorial start`.
 
 Canonical skills live in `skills/`. Install copies only if your agent needs a
 particular discovery directory; `skills --update` refreshes those copies.
@@ -138,6 +148,12 @@ see the [image generator documentation](_config/scripts/image-generation/README.
 for providers and options. `--lightweight` limits JTBD and journey imagery to
 overviews. Images and media references are written to the selected data project;
 run `build` afterward to include them in the website.
+
+For tutorial illustrations, use `--kind tutorial`. The generator reads concept
+definitions, configured participant and walkthrough overviews, and optional
+`illustrationPrompt` directions, saves images beside
+`tutorial/tutorial.json`, and adds media entries with alt text and captions.
+The tutorial page shows each illustration and opens the full image in a new tab.
 
 ## Verify the toolkit
 

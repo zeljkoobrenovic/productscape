@@ -79,6 +79,40 @@ class ToolkitCLI(unittest.TestCase):
             self.command('new', domain, '--group', group, ok=False)
         self.assertEqual(snapshot(self.project), before)
 
+    def test_team_headcounts_preserve_unknown_zero_and_nested_totals(self):
+        domain = self.create()
+
+        def team(team_id, **fields):
+            return {'id': team_id, 'name': team_id, 'type': 'enabling', **fields}
+
+        payload = {'groups': [
+            {'name': 'Unknown', 'teams': [team('missing'), team('null', teamHeadcount={'headcount': None})]},
+            {'name': 'Zero', 'groupDirectHeadcount': {'headcount': 0},
+             'teams': [team('zero', teamHeadcount={'headcount': 0})]},
+            {'name': 'Known', 'groupDirectHeadcount': {'headcount': 1},
+             'teams': [team('known', teamHeadcount={'headcount': 3})],
+             'groups': [{'name': 'Known child', 'groupDirectHeadcount': {'headcount': 2},
+                         'teams': [team('child', teamHeadcount={'headcount': 4})]}]},
+            {'name': 'Mixed', 'groupDirectHeadcount': {'headcount': 0},
+             'teams': [team('sized', teamHeadcount={'headcount': 2})],
+             'groups': [{'name': 'Unknown child', 'groupDirectHeadcount': {'headcount': 0},
+                         'teams': [team('unsized')]}]},
+        ]}
+        (domain / 'teams/teams.json').write_text(json.dumps(payload))
+        before = snapshot(self.project / '_config')
+        self.command('build', 'test-domain', '--sections', 'teams')
+        self.assertEqual(snapshot(self.project / '_config'), before)
+        page = (self.project / 'docs/sample/test-domain/teams/index.html').read_text()
+        data, _ = json.JSONDecoder().raw_decode(page.split('const teamsData = ', 1)[1])
+        unknown, zero, known, mixed = data['groups']
+        self.assertIsNone(unknown['teamHeadcount'])
+        self.assertIsNone(unknown['groupDirectHeadcount']['headcount'])
+        self.assertIsNone(unknown['rollupHeadcount'])
+        self.assertEqual(zero['rollupHeadcount'], 0)
+        self.assertEqual(known['rollupHeadcount'], 10)
+        self.assertEqual(mixed['teamHeadcount'], 2)
+        self.assertIsNone(mixed['rollupHeadcount'])
+
     def test_bad_inputs_preserve_previous_output(self):
         domain = self.create()
         target = self.project / 'docs/sample/test-domain/start/index.html'

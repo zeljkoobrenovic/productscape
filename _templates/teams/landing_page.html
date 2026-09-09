@@ -363,7 +363,8 @@ ${tabs_script}
         html += '<div class="description">' + escapeHtml(team.description) + '</div>';
     }
 
-    const headcount = Math.max(Number(hc.headcount) || 0, 0);
+    const hasHeadcount = typeof hc.headcount === 'number' && Number.isFinite(hc.headcount);
+    const headcount = hasHeadcount ? Math.max(hc.headcount, 0) : null;
     let sizeBody = '';
     if (headcount) {
         let dots = '';
@@ -372,12 +373,12 @@ ${tabs_script}
         }
         sizeBody += '<div class="hc-dots">' + dots + '</div>';
     } else {
-        sizeBody += '<div class="empty-state">Headcount not set.</div>';
+        sizeBody += '<div class="empty-state">' + (hasHeadcount ? 'No allocated FTE.' : 'Headcount not set.') + '</div>';
     }
     if (hc.description) {
         sizeBody += '<div class="stat-note">' + escapeHtml(hc.description) + '</div>';
     }
-    html += renderSection('Team Size (' + escapeHtml(String(headcount)) + ' FTE)', sizeBody);
+    html += renderSection('Team Size' + (hasHeadcount ? ' (' + escapeHtml(String(headcount)) + ' FTE)' : ''), sizeBody);
 
     html += renderSection('Customers (' + (team.customerDependencies || []).length + ')',
         renderLinkCards(team.customerDependencies || [], '../../customers/icons/', {

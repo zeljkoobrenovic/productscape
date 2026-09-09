@@ -1,6 +1,6 @@
 # Product-domain page generators
 
-The runner and all seven `generate-*-docs.py` scripts accept explicit paths.
+The runner and all eight `generate-*-docs.py` scripts accept explicit paths.
 Paths can be absolute or relative to the directory where you invoke the command;
 they are resolved before rendering changes the working directory.
 
@@ -32,7 +32,7 @@ sh _wiring/product-domains/run.sh \
 
 The runner forwards its arguments to `python3 productscapes.py build`. It also
 accepts `--sections start customers products product-bricks teams competition
-residuality` and `--verbose`. Choose a domain or pass `--all`; running without a
+residuality tutorial` and `--verbose`. Choose a domain or pass `--all`; running without a
 selection reports the missing input.
 
 ## Generate one section
@@ -45,7 +45,7 @@ python3 _wiring/product-domains/generate-customers-docs.py \
 ```
 
 The same options work for start, customers, products, product bricks, teams,
-competition, and residuality generators. The `products` generator publishes to
+competition, residuality, and tutorial generators. The `products` generator publishes to
 the `product-deployments` section.
 
 | Input | Default or behavior |
@@ -63,6 +63,13 @@ Output keeps the site layout
 the catalog, evidence explorer, and start packages under the same output root and
 uses the selected template root for those pages. A direct section generator
 renders only that section.
+
+The tutorial generator reads `tutorial/tutorial.json`, its referenced local images, and domain metadata;
+it does not require evidence or other model artifacts. Missing tutorials render
+an empty page, drafts are labeled, and `ready` tutorials must pass completeness
+checks before the previous tutorial page is replaced. Concept and overview images are copied
+from `tutorial/media/` and link to their full versions in a new tab. Generating
+images is a separate, optional `images my-domain --kind tutorial` action.
 
 The legacy direct-generator invocation remains supported:
 

@@ -36,6 +36,7 @@ dirty worktree before regenerating.
 | Data assets | `data/data-assets.json` | `generate-product-bricks-docs.py` |
 | Teams | `teams/teams.json` | `generate-teams-docs.py` |
 | Competition | `business/competition.json` | `generate-competition-docs.py` |
+| Beginner tutorial (optional, no evidence/model references required) | `tutorial/tutorial.json` | `generate-tutorial-docs.py` |
 | Domain brief | `_domain/DOMAIN.md` | (narrative, not generated) |
 
 ## ID conventions (enforced by `validate-domain-model.py --strict-ids`)

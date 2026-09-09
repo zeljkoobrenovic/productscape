@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${title}</title>
+    ${tokens_style}
+    <style>${app_style}</style>
+</head>
+<body id="top">
+    <a class="skip-link" href="#main">Skip to the tutorial</a>
+    <div class="page">
+        <nav class="domain-nav" aria-label="Domain">${domain_link}<span aria-hidden="true"> / </span><span>Tutorial</span></nav>
+        <header class="hero">
+            <p class="eyebrow">A beginner's guide</p>
+            <h1>${title}</h1>
+            <div class="metadata">${metadata}</div>
+            <div class="reader-context">${audience}${scope}</div>
+        </header>
+        <div class="reading-layout">
+            <aside>${contents}</aside>
+            <main id="main" tabindex="-1">${status}${sections}</main>
+        </div>
+        <footer><a href="#top">Back to the beginning</a></footer>
+    </div>
+</body>
+</html>

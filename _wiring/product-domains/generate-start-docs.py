@@ -39,7 +39,7 @@ def create_docs(domain, docs_folder):
                         .replace('${tabs_script}', tabs_script)
                         .replace('${date}', date_string)
                         .replace('${apps}', json.dumps(apps))
-                        .replace('${domain_nav_links}', '<a href="../residuality/index.html">Stress Test</a>')
+                        .replace('${domain_nav_links}', '<a href="../residuality/index.html">Stress Test</a><a href="../tutorial/index.html">Domain Tutorial</a>')
                         .replace('${domain_name}', domain['name'])
                         .replace('${domain_description}', domain['description']))
 

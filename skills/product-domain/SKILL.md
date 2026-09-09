@@ -24,6 +24,7 @@ site under `docs/`. No framework, no build system. Edit JSON in `_config/**`; tr
 | You want to… | Skill |
 |---|---|
 | Build a complete new domain from scratch | `new-product-domain` |
+| Explain a domain to a newcomer, with key concepts, history, and challenges | `create-domain-tutorial` |
 | Add/edit customer groups, personas, JTBD, journeys, KPI pyramids, per-customer strategy, insights | `edit-customers` |
 | Set domain framing, vision, cross-cutting strategy & KPIs, `start/config.json` | `set-domain-strategy` |
 | Add/edit products, interfaces, deployment channels & environments | `edit-products` |
@@ -52,3 +53,5 @@ site under `docs/`. No framework, no build system. Edit JSON in `_config/**`; tr
 
 The live artifact set is: start, customers (+insights), products/deployment,
 product-bricks (+streams, +evidence), data-assets, teams, and competition.
+An optional `tutorial/tutorial.json` provides a general introduction, authored by
+`create-domain-tutorial`. It does not require evidence or model cross-references.

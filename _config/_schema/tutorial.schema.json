@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "tutorial/tutorial.json. Ready-state completeness and domain identity are also checked by _wiring/tutorial_model.py.",
+  "title": "A product domain tutorial for newcomers",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "domainId", "status", "title"],
+  "properties": {
+    "schemaVersion": {"type": "string", "enum": ["1.0"]},
+    "domainId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "status": {"type": "string", "enum": ["draft", "ready"]},
+    "title": {"$ref": "#/$defs/text"},
+    "updated": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "audience": {"$ref": "#/$defs/text"},
+    "scope": {"$ref": "#/$defs/text"},
+    "learningGoals": {"$ref": "#/$defs/textList"},
+    "introduction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["whatItIs", "whyItMatters", "familiarComparison", "whereComparisonBreaks"],
+      "properties": {
+        "whatItIs": {"$ref": "#/$defs/text"},
+        "whyItMatters": {"$ref": "#/$defs/text"},
+        "familiarComparison": {"$ref": "#/$defs/text"},
+        "whereComparisonBreaks": {"$ref": "#/$defs/text"}
+      }
+    },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "role", "caresAbout"],
+        "properties": {
+          "name": {"$ref": "#/$defs/text"},
+          "role": {"$ref": "#/$defs/text"},
+          "caresAbout": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "participantsOverview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "illustrationPrompt": {"$ref": "#/$defs/text"},
+        "media": {"type": "array", "items": {"$ref": "#/$defs/image"}}
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["term", "meaning", "example", "whyItMatters"],
+        "properties": {
+          "term": {"$ref": "#/$defs/text"},
+          "meaning": {"$ref": "#/$defs/text"},
+          "example": {"$ref": "#/$defs/text"},
+          "whyItMatters": {"$ref": "#/$defs/text"},
+          "illustrationPrompt": {"$ref": "#/$defs/text"},
+          "media": {"type": "array", "items": {"$ref": "#/$defs/image"}}
+        }
+      }
+    },
+    "historyNote": {"$ref": "#/$defs/text"},
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["period", "change", "whyItMatters"],
+        "properties": {
+          "period": {"$ref": "#/$defs/text"},
+          "change": {"$ref": "#/$defs/text"},
+          "whyItMatters": {"$ref": "#/$defs/text"},
+          "sourceUrl": {"$ref": "#/$defs/url"}
+        }
+      }
+    },
+    "walkthrough": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "setup", "steps", "outcome"],
+      "properties": {
+        "title": {"$ref": "#/$defs/text"},
+        "setup": {"$ref": "#/$defs/text"},
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "whatHappens", "whyItMatters"],
+            "properties": {
+              "title": {"$ref": "#/$defs/text"},
+              "whatHappens": {"$ref": "#/$defs/text"},
+              "whyItMatters": {"$ref": "#/$defs/text"},
+              "watchOut": {"$ref": "#/$defs/text"}
+            }
+          }
+        },
+        "outcome": {"$ref": "#/$defs/text"},
+        "illustrationPrompt": {"$ref": "#/$defs/text"},
+        "media": {"type": "array", "items": {"$ref": "#/$defs/image"}}
+      }
+    },
+    "valueAndIncentives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "explanation", "example"],
+        "properties": {
+          "title": {"$ref": "#/$defs/text"},
+          "explanation": {"$ref": "#/$defs/text"},
+          "example": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "challenges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "whyHard", "tradeOff", "example", "commonApproach"],
+        "properties": {
+          "title": {"$ref": "#/$defs/text"},
+          "whyHard": {"$ref": "#/$defs/text"},
+          "tradeOff": {"$ref": "#/$defs/text"},
+          "example": {"$ref": "#/$defs/text"},
+          "commonApproach": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "misconceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["belief", "reality"],
+        "properties": {
+          "belief": {"$ref": "#/$defs/text"},
+          "reality": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "takeaways": {"$ref": "#/$defs/textList"},
+    "knowledgeChecks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question", "answer", "explanation"],
+        "properties": {
+          "question": {"$ref": "#/$defs/text"},
+          "answer": {"$ref": "#/$defs/text"},
+          "explanation": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "nextQuestions": {"$ref": "#/$defs/textList"},
+    "furtherReading": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "url", "whyRead"],
+        "properties": {
+          "title": {"$ref": "#/$defs/text"},
+          "url": {"$ref": "#/$defs/url"},
+          "whyRead": {"$ref": "#/$defs/text"}
+        }
+      }
+    }
+  },
+  "if": {"properties": {"status": {"enum": ["ready"]}}, "required": ["status"]},
+  "then": {
+    "required": ["audience", "scope", "learningGoals", "introduction", "participants", "concepts", "history", "walkthrough", "valueAndIncentives", "challenges", "misconceptions", "takeaways", "knowledgeChecks"],
+    "properties": {
+      "learningGoals": {"minItems": 1},
+      "participants": {"minItems": 1},
+      "concepts": {"minItems": 1},
+      "history": {"minItems": 1},
+      "valueAndIncentives": {"minItems": 1},
+      "challenges": {"minItems": 1},
+      "misconceptions": {"minItems": 1},
+      "takeaways": {"minItems": 1},
+      "knowledgeChecks": {"minItems": 1}
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "pattern": "\\S"},
+    "textList": {"type": "array", "items": {"$ref": "#/$defs/text"}},
+    "url": {"type": "string", "pattern": "^https?://[^\\s]+$"},
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "src", "alt"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "type": {"type": "string", "enum": ["image"]},
+        "src": {"type": "string", "pattern": "^media/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+\\.(?:png|jpg|jpeg|webp)$"},
+        "alt": {"$ref": "#/$defs/text"},
+        "title": {"$ref": "#/$defs/text"},
+        "caption": {"$ref": "#/$defs/text"}
+      }
+    }
+  }
+}

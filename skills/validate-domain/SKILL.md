@@ -35,7 +35,7 @@ python3 productscapes.py build my-domain
 
 For a presentation-only change, `build my-domain --sections customers` can scope
 rendering to one section. Available sections are start, customers, products,
-product-bricks, teams, competition, and residuality. The brick section includes
+product-bricks, teams, competition, residuality, and tutorial. The brick section includes
 streams and data assets. Generators replace their output directories; inspect
 existing docs changes first and keep source edits in JSON or templates.
 

@@ -551,7 +551,7 @@
     .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
     .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
 </style>
-<nav class="site-nav"><a href="../start/index.html">Home</a><a href="../customers/index.html">Customers</a><a href="../product-deployments/index.html">Products</a><a href="../product-bricks/index.html">Bricks &amp; Streams</a><a href="../teams/index.html" class="active">Teams</a><a href="../competition/index.html">Competition</a><a href="../residuality/index.html">Stress Test</a></nav>
+<nav class="site-nav"><a href="../start/index.html">Home</a><a href="../customers/index.html">Customers</a><a href="../product-bricks/index.html">Bricks &amp; Streams</a><a href="../product-deployments/index.html">Products</a><a href="../teams/index.html" class="active">Teams</a><a href="../competition/index.html">Competition</a><a href="../residuality/index.html">Stress Test</a></nav>
 <div id="breadcrumbs"></div>
 ${tabs_script}
 <div class="hero">
@@ -644,7 +644,17 @@ ${tabs_script}
         });
     })(teamsData.groups || []);
 
-    const totalHeadcount = (teamsData.groups || []).reduce((sum, group) => sum + (group.rollupHeadcount || 0), 0);
+    function sumHeadcounts(counts) {
+        return counts.every(count => typeof count === 'number' && Number.isFinite(count))
+            ? counts.reduce((sum, count) => sum + count, 0) : null;
+    }
+
+    function headcountLabel(count, suffix) {
+        return typeof count === 'number' && Number.isFinite(count)
+            ? formatNumber(count) + ' FTE' + (suffix || '') : 'Headcount not set';
+    }
+
+    const totalHeadcount = sumHeadcounts((teamsData.groups || []).map(group => group.rollupHeadcount));
     const typeCounts = {};
     flatTeams.forEach(team => {
         typeCounts[team.type] = (typeCounts[team.type] || 0) + 1;
@@ -668,7 +678,10 @@ ${tabs_script}
     }
 
     function renderHeadcountDots(count, color, showLabel) {
-        const total = Math.max(Number(count) || 0, 0);
+        if (typeof count !== 'number' || !Number.isFinite(count)) {
+            return '<div class="hc-dots"><span class="hc-dots-label">Headcount not set</span></div>';
+        }
+        const total = Math.max(count, 0);
         let dots = '';
         for (let i = 0; i < total; i++) {
             dots += '<span class="hc-dot" style="background-color:' + color + '"></span>';
@@ -679,7 +692,7 @@ ${tabs_script}
 
     function renderTeamCard(team) {
         const color = typeColor(team.type);
-        const hc = (team.teamHeadcount || {}).headcount || 0;
+        const hc = (team.teamHeadcount || {}).headcount;
         let html = '<a class="team-card" target="_blank" style="border-left-color:' + color + '" href="landing_pages/' + escapeHtml(team.id) + '.html">';
         html += '<span class="team-type" style="background-color:' + color + '">' + escapeHtml(typeNameMap[team.type] || team.type || 'team') + '</span>';
         html += '<div class="team-name">' + escapeHtml(team.name) + '</div>';
@@ -741,13 +754,13 @@ ${tabs_script}
         }
 
         const teamCount = matchedTeams.length + childResults.reduce((sum, child) => sum + child.teams, 0);
-        const headcount = matchedTeams.reduce((sum, team) => sum + ((team.teamHeadcount || {}).headcount || 0), 0)
-            + childResults.reduce((sum, child) => sum + child.headcount, 0);
+        const headcount = sumHeadcounts(matchedTeams.map(team => (team.teamHeadcount || {}).headcount)
+            .concat(childResults.map(child => child.headcount)));
 
         let html = '<div class="group' + (nested ? ' nested' : '') + '">';
         html += '<div class="group-head">';
         html += '<span class="group-name">' + escapeHtml(group.name || group.id) + '</span>';
-        html += '<span class="group-hc">' + formatNumber(group.rollupHeadcount || 0) + ' FTE total</span>';
+        html += '<span class="group-hc">' + headcountLabel(group.rollupHeadcount, ' total') + '</span>';
         html += '</div>';
         if (group.mission) {
             html += '<div class="group-mission">' + escapeHtml(group.mission) + '</div>';
@@ -783,7 +796,7 @@ ${tabs_script}
         document.getElementById('Hierarchy').innerHTML = html;
 
         const visibleTeams = results.reduce((sum, result) => sum + result.teams, 0);
-        const visibleHeadcount = results.reduce((sum, result) => sum + result.headcount, 0);
+        const visibleHeadcount = sumHeadcounts(results.map(result => result.headcount));
         renderSearchSummary(visibleTeams, visibleHeadcount);
     }
 
@@ -792,9 +805,9 @@ ${tabs_script}
         if (searchQuery) {
             el.innerHTML = 'showing ' +
                 '<strong>' + formatNumber(visibleTeams) + '</strong> of ' + formatNumber(flatTeams.length) + ' teams' +
-                ' &middot; <strong>' + formatNumber(visibleHeadcount) + '</strong> FTE';
+                ' &middot; <strong>' + headcountLabel(visibleHeadcount) + '</strong>';
         } else {
-            el.innerHTML = 'showing all <strong>' + formatNumber(flatTeams.length) + '</strong> teams &middot; <strong>' + formatNumber(totalHeadcount) + '</strong> FTE total';
+            el.innerHTML = 'showing all <strong>' + formatNumber(flatTeams.length) + '</strong> teams &middot; <strong>' + headcountLabel(totalHeadcount, ' total') + '</strong>';
         }
     }
 

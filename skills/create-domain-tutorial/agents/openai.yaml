@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Domain Tutorial"
+  short_description: "Introduce a product domain in clear, everyday language"
+  default_prompt: "Use $create-domain-tutorial to write and render an introduction to this product domain for someone coming from a different field."

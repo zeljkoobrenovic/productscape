@@ -14,8 +14,9 @@ TOOLKIT = Path(__file__).resolve().parent
 sys.path.insert(0, str(TOOLKIT / '_wiring'))
 from domain_paths import discover_domain_dirs, resolve_domain_dir
 import project_paths
+from tutorial_model import validate_tutorial
 
-SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality')
+SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality', 'tutorial')
 REQUIRED = (
     'start/config.json', 'customers/customers.json', 'customers/insights.json',
     'customers/links.json', 'product-deployments/products.json',
@@ -81,6 +82,11 @@ def preflight(domains, *, require_artifacts=True):
         for field in ('name', 'description'):
             if not isinstance(config.get(field), str) or not config[field].strip():
                 raise ValueError(f'{domain.name}: start/config.json needs a nonempty {field}.')
+        tutorial = domain / 'tutorial/tutorial.json'
+        if tutorial.is_file():
+            problems = validate_tutorial(read_json(tutorial), domain.name, tutorial.parent)
+            if problems:
+                raise ValueError(f'{domain.name}: tutorial/tutorial.json\n' + '\n'.join(problems))
 
 
 def init_project(project):
@@ -208,6 +214,7 @@ def install_skills(args):
 def images(args):
     resolve_domain_dir(args.domain, domains_root=args.project / '_config/product-domains')
     scripts = {
+        'tutorial': 'generate_tutorial_images_gemini_nanobanana_api.py',
         'jtbd': 'generate_jtbd_images_gemini_nanobanana_api.py',
         'journey': 'generate_journey_images_gemini_nanobanana_api.py',
         'relations': 'generate_customer_relations_images_gemini_nanobanana_api.py',
@@ -266,7 +273,7 @@ def main():
     kpis.set_defaults(action=lambda args: run_script('skills/scripts/check-kpi-pyramids.py', [args.domain], args.project))
     media = commands.add_parser('images', parents=[common], help='Optional Gemini image generation (requires credentials).')
     media.add_argument('domain')
-    media.add_argument('--kind', choices=('jtbd', 'journey', 'relations', 'residuality', 'icons', 'all'), default='all')
+    media.add_argument('--kind', choices=('jtbd', 'journey', 'relations', 'residuality', 'icons', 'tutorial', 'all'), default='all')
     media.add_argument('--dry-run', action='store_true')
     media.add_argument('--lightweight', action='store_true')
     media.add_argument('--skip-existing', action='store_true')

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "domainId": "__DOMAIN_ID__",
+  "status": "draft",
+  "title": "__DOMAIN_NAME__",
+  "audience": "A curious adult coming from a different field, with no assumed industry knowledge.",
+  "learningGoals": [],
+  "participants": [],
+  "concepts": [],
+  "history": [],
+  "valueAndIncentives": [],
+  "challenges": [],
+  "misconceptions": [],
+  "takeaways": [],
+  "knowledgeChecks": [],
+  "nextQuestions": [],
+  "furtherReading": []
+}
