@@ -11,6 +11,27 @@ a { color: var(--accent-ink); text-underline-offset: .2em; }
 a:hover { text-decoration-thickness: 2px; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 2px; }
 .page { max-width: 1160px; padding: 1.5rem 2.5rem 3rem; margin: auto; }
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    align-items: center;
+    margin: 2px 0 10px;
+    padding: 4px 0;
+    border-bottom: 1px solid #e5e7eb;
+    font-family: Ubuntu, Optima, Segoe, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.site-nav a {
+    color: #6b7280;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+.site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
+.site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
 .domain-nav { display: flex; flex-wrap: wrap; gap: .75rem; color: var(--ink-soft); font-size: .85rem; }
 .domain-nav a { color: inherit; }
 .hero { padding: 3rem 0 2.5rem; border-bottom: 1px solid var(--line-strong); }
@@ -97,7 +118,7 @@ footer { text-align: right; padding-top: 2rem; font-size: .85rem; }
 @media print {
     body { background: white; color: black; font-size: 11pt; }
     .page { max-width: none; padding: 0; }
-    .domain-nav, .reading-layout > aside, footer, .skip-link { display: none; }
+    .site-nav, .domain-nav, .reading-layout > aside, footer, .skip-link { display: none; }
     .hero { padding: 0 0 1rem; }
     h1 { font-size: 28pt; }
     .reading-layout { display: block; padding-top: 1rem; }

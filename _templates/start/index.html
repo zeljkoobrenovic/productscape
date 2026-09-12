@@ -156,9 +156,15 @@
         background: #dbeafe;
     }
 </style>
-<nav class="site-nav" id="siteNav" style="margin-left: 20px"><a href="../start/index.html" class="active">Home</a><a href="../customers/index.html">Customers</a><a
-        href="../product-deployments/index.html">Products</a><a
-        href="../product-bricks/index.html">Bricks &amp; Streams</a><a href="../teams/index.html">Teams</a><a href="../competition/index.html">Competition</a>${domain_nav_links}</nav>
+<nav class="site-nav" id="siteNav" style="margin-left: 20px" aria-label="Productscape sections">
+    <a href="../start/index.html" class="active" aria-current="page">Home</a>
+    <a href="../customers/index.html">Customers</a>
+    <a href="../product-bricks/index.html">Bricks &amp; Streams</a>
+    <a href="../product-deployments/index.html">Products</a>
+    <a href="../teams/index.html">Teams</a>
+    <a href="../competition/index.html">Competition</a>
+    ${domain_nav_links}
+</nav>
 <div style="margin: 40px">
     <div style="margin-top: 10px"><img src="icons/logo.png" style="height: 164px; border: 1px solid lightgrey; border-radius: 20px; padding: 12px; margin: 8px;"></div>
     <div style="margin: 8px; margin-top: 0; font-size: 52px; color: #8c8c8c">${domain_name}</div>

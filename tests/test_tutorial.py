@@ -24,6 +24,7 @@ class ReadingPage(HTMLParser):
         super().__init__()
         self.ids = []
         self.links = []
+        self.stylesheets = []
         self.tags = []
         self.disclosures = []
         self.images = []
@@ -39,6 +40,8 @@ class ReadingPage(HTMLParser):
         if tag == 'a':
             self.links.append(attrs['href'])
             self.link_attributes.append(attrs)
+        if tag == 'link' and 'stylesheet' in attrs.get('rel', '').split():
+            self.stylesheets.append(attrs['href'])
         if tag == 'img':
             self.images.append(attrs)
         if tag == 'details':
@@ -95,7 +98,7 @@ class Tutorial(unittest.TestCase):
                       self.example['knowledgeChecks'][0]['explanation']):
             self.assertIn(value, page.text)
         self.assertNotIn('script', page.tags)
-        self.assertNotIn('link', page.tags)  # No external stylesheet or font needed to read.
+        self.assertEqual(page.stylesheets, home.stylesheets)  # Load the same navigation font.
         self.assertNotIn('${', self.page.read_text(encoding='utf-8'))
 
     def test_drafts_and_older_domains_without_tutorials_build_without_invented_content(self):

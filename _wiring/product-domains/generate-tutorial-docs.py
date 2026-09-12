@@ -157,13 +157,15 @@ def create_docs(domain):
                    for number, (anchor, title, content) in enumerate(sections, 1))
     folder = project_paths.DOCS_ROOT / domain_docs_path(domain['id'], 'tutorial')
     home = folder.parent / 'start/index.html'
+    # Standalone tutorial previews have no surrounding domain pages to navigate.
+    site_nav = (templates / 'navigation.html').read_text(encoding='utf-8') if home.is_file() else ''
     domain_link = (f'<a href="../start/index.html">{escape(domain["name"])}</a>' if home.is_file()
                    else f'<span>{escape(domain["name"])}</span>')
     metadata = (f'<span>About {reading_minutes(sections)} min to read</span>' if has_content else '')
     if model.get('updated'):
         metadata += f'<span>Updated <time datetime="{escape(model["updated"])}">{escape(model["updated"])}</time></span>'
     replacements = {
-        'title': escape(model['title']), 'domain_link': domain_link,
+        'title': escape(model['title']), 'domain_link': domain_link, 'site_nav': site_nav,
         'audience': labeled('Who this is for', model['audience']) if model.get('audience') else '',
         'scope': labeled('What this guide covers', model['scope']) if model.get('scope') else '',
         'metadata': metadata, 'status': status, 'contents': toc, 'sections': body,

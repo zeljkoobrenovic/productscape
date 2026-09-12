@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
     <title>Product Bricks (${domain_name})</title>
 
     ${breadcrumbs_style}
@@ -214,28 +215,29 @@
         }
 
         .brick-card {
-            margin: 4px;
-            padding: 4px;
+            margin: 14px;
             font-size: 12px;
-            width: 140px;
-            max-width: 144px;
+            width: 130px;
+            max-width: 130px;
             box-sizing: border-box;
             overflow: hidden;
-            background-color: var(--surface-fallback);
-            box-shadow: var(--card-shadow);
             text-align: left;
             min-height: 40px;
             display: flex;
             flex-direction: column;
             align-items: stretch;
             gap: 6px;
-            border: 1px solid black;
+            border: 1px solid grey;
+            border-radius: 9px;
+            box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
         }
 
         .brick-card-main {
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             gap: 4px;
+            text-align: center;
         }
 
         .brick-card.highlighted {
@@ -243,15 +245,20 @@
         }
 
         .brick-icon {
-            width: 36px;
+            width: 102px;
         }
 
         .brick-name {
+            padding-top: 2px;
             overflow: hidden;
-            width: calc(100% - 40px);
+            width: 100%;
+            font-size: 120%;
+            display: block;
         }
 
         .brick-name-title {
+            padding-left: 4px;
+            padding-right: 4px;
             font-weight: 700;
             line-height: 1.2;
             margin-bottom: 4px;
@@ -1221,7 +1228,7 @@
             const modules = layerConfig && layerConfig.modules ? layerConfig.modules : {};
             if (Array.isArray(modules)) {
                 return modules.map((module, index) => {
-                    const moduleInfo = module && typeof module === 'object' ? module : { title: String(module || '') };
+                    const moduleInfo = module && typeof module === 'object' ? module : {title: String(module || '')};
                     return {
                         ...moduleInfo,
                         layerId,
@@ -1231,7 +1238,7 @@
                 });
             }
             return Object.entries(modules).map(([moduleName, module]) => {
-                const moduleInfo = module && typeof module === 'object' ? module : { title: String(module || '') };
+                const moduleInfo = module && typeof module === 'object' ? module : {title: String(module || '')};
                 return {
                     ...moduleInfo,
                     layerId,
@@ -1254,8 +1261,8 @@
                 });
             }
             return [
-                ...moduleLayerOrder.filter(layerId => layers[layerId]).map(layerId => ({ layer: layerId, ...layers[layerId] })),
-                ...Object.keys(layers).filter(layerId => !moduleLayerOrder.includes(layerId)).map(layerId => ({ layer: layerId, ...layers[layerId] }))
+                ...moduleLayerOrder.filter(layerId => layers[layerId]).map(layerId => ({layer: layerId, ...layers[layerId]})),
+                ...Object.keys(layers).filter(layerId => !moduleLayerOrder.includes(layerId)).map(layerId => ({layer: layerId, ...layers[layerId]}))
             ];
         }
 
@@ -1399,7 +1406,9 @@
             const brickCard = `
                 <div class="brick-card${item.isHighlighted ? ' highlighted' : ''}" style="background-color: ${item.color}; ${statusBorderStyle(item)}">
                     <div class="brick-card-main">
+                        <div style="background-color: #fafafa; width: 100%;">
                         <img class="brick-icon" src="icons/${item.id}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
+                        </div>
                         <div class="brick-name">
                             <div class="brick-name-title">${item.name || ''}</div>
                         </div>
@@ -1770,16 +1779,16 @@
             return `
                 <div class="stream-pills">
                     ${items.map(item => {
-                        const linkedBrick = getBrickCatalog().find(candidate => candidate.id === item.id) || {};
-                        const pillColor = colorOf(linkedBrick.type);
-                        return `
+                const linkedBrick = getBrickCatalog().find(candidate => candidate.id === item.id) || {};
+                const pillColor = colorOf(linkedBrick.type);
+                return `
                         <a class="stream-pill" style="background-color: ${pillColor}; border: 3px solid ${borderColor};" target="_blank" href="landing_pages/${item.id}.html" title="${escapeHtml(item.description || item.role || '')}">
                             <img src="icons/${actionIcon}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
                             <img src="icons/${item.id}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
                             <span>${item.name}</span>
                         </a>
                     `;
-                    }).join('')}
+            }).join('')}
                 </div>
             `;
         }
@@ -1816,10 +1825,10 @@
                 return `
                     <ul class="data-store-list">
                         ${(asset.stores || []).map(link => {
-                            const store = storeById(link.storeId);
-                            const parts = [store.name || link.storeId, link.role].filter(Boolean);
-                            return `<li>${escapeHtml(parts.join(' | '))}</li>`;
-                        }).join('')}
+                    const store = storeById(link.storeId);
+                    const parts = [store.name || link.storeId, link.role].filter(Boolean);
+                    return `<li>${escapeHtml(parts.join(' | '))}</li>`;
+                }).join('')}
                     </ul>
                 `;
             }
@@ -2115,8 +2124,8 @@
                     ${renderDependencyControlGroup('Product Streams', 'dependency-declared-stream-checkbox', catalog.streams, state.streamIds, renderStreamControlLabel)}
                     ${renderDependencyControlGroup('Dependency Types', 'dependency-declared-type-checkbox', catalog.dependencyTypes, state.typeIds, renderTypeControlLabel)}
                     ${renderDependencyNodeLegend([
-                        {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'}
-                    ])}
+                {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'}
+            ])}
                 </div>
             `;
         }
@@ -2135,9 +2144,9 @@
                     ${renderDependencyControlGroup('Product Bricks', 'dependency-data-brick-checkbox', catalog.bricks, state.brickIds, renderBrickControlLabel)}
                     ${renderDependencyControlGroup('Data Assets', 'dependency-data-asset-checkbox', catalog.assets, state.assetIds, renderAssetControlLabel)}
                     ${renderDependencyNodeLegend([
-                        {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'},
-                        {fill: '#dcfce7', stroke: '#16a34a', label: 'Data asset'}
-                    ])}
+                {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'},
+                {fill: '#dcfce7', stroke: '#16a34a', label: 'Data asset'}
+            ])}
                 </div>
             `;
         }
@@ -2156,9 +2165,9 @@
                     ${renderDependencyControlGroup('Product Streams', 'dependency-stream-stream-checkbox', catalog.streams, state.streamIds, renderStreamControlLabel)}
                     ${renderDependencyControlGroup('Product Bricks', 'dependency-stream-brick-checkbox', catalog.bricks, state.brickIds, renderBrickControlLabel)}
                     ${renderDependencyNodeLegend([
-                        {fill: '#fde68a', stroke: '#d97706', label: 'Product stream'},
-                        {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'}
-                    ])}
+                {fill: '#fde68a', stroke: '#d97706', label: 'Product stream'},
+                {fill: '#dbeafe', stroke: '#2563eb', label: 'Product brick'}
+            ])}
                 </div>
             `;
         }
@@ -3141,6 +3150,7 @@
         font-family: Ubuntu, Optima, Segoe, sans-serif;
         font-size: 13px;
     }
+
     .site-nav a {
         color: #6b7280;
         text-decoration: none;
@@ -3148,10 +3158,28 @@
         border-radius: 6px;
         white-space: nowrap;
     }
-    .site-nav a:hover { color: #1d4ed8; background: #eff6ff; }
-    .site-nav a.active { color: #1d4ed8; font-weight: 600; background: #dbeafe; }
+
+    .site-nav a:hover {
+        color: #1d4ed8;
+        background: #eff6ff;
+    }
+
+    .site-nav a.active {
+        color: #1d4ed8;
+        font-weight: 600;
+        background: #dbeafe;
+    }
 </style>
-<nav class="site-nav"><a href="../start/index.html">Home</a><a href="../customers/index.html">Customers</a><a href="../product-bricks/index.html" class="active">Bricks &amp; Streams</a><a href="../product-deployments/index.html">Products</a><a href="../teams/index.html">Teams</a><a href="../competition/index.html">Competition</a><a href="../residuality/index.html">Stress Test</a></nav>
+<nav class="site-nav" aria-label="Productscape sections">
+    <a href="../start/index.html">Home</a>
+    <a href="../customers/index.html">Customers</a>
+    <a href="../product-bricks/index.html" class="active" aria-current="page">Bricks &amp; Streams</a>
+    <a href="../product-deployments/index.html">Products</a>
+    <a href="../teams/index.html">Teams</a>
+    <a href="../competition/index.html">Competition</a>
+    <a href="../residuality/index.html">Stress Test</a>
+    <a href="../tutorial/index.html">Domain Tutorial</a>
+</nav>
 
 <div id="breadcrumbs"></div>
 ${tabs_script}
