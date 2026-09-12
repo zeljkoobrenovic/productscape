@@ -1,0 +1,63 @@
+_templates/tutorial/index.html
+  s_5e92156297c9c0::t_8689e9dd8d6597 7,14
+tests/test_tutorial.py
+  s_5e92156297c9c0::t_2fce99b584abfc 27,43-44,101
+_templates/competition/index.html
+  s_8cc0fe6e55daf7::t_475dca5cedfb7b 376-385
+_templates/competition/landing_page.html
+  s_8cc0fe6e55daf7::t_ff1b933845f236 408-417
+_templates/customers/index.html
+  s_8cc0fe6e55daf7::t_1f6c55b6242901 493-502
+_templates/customers/landing_page.html
+  s_8cc0fe6e55daf7::t_ae4ad14652bcf4 434-443
+_templates/product-bricks/brick_landing_page.html
+  s_8cc0fe6e55daf7::t_a1863bc1cf4b95 720-729
+_templates/product-bricks/data_asset_landing_page.html
+  s_8cc0fe6e55daf7::t_c56423a1c694dc 250-259
+_templates/product-bricks/stream_landing_page.html
+  s_8cc0fe6e55daf7::t_60c37c74a9e8f2 511-520
+_templates/product-deployments/deployment_landing_page.html
+  s_8cc0fe6e55daf7::t_412ac52fa41ce6 334-343
+_templates/product-deployments/index.html
+  s_8cc0fe6e55daf7::t_ce6833de280eee 1000-1009
+_templates/product-deployments/landing_page.html
+  s_8cc0fe6e55daf7::t_6f404b64d5b6d7 753-762
+_templates/residuality/index.html
+  s_8cc0fe6e55daf7::t_8d7512f885430c 20,24
+_templates/start/index.html
+  s_8cc0fe6e55daf7::t_e34d1787dfa570 159-167
+_templates/teams/index.html
+  s_8cc0fe6e55daf7::t_04207d32fb52c3 554-563
+_templates/teams/landing_page.html
+  s_8cc0fe6e55daf7::t_ebc73a06fd3071 220-229
+_templates/tutorial/navigation.html
+  s_8cc0fe6e55daf7::t_5503867487a9d9 1-10
+_templates/tutorial/style.css
+  s_8cc0fe6e55daf7::t_2717a5983e5b4a 14-34,121
+_wiring/product-domains/generate-tutorial-docs.py
+  s_8cc0fe6e55daf7::t_7de9e6b1019771 160-161,168
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f7fa653175f1a3c7e3b38c82dfa7c64cae8d51d0",
+  "prompts": {},
+  "sessions": {
+    "s_5e92156297c9c0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a09108-7ac6-75e2-9c52-b5204647f30b",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    },
+    "s_8cc0fe6e55daf7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a090d1-a167-7b81-9c28-594d4233b99b",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
