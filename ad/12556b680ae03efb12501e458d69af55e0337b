@@ -1,0 +1,30 @@
+_config/scripts/image-generation/generate_residuality_images_gemini_nanobanana_api.py
+  s_b18581ae54d929::t_75e97a0461f695 27
+  s_b18581ae54d929::t_8b005406d0f84d 270-272
+_config/scripts/image-generation/generate_journey_images_gemini_nanobanana_api.py
+  s_b18581ae54d929::t_0e6c56cf5f0943 27,603-606
+_config/scripts/image-generation/jtbd_image_generation_common.py
+  s_b18581ae54d929::t_0e6c56cf5f0943 22,506-509
+_config/scripts/image-generation/test_existing_image_formats.py
+  s_b18581ae54d929::t_88ca6615df472c 1-56
+_config/scripts/image-generation/generate_customer_icons_gemini_nanobanana_api.py
+  s_b18581ae54d929::t_e0141b810f0697 114-123
+_config/scripts/image-generation/generate_customer_relations_images_gemini_nanobanana_api.py
+  s_b18581ae54d929::t_0e6c56cf5f0943 33,311-315
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ad12556b680ae03efb12501e458d69af55e0337b",
+  "prompts": {},
+  "sessions": {
+    "s_b18581ae54d929": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "94115ae4-8f10-48ca-8e27-74b163c44f13",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
