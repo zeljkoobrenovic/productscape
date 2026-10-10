@@ -1,0 +1,25 @@
+project-template/AGENTS.md
+  s_b18581ae54d929::t_65b453f68bb5eb 11-13
+project-template/productscapes.py
+  s_b18581ae54d929::t_e2962b70903257 27-28,32
+productscapes.py
+  s_b18581ae54d929::t_e2962b70903257 107-124,285-286
+tests/test_cli.py
+  s_b18581ae54d929::t_e2962b70903257 161-173
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f99af6ac95bb009b63a0af178b99d4b97ae0a8a1",
+  "prompts": {},
+  "sessions": {
+    "s_b18581ae54d929": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "94115ae4-8f10-48ca-8e27-74b163c44f13",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
