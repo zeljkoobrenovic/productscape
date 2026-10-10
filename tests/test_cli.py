@@ -158,6 +158,19 @@ class ToolkitCLI(unittest.TestCase):
         config_path.write_text(json.dumps(config))
         self.assertIn('toolkit not found', self.command('list', launcher=True, ok=False).stderr)
 
+    def test_pin_adopts_the_checked_out_toolkit_when_the_pin_is_stale(self):
+        self.create()
+        config_path = self.project / 'productscapes.json'
+        config = json.loads(config_path.read_text())
+        expected = config['revision']
+        config['revision'] = '0' * 40
+        config_path.write_text(json.dumps(config))
+        self.assertIn('productscapes.py pin', self.command('list', launcher=True, ok=False).stderr)
+        self.assertIn('Pinned toolkit', self.command('pin', launcher=True).stdout)
+        self.assertEqual(json.loads(config_path.read_text())['revision'], expected)
+        self.command('list', launcher=True)
+        self.assertIn('Already pinned', self.command('pin', launcher=True).stdout)
+
     def test_skills_install_with_shared_references_without_generator_copies(self):
         self.create()
         self.command('skills', '--target', '.agents/skills', launcher=True)

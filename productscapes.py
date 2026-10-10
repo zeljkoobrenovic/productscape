@@ -104,6 +104,24 @@ def init_project(project):
             shutil.copy2(TOOLKIT / 'project-template' / name, project / name)
 
 
+def pin(args):
+    """Record the checked-out toolkit commit in the data project's productscapes.json."""
+    config_path = args.project / 'productscapes.json'
+    if args.project == TOOLKIT or not config_path.is_file():
+        raise ValueError(f'No productscapes.json in {args.project}; run pin from a data project root.')
+    current = revision()
+    if not current:
+        raise ValueError(f'The toolkit at {TOOLKIT} is not a git checkout, so there is no commit to pin.')
+    config = read_json(config_path)
+    previous = config.get('revision')
+    config['revision'] = current
+    write_json(config_path, config)
+    print(f'Already pinned to {current}' if previous == current else f'Pinned toolkit {previous or "(none)"} -> {current}')
+    status = subprocess.run(['git', '-C', str(TOOLKIT), 'status', '--porcelain'], capture_output=True, text=True)
+    if status.stdout.strip():
+        print('Warning: the toolkit has uncommitted changes; the pin records only its last commit.', file=sys.stderr)
+
+
 def new_domain(args):
     for label, value in (('domain ID', args.domain), ('group', args.group)):
         if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', value) or value == 'start':
@@ -264,6 +282,8 @@ def main():
     info = commands.add_parser('info', parents=[common], help='Show toolkit and project paths.')
     info.set_defaults(action=lambda args: print(json.dumps({'toolkit': str(TOOLKIT), 'project': str(args.project),
         'schemas': str(TOOLKIT / '_config/_schema'), 'skills': str(TOOLKIT / 'skills'), 'revision': revision()}, indent=2)))
+    pinning = commands.add_parser('pin', parents=[common], help='Pin this project to the checked-out toolkit commit.')
+    pinning.set_defaults(action=pin)
     skills = commands.add_parser('skills', parents=[common], help='Install portable skills into this project.')
     skills.add_argument('--target', default='.agents/skills', help='Skill directory, e.g. .agents/skills or .claude/skills.')
     skills.add_argument('--update', action='store_true', help='Refresh existing installed skills.')

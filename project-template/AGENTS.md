@@ -8,8 +8,9 @@ Preserve existing uncommitted source changes and inspect generated changes befor
 The scripts, schemas, templates, and canonical skills belong to the separate
 **productscape** toolkit. Run `python3 productscapes.py info` to locate it.
 `productscapes.json` records its relative checkout path and pinned commit;
-`PRODUCTSCAPES_HOME` may override the path. Keep shared implementation changes
-in the toolkit; the local `productscapes.py` only forwards commands.
+`PRODUCTSCAPES_HOME` may override the path. After updating the toolkit checkout,
+run `python3 productscapes.py pin` to record its commit. Keep shared implementation
+changes in the toolkit; the local `productscapes.py` only forwards commands.
 
 Use the toolkit's `skills/new-product-domain/SKILL.md` to author a complete domain,
 `skills/product-domain/SKILL.md` to route smaller edits, and its `_config/_schema/`

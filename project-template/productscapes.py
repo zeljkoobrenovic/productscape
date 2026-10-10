@@ -24,10 +24,12 @@ def main():
     if entry == Path(__file__).resolve():
         raise ValueError('The toolkit path points to this project, not the productscapes toolkit.')
     expected = config.get('revision')
-    if expected and not os.environ.get('PRODUCTSCAPES_ALLOW_UNPINNED'):
+    # `pin` adopts the checked-out toolkit, so it must run while the pin is stale.
+    if expected and not os.environ.get('PRODUCTSCAPES_ALLOW_UNPINNED') and sys.argv[1:2] != ['pin']:
         result = subprocess.run(['git', '-C', str(toolkit), 'rev-parse', 'HEAD'], capture_output=True, text=True)
         if result.returncode or result.stdout.strip() != expected:
             raise ValueError(f'This project requires productscapes commit {expected}. Run git -C "{toolkit}" checkout {expected}, '
+                             'run python3 productscapes.py pin to adopt the checked-out toolkit, '
                              'or set PRODUCTSCAPES_ALLOW_UNPINNED=1 for toolkit development.')
     os.environ['PRODUCTSCAPES_PROJECT'] = str(PROJECT)
     runpy.run_path(str(entry), run_name='__main__')
