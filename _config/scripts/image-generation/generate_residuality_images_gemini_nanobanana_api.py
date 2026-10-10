@@ -24,6 +24,7 @@ sys.path.insert(0, str(REPO_ROOT / "_wiring"))
 from project_paths import DOMAINS_ROOT as PRODUCT_DOMAINS_DIR, PROJECT_ROOT
 
 from domain_paths import list_domain_files
+from generate_customer_icons_gemini_nanobanana_api import find_existing_image, image_exists
 DEFAULT_MODEL = "gemini-3-pro-image-preview"
 DEFAULT_OUTPUT_FORMAT = "png"
 API_URL_TEMPLATE = (
@@ -266,6 +267,9 @@ def build_targets_for_file(
             ):
                 image_path = existing_path
                 media_src = existing_src
+        if not image_exists(image_path):
+            image_path = find_existing_image(image_path)
+            media_src = f"media/{image_path.name}"
 
         targets.append(
             ResidualityGenerationTarget(

@@ -111,6 +111,16 @@ def image_exists(path: Path) -> bool:
     return path.is_file() and path.stat().st_size > 0
 
 
+def find_existing_image(path: Path) -> Path:
+    """Return an existing image with the same stem in any supported format, else path.
+
+    Gemini may return JPEG when PNG was requested, so a previous run can leave
+    stressor-x.jpg where the generator now expects stressor-x.png.
+    """
+    candidates = [path] + [path.with_suffix(f".{fmt}") for fmt in IMAGE_FORMATS]
+    return next((candidate for candidate in candidates if image_exists(candidate)), path)
+
+
 def make_customer_icon_filename(customer_id: str, output_format: str = "png") -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", customer_id.lower()).strip("-")
     if not slug:

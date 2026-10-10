@@ -24,6 +24,7 @@ sys.path.insert(0, str(REPO_ROOT / "_wiring"))
 from project_paths import DOMAINS_ROOT as PRODUCT_DOMAINS_DIR, PROJECT_ROOT
 
 from domain_paths import list_domain_files
+from generate_customer_icons_gemini_nanobanana_api import find_existing_image
 PROMPT_INSPIRATION_PATH = SCRIPT_PATH.parent / "customer-journeys.md"
 DEFAULT_MODEL = "gemini-3-pro-image-preview"
 DEFAULT_QUALITY = "low"
@@ -599,6 +600,10 @@ def run_generation(args: argparse.Namespace, api_key: str) -> int:
 
         for target in targets:
             json_changed = sync_target_media(target, args.output_format) or json_changed
+            # Reuse an image saved in another format (Gemini may return JPEG for PNG).
+            existing = find_existing_image(target.image_path)
+            if existing != target.image_path:
+                json_changed = sync_target_media(target, existing.suffix.lstrip(".")) or json_changed
 
             should_generate = not args.json_only
             if args.limit and total_generated >= args.limit:

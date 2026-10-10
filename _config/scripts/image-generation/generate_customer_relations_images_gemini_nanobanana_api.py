@@ -30,6 +30,7 @@ sys.path.insert(0, str(REPO_ROOT / "_wiring"))
 from project_paths import DOMAINS_ROOT as PRODUCT_DOMAINS_DIR, PROJECT_ROOT
 
 from domain_paths import list_domain_files
+from generate_customer_icons_gemini_nanobanana_api import find_existing_image
 PROMPT_INSPIRATION_PATHS = [
     SCRIPT_PATH.parent / "customer-journeys.md",
     SCRIPT_PATH.parent / "customer-journeys.md",
@@ -307,6 +308,11 @@ def run_generation(args: argparse.Namespace, api_key: str) -> int:
         if target is None:
             print(f"Skipping (no relations): {relations_file}")
             continue
+        # Reuse an overview saved in another format (Gemini may return JPEG for PNG).
+        existing = find_existing_image(target.image_path)
+        if existing != target.image_path:
+            target.image_path = existing
+            target.media_src = f"media/{existing.name}"
 
         should_generate = not args.json_only
         if args.limit and total_generated >= args.limit:
