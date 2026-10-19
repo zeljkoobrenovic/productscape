@@ -1,0 +1,75 @@
+_templates/catalog/index.html
+  s_f1908ace8b7476::t_457dd4667909a5 15
+productscapes.py
+  s_f1908ace8b7476::t_ae9493a9ce6ada 19,24
+_wiring/product-domains/README.md
+  s_f1908ace8b7476::t_4163e3f3abbc24 34,47
+tests/test_generator_inputs.py
+  s_f1908ace8b7476::t_0816ad2d8212a6 53-56,81
+  s_f1908ace8b7476::t_ae9493a9ce6ada 15
+_wiring/test_domain_paths.py
+  s_f1908ace8b7476::t_8d17ac218d78bd 151-152,170-171
+  s_f1908ace8b7476::t_ae9493a9ce6ada 121,136
+_templates/residuality/index.html
+  s_f1908ace8b7476::t_457dd4667909a5 87,148
+skills/_references/domain-model.md
+  s_f1908ace8b7476::t_3212da6a0c03de 47-48,57,62,66,78,92,127-128,149,161-162
+_wiring/product-domains/product_bricks_support.py
+  s_f1908ace8b7476::t_0b7050cf949628 1324,1359
+skills/new-product-domain/NEW-DOMAIN-PROMPT.md
+  s_f1908ace8b7476::t_d89254c53d4492 23,42
+skills/edit-product-bricks/SKILL.md
+  s_f1908ace8b7476::t_3ee62ef70101a0 3
+  s_f1908ace8b7476::t_d0326788464842 23,27-28,213,230
+project-template/AGENTS.md
+  s_f1908ace8b7476::t_4163e3f3abbc24 32
+_wiring/product-domains/generate-product-bricks-docs.py
+  s_f1908ace8b7476::t_6cccb7d48b1559 285,312,358,470-472
+skills/edit-competition/SKILL.md
+  s_f1908ace8b7476::t_d0326788464842 70
+README.md
+  s_f1908ace8b7476::t_4163e3f3abbc24 5,77,84
+skills/audit-domain-balance/SKILL.md
+  s_f1908ace8b7476::t_6ffa2a7915e29b 3,31,44,48,51,53,77,115,133
+tests/test_cli.py
+  s_f1908ace8b7476::t_ae9493a9ce6ada 62
+_wiring/product-domains/generate-residuality-docs.py
+  s_f1908ace8b7476::t_71f58c65ac47a5 117,391
+skills/set-domain-strategy/SKILL.md
+  s_f1908ace8b7476::t_c81587f8e497c9 3,24,35,69,78-79,86
+skills/gpa-product-bricks-review/SKILL.md
+  s_f1908ace8b7476::t_420bb629d7189b 3,30,34,36,44,86,95,112
+_templates/residuality/app.js
+  s_f1908ace8b7476::t_284e325b7051d9 305
+  s_f1908ace8b7476::t_457dd4667909a5 17,144,393
+skills/edit-data-assets/SKILL.md
+  s_f1908ace8b7476::t_3212da6a0c03de 3
+  s_f1908ace8b7476::t_68e5be878dbc20 21-22,84,90
+skills/new-product-domain/SKILL.md
+  s_f1908ace8b7476::t_d89254c53d4492 3,34,45
+skills/product-domain/SKILL.md
+  s_f1908ace8b7476::t_76962ab8e15851 3,33,54
+skills/validate-domain/SKILL.md
+  s_f1908ace8b7476::t_d0326788464842 23,38
+skills/edit-customers/SKILL.md
+  s_f1908ace8b7476::t_c81587f8e497c9 77,290-291
+  s_f1908ace8b7476::t_d44be9ed8edf0d 3
+skills/gpa-product-domain-review/SKILL.md
+  s_f1908ace8b7476::t_420bb629d7189b 36,45,79,107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6ec4aa96ed824fb13218545789560077564f0ec0",
+  "prompts": {},
+  "sessions": {
+    "s_f1908ace8b7476": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5c405644-9957-4579-a227-86c84266615c",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
