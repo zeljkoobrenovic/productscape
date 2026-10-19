@@ -20,8 +20,7 @@ Then use the per-artifact skill for each phase, in this order:
 2. Customers & strategy → `edit-customers`
 3. Architecture → `edit-product-bricks`, then `edit-streams`, then `edit-data-assets`
 4. Products & delivery → `edit-products`
-5. Teams & operating model → `edit-teams`
-7. Validate & audit → `validate-domain`, then `audit-domain-balance`
+5. Validate & audit → `validate-domain`, then `audit-domain-balance`
 
 Load only the skill you need for the current phase; do the phase, validate, continue.
 
@@ -40,7 +39,7 @@ Load only the skill you need for the current phase; do the phase, validate, cont
 ## Requirements
 
 - Start with toolkit schemas and `_templates/domain/` for folder structure and required files. Existing example domains are optional.
-- Reuse the repository's established modeling language: customers, product strategy, product deployments, teams, product bricks, streams, data assets, start, evidence, and competition.
+- Reuse the repository's established modeling language: customers, product strategy, product deployments, product bricks, streams, data assets, start, evidence, and competition.
 - Do not invent a new schema if an existing one already fits.
 - Treat `_config/**` as the source of truth. Only create or modify generated `docs/**` when generation is explicitly requested.
 - If different domains use slightly different structures, identify the most current and internally consistent pattern before creating the new one.
@@ -87,14 +86,6 @@ Load only the skill you need for the current phase; do the phase, validate, cont
 - Define product capabilities as strategic outcomes, not implementation components, and map them to product bricks and external systems where relevant.
 - Model deployment through channels, interfaces, APIs, events, operational workflows, MVP scope, and capability mappings.
 - Add data assets where the current domain pattern supports them.
-
-### Teams And Operating Model
-
-- Define a realistic operating model in `teams/teams.json`.
-- Use value-stream, platform, enabling, data, reliability, compliance, finance, trust, or operational-control teams where domain-relevant.
-- Ensure every product brick has a primary owning team.
-- Keep team references from product bricks, deployment surfaces, and data assets resolvable.
-- Keep team sizes and group leadership aligned with the current repository convention unless the user asks for a different staffing model.
 
 ## Validation Gates
 

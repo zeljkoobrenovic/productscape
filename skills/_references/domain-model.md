@@ -34,7 +34,6 @@ dirty worktree before regenerating.
 | Product bricks | `product-bricks/product-bricks.json` | `generate-product-bricks-docs.py` |
 | Streams | `product-bricks/product-stream.json` | `generate-product-bricks-docs.py` |
 | Data assets | `data/data-assets.json` | `generate-product-bricks-docs.py` |
-| Teams | `teams/teams.json` | `generate-teams-docs.py` |
 | Competition | `business/competition.json` | `generate-competition-docs.py` |
 | Beginner tutorial (optional, no evidence/model references required) | `tutorial/tutorial.json` | `generate-tutorial-docs.py` |
 | Domain brief | `_domain/DOMAIN.md` | (narrative, not generated) |
@@ -45,9 +44,8 @@ dirty worktree before regenerating.
   matching `^[a-z0-9][a-z0-9._:-]*$`. Exceptions: `evidence-ids` values and
   `keyResultId` may contain regex/path-like characters.
 - Customer / brick IDs are short stable codes (`ridu`, `drvu`, `trip`, `disp`).
-  Stream / asset / team / insight IDs are hyphenated slugs
-  (`rider-book-and-complete-a-reliable-trip`, `customer-profile`, `rider-core`,
-  `rsm-01`).
+  Stream / asset / insight IDs are hyphenated slugs
+  (`rider-book-and-complete-a-reliable-trip`, `customer-profile`, `rsm-01`).
 - Product-brick **module** IDs must start with `module-`.
 - IDs are stable: renaming an ID breaks every cross-file reference to it.
 
@@ -56,18 +54,16 @@ dirty worktree before regenerating.
 ```
 customers.json
   customer.id ─────────────┬─▶ insights.json     linkedCustomers[].customerId
-                           ├─▶ products.json      portfolio.products[].primaryCustomers[].id
-                           └─▶ teams.json         ...teams[].customerDependencies[].customerId
+                           └─▶ products.json      portfolio.products[].primaryCustomers[].id
   jobsToBeDone[].id ───────┬─▶ insights.json     linkedCustomers[].jobIds[]
                            └─▶ customerJourneyStories[].linkedJobIds[]
   jtbd.steps[].streamsNeeded[].id ─▶ product-stream.json  stream id (or brick id)
   kpiPyramids ... node ids ─▶ insights.json linkedCustomers[].kpiIds[] (by ID)
-  kpiPyramids ... names ───▶ teams.json metrics, productStrategy northStar/supporting (by NAME — legacy)
+  kpiPyramids ... names ───▶ productStrategy northStar/supporting (by NAME — legacy)
 
 product-bricks.json
   brick.id ────────────────┬─▶ deployment.json     ...deployedBricks[].brickId
-                           ├─▶ product-stream.json brickDependencies[].targetBrickId, flows steps deps
-                           └─▶ teams.json          ...brickDependencies[].brickId
+                           └─▶ product-stream.json brickDependencies[].targetBrickId, flows steps deps
   brick.dataDependencies[].assetId ─▶ data-assets.json  asset.id
   brick.layers[].modules[].id (module-*) ─▶ referenced by brickDependencies[].moduleId
 
@@ -76,13 +72,10 @@ products.json
 
 deployment.json
   channels[].channels[].deployedBricks[].brickId ─▶ product-bricks.json brick id
-
-data-assets.json
-  asset.ownerTeamId ───────▶ teams.json team id
 ```
 
 When you add or rename an entity, update **every** referencing file in the same
-edit. The validator catches brick/team/module breakage; customer- and
+edit. The validator catches brick/module breakage; customer- and
 asset-level references you must check by hand (see each `edit-*` skill).
 
 ## Product-brick layer model (fixed)
@@ -96,8 +89,7 @@ message-consumer, daemon, stateless-service, stateful-service, service, integrat
 `metadata.modulesConfig.layerTypes` / `moduleTypes` (when present) must match these
 sets exactly, and each module type needs a `color`. The shared defaults live in
 `_config/_shared/product-brick-model.json` (same for `brickTypes`/`brickStatuses`,
-and `teamTypes`/`teamDependencyTypes` in `team-model.json`, stream `definitions` in
-`product-stream-model.json`) — domain files only declare these blocks to override
+and stream `definitions` in `product-stream-model.json`) — domain files only declare these blocks to override
 the shared model. Source of truth for the fixed sets:
 `_wiring/product-domains/product_bricks_support.py`.
 
@@ -132,9 +124,8 @@ having `children[]`.
   when diagnostics are genuinely sparse. Don't pad with vanity metrics to hit a count.
 - KPI **ids** are unique within a persona (across both pyramids). `insights.json`
   links KPIs by **id** (`linkedCustomers[].kpiIds[]` — the validator checks these
-  resolve; never use the legacy name-based `kpis` field in new content). `teams.json`
-  metrics and the persona's `productStrategy` `northStar`/`supporting` still link by
-  NAME — every such name must exist as a node in that persona's pyramids
+  resolve; never use the legacy name-based `kpis` field in new content). The persona's
+  `productStrategy` `northStar`/`supporting` still link by NAME — every such name must exist as a node in that persona's pyramids
   (`check-kpi-pyramids.py` reports violations). The customer landing page shows
   "No KPI pyramid defined" unless BOTH pyramids are present. See `edit-customers`
   for the full schema.
@@ -155,8 +146,7 @@ See [workspace paths](workspace.md) for the repository boundary.
 
 ## Optional examples
 
-The separate productscape-examples repository contains `maas` (teams and product
-usage), `ride-sharing-marketplace` (customers, bricks, streams, data, competition),
+The separate productscape-examples repository contains `maas` (product usage), `ride-sharing-marketplace` (customers, bricks, streams, data, competition),
 and other domains of varying maturity. Compare them when available. The toolkit's
 schemas and starter establish the contracts even when no examples are cloned.
 
@@ -168,6 +158,6 @@ schemas and starter establish the contracts even when no examples are cloned.
 - Reuse existing JSON schemas and `${...}` template patterns; don't invent parallel
   structures.
 - Keep domain language: customers, product deployments, product bricks, streams,
-  teams, data assets, competition, and evidence.
-- Every entity must earn its place — a segment/brick/team that doesn't change a
+  data assets, competition, and evidence.
+- Every entity must earn its place — a segment/brick that doesn't change a
   decision should be merged or dropped.

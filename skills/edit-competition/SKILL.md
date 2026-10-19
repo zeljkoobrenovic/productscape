@@ -67,7 +67,7 @@ players in the file.
 ## After editing
 
 1. `python3 productscapes.py validate <domain-id>`
-   (JSON validity; competition has no brick/team integrity checks).
+   (JSON validity; competition has no brick integrity checks).
 2. Regenerate: from the project root,
    `python3 productscapes.py build <domain-id>
 3. Report players added/changed and confirm every new stat has an official source URL.

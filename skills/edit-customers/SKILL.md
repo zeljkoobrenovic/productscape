@@ -1,6 +1,6 @@
 ---
 name: edit-customers
-description: "Create or edit customer data for a product domain: customer groups, personas, jobs-to-be-done (JTBD), customer journey stories, KPI pyramids, per-customer product strategy, customer insights, and external reference links. Use when adding a customer segment, refining a persona, writing JTBD/journeys, building KPI pyramids, adding sourced insights, or curating external links in _config/product-domains/group/domain/customers/customers.json, insights.json, and links.json. Keeps customer IDs consistent across products, teams, and insights."
+description: "Create or edit customer data for a product domain: customer groups, personas, jobs-to-be-done (JTBD), customer journey stories, KPI pyramids, per-customer product strategy, customer insights, and external reference links. Use when adding a customer segment, refining a persona, writing JTBD/journeys, building KPI pyramids, adding sourced insights, or curating external links in _config/product-domains/group/domain/customers/customers.json, insights.json, and links.json. Keeps customer IDs consistent across products and insights."
 ---
 
 Read [workspace paths](../_references/workspace.md) when using this skill in a separate data repository.
@@ -74,7 +74,7 @@ compare `ride-sharing-marketplace` in productscape-examples for modeling depth.
 - Only leaves carry a `unit` + `currentValue` that is a terminal measurement; give
   every metric a `unit` and avoid vanity terminals.
 - KPI **ids** must be unique within a customer (across both pyramids). Reuse KPI
-  **names** consistently across customers, teams, and insights (they link by name, not
+  **names** consistently across customers and insights (they link by name, not
   id) — every `northStar`/`supporting` name must exist as a node in that
   customer's pyramids.
 
@@ -284,13 +284,11 @@ Every non-leaf node below has ≥2 children — mirror this fan-out (top → 2 b
 
 When you add/rename a **persona id**, update references in:
 - `product-deployments/products.json` → `portfolio.products[].primaryCustomers[].id`
-- `teams/teams.json` → `…teams[].primaryCustomers[].customerId`
 - `customers/insights.json` → `items[].linkedCustomers[].customerId`
 
 When you add/rename a **JTBD id**, update `linkedJobIds` in the same persona's
-journeys and `jobIds` in insights. When you change a **KPI name**, update teams'
-metrics and the persona's `productStrategy` northStar/supporting (insights link by `kpiIds`)
-(these link by name). When a JTBD step needs a stream that doesn't exist yet, either
+journeys and `jobIds` in insights. When you change a **KPI name**, update the persona's
+`productStrategy` northStar/supporting (these link by name; insights link by `kpiIds`). When a JTBD step needs a stream that doesn't exist yet, either
 add the stream (`edit-streams`) or point at an existing brick id.
 
 ## After editing

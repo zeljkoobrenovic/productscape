@@ -1,6 +1,6 @@
 ---
 name: new-product-domain
-description: "Create and author a complete product domain using Productscapes: research, customers, strategy, products, bricks, streams, data assets, teams, competition, and validation. Use for a new domain from scratch; use the artifact skills for narrower edits."
+description: "Create and author a complete product domain using Productscapes: research, customers, strategy, products, bricks, streams, data assets, competition, and validation. Use for a new domain from scratch; use the artifact skills for narrower edits."
 ---
 
 # New product domain
@@ -31,7 +31,7 @@ validation is not evidence of a researched, complete product domain.
 The [input prompt](NEW-DOMAIN-PROMPT.md) helps capture the target and research scope.
 Choose depth appropriate to the business; a small domain need not match a mature
 example's object counts. Research current claims from primary sources and record
-source URLs. Do not invent facts, statistics, implementation evidence, or ownership.
+source URLs. Do not invent facts, statistics, or implementation evidence.
 
 ## Author in dependency order
 
@@ -42,9 +42,7 @@ source URLs. Do not invent facts, statistics, implementation evidence, or owners
 4. Use `edit-streams` to connect customer outcomes with bricks and external systems.
 5. Use `edit-data-assets` for data meaning, stores, governance, and brick dependencies.
 6. Use `edit-products` for customer-facing products and their deployment channels.
-7. Use `edit-teams` for ownership and the operating model; reconcile team and data
-   ownership references with the earlier artifacts.
-8. Use `edit-competition` for a sourced competitive landscape. Add evidence references
+7. Use `edit-competition` for a sourced competitive landscape. Add evidence references
    where real evidence exists. Author residuality stressors when relevant to scope.
 
 Read the relevant skill when entering its phase. Reconcile earlier artifacts when

@@ -31,7 +31,7 @@ sh _wiring/product-domains/run.sh \
 ```
 
 The runner forwards its arguments to `python3 productscapes.py build`. It also
-accepts `--sections start customers products product-bricks teams competition
+accepts `--sections start customers products product-bricks competition
 residuality tutorial` and `--verbose`. Choose a domain or pass `--all`; running without a
 selection reports the missing input.
 
@@ -44,7 +44,7 @@ python3 _wiring/product-domains/generate-customers-docs.py \
   --templates-dir ./_templates
 ```
 
-The same options work for start, customers, products, product bricks, teams,
+The same options work for start, customers, products, product bricks,
 competition, residuality, and tutorial generators. The `products` generator publishes to
 the `product-deployments` section.
 

@@ -1,6 +1,6 @@
 ---
 name: edit-product-bricks
-description: "Create or edit product bricks for a product domain: root groups, subgroups, bricks, their layered modules (ui/interfaces/worker/stateless-service/service/integration), brick-to-brick dependencies, data dependencies, and external-system dependencies in _config/product-domains/group/domain/product-bricks/product-bricks.json. Use when adding a brick, restructuring brick groups, adding/moving modules across layers, wiring module or brick dependencies, or linking bricks to data assets. Keeps brick and module IDs consistent across products, deployment, streams, teams, evidence, and data assets."
+description: "Create or edit product bricks for a product domain: root groups, subgroups, bricks, their layered modules (ui/interfaces/worker/stateless-service/service/integration), brick-to-brick dependencies, data dependencies, and external-system dependencies in _config/product-domains/group/domain/product-bricks/product-bricks.json. Use when adding a brick, restructuring brick groups, adding/moving modules across layers, wiring module or brick dependencies, or linking bricks to data assets. Keeps brick and module IDs consistent across products, deployment, streams, evidence, and data assets."
 ---
 
 Read [workspace paths](../_references/workspace.md) when using this skill in a separate data repository.
@@ -20,12 +20,12 @@ right or generation/validation fails.
 ## Method (what good looks like)
 
 - **Bricks are buildable, ownable units** that connect customer value → roadmap →
-  delivery → systems → data → teams. Not vague aspirations, not tiny tasks; they
+  delivery → systems → data. Not vague aspirations, not tiny tasks; they
   sound like product/platform building blocks.
 - **Three meaningful levels**: root group (durable product/platform area) → subgroup
   (related workflows/systems) → brick. A mature domain has **20+ bricks**.
-- Every brick must be able to have an **owning team** and trace to a customer or
-  business outcome. A brick referenced by no product/stream/team is an orphan — drop
+- Every brick must trace to a customer or business outcome. A brick referenced by
+  no product/stream is an orphan — drop
   or wire it.
 - **Modules live under `layers`** by architectural responsibility, not as a flat list.
   Only include a layer when it has modules.
@@ -197,7 +197,6 @@ When you add/rename a **brick id**, update every referencing file:
 - `product-deployments/deployment.json` → `…deployedBricks[].brickId` (and `brickName`)
 - `product-bricks/product-stream.json` → `…brickDependencies[].targetBrickId` and
   flow `steps[].dependencies[]` of `type:"brick"`
-- `teams/teams.json` → `…teams[].brickDependencies[].brickId`
 
 When you add/rename a **module id**, fix any `brickDependencies[].moduleId/sourceModuleId`
 and `dependencies.modules[].moduleId` (in this and other bricks) that point at it, plus
@@ -211,7 +210,7 @@ add a `dataDependencies.assetId`, it must exist in `data-assets.json` (add it wi
    — this validator deeply checks bricks: layers/module-types, `module-` prefix,
    duplicate brick/module IDs, resolvable module/brick/data dependencies, legacy
    fields, and `modulesConfig` correctness. Fix every error before proceeding.
-   (It does NOT check products/deployment/stream/team back-references to bricks —
+   (It does NOT check products/deployment/stream back-references to bricks —
    verify those by hand or with `audit-domain-balance`.)
 2. Regenerate: from the project root,
    `python3 productscapes.py build <domain-id>
@@ -228,4 +227,4 @@ add a `dataDependencies.assetId`, it must exist in `data-assets.json` (add it wi
 - Module IDs not starting with `module-`; module types not valid for their layer.
 - `storeIds` in `dataDependencies`; legacy `interface` field in `brickDependencies`.
 - Architecture jargon with no customer/operating relevance; orphan bricks no
-  product/stream/team uses; inventing external/data references to fill fields.
+  product/stream uses; inventing external/data references to fill fields.

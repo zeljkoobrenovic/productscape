@@ -145,38 +145,6 @@
             vertical-align: top;
         }
 
-        .team {
-            text-align: center;
-            padding: 6px;
-            margin: 8px;
-            border-radius: 5px;
-            display: inline-block;
-            font-size: 13px;
-            width: 110px;
-            overflow: hidden;
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-            white-space: nowrap;
-            vertical-align: top;
-            border: 2px solid grey;
-            height: 140px;
-        }
-
-        .legacy-team {
-            text-align: center;
-            padding: 6px;
-            margin: 8px;
-            border-radius: 5px;
-            display: inline-block;
-            font-size: 13px;
-            width: 110px;
-            overflow: hidden;
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-            white-space: nowrap;
-            vertical-align: top;
-            border: 2px dashed grey;
-            height: 140px;
-        }
-
         .number {
             display: inline-block;
             box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
@@ -722,7 +690,6 @@
     <a href="../../customers/index.html">Customers</a>
     <a href="../../product-bricks/index.html" class="active" aria-current="page">Bricks &amp; Streams</a>
     <a href="../../product-deployments/index.html">Products</a>
-    <a href="../../teams/index.html">Teams</a>
     <a href="../../competition/index.html">Competition</a>
     <a href="../../residuality/index.html">Stress Test</a>
     <a href="../../tutorial/index.html">Domain Tutorial</a>
@@ -739,7 +706,6 @@
     const modulesConfig = bricksMetadata.modulesConfig || {};
     const dataAssetsPayload = window.SHARED_DOMAIN_DATA.dataAssetsPayload;
     const brick = ${brick_data};
-    const relatedTeams = ${related_teams};
     const linkedProducts = ${linked_products};
     const supportedJobs = ${supported_jobs};
     mermaid.initialize({
@@ -1086,32 +1052,6 @@
             });
             sectionHtml += '</div>';
         });
-        sectionHtml += '</div>';
-        return sectionHtml;
-    }
-
-    function renderRelatedTeams() {
-        let sectionHtml = '<div class="home-section">';
-        sectionHtml += '<div class="home-section-title">Teams Owning Or Supporting This Brick</div>';
-        if (!relatedTeams.length) {
-            sectionHtml += '<div class="activity-muted">No owning or supporting teams are linked to this product brick.</div>';
-            sectionHtml += '</div>';
-            return sectionHtml;
-        }
-
-        relatedTeams.forEach(team => {
-            sectionHtml += '<a class="home-link-card" target="_blank" rel="noopener noreferrer" href="../../teams/landing_pages/' + escapeHomeHtml(team.teamId) + '.html">';
-            sectionHtml += '<div class="home-link-head">';
-            sectionHtml += '<img class="home-link-icon" src="../../teams/icons/logo.png" onerror="this.onerror=null;this.src=\'../../teams/icons/logo.png\'">';
-            sectionHtml += '<div>';
-            if (team.teamType) {
-                sectionHtml += '<div class="home-link-copy"><div class="page-type-badge" style="font-size: 70%;">' + escapeHomeHtml(team.teamType) + ' team</div></div>';
-            }
-            sectionHtml += '<div class="home-link-title">' + escapeHomeHtml('' + team.teamName) + '</div><div class="home-link-meta">' + escapeHomeHtml(team.roleLabel || '') + (team.groupName ? ' | ' + escapeHomeHtml(team.groupName) : '') + '</div></div>';
-            sectionHtml += '</div>';
-            sectionHtml += '</a>';
-        });
-
         sectionHtml += '</div>';
         return sectionHtml;
     }
@@ -2118,7 +2058,6 @@
     document.getElementById('Dependencies').innerHTML = html;
     html = '';
 
-    html += renderRelatedTeams();
     html += renderSupportedStreams();
     html += renderLinkedProducts();
     html += renderSupportedJobs();

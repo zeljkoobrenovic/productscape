@@ -168,54 +168,6 @@ def build_brick_context(brick, products, customers, deployment_payload=None, str
     return linked_products, supported_jobs
 
 
-def _iter_team_groups(groups):
-    """Yield (group, team) for every team in the recursive group tree."""
-    for group in groups or []:
-        for team in group.get('teams', []):
-            yield group, team
-        for descendant in _iter_team_groups(group.get('groups', [])):
-            yield descendant
-
-
-def build_brick_team_context(brick, teams_payload):
-    related_teams = []
-    brick_id = str(brick.get('id', '')).strip()
-
-    for group, team in _iter_team_groups(teams_payload.get('groups', [])):
-        links = team.get('brickDependencies', [])
-        if not any(str(link.get('brickId', '')).strip() == brick_id for link in links):
-            continue
-
-        related_teams.append({
-            'teamId': team.get('id', ''),
-            'teamName': team.get('name', team.get('id', '')),
-            'teamType': team.get('type', ''),
-            'groupId': group.get('id', ''),
-            'groupName': group.get('name', ''),
-            'role': 'related',
-            'roleLabel': 'Related team'
-        })
-
-    related_teams.sort(key=lambda item: item['teamName'].lower())
-    return related_teams
-
-
-def build_team_lookup(teams_payload):
-    """Map teamId -> {teamId, teamName, groupName, teamType} for ownership resolution."""
-    lookup = {}
-    for group, team in _iter_team_groups(teams_payload.get('groups', [])):
-        team_id = str(team.get('id', '')).strip()
-        if not team_id:
-            continue
-        lookup[team_id] = {
-            'teamId': team_id,
-            'teamName': team.get('name', team_id),
-            'teamType': team.get('type', ''),
-            'groupName': group.get('name', ''),
-        }
-    return lookup
-
-
 def flatten_data_assets_with_context(root_groups):
     """Flatten the recursive data-asset group tree, annotating each asset with its
     rootGroup / group names so landing pages can show the catalog path."""
@@ -330,14 +282,13 @@ def merge_named_records(items, id_field, list_fields=None):
     return ordered
 
 
-def create_landing_pages(bricks, products, customers, teams_payload, deployment_payload=None, streams=None):
+def create_landing_pages(bricks, products, customers, deployment_payload=None, streams=None):
     landing_page_template = open(root_templates + 'brick_landing_page.html').read();
     breadcrumbs = open(root_templates + 'brick_landing_page_breadcrumbs.json').read();
 
     for brick in bricks:
         name = brick['name']
         linked_products, supported_jobs = build_brick_context(brick, products, customers, deployment_payload, streams)
-        related_teams = build_brick_team_context(brick, teams_payload)
 
         htmlFile = docs_folder + 'landing_pages/' + str(brick['id']) + '.html'
         with open(htmlFile, 'w') as html_file:
@@ -354,12 +305,11 @@ def create_landing_pages(bricks, products, customers, teams_payload, deployment_
                             .replace('${breadcrumbs}', breadcrumbs)
                             .replace('${domain_name}', domain['name'])
                             .replace('${brick_name}', name.replace('&', '&amp;'))
-                            .replace('${related_teams}', json.dumps(related_teams))
                             .replace('${linked_products}', json.dumps(linked_products))
                             .replace('${supported_jobs}', json.dumps(supported_jobs)))
 
 
-def create_stream_landing_pages(streams, bricks, products, customers, teams_payload, deployment_payload=None):
+def create_stream_landing_pages(streams, bricks, products, customers, deployment_payload=None):
     landing_page_template = open(root_templates + 'stream_landing_page.html').read();
     brick_lookup = {brick['id']: brick for brick in bricks}
     breadcrumbs = open(root_templates + 'stream_landing_page_breadcrumbs.json').read();
@@ -368,7 +318,6 @@ def create_stream_landing_pages(streams, bricks, products, customers, teams_payl
         related_bricks = []
         linked_products = list(stream.get('supportedProducts', []))
         supported_jobs = list(stream.get('supportedCustomerJobs', []))
-        related_teams = list(stream.get('owningTeams', []))
 
         for dep in stream.get('brickDependencies', []):
             brick_id = dep.get('targetBrickId', dep.get('targetobjectId', ''))
@@ -381,12 +330,10 @@ def create_stream_landing_pages(streams, bricks, products, customers, teams_payl
             )
             linked_products.extend(brick_linked_products)
             supported_jobs.extend(brick_supported_jobs)
-            related_teams.extend(build_brick_team_context(brick, teams_payload))
 
         related_bricks = dedupe_by(related_bricks, lambda item: item.get('id', ''))
         linked_products = merge_named_records(linked_products, 'id')
         supported_jobs = merge_supported_jobs(supported_jobs)
-        related_teams = merge_named_records(related_teams, 'teamId')
         html_file = docs_folder + 'stream_pages/' + str(stream['id']) + '.html'
         with open(html_file, 'w') as html_file:
             html_file.write(landing_page_template
@@ -405,11 +352,10 @@ def create_stream_landing_pages(streams, bricks, products, customers, teams_payl
                             .replace('${breadcrumbs_script}', breadcrumbs_script)
                             .replace('${stream_name}', stream.get('name', stream.get('id', '')).replace('&', '&amp;'))
                             .replace('${linked_products}', json.dumps(linked_products))
-                            .replace('${related_teams}', json.dumps(related_teams))
                             .replace('${supported_jobs}', json.dumps(supported_jobs)))
 
 
-def create_data_asset_landing_pages(data_assets_payload, bricks, teams_payload):
+def create_data_asset_landing_pages(data_assets_payload, bricks):
     template_path = root_templates + 'data_asset_landing_page.html'
     breadcrumbs_path = root_templates + 'data_asset_landing_page_breadcrumbs.json'
     if not os.path.exists(template_path):
@@ -420,7 +366,6 @@ def create_data_asset_landing_pages(data_assets_payload, bricks, teams_payload):
 
     assets = flatten_data_assets_with_context(data_assets_payload.get('rootGroups', []))
     stores = data_assets_payload.get('stores', [])
-    team_lookup = build_team_lookup(teams_payload)
 
     # Lightweight catalog for the nav strip on each page (no need to inline everything).
     nav_assets = [{'id': asset.get('id', ''), 'name': asset.get('name', asset.get('id', ''))} for asset in assets]
@@ -431,12 +376,6 @@ def create_data_asset_landing_pages(data_assets_payload, bricks, teams_payload):
             continue
 
         producing_bricks, consuming_bricks = build_data_asset_brick_usage(asset_id, bricks)
-        owner_team = team_lookup.get(str(asset.get('ownerTeamId', '')).strip()) if asset.get('ownerTeamId') else None
-        steward_teams = [
-            team_lookup[steward_id]
-            for steward_id in asset.get('stewardTeamIds', [])
-            if str(steward_id).strip() in team_lookup
-        ]
 
         html_path = docs_folder + 'data_pages/' + asset_id + '.html'
         with open(html_path, 'w') as html_file:
@@ -448,8 +387,6 @@ def create_data_asset_landing_pages(data_assets_payload, bricks, teams_payload):
                             .replace('${asset_data}', json.dumps(asset))
                             .replace('${producing_bricks}', json.dumps(producing_bricks))
                             .replace('${consuming_bricks}', json.dumps(consuming_bricks))
-                            .replace('${owner_team}', json.dumps(owner_team))
-                            .replace('${steward_teams}', json.dumps(steward_teams))
                             .replace('${common_style}', common_style)
                             .replace('${breadcrumbs_style}', breadcrumbs_style)
                             .replace('${breadcrumbs_script}', breadcrumbs_script)
@@ -480,7 +417,6 @@ data_assets_payload = load_data_assets_payload(data_assets_config_path)
 products = load_json_if_exists(domain_source_path(domain_id, 'product-deployments/products.json'), {'portfolio': {'products': []}})
 deployment_payload = load_json_if_exists(domain_source_path(domain_id, 'product-deployments/deployment.json'), {'channels': []})
 customers = load_json_if_exists(domain_source_path(domain_id, 'customers/customers.json'), [])
-teams_payload = load_json_if_exists(domain_source_path(domain_id, 'teams/teams.json'), {'groups': []})
 
 if os.path.exists(docs_folder): shutil.rmtree(docs_folder)
 os.makedirs(os.path.join(docs_folder, 'icons'), exist_ok=True)
@@ -531,6 +467,6 @@ shared_domain_data = {
 with open(docs_folder + 'shared_data.js', 'w') as shared_file:
     shared_file.write('window.SHARED_DOMAIN_DATA = ' + json.dumps(shared_domain_data, ensure_ascii=False) + ';\n')
 
-create_landing_pages(flat_bricks, products, customers, teams_payload, deployment_payload, flat_streams)
-create_stream_landing_pages(flat_streams, flat_bricks, products, customers, teams_payload, deployment_payload)
-create_data_asset_landing_pages(data_assets_payload, flat_bricks, teams_payload)
+create_landing_pages(flat_bricks, products, customers, deployment_payload, flat_streams)
+create_stream_landing_pages(flat_streams, flat_bricks, products, customers, deployment_payload)
+create_data_asset_landing_pages(data_assets_payload, flat_bricks)

@@ -16,13 +16,12 @@ from domain_paths import discover_domain_dirs, resolve_domain_dir
 import project_paths
 from tutorial_model import validate_tutorial
 
-SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality', 'tutorial')
+SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'competition', 'residuality', 'tutorial')
 REQUIRED = (
     'start/config.json', 'customers/customers.json', 'customers/insights.json',
     'customers/links.json', 'product-deployments/products.json',
     'product-deployments/deployment.json', 'product-bricks/product-bricks.json',
-    'product-bricks/product-stream.json', 'teams/teams.json',
-    'data/data-assets.json', 'business/competition.json',
+    'product-bricks/product-stream.json', 'data/data-assets.json', 'business/competition.json',
 )
 
 

@@ -2,7 +2,7 @@
 
 Reusable skills and scripts for turning product-domain research into structured
 JSON and a static website: customers, jobs to be done, strategy, products, product
-bricks, streams, data assets, teams, competition, residuality stress tests, and
+bricks, streams, data assets, competition, residuality stress tests, and
 beginner tutorials.
 
 **Requires Python 3.10+ and Git.** Creating, validating, and building domains uses
@@ -74,14 +74,14 @@ For builds, a domain folder path also selects its data project automatically.
 | `build ID` | Generate all pages for one domain |
 | `build --domain-dir PATH --output-dir PATH` | Build a domain folder into an explicit site output root |
 | `build --all` | Generate all registered domains and a site catalog |
-| `build ID --sections customers teams` | Rebuild selected sections |
+| `build ID --sections customers competition` | Rebuild selected sections |
 | `skills --target .agents/skills` | Copy portable authoring/review skills into the project |
 | `skills --target .claude/skills` | Copy the same skills into another agent's skill directory |
 | `images ID --dry-run --lightweight` | Inspect optional image-generation scope |
 | `images ID --kind tutorial` | Generate tutorial concepts and configured overview illustrations |
 
 The CLI builds a domain in this order: start, customers, products, product bricks
-(including streams and data), teams, competition, residuality, tutorial. It also renders
+(including streams and data), competition, residuality, tutorial. It also renders
 the evidence explorer and optional project start packages. Output goes under
 `docs/<group>/<domain-id>/`, with a catalog at `docs/index.html`.
 

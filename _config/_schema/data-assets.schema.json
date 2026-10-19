@@ -43,15 +43,6 @@
               "name": {
                 "type": "string"
               },
-              "ownerTeamId": {
-                "type": "string"
-              },
-              "stewardTeamIds": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
               "derivedFromAssetIds": {
                 "type": "array",
                 "items": {

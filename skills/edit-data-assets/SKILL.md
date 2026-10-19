@@ -1,6 +1,6 @@
 ---
 name: edit-data-assets
-description: "Create or edit data assets for a product domain: logical data objects, their classification, personal-data level, legal tags, security criticality, governance (retention/residency/sharing), backing stores, interfaces, and team ownership in _config/product-domains/group/domain/data/data-assets.json. Use when adding a data asset, setting data governance/classification, defining stores, or wiring asset ownership and derivations. Keeps asset IDs consistent with product-brick dataDependencies."
+description: "Create or edit data assets for a product domain: logical data objects, their classification, personal-data level, legal tags, security criticality, governance (retention/residency/sharing), backing stores and interfaces in _config/product-domains/group/domain/data/data-assets.json. Use when adding a data asset, setting data governance/classification, defining stores, or wiring asset derivations. Keeps asset IDs consistent with product-brick dataDependencies."
 ---
 
 Read [workspace paths](../_references/workspace.md) when using this skill in a separate data repository.
@@ -18,8 +18,8 @@ the data-asset schema (optionally compare `ride-sharing-marketplace` in products
 - Capture **governance reality**: classification, personal-data level, legal tags,
   security criticality, retention, residency, sharing — where the domain actually has
   obligations. Don't invent regulatory tags.
-- Each asset has an **owning team** and is used by bricks via `dataDependencies`. An
-  asset no brick uses and no team owns is likely noise.
+- Each asset is used by bricks via `dataDependencies`. An asset no brick uses is
+  likely noise.
 
 ## Exact schema
 
@@ -59,8 +59,6 @@ the data-asset schema (optionally compare `ride-sharing-marketplace` in products
   "status": "active",
   "stores": [ { "storeId": "customer-profile-db", "role": "system-of-record" } ], // → stores[].id
   "interfaces": [ { "type": "api", "name": "customer-profile api", "description": "…" } ],
-  "ownerTeamId": "",                          // → teams.json team id (fill it in)
-  "stewardTeamIds": [],                       // → teams.json team ids
   "derivedFromAssetIds": [],                  // → other asset ids in this file
   "governance": { "retention": "…", "residency": "eu", "sharingPolicy": "…" }
 }
@@ -74,9 +72,6 @@ the data-asset schema (optionally compare `ride-sharing-marketplace` in products
   `bricks[].dataDependencies[].assetId`. When you add/rename an asset, update every
   referencing brick (and consider whether a brick should own/read it).
 - `stores[].storeId` on an asset → an entry in the top-level `stores` array.
-- `ownerTeamId` / `stewardTeamIds` → real team ids in `teams/teams.json`. The
-  reference domain often leaves `ownerTeamId` empty — filling it improves traceability
-  (and `audit-domain-balance` flags empties).
 - `derivedFromAssetIds` → other asset ids in this file.
 
 ## After editing
@@ -86,11 +81,11 @@ the data-asset schema (optionally compare `ride-sharing-marketplace` in products
 2. Regenerate: from the project root,
    `python3 productscapes.py build <domain-id>
    (the bricks generator builds data-asset pages).
-3. Report assets/stores added or changed and the brick/team references touched.
+3. Report assets/stores added or changed and the brick references touched.
 
 ## Avoid
 
 - Modeling physical tables as assets (use `stores`).
 - Inventing legal/governance tags the domain has no basis for.
-- Orphan assets (no brick uses them, no team owns them).
+- Orphan assets (no brick uses them).
 - Introducing new classification/kind vocabularies inconsistent with existing assets.

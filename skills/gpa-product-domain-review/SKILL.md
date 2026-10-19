@@ -33,7 +33,7 @@ Do not review product-brick or stream `*-evidence.json` files in this skill. Res
 ## Workflow
 
 1. Identify the modeled business, primary customers, and strategic thesis from the domain brief and customer model.
-2. Map customer groups to personas, jobs, journeys, KPIs, insights, competition pressures, product deployments, product streams, and teams.
+2. Map customer groups to personas, jobs, journeys, KPIs, insights, competition pressures, product deployments, and product streams.
 3. Check realism, specificity, and balance before checking syntax. A syntactically valid model can still be strategically weak.
 4. Separate findings into defects, gaps, weak assumptions, and improvement opportunities.
 5. Include exact source-file references and enough context for an editor to fix the issue without rediscovering it.
@@ -42,7 +42,7 @@ Do not review product-brick or stream `*-evidence.json` files in this skill. Res
 ## Review Storage
 
 - Create `_config/product-domains/<group>/<domain>/REVIEW.md` if it does not exist.
-- If the file exists, update only the `## Product Domain Review` section and preserve other sections, especially `## Teams Review` and `## Product Bricks Review`.
+- If the file exists, update only the `## Product Domain Review` section and preserve other sections, especially `## Product Bricks Review`.
 - If the file has no title, add `# <domain-id> Review` at the top.
 - Include an `Updated: YYYY-MM-DD` line inside the `## Product Domain Review` section.
 - Treat `REVIEW.md` as a review artifact in the domain root. Do not edit other domain source files during a review-only task unless the user explicitly asks for fixes.
@@ -76,7 +76,7 @@ Do not review product-brick or stream `*-evidence.json` files in this skill. Res
 - Verify KPIs are specific, measurable, and relevant to the customer or business outcome.
 - Challenge invented precision, impossible targets, vanity metrics, and trees with many one-child branches.
 - Check for a healthy mix of north-star, leading, lagging, diagnostic, guardrail, customer, operational, and business metrics.
-- Confirm KPIs connect to jobs, insights, strategy horizons, product streams, and teams where those references exist.
+- Confirm KPIs connect to jobs, insights, strategy horizons, and product streams where those references exist.
 
 ### Insights And Research Evidence
 
@@ -104,7 +104,7 @@ Do not review product-brick or stream `*-evidence.json` files in this skill. Res
 ### Cross-Model Coherence
 
 - Trace customer jobs to product streams and product bricks. Flag important jobs with no plausible implementation path.
-- Trace strategy and KPIs to product deployments, product streams, product bricks, data assets, and teams where present.
+- Trace strategy and KPIs to product deployments, product streams, product bricks, and data assets where present.
 - Check whether product streams explain customer outcomes rather than just grouping bricks.
 - Identify imbalance: too much architecture with thin customer value, or rich customer strategy with weak implementation grounding.
 

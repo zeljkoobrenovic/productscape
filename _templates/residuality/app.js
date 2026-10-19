@@ -14,8 +14,7 @@
         product: { label: 'Product', plural: 'Products', category: 'implementation', order: 5 },
         stream: { label: 'Product stream', plural: 'Product streams', category: 'implementation', order: 6 },
         brick: { label: 'Product brick', plural: 'Product bricks', category: 'implementation', order: 7 },
-        team: { label: 'Team', plural: 'Teams', category: 'organization', order: 8 },
-        competitor: { label: 'Competitor', plural: 'Competition', category: 'strategy', order: 9 }
+        competitor: { label: 'Competitor', plural: 'Competition', category: 'strategy', order: 8 }
     };
 
     const CATEGORY_META = {
@@ -28,11 +27,6 @@
             label: 'Implementation',
             description: 'Products, product streams, and product bricks that must work differently.',
             order: 2
-        },
-        organization: {
-            label: 'Organization',
-            description: 'Team ownership, responsibilities, and coordination.',
-            order: 3
         }
     };
 
@@ -147,7 +141,7 @@
             { label: 'Situations tested', value: stressors.length, note: 'Outside changes explored' },
             { label: 'Changes identified', value: candidateCount + integratedCount, note: candidateCount + ' proposed · ' + integratedCount + ' built in' },
             { label: 'Already handled', value: loopingCount, note: 'Covered by changes made for earlier tests', className: 'looping' },
-            { label: 'Affected items', value: impactedCount, note: 'Across strategy, implementation, and organization' },
+            { label: 'Affected items', value: impactedCount, note: 'Across strategy and implementation' },
             {
                 label: 'Adaptability score',
                 value: formatIndex(ri),
@@ -308,7 +302,7 @@
             renderReuseRow(stressor) +
             '<div class="stressor-impacts">' +
             '<div class="impact-section-label">Where that change appears in the productscape</div>' +
-            (impacts.length ? renderStressorImpactGroups(impacts) : '<div class="empty-state"><strong>No affected items mapped</strong>Describe the concrete change, then link it to strategy, products, streams, bricks, teams, or competition.</div>') +
+            (impacts.length ? renderStressorImpactGroups(impacts) : '<div class="empty-state"><strong>No affected items mapped</strong>Describe the concrete change, then link it to strategy, products, streams, bricks, or competition.</div>') +
             '</div>' +
             '</article>';
     }
@@ -396,7 +390,7 @@
         if (!entries.length) {
             container.innerHTML = '';
             empty.hidden = false;
-            empty.innerHTML = '<strong>No affected items to show</strong>Each test can explain what changes in visions, jobs, journeys, KPIs, products, streams, bricks, teams, and competition.';
+            empty.innerHTML = '<strong>No affected items to show</strong>Each test can explain what changes in visions, jobs, journeys, KPIs, products, streams, bricks, and competition.';
             return;
         }
         empty.hidden = true;

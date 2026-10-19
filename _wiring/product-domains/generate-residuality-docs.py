@@ -25,7 +25,6 @@ TARGET_TYPES = {
     'product',
     'stream',
     'brick',
-    'team',
     'competitor',
 }
 RESIDUE_STATUSES = {'candidate', 'integrated', 'already-survived'}
@@ -115,7 +114,7 @@ def collect_items_in_named_arrays(node, key, target_type, href_prefix, items, se
             collect_items_in_named_arrays(value, key, target_type, href_prefix, items, seen)
 
 
-def build_catalog(customers, products_payload, bricks_payload, streams_payload, teams_payload, competition_payload):
+def build_catalog(customers, products_payload, bricks_payload, streams_payload, competition_payload):
     items = []
 
     for group in customers if isinstance(customers, list) else []:
@@ -186,14 +185,6 @@ def build_catalog(customers, products_payload, bricks_payload, streams_payload, 
         'streams',
         'stream',
         '../product-bricks/stream_pages/',
-        items,
-        set(),
-    )
-    collect_items_in_named_arrays(
-        teams_payload,
-        'teams',
-        'team',
-        '../teams/landing_pages/',
         items,
         set(),
     )
@@ -395,10 +386,9 @@ def create_docs(domain):
     products = load_domain_json(domain_id, 'product-deployments/products.json', {})
     bricks = load_domain_json(domain_id, 'product-bricks/product-bricks.json', {})
     streams = load_domain_json(domain_id, 'product-bricks/product-stream.json', {})
-    teams = load_domain_json(domain_id, 'teams/teams.json', {})
     competition = load_domain_json(domain_id, 'business/competition.json', {})
 
-    catalog = build_catalog(customers, products, bricks, streams, teams, competition)
+    catalog = build_catalog(customers, products, bricks, streams, competition)
     validate_model(model, catalog)
 
     docs_folder = domain_docs_path(domain_id, 'residuality') + '/'

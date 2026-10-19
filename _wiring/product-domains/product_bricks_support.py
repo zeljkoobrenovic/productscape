@@ -1022,7 +1022,6 @@ def _asset_text(asset):
         asset.get('kind', ''),
         asset.get('description', ''),
         asset.get('businessMeaning', ''),
-        asset.get('ownerTeamId', ''),
         asset.get('systemOfRecordBrickId', ''),
         ' '.join(asset.get('tags', []) or [])
     ]
@@ -1322,8 +1321,7 @@ def flatten_product_streams(payload):
                 'outcomes': stream.get('outcomes', []),
                 'brickDependencies': stream.get('brickDependencies', stream.get('productBrickDependencies', [])),
                 'externalSystemsThisStreamDependsOn': stream.get('externalSystemsThisStreamDependsOn', []),
-                'externalSystemsDependingOnThisStream': stream.get('externalSystemsDependingOnThisStream', []),
-                'owningTeams': stream.get('owningTeams', [])
+                'externalSystemsDependingOnThisStream': stream.get('externalSystemsDependingOnThisStream', [])
             })
 
     for group in product_stream_root_groups(payload):
@@ -1358,8 +1356,7 @@ def sanitize_product_stream_root_groups(groups, ancestors=None):
                     'outcomes': stream.get('outcomes', []),
                     'brickDependencies': stream.get('brickDependencies', stream.get('productBrickDependencies', [])),
                     'externalSystemsThisStreamDependsOn': stream.get('externalSystemsThisStreamDependsOn', []),
-                    'externalSystemsDependingOnThisStream': stream.get('externalSystemsDependingOnThisStream', []),
-                    'owningTeams': stream.get('owningTeams', [])
+                    'externalSystemsDependingOnThisStream': stream.get('externalSystemsDependingOnThisStream', [])
                 }
                 for stream in group.get('streams', [])
             ]

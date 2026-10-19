@@ -29,7 +29,7 @@ python3 productscapes.py build my-domain
 
 `new` creates an empty scaffold. Author researched content before treating it as
 a complete model. Keep evidence, assumptions, and inferences distinct. Model
-customer value and KPIs before delivery, bricks, data ownership, and teams.
+customer value and KPIs before delivery, bricks, and data.
 Validate references after edits. Regenerate only the selected domain when needed.
 Templates use HTML, CSS, and vanilla JavaScript; preserve the no-framework approach.
 Generated pages must work as static assets.

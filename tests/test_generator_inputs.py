@@ -12,7 +12,7 @@ from urllib.parse import unquote, urlsplit
 from test_cli import CLI, TOOLKIT, Links, snapshot
 
 
-SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'teams', 'competition', 'residuality', 'tutorial')
+SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'competition', 'residuality', 'tutorial')
 GENERATORS = TOOLKIT / '_wiring/product-domains'
 
 
@@ -50,10 +50,10 @@ class GeneratorInputs(unittest.TestCase):
         apps = json.loads((TOOLKIT / '_config/product-domains/start/apps.json').read_text())
         apps['apps'][0]['apps'][0]['apps'][0]['name'] = 'Explicit navigation label'
         navigation.write_text(json.dumps(apps))
-        team_file = shared / 'team-model.json'
-        teams = json.loads(team_file.read_text())
-        teams['teamTypes'][0]['name'] = 'Explicit shared team type'
-        team_file.write_text(json.dumps(teams))
+        brick_file = shared / 'product-brick-model.json'
+        bricks = json.loads(brick_file.read_text())
+        bricks['brickTypes'][0]['name'] = 'Explicit shared brick type'
+        brick_file.write_text(json.dumps(bricks))
         return {
             '--output-dir': self.output, '--templates-dir': templates,
             '--navigation-file': navigation, '--shared-config-dir': shared,
@@ -78,7 +78,7 @@ class GeneratorInputs(unittest.TestCase):
                 page = self.output / 'sample/example' / folder / 'index.html'
                 self.assertIn(f'custom {folder} template', page.read_text())
         self.assertIn('Explicit navigation label', (self.output / 'sample/example/start/index.html').read_text())
-        self.assertIn('Explicit shared team type', (self.output / 'sample/example/teams/index.html').read_text())
+        self.assertIn('Explicit shared brick type', (self.output / 'sample/example/product-bricks/index.html').read_text())
         self.assertEqual(snapshot(self.project), before)
         self.assertFalse((self.root / 'wrong output').exists())
 

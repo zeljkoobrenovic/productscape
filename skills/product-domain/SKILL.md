@@ -1,6 +1,6 @@
 ---
 name: product-domain
-description: "Router and index for creating and maintaining Productscape domain data (customers, strategy, jobs-to-be-done, product vision, insights, competition, teams, product bricks, streams, data assets, product deployments). Use when the user wants to work on a product domain but the specific artifact isn't named, when they ask what's possible, or to understand the model, ID conventions, and the validate/regenerate loop before editing _config/product-domains/**."
+description: "Router and index for creating and maintaining Productscape domain data (customers, strategy, jobs-to-be-done, product vision, insights, competition, product bricks, streams, data assets, product deployments). Use when the user wants to work on a product domain but the specific artifact isn't named, when they ask what's possible, or to understand the model, ID conventions, and the validate/regenerate loop before editing _config/product-domains/**."
 ---
 
 Read [workspace paths](../_references/workspace.md) when using this skill in a separate data repository.
@@ -30,8 +30,7 @@ site under `docs/`. No framework, no build system. Edit JSON in `_config/**`; tr
 | Add/edit products, interfaces, deployment channels & environments | `edit-products` |
 | Add/edit product bricks, layers, modules, brick/data dependencies | `edit-product-bricks` |
 | Add/edit product streams and flows | `edit-streams` |
-| Add/edit data assets, stores, classification, ownership | `edit-data-assets` |
-| Add/edit teams, org design, topology, ownership | `edit-teams` |
+| Add/edit data assets, stores, classification, governance | `edit-data-assets` |
 | Add/edit the competitive landscape | `edit-competition` |
 | Check integrity & realism / find gaps & imbalance | `audit-domain-balance` |
 | Validate JSON + references and regenerate docs | `validate-domain` |
@@ -52,6 +51,6 @@ site under `docs/`. No framework, no build system. Edit JSON in `_config/**`; tr
 ## Scope note
 
 The live artifact set is: start, customers (+insights), products/deployment,
-product-bricks (+streams, +evidence), data-assets, teams, and competition.
+product-bricks (+streams, +evidence), data-assets, and competition.
 An optional `tutorial/tutorial.json` provides a general introduction, authored by
 `create-domain-tutorial`. It does not require evidence or model cross-references.

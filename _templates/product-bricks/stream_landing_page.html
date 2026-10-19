@@ -513,7 +513,6 @@
     <a href="../../customers/index.html">Customers</a>
     <a href="../../product-bricks/index.html" class="active" aria-current="page">Bricks &amp; Streams</a>
     <a href="../../product-deployments/index.html">Products</a>
-    <a href="../../teams/index.html">Teams</a>
     <a href="../../competition/index.html">Competition</a>
     <a href="../../residuality/index.html">Stress Test</a>
     <a href="../../tutorial/index.html">Domain Tutorial</a>
@@ -529,7 +528,6 @@
     const currentStream = ${stream_data};
     const related_bricks = ${related_bricks};
     const linked_products = ${linked_products};
-    const related_teams = ${related_teams};
     const supported_jobs = ${supported_jobs};
 
     mermaid.initialize({
@@ -768,22 +766,6 @@
                 html += '<div class="card-title">' + escapeHtml(product.name || product.id) + '</div>';
                 html += '</div>';
                 html += '<div class="card-copy">' + escapeHtml(product.whyUsed || '') + '</div>';
-                html += '</a>';
-            });
-            html += '</div>';
-        }
-        html += '</div>';
-
-        html += '<div class="group"><div class="section-title">Related Teams</div>';
-        if (!related_teams.length) {
-            html += '<div class="muted">No teams were inferred from the supporting bricks.</div>';
-        } else {
-            html += '<div class="card-grid">';
-            related_teams.forEach(team => {
-                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../../teams/landing_pages/' + escapeHtml(team.teamId) + '.html">';
-                html += '<div class="card-meta">' + escapeHtml(team.roleLabel || team.teamType || 'Team') + '</div>';
-                html += '<div class="card-title">' + escapeHtml(team.teamName || team.teamId) + '</div>';
-                html += '<div class="card-copy">' + escapeHtml(team.groupName || '') + '</div>';
                 html += '</a>';
             });
             html += '</div>';

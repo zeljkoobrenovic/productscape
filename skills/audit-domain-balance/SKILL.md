@@ -1,6 +1,6 @@
 ---
 name: audit-domain-balance
-description: "Review a product domain for realism, completeness, and balance — not just JSON validity. Use to assess whether a domain is high-quality and well-balanced: per-artifact density vs the reference domain, cross-segment coverage, brick-layer balance, team/brick ownership gaps, customer→brick→team traceability, research/source quality, and sparse vs over-built areas. Produces a prioritized gap report. Run before declaring a domain 'done' or when asked if a domain is mature/realistic/complete."
+description: "Review a product domain for realism, completeness, and balance — not just JSON validity. Use to assess whether a domain is high-quality and well-balanced: per-artifact density vs the reference domain, cross-segment coverage, brick-layer balance, customer→brick→product traceability, research/source quality, and sparse vs over-built areas. Produces a prioritized gap report. Run before declaring a domain 'done' or when asked if a domain is mature/realistic/complete."
 ---
 
 Read [workspace paths](../_references/workspace.md) when using this skill in a separate data repository.
@@ -28,7 +28,7 @@ model and the reference-domain density targets.
 ### Density vs reference
 Count entries per artifact and compare to the reference domain (mature targets):
 customer groups (~4) and personas, bricks (20+ across 3 group levels for a mature
-domain), data assets (15+), teams (8+), competitors (8+), insights (8+). Flag
+domain), data assets (15+), competitors (8+), insights (8+). Flag
 artifacts that are skeletal (1–2 entries where the reference has many) or absent.
 
 ### Cross-segment coverage
@@ -41,18 +41,16 @@ artifacts that are skeletal (1–2 entries where the reference has many) or abse
   narrative in journey clothing.**
 - Multi-sided domains have distinct segments (buyer/user/operator/partner), not one
   generic "user". Flag collapsed segmentation.
-- Each segment maps to at least one product and one owning team.
+- Each segment maps to at least one product.
 
 ### Traceability chains (the spine of quality)
 Walk the spine and flag breaks:
-`customer → JTBD → stream/brick → product (neededBricks) → deployment → team (ownership)`
+`customer → JTBD → stream/brick → product (neededBricks) → deployment`
 and `insight → linkedCustomers (customerId, jobIds) → kpis`.
 - Customers with no products serving them.
-- Bricks in `product-bricks.json` referenced by no product, stream, or team
+- Bricks in `product-bricks.json` referenced by no product or stream
   (orphan bricks) — and products needing bricks that don't exist.
-- Bricks with no owning team; teams owning no bricks.
-- Data assets with empty `ownerTeamId`, or assets referenced by no brick's
-  `dataDependencies`.
+- Data assets referenced by no brick's `dataDependencies`.
 - JTBD steps whose `streamsNeeded` point to non-existent streams/bricks.
 
 ### Brick-layer balance
@@ -76,7 +74,7 @@ and `insight → linkedCustomers (customerId, jobIds) → kpis`.
   unless **both** exist.
 - Measurable leaves with units; no vanity terminals or padding leaves.
 - KPI **ids** unique within a customer; KPI **names** reused consistently across
-  customers, teams, and insights, and every `northStar`/`supporting`/insight `kpis`
+  customers and insights, and every `northStar`/`supporting`/insight `kpis`
   name resolves to a node in that customer's pyramids.
 - Per-customer and domain strategy horizons (1/3/5-year) are present and distinct,
   not copies.
@@ -114,7 +112,7 @@ PY
 
 ### Over-build & redundancy
 Imbalance cuts both ways: flag duplicated personas, near-identical bricks that should
-merge, teams with no distinct mission, or detail in one artifact far exceeding the
+merge, or detail in one artifact far exceeding the
 rest (e.g., 30 bricks but 2 customers).
 
 ## Report format
@@ -132,5 +130,5 @@ Density vs reference: <table of counts>
 Overall: <one-line maturity judgment: skeletal / partial / mature>
 ```
 
-Be specific and quantitative — name the customer, brick, or team. Avoid generic
+Be specific and quantitative — name the customer, brick, or product. Avoid generic
 advice like "add more detail".

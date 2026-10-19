@@ -252,7 +252,6 @@
     <a href="../../customers/index.html">Customers</a>
     <a href="../../product-bricks/index.html" class="active" aria-current="page">Bricks &amp; Streams</a>
     <a href="../../product-deployments/index.html">Products</a>
-    <a href="../../teams/index.html">Teams</a>
     <a href="../../competition/index.html">Competition</a>
     <a href="../../residuality/index.html">Stress Test</a>
     <a href="../../tutorial/index.html">Domain Tutorial</a>
@@ -269,8 +268,6 @@
     const allStores = window.SHARED_DOMAIN_DATA.allStores;
     const producingBricks = ${producing_bricks};
     const consumingBricks = ${consuming_bricks};
-    const ownerTeam = ${owner_team};
-    const stewardTeams = ${steward_teams};
 
     function escapeHtml(value) {
         return String(value ?? '')
@@ -459,30 +456,6 @@
                     html += '<div class="card-copy">' + escapeHtml(iface.description) + '</div>';
                 }
                 html += '</div>';
-            });
-            html += '</div>';
-        }
-        html += '</div>';
-
-        // Ownership
-        html += '<div class="group"><div class="section-title">Ownership</div>';
-        if (!ownerTeam && !stewardTeams.length) {
-            html += '<div class="muted">No owning or steward teams listed for this asset.</div>';
-        } else {
-            html += '<div class="card-grid">';
-            if (ownerTeam) {
-                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../../teams/landing_pages/' + escapeHtml(ownerTeam.teamId) + '.html">';
-                html += '<div class="card-meta">Owner Team</div>';
-                html += '<div class="card-title">' + escapeHtml(ownerTeam.teamName || ownerTeam.teamId) + '</div>';
-                html += '<div class="card-copy">' + escapeHtml(ownerTeam.groupName || '') + '</div>';
-                html += '</a>';
-            }
-            stewardTeams.forEach(team => {
-                html += '<a class="card" target="_blank" rel="noopener noreferrer" href="../../teams/landing_pages/' + escapeHtml(team.teamId) + '.html">';
-                html += '<div class="card-meta">Steward Team</div>';
-                html += '<div class="card-title">' + escapeHtml(team.teamName || team.teamId) + '</div>';
-                html += '<div class="card-copy">' + escapeHtml(team.groupName || '') + '</div>';
-                html += '</a>';
             });
             html += '</div>';
         }

@@ -23,7 +23,6 @@ SCHEMA_BY_ARTIFACT = {
     'product-deployments/deployment.json': 'deployment.schema.json',
     'product-bricks/product-bricks.json': 'product-bricks.schema.json',
     'product-bricks/product-stream.json': 'product-stream.schema.json',
-    'teams/teams.json': 'teams.schema.json',
     'data/data-assets.json': 'data-assets.schema.json',
     'business/competition.json': 'competition.schema.json',
     'residuality/residuality.json': 'residuality.schema.json',
@@ -337,74 +336,6 @@ def brick_ref_id(ref):
     return str(ref.get('brickId') or ref.get('objectId') or '').strip()
 
 
-def iter_team_groups(groups):
-    """Yield every (group, team) pair across the recursive group tree."""
-    for group in groups or []:
-        for team in group.get('teams', []) or []:
-            yield group, team
-        for pair in iter_team_groups(group.get('groups', [])):
-            yield pair
-
-
-def validate_team_model(domain_dir, bricks, errors):
-    teams_path = domain_dir / 'teams' / 'teams.json'
-    if not teams_path.exists():
-        return
-
-    payload = load_json(teams_path, errors)
-    if payload is None:
-        return
-
-    org_design = dict(payload.get('orgDesign', {})) if isinstance(payload, dict) else {}
-    # shared enum fallback: domains may omit teamTypes/teamDependencyTypes and
-    # inherit them from _config/_shared/team-model.json
-    shared_team_model_path = REPO_ROOT / '_config' / '_shared' / 'team-model.json'
-    if shared_team_model_path.exists():
-        shared_team_model = json.loads(shared_team_model_path.read_text())
-        for key in ('teamTypes', 'teamDependencyTypes'):
-            org_design.setdefault(key, shared_team_model.get(key, []))
-    groups = payload.get('groups', []) if isinstance(payload, dict) else []
-    team_pairs = list(iter_team_groups(groups))
-    teams = [team for _, team in team_pairs]
-
-    team_ids = [team.get('id') for team in teams if team.get('id')]
-    duplicate_team_ids = sorted({team_id for team_id in team_ids if team_ids.count(team_id) > 1})
-    for team_id in duplicate_team_ids:
-        errors.append(f'{domain_dir.name}: duplicate team id: {team_id}')
-
-    team_id_set = set(team_ids)
-    brick_ids = set(bricks)
-    valid_types = {str(item.get('id', '')) for item in org_design.get('teamTypes', [])}
-    valid_dependency_types = {str(item.get('id', '')) for item in org_design.get('teamDependencyTypes', [])}
-
-    for team in teams:
-        team_id = team.get('id', '<missing-id>')
-
-        team_type = team.get('type')
-        if valid_types and team_type not in valid_types:
-            errors.append(f'{domain_dir.name}: team {team_id} has type {team_type} not in orgDesign.teamTypes')
-
-        headcount = (team.get('teamHeadcount') or {}).get('headcount')
-        if headcount is not None and (not isinstance(headcount, int) or headcount < 0):
-            errors.append(f'{domain_dir.name}: team {team_id} teamHeadcount.headcount must be a non-negative integer')
-
-        for dependency in team.get('otherTeamDependencies', []) or []:
-            dependency_id = dependency.get('teamId')
-            if dependency_id and dependency_id not in team_id_set:
-                errors.append(f'{domain_dir.name}: team {team_id} references missing team {dependency_id}')
-            dependency_type = dependency.get('type')
-            if valid_dependency_types and dependency_type and dependency_type not in valid_dependency_types:
-                errors.append(f'{domain_dir.name}: team {team_id} uses dependency type {dependency_type} not in orgDesign.teamDependencyTypes')
-
-        for ref in team.get('brickDependencies', []) or []:
-            ref_id = str(ref.get('brickId', '')).strip()
-            if not ref_id:
-                errors.append(f'{domain_dir.name}: team {team_id} has brickDependencies entry without brickId')
-                continue
-            if brick_ids and ref_id not in brick_ids:
-                errors.append(f'{domain_dir.name}: team {team_id} links missing brick {ref_id}')
-
-
 def _walk_collect(node, list_key, out):
     """Collect entries of every `list_key` array across a nested group tree."""
     if isinstance(node, dict):
@@ -697,7 +628,6 @@ def validate_domain(domain_dir, strict_ids=False):
             for brick_id in duplicate_bricks:
                 errors.append(f'{domain_dir.name}: duplicate product brick id: {brick_id}')
 
-    validate_team_model(domain_dir, bricks, errors)
     validate_cross_references(domain_dir, bricks, errors)
     validate_relations(domain_dir, errors)
     validate_journey_stages(domain_dir, warnings)

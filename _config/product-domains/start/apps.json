@@ -42,18 +42,6 @@
           ]
         },
         {
-          "group": "org design",
-          "apps": [
-            {
-              "name": "Teams",
-              "link": "../teams/index.html",
-              "icon": "../teams/icons/logo.png",
-              "description": "teams, topology, and staffing",
-              "source": ""
-            }
-          ]
-        },
-        {
           "group": "product architecture",
           "apps": [
             {

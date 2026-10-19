@@ -20,7 +20,7 @@ have pre-existing model issues; distinguish those from regressions introduced by
 the task. Do not suppress failures or describe rendering success as model validity.
 
 The validator checks required artifacts, JSON syntax, artifact schema contracts,
-brick/module IDs, supported types, team references, relationships, and the
+brick/module IDs, supported types, relationships, and the
 cross-file links implemented in `skills/scripts/validate-domain-model.py`. The
 strict-ID flag adds lowercase and ID-format checks. The KPI checker examines
 pyramid shape and referenced metric names. These structural checks do not establish
@@ -35,7 +35,7 @@ python3 productscapes.py build my-domain
 
 For a presentation-only change, `build my-domain --sections customers` can scope
 rendering to one section. Available sections are start, customers, products,
-product-bricks, teams, competition, residuality, and tutorial. The brick section includes
+product-bricks, competition, residuality, and tutorial. The brick section includes
 streams and data assets. Generators replace their output directories; inspect
 existing docs changes first and keep source edits in JSON or templates.
 
