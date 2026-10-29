@@ -17,6 +17,8 @@ import project_paths
 from tutorial_model import validate_tutorial
 
 SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'competition', 'residuality', 'tutorial')
+# Groups whose domains build normally but stay out of the shared site index.
+UNLISTED_GROUPS = frozenset({'hidden'})
 REQUIRED = (
     'start/config.json', 'customers/customers.json', 'customers/insights.json',
     'customers/links.json', 'product-deployments/products.json',
@@ -195,7 +197,7 @@ def build_index(project):
     groups = {}
     for domain in discover_domain_dirs(project / '_config/product-domains'):
         page = Path(domain.parent.name) / domain.name / 'start/index.html'
-        if not (docs / page).is_file():
+        if domain.parent.name in UNLISTED_GROUPS or not (docs / page).is_file():
             continue
         config = read_json(domain / 'start/config.json')
         groups.setdefault(domain.parent.name, []).append(

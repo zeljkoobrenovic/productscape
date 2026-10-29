@@ -71,6 +71,16 @@ class ToolkitCLI(unittest.TestCase):
                     continue
                 self.assertTrue((page.parent / unquote(parsed.path)).exists(), f'{page}: {url}')
 
+    def test_hidden_group_builds_but_stays_out_of_the_site_index(self):
+        self.create()
+        self.create('secret-domain', group='hidden')
+        self.command('build', '--all', launcher=True)
+        self.assertTrue((self.project / 'docs/hidden/secret-domain/start/index.html').is_file())
+        index = (self.project / 'docs/index.html').read_text()
+        self.assertIn('sample/test-domain/start/index.html', index)
+        self.assertNotIn('hidden/', index)
+        self.assertNotIn('<h2>Hidden</h2>', index)
+
     def test_domain_ids_are_unique_across_groups_and_paths_cannot_escape(self):
         self.create()
         before = snapshot(self.project)
