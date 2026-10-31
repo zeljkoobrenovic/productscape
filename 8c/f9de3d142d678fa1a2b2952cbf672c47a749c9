@@ -1,0 +1,19 @@
+_templates/product-bricks/index.html
+  s_29ab8b502045c6::t_13bf78e89d5af0 1442-1443,1447
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8cf9de3d142d678fa1a2b2952cbf672c47a749c9",
+  "prompts": {},
+  "sessions": {
+    "s_29ab8b502045c6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5e08b29e-2900-4f0c-8a34-0eefd4d6852a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
