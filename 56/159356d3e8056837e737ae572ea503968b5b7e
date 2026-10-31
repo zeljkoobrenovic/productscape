@@ -1,0 +1,115 @@
+_templates/residuality/index.html
+  s_29ab8b502045c6::t_10bfdae99ce001 19
+_templates/product-bricks/index.html
+  s_29ab8b502045c6::t_8a3c63a05851c4 3200
+  s_29ab8b502045c6::t_10bfdae99ce001 3178
+  s_29ab8b502045c6::t_9d8a7ad0f36449 1055,3250-3257,3259-3262
+  s_29ab8b502045c6::t_d1390d2f93e901 3258
+  s_29ab8b502045c6::t_61e8f0f51bdbc1 249-250
+  s_29ab8b502045c6::t_68972f29427454 74-75,92
+_wiring/generate-start-apps-docs.py
+  s_29ab8b502045c6::t_4bd7a209dda8b2 149-150
+_templates/product-deployments/deployment_landing_page.html
+  s_29ab8b502045c6::t_10bfdae99ce001 337
+  s_29ab8b502045c6::t_e87cc6b9a8c514 73
+_templates/_imports/breadcrumbs/style.html
+  s_29ab8b502045c6::t_324db6d4f977a4 43-44
+  s_29ab8b502045c6::t_22485b24e4fc90 21-23,40-42
+  s_29ab8b502045c6::t_830d561aea10f8 24-36
+  s_29ab8b502045c6::t_8cfea40bb5651e 19-20,37-39,45-47
+_templates/start/package.html
+  s_29ab8b502045c6::t_b840891a6e8155 1-161,163-377
+  s_29ab8b502045c6::t_10bfdae99ce001 162
+_templates/product-bricks/data_asset_landing_page.html
+  s_29ab8b502045c6::t_10bfdae99ce001 253
+  s_29ab8b502045c6::t_4ae0dfbae99e30 71
+_templates/product-bricks/stream_landing_page.html
+  s_29ab8b502045c6::t_10bfdae99ce001 514
+  s_29ab8b502045c6::t_a1b8ba9c85102d 124
+_config/product-domains/start/apps.json
+  s_29ab8b502045c6::t_2bdafffec3507a 12,67-85
+_templates/customers/index.html
+  s_29ab8b502045c6::t_8a3c63a05851c4 478
+  s_29ab8b502045c6::t_d1390d2f93e901 469,480-483
+  s_29ab8b502045c6::t_10bfdae99ce001 457
+  s_29ab8b502045c6::t_6cb170b6f5d463 65-66,83,170,176-177,183-184,189
+tests/test_generator_inputs.py
+  s_29ab8b502045c6::t_4bd7a209dda8b2 50-51,103
+_templates/competition/index.html
+  s_29ab8b502045c6::t_d1390d2f93e901 344
+  s_29ab8b502045c6::t_13a6bb43fc31b3 305,350
+  s_29ab8b502045c6::t_10bfdae99ce001 331
+  s_29ab8b502045c6::t_a017863cdb8c38 76-77,99,298
+_templates/competition/landing_page.html
+  s_29ab8b502045c6::t_10bfdae99ce001 411
+  s_29ab8b502045c6::t_7864c70217278f 99,375
+_templates/product-deployments/index.html
+  s_29ab8b502045c6::t_10bfdae99ce001 1003
+  s_29ab8b502045c6::t_d1390d2f93e901 1016,1026-1029
+  s_29ab8b502045c6::t_8a3c63a05851c4 1025
+  s_29ab8b502045c6::t_52e49b2ec4f058 63-64,81
+_templates/tutorial/navigation.html
+  s_29ab8b502045c6::t_10bfdae99ce001 4
+_templates/product-deployments/landing_page.html
+  s_29ab8b502045c6::t_22485b24e4fc90 833
+  s_29ab8b502045c6::t_10bfdae99ce001 724
+_templates/product-bricks/brick_landing_page.html
+  s_29ab8b502045c6::t_10bfdae99ce001 691
+  s_29ab8b502045c6::t_22485b24e4fc90 835
+_templates/product-bricks/index_breadcrumbs.json
+  s_29ab8b502045c6::t_10bfdae99ce001 8
+_templates/_imports/tabs/script.html
+  s_29ab8b502045c6::t_d1390d2f93e901 87-92
+_templates/customers/landing_page.html
+  s_29ab8b502045c6::t_22485b24e4fc90 466
+  s_29ab8b502045c6::t_10bfdae99ce001 405
+_wiring/product-domains/generate-start-docs.py
+  s_29ab8b502045c6::t_1ba47e0c112192 6-21,40-57,67-68,70-79,87-124,128-153,161-187,189-191,207-213,230-231
+  s_29ab8b502045c6::t_10bfdae99ce001 85
+  s_29ab8b502045c6::t_18986bf89848f2 192-206
+  s_29ab8b502045c6::t_e0ced3823ae86f 58-64,69,83-84,188
+  s_29ab8b502045c6::t_a875dca41ce88a 65-66,80-82,86,125-127,154-160
+skills/edit-product-bricks/SKILL.md
+  s_29ab8b502045c6::t_10bfdae99ce001 48
+_templates/start/index.html
+  s_29ab8b502045c6::t_d3e0f0eaecb5a1 681
+  s_29ab8b502045c6::t_715cfb27cb20b0 9,12-19,24-27,29,31,34-36,39-41,44-46,49-92,94-96,99-108,111-117,119,122-126,129-169,172,175-181,183-229,256-274,276-326,333-377,379-410,413-443,445-447,450-459,461-481,485-527,530-532,534,536-552,555-560,582-633,637-680,682-723,726-728,731-737,740-745,748-750,752-756,758,782-783,788,790-794,797-809,811-821,832,834-837,852-853,855-856,861-872,878,880-887,892-893,895-897,899-915,917-992,995,997-1000,1002-1036,1041-1052,1056-1059,1061-1097,1107-1113,1115-1125,1127-1138,1153-1161,1163-1173,1175-1177,1179-1200,1202-1209
+  s_29ab8b502045c6::t_87f341f6c50cf1 10
+  s_29ab8b502045c6::t_e4a16343da22f4 230-255,781,822-825,827-831,833,838-845,849,1144-1145
+  s_29ab8b502045c6::t_58e3aa36e5ca23 561-581,1139-1142,1151-1152,1162
+  s_29ab8b502045c6::t_a6a11f7467ab17 891,996,1001
+  s_29ab8b502045c6::t_e0ced3823ae86f 1146-1150
+  s_29ab8b502045c6::t_18df913fe82785 20-23
+  s_29ab8b502045c6::t_94b9aa740247ee 330
+  s_29ab8b502045c6::t_a2282e88b519a4 760-777,779-780,784-787,810,847-848,850-851,854,857,916,1037-1040
+  s_29ab8b502045c6::t_8cfea40bb5651e 1098-1106
+  s_29ab8b502045c6::t_37eccfebfe403c 858,873-877,993-994,1053-1055,1060,1114,1143
+  s_29ab8b502045c6::t_c946623fd4c61c 795-796,890
+  s_29ab8b502045c6::t_e303f3c7954129 1178
+  s_29ab8b502045c6::t_8a3c63a05851c4 327-329,331-332
+  s_29ab8b502045c6::t_7317ec8b3623ca 444
+  s_29ab8b502045c6::t_90cdac75e1168d 448-449
+  s_29ab8b502045c6::t_8ef817c63b4cae 460
+  s_29ab8b502045c6::t_e882e41574c8ac 859
+  s_29ab8b502045c6::t_644ddbea53bd5c 888
+  s_29ab8b502045c6::t_70bfbdb1163ee7 1210
+tests/test_tutorial.py
+  s_29ab8b502045c6::t_61e8f0f51bdbc1 92
+  s_29ab8b502045c6::t_2889a3e7e0ac86 93-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "56159356d3e8056837e737ae572ea503968b5b7e",
+  "prompts": {},
+  "sessions": {
+    "s_29ab8b502045c6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5e08b29e-2900-4f0c-8a34-0eefd4d6852a",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
