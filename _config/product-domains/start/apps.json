@@ -9,7 +9,7 @@
       "tab": "Product",
       "apps": [
         {
-          "group": "strategy",
+          "group": "business",
           "apps": [
             {
               "name": "Customers-Centric<br>Product Vision",
@@ -30,13 +30,6 @@
               "link": "../competition/index.html",
               "icon": "../competition/icons/logo.png",
               "description": "key players, stats, and geography",
-              "source": ""
-            },
-            {
-              "name": "Residuality<br>(Stress Test)",
-              "link": "../residuality/index.html",
-              "icon": "icons/residuality.png",
-              "description": "unexpected business changes, and response they require",
               "source": ""
             }
           ]
@@ -70,6 +63,25 @@
               "link": "../product-deployments/index.html",
               "icon": "../product-deployments/icons/logo.png",
               "description": "product deployments and environments",
+              "source": ""
+            }
+          ]
+        },
+        {
+          "group": "more",
+          "apps": [
+            {
+              "name": "Residuality<br>(Stress Test)",
+              "link": "../residuality/index.html",
+              "icon": "icons/residuality.png",
+              "description": "unexpected business changes, and response they require",
+              "source": ""
+            },
+            {
+              "name": "Domain Tutorial",
+              "link": "../tutorial/index.html",
+              "icon": "icons/initiative.png",
+              "description": "guided walkthrough of this productscape",
               "source": ""
             },
             {

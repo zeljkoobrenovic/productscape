@@ -89,8 +89,10 @@ class Tutorial(unittest.TestCase):
             if link.startswith('#'):
                 self.assertIn(link[1:], page.ids)
         self.assertIn('../start/index.html', page.links)
-        home = ReadingPage((self.page.parent.parent / 'start/index.html').read_text(encoding='utf-8'))
-        self.assertIn('../tutorial/index.html', home.links)
+        # The start page lists the tutorial in its script-rendered sidebar.
+        home_source = (self.page.parent.parent / 'start/index.html').read_text(encoding='utf-8')
+        self.assertIn('"link": "../tutorial/index.html"', home_source)
+        home = ReadingPage(home_source)
         self.assertEqual(len(page.disclosures), len(self.example['knowledgeChecks']))
         self.assertTrue(all('open' not in attrs for attrs in page.disclosures))
         for value in (self.example['walkthrough']['outcome'], self.example['history'][0]['change'],

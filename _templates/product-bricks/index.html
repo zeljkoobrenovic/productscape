@@ -71,8 +71,8 @@
         }
 
         .hero-logo {
-            width: 108px;
-            height: 108px;
+            width: 92px;
+            height: 92px;
             margin-right: 12px;
         }
 
@@ -89,7 +89,7 @@
         }
 
         .hero-title {
-            font-size: 64px;
+            font-size: 52px;
             margin-bottom: 4px;
         }
 
@@ -246,6 +246,8 @@
 
         .brick-icon {
             width: 102px;
+            margin-top: 4px;
+            margin-bottom: 4px;
         }
 
         .brick-name {
@@ -1050,6 +1052,7 @@
         // The shared tabs script (_imports/tabs) calls this hook after a tab opens.
         // Render the lazily-built views for the tab that just became visible.
         window.afterOpenTab = function (tabName) {
+            updateHeroTitle(tabName);
             if (tabName === 'dependencies') {
                 renderDependenciesView();
             } else if (tabName === 'streams') {
@@ -3172,7 +3175,7 @@
 <nav class="site-nav" aria-label="Productscape sections">
     <a href="../start/index.html">Home</a>
     <a href="../customers/index.html">Customers</a>
-    <a href="../product-bricks/index.html" class="active" aria-current="page">Bricks &amp; Streams</a>
+    <a href="../product-bricks/index.html" class="active" aria-current="page">Product Bricks</a>
     <a href="../product-deployments/index.html">Products</a>
     <a href="../competition/index.html">Competition</a>
     <a href="../residuality/index.html">Stress Test</a>
@@ -3194,7 +3197,7 @@ ${tabs_script}
     </table>
 </div>
 <div>
-    <div class="tab">
+    <div class="tab section-tabs">
         <button class="tablinks active" id="tab_bricks" onclick="openTab('bricks')">Bricks</button>
         <button class="tablinks" id="tab_streams" onclick="openTab('streams')">Streams</button>
         <button class="tablinks" id="tab_data" onclick="openTab('data')">Data</button>
@@ -3244,7 +3247,19 @@ ${tabs_script}
 </div>
 
 <script>
-    document.getElementById('doc-title').innerText = bricksMetadata.title || 'Product Bricks &amp; Streams';
+    // The hero names the open tab: bricks (and their dependencies), streams or data assets.
+    // Older sources title the bricks "Product Bricks & Streams"; keep just the bricks part.
+    function updateHeroTitle(tabName) {
+        const bricksTitle = (bricksMetadata.title || 'Product Bricks').replace(/\s+(&|and)\s+Streams$/i, '');
+        const titles = {
+            streams: streamsMetadata.title || 'Product Streams',
+            data: (dataAssetsPayload.metadata || {}).title || 'Data Assets'
+        };
+        const title = tabName === 'dependencies' ? 'Dependencies' : titles[tabName] || bricksTitle;
+        document.getElementById('doc-title').innerText = title;
+    }
+
+    updateHeroTitle('bricks');
     document.getElementById('doc-description').innerText = 'Product bricks connect customer and business needs to concrete implementation building blocks. This page shows an overview of the brick landscape, dependencies, streams, and delivery structure behind the domain.';
 </script>
 

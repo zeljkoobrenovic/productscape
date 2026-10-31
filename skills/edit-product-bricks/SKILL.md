@@ -45,7 +45,7 @@ right or generation/validation fails.
 
 ```json
 {
-  "title": "Product Bricks & Streams",
+  "title": "Product Bricks",
   "description": "…",
   "rendering": { … },
   "brickTypes":   [ { "id": "full-stack", "name": "full-stack brick", "color": "#b6d7a8ff" }, … ],

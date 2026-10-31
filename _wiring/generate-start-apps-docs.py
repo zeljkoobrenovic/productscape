@@ -146,7 +146,8 @@ def render_package(package_folder, template):
 
 
 def main():
-    template = (TEMPLATES_ROOT / 'index.html').read_text(encoding='utf-8')
+    # Group launcher pages keep the card layout; domain start pages use index.html.
+    template = (TEMPLATES_ROOT / 'package.html').read_text(encoding='utf-8')
     rendered_packages = []
 
     for package_folder in package_sources():

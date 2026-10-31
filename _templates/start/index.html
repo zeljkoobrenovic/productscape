@@ -6,372 +6,1207 @@
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231d4ed8'/><rect x='18' y='22' width='30' height='24' rx='4' fill='white'/><rect x='52' y='22' width='30' height='24' rx='4' fill='%2393c5fd'/><rect x='18' y='54' width='64' height='24' rx='4' fill='%23dbeafe'/></svg>">
     <title>${domain_name}</title>
+    ${tokens_style}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
     <style>
+        :root {
+            --sidebar-width: 310px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
         body {
+            margin: 0;
             font-family: Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
-            text-align: center;
-        }
-
-        .group {
-            display: inline-block;
-            border: 1px solid lightgrey;
-            border-radius: 6px;
-            margin: 8px 18px 8px 8px;
-            padding: 5px;
-            background-color: #f8f8f8;
-        }
-
-        .group-title {
-            font-size: 90%;
-            margin-top: 4px;
-            color: grey;
-        }
-
-        .app {
-            margin: 10px;
-            padding-top: 10px;
-            border: solid lightgrey 1px;
-            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-            display: inline-block;
-            height: 320px;
-            width: 230px;
-            object-fit: cover;
-            text-align: center;
-            vertical-align: top;
-            border-radius: 12px;
-            background-color: white;
-        }
-
-        .name {
-            font-weight: bold;
-            font-size: 18px;
-            margin-top: 12px;
-            color: #5009DC;
-            overflow: hidden;
-            padding-left: 8px;
-            padding-right: 8px;
-        }
-
-        .source {
-            font-size: 11px;
-            color: grey;
-            margin: 3px;
-        }
-
-        .description {
-            font-size: 14px;
-            color: grey;
-            margin: 3px;
-            line-height: 21px;
-            padding-left: 8px;
-            padding-right: 8px;
-        }
-
-        .domain-intro {
-            max-width: 1024px;
-            margin: 10px auto 36px;
-        }
-
-        .domain-description {
-            font-size: 20px;
-            line-height: 1.5;
-            color: #8c8c8c;
-            overflow-wrap: anywhere;
-        }
-
-        .domain-description-toggle {
-            padding: 0;
-            border: 0;
-            background: none;
-            color: var(--accent-ink);
-            font: inherit;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 90%;
-        }
-
-        .domain-description-toggle:hover,
-        .domain-description-toggle:focus-visible {
-            text-decoration: underline;
+            color: var(--ink);
         }
 
         a {
+            color: inherit;
             text-decoration: none;
         }
 
-        .icon {
-            width: 140px;
-            height: 140px;
+        button {
+            font: inherit;
+            color: inherit;
+        }
+
+        .shell {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* ---------- sidebar ---------- */
+
+        .sidebar {
+            flex: 0 0 var(--sidebar-width);
+            width: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            background: var(--panel);
+            border-right: 1px solid var(--line);
+            transition: margin-left 0.18s ease;
+        }
+
+        .shell.sidebar-hidden .sidebar {
+            margin-left: calc(-1 * var(--sidebar-width));
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px 14px 10px;
+            border: 0;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sidebar-brand img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            padding: 3px;
+            background: white;
+            flex: none;
+        }
+
+        .sidebar-brand span {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.25;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .sidebar-brand:hover span {
+            color: var(--accent-ink);
+        }
+
+        .sidebar-search {
+            padding: 2px 12px 8px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 34px;
+            padding: 0 54px 0 32px;
+            border: 1px solid var(--line-strong);
+            border-radius: 8px;
+            font: inherit;
+            font-size: 14px;
+            background: var(--surface);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 14px;
+            height: 14px;
+            color: var(--muted);
+        }
+
+        .search-hint {
+            position: absolute;
+            right: 8px;
+            top: 7px;
+            font-size: 11px;
+            color: var(--muted);
+            border: 1px solid var(--line-strong);
+            border-radius: 4px;
+            padding: 1px 6px;
+            background: white;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 6px;
+            top: 5px;
+            border: 0;
+            background: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+        }
+
+        .sidebar-tools {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--muted);
+            min-height: 18px;
+        }
+
+        .link-button {
+            border: 0;
+            background: none;
+            padding: 0 2px;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .link-button:hover, .link-button:focus-visible {
+            color: var(--accent-ink);
+            text-decoration: underline;
+        }
+
+        .sidebar-tree {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2px 8px 24px;
+            border-top: 1px solid var(--line);
+        }
+
+        .nav-section {
+            margin-top: 6px;
+        }
+
+        .nav-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            border: 0;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+            border-radius: 7px;
+        }
+
+        .nav-toggle:hover {
+            background: var(--surface-muted);
+        }
+
+        .nav-toggle:focus-visible, .nav-item:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -2px;
+        }
+
+        .chevron {
+            flex: none;
+            width: 10px;
+            height: 10px;
+            color: var(--muted-strong);
+            transition: transform 0.12s ease;
+        }
+
+        [aria-expanded="true"] > .chevron {
+            transform: rotate(90deg);
+        }
+
+        .nav-category {
+            margin: 16px 6px 2px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted-strong);
+        }
+
+        .nav-category:first-child {
+            margin-top: 10px;
+        }
+
+        .nav-item.nav-single {
+            margin-top: 6px;
+            padding: 7px 6px 7px 24px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .nav-item.nav-single img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .nav-section-header {
+            padding: 7px 6px;
+            font-weight: 700;
+            font-size: 13.5px;
+        }
+
+        .nav-section-header img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            flex: none;
+        }
+
+
+        .nav-label {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .count {
+            flex: none;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--muted);
+            background: var(--surface-muted);
+            border-radius: 999px;
+            padding: 1px 7px;
+        }
+
+        .nav-body[hidden] {
+            display: none;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px 4px 34px;
+            border-radius: 7px;
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.3;
+        }
+
+
+        .nav-item img {
+            width: 20px;
+            height: 20px;
             object-fit: contain;
             border-radius: 4px;
-            margin-top: 26px;
-            margin-bottom: 20px;
-            filter: grayscale(100%);
+            flex: none;
         }
 
-    </style>
-    ${tokens_style}
-    ${tabs_style}
-    <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
-    ${tabs_script}
-    <script>
-        const START_TAB_STORAGE_KEY = 'productscape:start-active-tab';
+        .nav-item:hover {
+            background: var(--accent-soft);
+            color: var(--accent-ink);
+        }
 
-        // Persist the last opened tab (shared tabs script calls this hook after opening).
-        window.afterOpenTab = function (tabName) {
-            window.sessionStorage.setItem(START_TAB_STORAGE_KEY, tabName);
-        };
-    </script>
+        .nav-item.active {
+            background: var(--highlight-color);
+            color: var(--accent-ink);
+            font-weight: 500;
+        }
+
+        .nav-item.overview {
+            color: var(--muted);
+        }
+
+        /* A thin rule separates a section's overview pages from its item pages. */
+        .nav-item.overview + .nav-item:not(.overview) {
+            margin-top: 4px;
+            box-shadow: inset 0 1px 0 var(--line);
+        }
+
+        .nav-item mark {
+            background: #fde68a;
+            color: inherit;
+            border-radius: 2px;
+        }
+
+        .nav-empty {
+            padding: 18px 10px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* ---------- main ---------- */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            flex: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 46px;
+            padding: 0 12px;
+            background: var(--panel);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .icon-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            height: 30px;
+            min-width: 30px;
+            padding: 0 8px;
+            border: 1px solid transparent;
+            border-radius: 7px;
+            background: none;
+            color: var(--ink-soft);
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .icon-button:hover, .icon-button:focus-visible {
+            background: var(--surface-muted);
+            border-color: var(--line);
+            color: var(--accent-ink);
+        }
+
+        .icon-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .topbar-title {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--muted);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .topbar-title strong {
+            color: var(--ink);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .view {
+            flex: 1;
+            min-height: 0;
+            padding-top: 12px;
+        }
+
+        .view[hidden] {
+            display: none;
+        }
+
+        #frameView iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: white;
+        }
+
+        #homeView {
+            overflow-y: auto;
+            padding: 32px 36px 60px;
+        }
+
+        .home {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .hero-logo {
+            width: 202px;
+            height: 202px;
+            object-fit: contain;
+            flex: none;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 10px;
+            background: white;
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: 52px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .domain-description {
+            font-size: 16px;
+            line-height: 1.55;
+            color: var(--ink-soft);
+            overflow-wrap: anywhere;
+        }
+
+        .domain-description.clamped #domain-description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .domain-description a {
+            color: var(--accent-ink);
+            text-decoration: underline;
+        }
+
+        .app-tab-title {
+            margin: 0 0 12px;
+            font-size: 13px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .app-group {
+            margin-bottom: 26px;
+        }
+
+        .app-group-title {
+            margin: 0 0 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ink-soft);
+            text-transform: capitalize;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 14px;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 18px 14px 16px;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--panel);
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.15s ease, transform 0.15s ease;
+        }
+
+        .app:hover, .app:focus-visible {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .app img {
+            width: 84px;
+            height: 84px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            filter: grayscale(100%);
+            transition: filter 0.15s ease;
+        }
+
+        .app:hover img, .app:focus-visible img {
+            filter: none;
+        }
+
+        .app .name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #5009DC;
+        }
+
+        .app .source {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .app .description {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.45;
+            margin-top: 6px;
+        }
+
+        .app-counts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .app-count {
+            font-size: 12px;
+            color: var(--accent-ink);
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-line);
+            border-radius: 999px;
+            padding: 2px 10px;
+        }
+
+        .app-count strong {
+            font-weight: 700;
+        }
+
+        .backdrop {
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                position: fixed;
+                z-index: 20;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                max-width: 88vw;
+                box-shadow: var(--shadow-hover);
+                margin-left: 0;
+            }
+
+            .shell:not(.sidebar-open) .sidebar {
+                margin-left: calc(-1 * var(--sidebar-width) - 20px);
+            }
+
+            .shell.sidebar-open .backdrop {
+                display: block;
+                position: fixed;
+                inset: 0;
+                z-index: 10;
+                background: rgba(15, 23, 42, 0.3);
+            }
+
+            #homeView {
+                padding: 20px 16px 40px;
+            }
+
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .hero-logo {
+                width: 84px;
+                height: 84px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .topbar .label {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
-<style>
-    .site-nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2px;
-        align-items: center;
-        margin: 2px 0 10px 0;
-        padding: 4px 0;
-        border-bottom: 1px solid #e5e7eb;
-        font-family: Ubuntu, Optima, Segoe, sans-serif;
-        font-size: 13px;
-    }
-
-    .site-nav a {
-        color: #6b7280;
-        text-decoration: none;
-        padding: 4px 10px;
-        border-radius: 6px;
-        white-space: nowrap;
-    }
-
-    .site-nav a:hover {
-        color: #1d4ed8;
-        background: #eff6ff;
-    }
-
-    .site-nav a.active {
-        color: #1d4ed8;
-        font-weight: 600;
-        background: #dbeafe;
-    }
-</style>
-<nav class="site-nav" id="siteNav" style="margin-left: 20px" aria-label="Productscape sections">
-    <a href="../start/index.html" class="active" aria-current="page">Home</a>
-    <a href="../customers/index.html">Customers</a>
-    <a href="../product-bricks/index.html">Bricks &amp; Streams</a>
-    <a href="../product-deployments/index.html">Products</a>
-    <a href="../competition/index.html">Competition</a>
-    ${domain_nav_links}
-</nav>
-<div style="margin: 40px">
-    <div style="margin-top: 10px"><img src="icons/logo.png" style="height: 164px; border: 1px solid lightgrey; border-radius: 20px; padding: 12px; margin: 8px;"></div>
-    <div style="margin: 8px; margin-top: 0; font-size: 52px; color: #8c8c8c">${domain_name}</div>
-    <div class="domain-intro">
-        <div class="domain-description">
-            <span id="domain-description">${domain_description}</span>
-            <button id="domain-description-toggle" class="domain-description-toggle" type="button"
-                    aria-expanded="false" aria-controls="domain-description" hidden>...</button>
+<div class="shell" id="shell">
+    <aside class="sidebar" id="sidebar" aria-label="Productscape navigation">
+        <button class="sidebar-brand" type="button" id="brand" title="Overview">
+            <img src="icons/logo.png" alt="">
+            <span>${domain_name}</span>
+        </button>
+        <div class="sidebar-search" id="search_container">
+            <div class="search-box">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <circle cx="7" cy="7" r="5"/>
+                    <path d="M11 11l4 4"/>
+                </svg>
+                <input id="filter_all" type="search" placeholder="Search pages..." autocomplete="off"
+                       aria-label="Search pages" aria-controls="sidebarTree">
+                <span class="search-hint" id="searchHint" aria-hidden="true">/</span>
+                <button class="search-clear" id="searchClear" type="button" aria-label="Clear search" hidden>&times;</button>
+            </div>
+            <div class="sidebar-tools">
+                <span id="summary_all" aria-live="polite"></span>
+                <span>
+                    <button class="link-button" type="button" id="expandAll">expand all</button>
+                    &middot;
+                    <button class="link-button" type="button" id="collapseAll">collapse all</button>
+                </span>
+            </div>
         </div>
+        <nav class="sidebar-tree" id="sidebarTree"></nav>
+    </aside>
+    <div class="backdrop" id="backdrop"></div>
+
+    <div class="main">
+        <header class="topbar">
+            <button class="icon-button" type="button" id="sidebarToggle" aria-controls="sidebar"
+                    aria-label="Toggle navigation" title="Toggle navigation">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M2 4h12M2 8h12M2 12h12"/>
+                </svg>
+            </button>
+            <div class="topbar-title" id="topbarTitle"></div>
+            <button class="icon-button" type="button" id="homeButton" hidden title="Back to overview">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M2 8l6-5 6 5M4 7v6h8V7"/>
+                </svg>
+                <span class="label">Overview</span>
+            </button>
+            <a class="icon-button" id="openExternal" href="#" target="_blank" hidden title="Open page in a new tab">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                    <path d="M9 2h5v5M14 2L7 9M12 10v4H2V4h4"/>
+                </svg>
+                <span class="label">New tab</span>
+            </a>
+        </header>
+
+        <section class="view" id="homeView">
+            <div class="home">
+                <div class="hero">
+                    <img class="hero-logo" src="icons/logo.png" alt="">
+                    <div>
+                        <h1>${domain_name}</h1>
+                        <div class="domain-description clamped" id="descriptionContainer">
+                            <span id="domain-description">${domain_description}</span>
+                            <button id="domain-description-toggle" class="link-button" type="button"
+                                    aria-expanded="false" aria-controls="domain-description" hidden>more</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="appGroups"></div>
+            </div>
+        </section>
+
+        <section class="view" id="frameView" hidden>
+            <iframe id="pageFrame" title="Selected page"></iframe>
+        </section>
     </div>
-    <div style="margin: -10px; padding: 6px" id="search_container">
-        <div style="margin-bottom: 30px; color: grey">
-            <input id="filter_all" type="text" placeholder="search..."
-                   style="font-size: 16px; height: 32px; width: 320px"
-                   onkeyup="update()">
-            <span id="summary_all"></span>
-        </div>
-        <div id="content_search"></div>
-    </div>
-
-    <div class="tab" id="tab_navigation">
-    </div>
-
-    <div id="tab_content"></div>
-
-    <script>
-        const apps = ${apps}.apps;
-        const config = ${apps}.config;
-        // Global navigation is optional on start pages (config.showGlobalNav in
-        // apps.json); package launchers outside a domain turn it off because the
-        // per-area links only resolve inside a domain folder.
-        if (config.showGlobalNav === false) {
-            const siteNav = document.getElementById('siteNav');
-            if (siteNav) siteNav.style.display = 'none';
-        }
-        let tabNavigationHtml = '';
-        let tabContentHtml = '';
-        apps.forEach(tab => {
-            tabNavigationHtml += '<button id="tab_' + tab.tab + '" class="tablinks" onclick="openTab(\'' + tab.tab + '\')">' + tab.tab + '</button>';
-
-            tabContentHtml += '<div id="tab_content_' + tab.tab + '" class="tabcontent" style="margin: 0; padding: 6px;">' +
-                '<div id="content_' + tab.tab + '"></div>' +
-                '</div>';
-        });
-
-        document.getElementById('tab_navigation').innerHTML = tabNavigationHtml;
-        document.getElementById('tab_content').innerHTML = tabContentHtml;
-
-        // Default to the first tab, but prefer the last opened tab (URL hash wins over both,
-        // resolved inside the shared initTab).
-        const storedStartTab = window.sessionStorage.getItem(START_TAB_STORAGE_KEY);
-        const defaultStartTab = (storedStartTab && document.getElementById('tab_' + storedStartTab))
-            ? storedStartTab
-            : (apps.length ? apps[0].tab : '');
-        initTab(defaultStartTab);
-    </script>
-
-    <script>
-        // Pre-build a flat list with pre-lowercased fields for search
-        const allApps = [];
-        apps.forEach(tab => {
-            tab.apps.forEach(group => {
-                group.apps.forEach(app => {
-                    allApps.push({
-                        app: app,
-                        name: (app.name || '').toLowerCase(),
-                        description: (app.description || '').toLowerCase(),
-                        source: (app.source || '').toLowerCase()
-                    });
-                });
-            });
-        });
-
-        function renderAppCard(app) {
-            let html = '<div class="app">';
-            if (config.openInNewTab === false || app.openInNewTab === false) {
-                html += '<a href="' + app.link + '">';
-            } else {
-                html += '<a target="_blank" href="' + app.link + '">';
-            }
-            html += '<div style="height: 38px">';
-            html += '<div class="name">' + app.name + '</div>';
-            if (app.source) {
-                html += '<div class="source">source: ' + app.source + '</div>';
-            } else {
-                html += '<div class="source"></div>';
-            }
-            html += '</div>';
-            html += '<div><img class="icon" src="' + app.icon + '"></div>';
-            html += '<div class="description">' + app.description + '</div>';
-            html += '</a>';
-            html += '</div>';
-            return html;
-        }
-
-        function renderTabs() {
-            apps.forEach(tab => {
-                let html = '';
-                tab.apps.forEach(group => {
-                    html += '<div class="group">';
-                    html += '<div class="group-title">' + group.group + '</div>';
-                    group.apps.forEach(app => {
-                        html += renderAppCard(app);
-                    });
-                    html += '</div>';
-                });
-                document.getElementById('content_' + tab.tab).innerHTML = html;
-            });
-        }
-
-        function update() {
-            const filterText = document.getElementById('filter_all').value.trim().toLowerCase();
-
-            if (filterText) {
-                document.getElementById('tab_navigation').style.display = 'none';
-                document.getElementById('tab_content').style.display = 'none';
-                document.getElementById('content_search').style.display = 'block';
-
-                let html = '';
-                let count = 0;
-                allApps.forEach(entry => {
-                    if (entry.name.includes(filterText) || entry.description.includes(filterText) || entry.source.includes(filterText)) {
-                        html += renderAppCard(entry.app);
-                        count++;
-                    }
-                });
-                document.getElementById('content_search').innerHTML = html;
-                document.getElementById('summary_all').innerHTML = ' = ' + count + ' app' + (count !== 1 ? 's' : '');
-            } else {
-                document.getElementById('tab_navigation').style.display = '';
-                document.getElementById('tab_content').style.display = '';
-                document.getElementById('content_search').style.display = 'none';
-                document.getElementById('summary_all').innerHTML = '';
-            }
-        }
-
-        if (!config || !config.enableSearch) {
-            document.getElementById('search_container').style.display = 'none';
-        }
-
-        renderTabs();
-    </script>
-
-    <script>
-        const domainDescription = document.getElementById('domain-description');
-        const domainDescriptionToggle = document.getElementById('domain-description-toggle');
-        const descriptionContainer = domainDescription.parentElement;
-        const fullDomainDescription = domainDescription.cloneNode(true);
-        const fullDescriptionText = fullDomainDescription.textContent;
-
-        function showDescriptionPrefix(length) {
-            // Keep links and formatting when shortening the description.
-            const range = document.createRange();
-            range.selectNodeContents(fullDomainDescription);
-            const walker = document.createTreeWalker(fullDomainDescription, NodeFilter.SHOW_TEXT);
-            let node;
-            while ((node = walker.nextNode())) {
-                if (length <= node.length) {
-                    range.setEnd(node, length);
-                    break;
-                }
-                length -= node.length;
-            }
-            domainDescription.replaceChildren(range.cloneContents());
-        }
-
-        function updateDescriptionToggle() {
-            const wasExpanded = domainDescriptionToggle.getAttribute('aria-expanded') === 'true';
-            const maxHeight = 2 * parseFloat(getComputedStyle(descriptionContainer).lineHeight);
-            showDescriptionPrefix(fullDescriptionText.length);
-            domainDescriptionToggle.hidden = true;
-            const overflows = descriptionContainer.scrollHeight > maxHeight + 1;
-            domainDescriptionToggle.hidden = !overflows;
-            const expanded = wasExpanded && overflows;
-            domainDescriptionToggle.setAttribute('aria-expanded', String(expanded));
-            domainDescriptionToggle.textContent = expanded ? '<<' : '...';
-            if (!overflows || expanded) return;
-
-            // Find the longest prefix that leaves room for the inline button on line two.
-            let low = 0;
-            let high = fullDescriptionText.length;
-            while (low < high) {
-                const middle = Math.ceil((low + high) / 2);
-                showDescriptionPrefix(middle);
-                if (descriptionContainer.scrollHeight <= maxHeight + 1) {
-                    low = middle;
-                } else {
-                    high = middle - 1;
-                }
-            }
-            // Prefer ending at a whole word when the next character continues it.
-            let prefix = fullDescriptionText.slice(0, low);
-            if (/\S/.test(fullDescriptionText.charAt(low))) {
-                const wordBoundary = prefix.search(/\s+\S*$/);
-                if (wordBoundary > 0) prefix = prefix.slice(0, wordBoundary);
-            }1
-            showDescriptionPrefix(prefix.trimEnd().length);
-        }
-
-        domainDescriptionToggle.addEventListener('click', () => {
-            const expanded = domainDescriptionToggle.getAttribute('aria-expanded') === 'true';
-            domainDescriptionToggle.setAttribute('aria-expanded', String(!expanded));
-            updateDescriptionToggle();
-        });
-        window.addEventListener('resize', updateDescriptionToggle);
-        updateDescriptionToggle();
-        if (document.fonts) document.fonts.ready.then(updateDescriptionToggle);
-    </script>
 </div>
+
+<script>
+    const apps = ${apps}.apps;
+    const config = ${apps}.config || {};
+    const sidebarSections = ${sidebar_sections};
+    const DOMAIN_NAME = document.title;
+    const SIDEBAR_HIDDEN_KEY = 'productscape:start-sidebar-hidden';
+
+    function escapeHtml(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // App names in apps.json may carry <br> for the card layout; the sidebar needs plain text.
+    function plainText(value) {
+        return String(value || '').replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    }
+
+    function storageGet(key, fallback) {
+        try {
+            const value = window.localStorage.getItem(key);
+            return value === null ? fallback : JSON.parse(value);
+        } catch (e) {
+            return fallback;
+        }
+    }
+
+    function storageSet(key, value) {
+        try {
+            window.localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+            // Storage can be unavailable (private windows, file:// in some browsers).
+        }
+    }
+
+    function isExternal(link) {
+        return /^[a-z][a-z0-9+.-]*:/i.test(link) || link.startsWith('//');
+    }
+
+    // Package launchers link to other domains' start pages, which carry their own
+    // sidebar; open those (and external sites) as full pages instead of inline.
+    function opensInline(link) {
+        return !isExternal(link) && !/(^|\/)start\/index\.html(#.*)?$/.test(link);
+    }
+
+    // ---------- build the navigation model ----------
+
+    // Two levels only: section -> pages. Source groups stay searchable and show
+    // in tooltips; each section's overview page presents the full grouping.
+    // Package launchers have no domain sections, so their app groups become sections.
+    const launcherSections = apps.flatMap(tab => (tab.apps || []).map((group, groupIndex) => ({
+        id: 'apps/' + tab.tab + '/' + groupIndex,
+        title: (apps.length > 1 ? tab.tab + ' · ' : '') + group.group,
+        groups: [{
+            name: group.group,
+            items: (group.apps || []).map(app => ({
+                name: plainText(app.name),
+                link: app.link,
+                icon: app.icon,
+                fallback: 'icons/logo.png',
+                description: plainText(app.description) + (app.source ? ' ' + app.source : ''),
+                newTab: config.openInNewTab !== false && app.openInNewTab !== false
+            }))
+        }]
+    })));
+
+    const sections = (sidebarSections.length ? sidebarSections : launcherSections).map(section => ({
+        ...section,
+        items: section.groups.flatMap(group => group.items.map(item => ({...item, groupName: group.name})))
+    })).filter(section => section.items.length || (section.link && !section.groups.length));
+    const allItems = [];
+    sections.forEach(section => {
+        section.items.forEach(item => {
+            item.section = section;
+            item.search = (item.name + ' ' + (item.description || '') + ' ' + item.groupName + ' ' + section.title).toLowerCase();
+            allItems.push(item);
+        });
+    });
+
+    // ---------- sidebar rendering ----------
+
+    const tree = document.getElementById('sidebarTree');
+    const filterInput = document.getElementById('filter_all');
+    // Sections start collapsed on every visit; only the open page's section is revealed.
+    const expanded = new Set();
+    const CHEVRON = '<svg class="chevron" viewBox="0 0 10 10" aria-hidden="true"><path d="M3 1.5L7 5 3 8.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+
+    function highlight(text, query) {
+        if (!query) return escapeHtml(text);
+        const index = text.toLowerCase().indexOf(query);
+        if (index < 0) return escapeHtml(text);
+        return escapeHtml(text.slice(0, index)) + '<mark>' + escapeHtml(text.slice(index, index + query.length)) +
+            '</mark>' + escapeHtml(text.slice(index + query.length));
+    }
+
+    function itemHtml(item, query, extraClass) {
+        const attrs = opensInline(item.link) ? '' : (item.newTab === false ? '' : ' target="_blank" rel="noopener"');
+        return '<a class="nav-item' + (extraClass || '') + '" href="' + escapeHtml(item.link) + '"' + attrs +
+            ' title="' + escapeHtml([item.groupName, item.description].filter(Boolean).join(' — ')) + '"' + '>' +
+            '<img src="' + escapeHtml(item.icon || item.fallback) + '" data-fallback="' + escapeHtml(item.fallback || '') + '" alt="" loading="lazy">' +
+            '<span class="nav-label">' + highlight(item.name, query) + '</span></a>';
+    }
+
+    function toggleHtml(className, id, label, count, isOpen, icon) {
+        return '<button class="nav-toggle ' + className + '" type="button" data-toggle="' + escapeHtml(id) +
+            '" aria-expanded="' + isOpen + '">' + CHEVRON +
+            (icon ? '<img src="' + escapeHtml(icon) + '" data-fallback="icons/logo.png" alt="">' : '') +
+            '<span class="nav-label">' + escapeHtml(label) + '</span><span class="count">' + count + '</span></button>';
+    }
+
+    // Category headings (Business, Product Architecture, More) above the first
+    // visible section of each category.
+    let lastCategory = '';
+
+    function categoryHtml(section) {
+        if (!section.category || section.category === lastCategory) return '';
+        lastCategory = section.category;
+        return '<div class="nav-category">' + escapeHtml(section.category) + '</div>';
+    }
+
+    function renderSidebar() {
+        lastCategory = '';
+        const query = filterInput.value.trim().toLowerCase();
+        let html = '';
+        let matches = 0;
+        sections.forEach(section => {
+            // A section without pages is a single link, e.g. Stress Test under More.
+            if (!section.items.length) {
+                if (query && !section.title.toLowerCase().includes(query)) return;
+                if (query) matches++;
+                html += categoryHtml(section) + itemHtml({name: section.title, link: section.link, icon: section.icon,
+                    fallback: 'icons/logo.png'}, query, ' nav-single');
+                return;
+            }
+            const items = section.items.filter(item => !query || item.search.includes(query));
+            if (!items.length) return;
+            matches += items.length;
+            html += categoryHtml(section);
+            // While searching every section with a match is open; the remembered
+            // state returns when the search is cleared.
+            const sectionOpen = !!query || expanded.has(section.id);
+            html += '<div class="nav-section">' +
+                toggleHtml('nav-section-header', section.id, section.title, items.length, sectionOpen, section.icon) +
+                '<div class="nav-body"' + (sectionOpen ? '' : ' hidden') + '>';
+            if (section.link && !query) {
+                html += itemHtml({name: 'Overview', link: section.link, icon: section.icon, fallback: 'icons/logo.png'}, '', ' overview');
+                (section.views || []).forEach(view => html += itemHtml(view, '', ' overview'));
+            }
+            items.forEach(item => html += itemHtml(item, query));
+            html += '</div></div>';
+        });
+        tree.innerHTML = html || '<div class="nav-empty">No pages match "' + escapeHtml(query) + '"</div>';
+        document.getElementById('summary_all').textContent = query
+            ? matches + ' match' + (matches === 1 ? '' : 'es')
+            : allItems.length + ' pages';
+        document.getElementById('searchClear').hidden = !query;
+        document.getElementById('searchHint').hidden = !!query;
+        markActive();
+    }
+
+    // The overview entries are built on the fly, so give them an index too.
+    // Views are the other tabs of a section's overview page.
+    const overviewItems = sections.filter(section => section.link).flatMap(section => [
+        {name: section.title, link: section.link, section: section},
+        ...(section.views || []).map(view => ({name: view.name, link: view.link, section: section}))
+    ]);
+
+    tree.addEventListener('click', event => {
+        const toggle = event.target.closest('[data-toggle]');
+        if (toggle) {
+            const id = toggle.dataset.toggle;
+            const open = toggle.getAttribute('aria-expanded') !== 'true';
+            toggle.setAttribute('aria-expanded', String(open));
+            toggle.nextElementSibling.hidden = !open;
+            if (!filterInput.value.trim()) {
+                open ? expanded.add(id) : expanded.delete(id);
+            }
+            // Opening a section also shows its overview page.
+            const section = sections.find(candidate => candidate.id === id);
+            if (open && section && section.link) followLink(event, section.link, true);
+            return;
+        }
+        const link = event.target.closest('a.nav-item');
+        if (link) followLink(event, link.getAttribute('href'));
+    });
+
+    // Arrow keys move through visible entries; Escape returns to the search box.
+    tree.addEventListener('keydown', event => {
+        const focusable = [...tree.querySelectorAll('.nav-toggle, .nav-item')].filter(el => el.offsetParent !== null);
+        const index = focusable.indexOf(document.activeElement);
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            const next = focusable[index + (event.key === 'ArrowDown' ? 1 : -1)];
+            if (next) next.focus(); else if (event.key === 'ArrowUp') filterInput.focus();
+        } else if (event.key === 'Escape') {
+            filterInput.focus();
+        } else if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && document.activeElement.dataset.toggle) {
+            const isOpen = document.activeElement.getAttribute('aria-expanded') === 'true';
+            if (isOpen !== (event.key === 'ArrowRight')) document.activeElement.click();
+        }
+    });
+
+    function setAllExpanded(open) {
+        expanded.clear();
+        if (open) sections.forEach(section => expanded.add(section.id));
+        renderSidebar();
+    }
+
+    document.getElementById('expandAll').addEventListener('click', () => setAllExpanded(true));
+    document.getElementById('collapseAll').addEventListener('click', () => setAllExpanded(false));
+
+    filterInput.addEventListener('input', renderSidebar);
+    filterInput.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            filterInput.value = '';
+            renderSidebar();
+        } else if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            const first = tree.querySelector('.nav-item');
+            if (first) first.focus();
+        } else if (event.key === 'Enter') {
+            const first = tree.querySelector('.nav-item:not(.overview)');
+            if (first) first.click();
+        }
+    });
+    document.getElementById('searchClear').addEventListener('click', () => {
+        filterInput.value = '';
+        renderSidebar();
+        filterInput.focus();
+    });
+    document.addEventListener('keydown', event => {
+        const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+        if (event.key === '/' && !typing && !event.metaKey && !event.ctrlKey) {
+            event.preventDefault();
+            showSidebar(true);
+            filterInput.focus();
+            filterInput.select();
+        }
+    });
+
+    if (config.enableSearch === false) {
+        document.getElementById('search_container').hidden = true;
+    }
+
+    // Broken or missing icons fall back to the section's generic icon.
+    document.addEventListener('error', event => {
+        const img = event.target;
+        if (img.tagName !== 'IMG' || !img.dataset.fallback) return;
+        const fallback = img.dataset.fallback;
+        img.removeAttribute('data-fallback');
+        img.src = fallback;
+    }, true);
+
+    // ---------- sidebar visibility ----------
+
+    const shell = document.getElementById('shell');
+    const isNarrow = () => window.matchMedia('(max-width: 900px)').matches;
+
+    function showSidebar(show) {
+        if (isNarrow()) {
+            shell.classList.toggle('sidebar-open', show);
+        } else {
+            shell.classList.toggle('sidebar-hidden', !show);
+            storageSet(SIDEBAR_HIDDEN_KEY, !show);
+        }
+    }
+
+    document.getElementById('sidebarToggle').addEventListener('click', () => {
+        showSidebar(isNarrow() ? !shell.classList.contains('sidebar-open') : shell.classList.contains('sidebar-hidden'));
+    });
+    document.getElementById('backdrop').addEventListener('click', () => showSidebar(false));
+    if (storageGet(SIDEBAR_HIDDEN_KEY, false)) shell.classList.add('sidebar-hidden');
+
+    // ---------- routing: #page=<relative link> shows that page inline ----------
+
+    const homeView = document.getElementById('homeView');
+    const frameView = document.getElementById('frameView');
+    const frame = document.getElementById('pageFrame');
+    const openExternal = document.getElementById('openExternal');
+    const topbarTitle = document.getElementById('topbarTitle');
+    let currentPage = '';
+    // The page the frame shows; it differs from its src after navigation inside the frame.
+    let framePage = '';
+
+    function followLink(event, link, keepSidebar) {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        if (!opensInline(link)) return;
+        event.preventDefault();
+        location.hash = 'page=' + encodeURIComponent(link);
+        if (isNarrow() && !keepSidebar) showSidebar(false);
+    }
+
+    function pageFromHash() {
+        const match = location.hash.match(/^#page=(.+)$/);
+        if (!match) return '';
+        const link = decodeURIComponent(match[1]);
+        return opensInline(link) ? link : '';
+    }
+
+    function findItem(link) {
+        const base = link.split('#')[0];
+        return allItems.find(item => item.link === link) ||
+            overviewItems.find(item => item.link === link) ||
+            allItems.find(item => item.link.split('#')[0] === base) ||
+            overviewItems.find(item => item.link.split('#')[0] === base);
+    }
+
+    function setTitle(item, fallbackTitle) {
+        let html = '<button class="link-button" type="button" id="crumbHome">' + escapeHtml(DOMAIN_NAME) + '</button>';
+        if (item && item.section && item.section.title !== item.name) html += '<span>/</span><span>' + escapeHtml(item.section.title) + '</span>';
+        if (item || fallbackTitle) html += '<span>/</span><strong>' + escapeHtml(item ? item.name : fallbackTitle) + '</strong>';
+        topbarTitle.innerHTML = item || fallbackTitle ? html : '<strong>Overview</strong>';
+        const crumb = document.getElementById('crumbHome');
+        if (crumb) crumb.addEventListener('click', goHome);
+    }
+
+    function markActive() {
+        tree.querySelectorAll('.nav-item.active').forEach(el => el.classList.remove('active'));
+        if (!currentPage) return;
+        const active = [...tree.querySelectorAll('.nav-item')].find(el => el.getAttribute('href') === currentPage);
+        if (active) active.classList.add('active');
+    }
+
+    function revealActive(item) {
+        if (!item || filterInput.value.trim()) return;
+        if (!expanded.has(item.section.id)) {
+            expanded.add(item.section.id);
+            renderSidebar();
+        }
+        const active = tree.querySelector('.nav-item.active');
+        if (active) active.scrollIntoView({block: 'nearest'});
+    }
+
+    function route() {
+        currentPage = pageFromHash();
+        const item = currentPage ? findItem(currentPage) : null;
+        homeView.hidden = !!currentPage;
+        frameView.hidden = !currentPage;
+        document.getElementById('homeButton').hidden = !currentPage;
+        openExternal.hidden = !currentPage;
+        if (currentPage) {
+            // A change of #tab only scrolls the frame to that tab, without reloading it.
+            if (framePage !== currentPage) frame.setAttribute('src', currentPage);
+            framePage = currentPage;
+            openExternal.href = currentPage;
+            document.title = (item ? item.name : 'Page') + ' · ' + DOMAIN_NAME;
+        } else {
+            frame.removeAttribute('src');
+            framePage = '';
+            document.title = DOMAIN_NAME;
+        }
+        setTitle(item);
+        markActive();
+        revealActive(item);
+    }
+
+    function goHome() {
+        if (location.hash) history.pushState(null, '', location.pathname + location.search);
+        route();
+    }
+
+    // Relative link from this page's folder to an absolute URL, or '' when it
+    // leaves the site (different origin).
+    function relativeLink(href) {
+        const from = new URL('.', location.href);
+        const to = new URL(href);
+        if (from.origin !== to.origin || from.protocol !== to.protocol) return '';
+        const fromParts = from.pathname.split('/').filter(Boolean);
+        const toParts = to.pathname.split('/');
+        const fileName = toParts.pop();
+        const toDirs = toParts.filter(Boolean);
+        let common = 0;
+        while (common < fromParts.length && common < toDirs.length && fromParts[common] === toDirs[common]) common++;
+        return '../'.repeat(fromParts.length - common) + toDirs.slice(common).concat(fileName).join('/') + to.hash;
+    }
+
+    // Keep the address bar, title and sidebar in step with navigation inside the
+    // frame. Browsers block this for file:// pages; the frame still works there.
+    frame.addEventListener('load', () => {
+        let location_;
+        try {
+            location_ = frame.contentWindow.location.href;
+        } catch (e) {
+            return;
+        }
+        if (!location_ || location_ === 'about:blank') return;
+        // Pages without the breadcrumbs import (the script-free tutorial) can't mark
+        // themselves as embedded; do it for them.
+        frame.contentDocument.documentElement.classList.add('embedded');
+        if (!frame.contentDocument.querySelector('style[data-embedded]')) {
+            const style = frame.contentDocument.createElement('style');
+            style.dataset.embedded = '';
+            style.textContent = 'html.embedded .site-nav, html.embedded #breadcrumbs { display: none !important; }';
+            frame.contentDocument.head.appendChild(style);
+        }
+        const link = relativeLink(location_);
+        if (!link) return;
+        if (link.split('#')[0] === 'index.html' || link.split('#')[0] === '../start/index.html') {
+            // A "Home" link inside the frame: show the overview instead of nesting the start page.
+            goHome();
+            return;
+        }
+        framePage = link;
+        if (link !== currentPage) {
+            currentPage = link;
+            history.replaceState(null, '', '#page=' + encodeURIComponent(link));
+            openExternal.href = link;
+            const item = findItem(link);
+            let frameTitle = '';
+            try {
+                frameTitle = frame.contentDocument.title;
+            } catch (e) {
+                // ignore
+            }
+            setTitle(item, frameTitle);
+            document.title = (item ? item.name : frameTitle || 'Page') + ' · ' + DOMAIN_NAME;
+            markActive();
+            revealActive(item);
+        }
+    });
+
+    document.getElementById('brand').addEventListener('click', goHome);
+    document.getElementById('homeButton').addEventListener('click', goHome);
+    window.addEventListener('hashchange', route);
+    window.addEventListener('popstate', route);
+
+    // ---------- overview (home) content ----------
+
+    // Cards show the page counts of the sidebar sections they lead to.
+    function appCountsHtml(app) {
+        const counts = sidebarSections
+            .filter(section => (section.card || section.link) === app.link && section.groups.length)
+            .map(section => '<span class="app-count"><strong>' +
+                section.groups.reduce((sum, group) => sum + group.items.length, 0) + '</strong> ' +
+                escapeHtml(section.title) + '</span>')
+            .concat(sidebarSections.flatMap(section => section.views || [])
+                .filter(view => view.link === app.link && view.count > 0)
+                .map(view => '<span class="app-count"><strong>' + view.count + '</strong> ' +
+                    escapeHtml(view.name) + '</span>'));
+        return counts.length ? '<div class="app-counts">' + counts.join('') + '</div>' : '';
+    }
+
+    function renderAppCard(app) {
+        const newTab = config.openInNewTab !== false && app.openInNewTab !== false;
+        const attrs = opensInline(app.link) || !newTab ? '' : ' target="_blank" rel="noopener"';
+        // App names are authored markup (they may contain <br>), as on the previous start page.
+        return '<a class="app" href="' + escapeHtml(app.link) + '"' + attrs + '>' +
+            '<img src="' + escapeHtml(app.icon) + '" data-fallback="icons/logo.png" alt="">' +
+            '<div class="name">' + app.name + '</div>' +
+            (app.source ? '<div class="source">source: ' + escapeHtml(app.source) + '</div>' : '') +
+            '<div class="description">' + escapeHtml(app.description) + '</div>' + appCountsHtml(app) + '</a>';
+    }
+
+    function renderApps() {
+        let html = '';
+        apps.forEach(tab => {
+            if (apps.length > 1) html += '<h2 class="app-tab-title">' + escapeHtml(tab.tab) + '</h2>';
+            (tab.apps || []).forEach(group => {
+                html += '<div class="app-group"><h3 class="app-group-title">' + escapeHtml(group.group) + '</h3>' +
+                    '<div class="app-grid">' + (group.apps || []).map(renderAppCard).join('') + '</div></div>';
+            });
+        });
+        document.getElementById('appGroups').innerHTML = html;
+    }
+
+    homeView.addEventListener('click', event => {
+        const link = event.target.closest('a.app');
+        if (link) followLink(event, link.getAttribute('href'));
+    });
+
+    // ---------- domain description: three lines with a "more" toggle ----------
+
+    const descriptionContainer = document.getElementById('descriptionContainer');
+    const descriptionText = document.getElementById('domain-description');
+    const descriptionToggle = document.getElementById('domain-description-toggle');
+
+    function updateDescriptionToggle() {
+        const isExpanded = descriptionToggle.getAttribute('aria-expanded') === 'true';
+        descriptionContainer.classList.add('clamped');
+        const overflows = descriptionText.scrollHeight > descriptionText.clientHeight + 1;
+        descriptionContainer.classList.toggle('clamped', overflows && !isExpanded);
+        descriptionToggle.hidden = !overflows;
+        descriptionToggle.textContent = isExpanded ? 'less' : 'more';
+    }
+
+    descriptionToggle.addEventListener('click', () => {
+        const isExpanded = descriptionToggle.getAttribute('aria-expanded') === 'true';
+        descriptionToggle.setAttribute('aria-expanded', String(!isExpanded));
+        updateDescriptionToggle();
+    });
+    window.addEventListener('resize', updateDescriptionToggle);
+
+    renderSidebar();
+    renderApps();
+    route();
+    updateDescriptionToggle();
+    if (document.fonts) document.fonts.ready.then(updateDescriptionToggle);
+</script>
 </body>
 </html>

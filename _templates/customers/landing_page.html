@@ -402,7 +402,7 @@
 <nav class="site-nav" aria-label="Productscape sections">
     <a href="../../start/index.html">Home</a>
     <a href="../../customers/index.html" class="active" aria-current="page">Customers</a>
-    <a href="../../product-bricks/index.html">Bricks &amp; Streams</a>
+    <a href="../../product-bricks/index.html">Product Bricks</a>
     <a href="../../product-deployments/index.html">Products</a>
     <a href="../../competition/index.html">Competition</a>
     <a href="../../residuality/index.html">Stress Test</a>
@@ -463,7 +463,7 @@ ${tabs_script}
 <script>
     function addNavigation() {
         let html = '';
-        html += '<div style="margin: 4px 20px 10px 20px; font-size: 85%; color: black">';
+        html += '<div class="image-tabs" style="margin: 4px 20px 10px 20px; font-size: 85%; color: black">';
         let prev_domain = all_customers[0].domain;
         all_customers.forEach(per => {
             if (prev_domain.toLowerCase() !== per.domain.toLowerCase()) {

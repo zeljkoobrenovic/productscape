@@ -84,6 +84,12 @@
         const activeTab = document.getElementById('tab_' + resolvedTabName);
         activeTab.className += ' active';
         activeTab.setAttribute('aria-selected', 'true');
+        // Overview pages name the open tab in their title, as the start page's sidebar does.
+        const heroTitle = document.querySelector('[data-follows-tab]');
+        if (heroTitle) {
+            if (!heroTitle.dataset.defaultTitle) heroTitle.dataset.defaultTitle = heroTitle.textContent;
+            heroTitle.textContent = activeTab.dataset.tabTitle || heroTitle.dataset.defaultTitle;
+        }
         if (typeof window.afterOpenTab === 'function') {
             window.afterOpenTab(resolvedTabName);
         }

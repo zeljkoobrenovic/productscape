@@ -47,6 +47,8 @@ class GeneratorInputs(unittest.TestCase):
             folder = 'product-deployments' if section == 'products' else section
             path = templates / folder / 'index.html'
             path.write_text(path.read_text() + f'\n<!-- custom {folder} template -->\n')
+        package_template = templates / 'start/package.html'
+        package_template.write_text(package_template.read_text() + '\n<!-- custom start package template -->\n')
         apps = json.loads((TOOLKIT / '_config/product-domains/start/apps.json').read_text())
         apps['apps'][0]['apps'][0]['apps'][0]['name'] = 'Explicit navigation label'
         navigation.write_text(json.dumps(apps))
@@ -98,7 +100,7 @@ class GeneratorInputs(unittest.TestCase):
             page = self.output / ('index.html' if section == 'catalog' else 'evidence-explorer/index.html')
             self.assertIn(f'custom {section} template', page.read_text())
         package_page = self.output / 'start-packages/example/index.html'
-        self.assertIn('custom start template', package_page.read_text())
+        self.assertIn('custom start package template', package_page.read_text())
         self.assertTrue((package_page.parent / 'icons/logo.png').is_file())
         # Package pages hide the domain navigation at runtime. Check domain and
         # shared-page links here, and package output/assets separately above.

@@ -721,7 +721,7 @@
 <nav class="site-nav" aria-label="Productscape sections">
     <a href="../../start/index.html">Home</a>
     <a href="../../customers/index.html">Customers</a>
-    <a href="../../product-bricks/index.html">Bricks &amp; Streams</a>
+    <a href="../../product-bricks/index.html">Product Bricks</a>
     <a href="../../product-deployments/index.html" class="active" aria-current="page">Products</a>
     <a href="../../competition/index.html">Competition</a>
     <a href="../../residuality/index.html">Stress Test</a>
@@ -830,7 +830,7 @@ ${tabs_script}
 <script>
     function addNavigation() {
         let html = '';
-        html += '<div style="margin: 4px 20px 10px 20px; font-size: 85%; color: black">';
+        html += '<div class="image-tabs" style="margin: 4px 20px 10px 20px; font-size: 85%; color: black">';
         all_products.forEach(per => {
             html += '<a href="' + per.id + '.html">';
             const tabClass = per.id === product.id ? 'tab-image-selected' : 'tab-image';

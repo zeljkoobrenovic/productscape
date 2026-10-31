@@ -62,8 +62,8 @@
         }
 
         .hero-logo {
-            width: 108px;
-            height: 108px;
+            width: 92px;
+            height: 92px;
             margin-right: 12px;
         }
 
@@ -80,7 +80,7 @@
         }
 
         .hero-title {
-            font-size: 64px;
+            font-size: 52px;
             margin-bottom: 4px;
         }
 
@@ -167,65 +167,26 @@
             padding: 12px;
             background-color: white;
             box-shadow: rgba(0, 0, 0, 0.05) 0 1px 3px;
-            width: 320px;
+            width: 216px;
             text-align: left;
         }
 
         .customer-card-photo {
             display: block;
-            width: 290px;
-            height: 290px;
+            width: 192px;
+            height: 192px;
             object-fit: contain;
             margin: 4px auto 10px;
         }
 
         .customer-card-name {
-            font-size: 19px;
+            font-size: 16px;
+            line-height: 1.3;
             font-weight: bold;
             color: #1d4ed8;
             text-align: center;
             margin-bottom: 10px;
-            padding-bottom: 10px;
-            height: 2em;
-        }
-
-        .customer-attribute {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
-            align-items: flex-start;
-        }
-
-        .customer-attribute-icon {
-            width: 28px;
-            height: 28px;
-            flex: 0 0 auto;
-            margin-top: 2px;
-        }
-
-        .customer-attribute-body {
-            min-width: 0;
-            padding-left: 6px;
-        }
-
-        .customer-attribute-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #6b7280;
-            margin-bottom: 2px;
-        }
-
-        .customer-attribute-item {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            overflow: hidden;
-            overflow-wrap: anywhere;
-            font-size: 13px;
-            color: #374151;
-            margin-top: 3px;
-            margin-bottom: 13px;
+            min-height: 2.6em;
         }
 
         .visual-overview-wrap {
@@ -493,7 +454,7 @@
 <nav class="site-nav" aria-label="Productscape sections">
     <a href="../start/index.html">Home</a>
     <a href="../customers/index.html" class="active" aria-current="page">Customers</a>
-    <a href="../product-bricks/index.html">Bricks &amp; Streams</a>
+    <a href="../product-bricks/index.html">Product Bricks</a>
     <a href="../product-deployments/index.html">Products</a>
     <a href="../competition/index.html">Competition</a>
     <a href="../residuality/index.html">Stress Test</a>
@@ -505,7 +466,7 @@
         <tr>
             <td class="hero-logo-cell"><img class="hero-logo" src="icons/logo.png" alt="Customers"></td>
             <td class="hero-copy-cell">
-                <div class="hero-title">Customers</div>
+                <div class="hero-title" data-follows-tab>Customers</div>
                 <div class="hero-subtitle">Product strategy is defined around customers, their jobs to be done, and the outcomes they care about. This page shows an overview of the customer landscape,
                     linked signals, and shared insights.
                 </div>
@@ -514,12 +475,12 @@
     </table>
 </div>
 
-<div class="tab">
+<div class="tab section-tabs">
     <button class="tablinks active" id="tab_customers" onclick="openTab('customers')">Customers</button>
-    <button class="tablinks" id="tab_visual-overview" onclick="openTab('visual-overview')">Visual Overview</button>
-    <button class="tablinks" id="tab_relations" onclick="openTab('relations')">Relations</button>
-    <button class="tablinks" id="tab_insights" onclick="openTab('insights')">Insights</button>
-    <button class="tablinks" id="tab_links" onclick="openTab('links')">Links</button>
+    <button class="tablinks" id="tab_visual-overview" data-tab-title="Visual Overview" onclick="openTab('visual-overview')">Visual Overview</button>
+    <button class="tablinks" id="tab_relations" data-tab-title="Relations" onclick="openTab('relations')">Relations</button>
+    <button class="tablinks" id="tab_insights" data-tab-title="Insights" onclick="openTab('insights')">Insights</button>
+    <button class="tablinks" id="tab_links" data-tab-title="Links" onclick="openTab('links')">Links</button>
 </div>
 <div>
     <div id="tab_content_customers" class="tabcontent">
@@ -656,18 +617,6 @@
         return (link && link.kpis) || [];
     }
 
-    function renderAttribute(iconFile, label, items) {
-        if (!items || !items.length) return '';
-        let html = '<div class="customer-attribute">';
-        html += '<div class="customer-attribute-body">';
-        html += '<div class="customer-attribute-label">' + escapeHtml(label) + '</div>';
-        items.forEach(item => {
-            html += '<div class="customer-attribute-item" title="' + escapeHtml(item) + '">' + escapeHtml(item) + '</div>';
-        });
-        html += '</div></div>';
-        return html;
-    }
-
     function customerMatchesSearch(customer, groupName, query) {
         if (!query) return true;
         const haystack = [customer.id, customer.name, customer.description, groupName]
@@ -714,7 +663,6 @@
                     html += '<div>KPI: ' + escapeHtml(topKpi.name) + '</div>';
                     html += '</div>';
                 }
-                html += renderAttribute('care.png', 'Care about', customer.careAbout);
                 html += '</div></a>';
             });
             html += '</div>';

@@ -73,8 +73,8 @@
         }
 
         .hero-logo {
-            width: 116px;
-            height: 116px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
             border-radius: 20px;
             background: white;
@@ -96,7 +96,7 @@
         }
 
         .hero-title {
-            font-size: 58px;
+            font-size: 52px;
             line-height: 0.94;
             margin: 0 0 8px;
         }
@@ -109,31 +109,11 @@
             margin-bottom: 16px;
         }
 
-        .hero-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .meta-chip {
-            padding: 8px 12px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.84);
-            border: 1px solid #d8e0ea;
-            font-size: 13px;
-            color: #475467;
-        }
-
-        .scope-card,
         .player-card {
             background: var(--panel);
             border: 1px solid var(--panel-border);
             border-radius: 18px;
             box-shadow: var(--shadow);
-        }
-
-        .scope-card {
-            padding: 18px 20px;
         }
 
         .section-title {
@@ -142,29 +122,6 @@
             letter-spacing: 0.08em;
             color: var(--muted);
             margin-bottom: 12px;
-        }
-
-        .scope-copy {
-            color: #475467;
-            line-height: 1.55;
-            margin-bottom: 14px;
-        }
-
-        .pill-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            padding: 7px 11px;
-            border-radius: 999px;
-            border: 1px solid #d8e0ea;
-            background: #f8fbff;
-            color: #344054;
-            font-size: 12px;
         }
 
         .players-grid {
@@ -327,11 +284,6 @@
             color: white;
         }
 
-        .about-layout {
-            display: grid;
-            gap: 18px;
-        }
-
         @media (max-width: 800px) {
             body {
                 margin: 12px;
@@ -343,14 +295,14 @@
             }
 
             .hero-title {
-                font-size: 42px;
+                font-size: 38px;
             }
         }
     </style>
     <link rel="stylesheet" target="_blank" href="https://fonts.googleapis.com/css?family=Ubuntu">
     ${tabs_script}
 </head>
-<body onload="initTab('PlayersTab')" onhashchange="initTab()">
+<body>
 <style>
     .site-nav {
         display: flex;
@@ -376,7 +328,7 @@
 <nav class="site-nav" aria-label="Productscape sections">
     <a href="../start/index.html">Home</a>
     <a href="../customers/index.html">Customers</a>
-    <a href="../product-bricks/index.html">Bricks &amp; Streams</a>
+    <a href="../product-bricks/index.html">Product Bricks</a>
     <a href="../product-deployments/index.html">Products</a>
     <a href="../competition/index.html" class="active" aria-current="page">Competition</a>
     <a href="../residuality/index.html">Stress Test</a>
@@ -389,36 +341,17 @@
         <img class="hero-logo" src="icons/logo.png" alt="Competition">
         <div>
             <div class="eyebrow">Competition Analysis</div>
-            <div class="hero-title">Competition</div>
+            <div class="hero-title" data-follows-tab>Competition</div>
             <div class="hero-subtitle" id="heroSubtitle"></div>
         </div>
     </div>
 </div>
 
-<div class="tab">
-    <button class="tablinks active" id="tab_PlayersTab" onclick="openTab('PlayersTab')">Players</button>
-    <button class="tablinks" id="tab_AboutTab" onclick="openTab('AboutTab')">About</button>
-</div>
-
-<div id="tab_content_PlayersTab" class="tabcontent">
+<div>
     <div class="toggle-row">
         <button class="toggle-button" id="detailsToggleButton" type="button" onclick="toggleDetails()">Show details</button>
     </div>
     <div class="players-grid" id="playersGrid"></div>
-</div>
-
-<div id="tab_content_AboutTab" class="tabcontent">
-    <div class="about-layout">
-        <div class="scope-card" id="scope">
-            <div class="section-title">Scope</div>
-            <div class="scope-copy" id="scopeCopy"></div>
-        </div>
-        <div class="scope-card">
-            <div class="section-title">Notes</div>
-            <div class="pill-row" id="scopeNotes"></div>
-        </div>
-        <div class="hero-meta" id="heroMeta"></div>
-    </div>
 </div>
 
 ${breadcrumbs_script}
@@ -463,17 +396,7 @@ ${breadcrumbs_script}
     }
 
     function renderHero() {
-        const players = competitionData.players || [];
         document.getElementById('heroSubtitle').innerHTML = escapeHtml(competitionData.scope && competitionData.scope.description || '');
-        document.getElementById('heroMeta').innerHTML = ''
-            + '<div class="meta-chip">Updated ' + escapeHtml(competitionData.generatedOn || '') + '</div>';
-    }
-
-    function renderScope() {
-        const scope = competitionData.scope || {};
-        document.getElementById('scopeCopy').textContent = scope.description || '';
-        const notes = Array.isArray(scope.notes) ? scope.notes : (scope.notes ? [scope.notes] : []);
-        document.getElementById('scopeNotes').innerHTML = notes.map(item => '<div class="pill">' + escapeHtml(item) + '</div>').join('');
     }
 
     function renderPlayer(player) {
@@ -524,7 +447,6 @@ ${breadcrumbs_script}
         document.getElementById('playersGrid').innerHTML = (competitionData.players || []).map(renderPlayer).join('');
         bindPlayerCardNavigation();
         syncDetailsToggle();
-        syncPlayerTabLabel();
     }
 
     function bindPlayerCardNavigation() {
@@ -556,16 +478,7 @@ ${breadcrumbs_script}
         renderPlayers();
     }
 
-    function syncPlayerTabLabel() {
-        const button = document.getElementById('tab_PlayersTab');
-        if (!button) {
-            return;
-        }
-        button.textContent = 'Players (' + String((competitionData.players || []).length) + ')';
-    }
-
     renderHero();
-    renderScope();
     renderPlayers();
 </script>
 </body>

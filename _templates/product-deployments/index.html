@@ -60,8 +60,8 @@
         }
 
         .hero-logo {
-            width: 108px;
-            height: 108px;
+            width: 92px;
+            height: 92px;
             margin-right: 12px;
         }
 
@@ -78,7 +78,7 @@
         }
 
         .hero-title {
-            font-size: 64px;
+            font-size: 52px;
             margin-bottom: 4px;
         }
 
@@ -1000,7 +1000,7 @@
 <nav class="site-nav" aria-label="Productscape sections">
     <a href="../start/index.html">Home</a>
     <a href="../customers/index.html">Customers</a>
-    <a href="../product-bricks/index.html">Bricks &amp; Streams</a>
+    <a href="../product-bricks/index.html">Product Bricks</a>
     <a href="../product-deployments/index.html" class="active" aria-current="page">Products</a>
     <a href="../competition/index.html">Competition</a>
     <a href="../residuality/index.html">Stress Test</a>
@@ -1013,7 +1013,7 @@ ${tabs_script}
         <tr>
             <td class="hero-logo-cell"><img class="hero-logo" src="icons/logo.png" alt="Products"></td>
             <td class="hero-copy-cell">
-                <div class="hero-title">Product Deployments</div>
+                <div class="hero-title" data-follows-tab>Product Deployments</div>
                 <div class="hero-subtitle">Products organize the customer value proposition into concrete offers, journeys, channels, and delivery structures. This page shows an overview of the
                     product landscape and how products are exposed across deployment channels.
                 </div>
@@ -1022,11 +1022,11 @@ ${tabs_script}
     </table>
 </div>
 
-<div class="tab">
-    <button class="tablinks active" id="tab_products" onclick="openTab('products')">Products</button>
-    <button class="tablinks" id="tab_deployment" onclick="openTab('deployment')">Deployment Channels</button>
-    <button class="tablinks" id="tab_dependencies" onclick="openTab('dependencies')">Dependencies</button>
-    <button class="tablinks" id="tab_matrix" onclick="openTab('matrix')">Matrix</button>
+<div class="tab section-tabs">
+    <button class="tablinks active" id="tab_products" data-tab-title="Products" onclick="openTab('products')">Products</button>
+    <button class="tablinks" id="tab_deployment" data-tab-title="Deployments" onclick="openTab('deployment')">Deployment Channels</button>
+    <button class="tablinks" id="tab_dependencies" data-tab-title="Dependencies" onclick="openTab('dependencies')">Dependencies</button>
+    <button class="tablinks" id="tab_matrix" data-tab-title="Matrix" onclick="openTab('matrix')">Matrix</button>
 </div>
 <div>
     <div id="tab_content_products" class="tabcontent">

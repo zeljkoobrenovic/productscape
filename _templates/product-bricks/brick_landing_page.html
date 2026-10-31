@@ -688,7 +688,7 @@
 <nav class="site-nav" aria-label="Productscape sections">
     <a href="../../start/index.html">Home</a>
     <a href="../../customers/index.html">Customers</a>
-    <a href="../../product-bricks/index.html" class="active" aria-current="page">Bricks &amp; Streams</a>
+    <a href="../../product-bricks/index.html" class="active" aria-current="page">Product Bricks</a>
     <a href="../../product-deployments/index.html">Products</a>
     <a href="../../competition/index.html">Competition</a>
     <a href="../../residuality/index.html">Stress Test</a>
@@ -832,7 +832,7 @@
     let html = '';
 
     function addNavigation() {
-        html += '<div style="margin: 4px 20px 10px 20px; font-size: 85%; color: black">';
+        html += '<div class="image-tabs" style="margin: 4px 20px 10px 20px; font-size: 85%; color: black">';
         let prev_domain = all_bricks.length ? all_bricks[0].domain : '';
         all_bricks.filter(c => c.domain && c.domain.toLowerCase().trim() !== 'on ice').forEach(cap => {
             if (prev_domain && prev_domain.toLowerCase() !== cap.domain.toLowerCase()) {
