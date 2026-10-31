@@ -1439,10 +1439,12 @@
         }
 
         function renderDomain(domain) {
+            // A domain's own bricks wrap side by side, like the bricks of its groups.
+            const renderedBricks = (domain.bricks || []).map(renderBrick).join('');
             return `
                 <section class="domain-column">
                     <div class="domain-title">${domain.name}</div>
-                    <div class="domain-groups">${(domain.subGroups || []).map(renderGroup).join('')}${(domain.bricks || []).map(renderBrick).join('')}</div>
+                    <div class="domain-groups">${(domain.subGroups || []).map(renderGroup).join('')}${renderedBricks ? `<div class="group-items">${renderedBricks}</div>` : ''}</div>
                 </section>
             `;
         }
