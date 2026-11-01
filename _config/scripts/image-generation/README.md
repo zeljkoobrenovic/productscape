@@ -22,6 +22,7 @@ Sources live in `_config/product-domains/<group>/<domain-id>/`. All image script
 - generates one rich, square customer-role portrait per customer in the same colored cartoon style as the customer-relations overview, saves it in `customers/icons/`, and updates the existing `icon` field
 - generates one Gemini Nano Banana illustration for every residuality stressor, writes it into `residuality/media/`, and patches the stressor's `media` entry
 - illustrates tutorial concepts, participant maps, and walkthrough overviews; saves images and prompts in `tutorial/media/` and updates their `media` entries in `tutorial/tutorial.json`
+- draws one high-level overview of each domain (its products and building blocks inside, its customers, external systems, and competitors outside) and saves it with its prompt and alt text in `start/media/`
 
 ## Requirements
 
@@ -109,6 +110,45 @@ JSON update instead of replacing newer prose.
 Builds need no credentials. The tutorial renderer validates local image paths,
 copies them from the source media folder, and adds an accessible image link that
 opens the full image in a new tab. Do not edit generated HTML to add illustrations.
+
+### Domain overview picture
+
+One picture per domain for the top of its start page: what the domain is about,
+the interfaces to the external world, and the key internal elements.
+
+```sh
+python3 productscapes.py images my-domain --kind overview --dry-run
+python3 _config/scripts/image-generation/generate_domain_overview_image_gemini_nanobanana_api.py \
+  --project ../productscape-examples --domain my-domain --dry-run --show-prompts
+python3 productscapes.py images my-domain --kind overview
+python3 productscapes.py build my-domain --sections start
+```
+
+The prompt is built from the model, with no extra authoring:
+
+| Where in the picture | Source |
+| --- | --- |
+| Left, outside: customer groups | `customers/customers.json` groups, largest first |
+| Center: products | `product-deployments/products.json`, with first-sentence descriptions as background |
+| Center: building blocks | root groups of `product-bricks/product-bricks.json`, largest first |
+| Center, bottom: shared data | `data/data-assets.json` root groups (one label) |
+| Boundary base: delivery channels | `product-deployments/deployment.json` channel groups |
+| Right, outside: external systems | brick `externalSystems…` entries grouped by `type` (customer devices skipped) |
+| Bottom right, apart: competitors | `business/competition.json`, leaders first |
+
+Image models garble crowded text, so each kind is capped (`LIMITS` in the script:
+4 customer groups, 5 products, 4 brick groups, 3 channel groups, 5 external-system
+types, 3 competitors), and labels drop parentheticals. Only those labels and the
+domain name are requested as text; everything else is background for the model.
+`--scene` replaces the composition directions while keeping the labels.
+
+Output: `start/media/domain-overview.jpg` (or the returned format without `sips`),
+`domain-overview.prompt.txt`, and `domain-overview.alt.txt`. Existing images are
+reused; `--overwrite` regenerates. The default size is `2K` for legible labels.
+On macOS the saved image is converted with `sips` to a JPEG at most 1600 px wide
+(about 0.5 MB instead of 2–3 MB); `--max-width 0` keeps the provider's original.
+Domains without products or bricks are skipped. Rebuild the `start` section to
+show the image; clicking it opens the full size.
 
 ### Other domain images
 

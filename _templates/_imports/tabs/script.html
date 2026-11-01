@@ -96,4 +96,13 @@
 
         return resolvedTabName;
     }
+
+    // In-page links to another tab (e.g. the top bar's Insights link on the
+    // Customers page) only change the hash; switch to that tab.
+    window.addEventListener('hashchange', () => {
+        const hash = window.location.hash.substring(1);
+        if (hash && document.getElementById('tab_' + hash) && document.getElementById('tab_content_' + hash)) {
+            openTab(hash, {updateHistory: false});
+        }
+    });
 </script>

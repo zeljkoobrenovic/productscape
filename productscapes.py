@@ -239,6 +239,7 @@ def images(args):
         'relations': 'generate_customer_relations_images_gemini_nanobanana_api.py',
         'residuality': 'generate_residuality_images_gemini_nanobanana_api.py',
         'icons': 'generate_missing_domain_icons_gemini_nanobanana_api.py',
+        'overview': 'generate_domain_overview_image_gemini_nanobanana_api.py',
     }
     for kind in scripts if args.kind == 'all' else [args.kind]:
         extra = ['--domain', args.domain]
@@ -294,7 +295,7 @@ def main():
     kpis.set_defaults(action=lambda args: run_script('skills/scripts/check-kpi-pyramids.py', [args.domain], args.project))
     media = commands.add_parser('images', parents=[common], help='Optional Gemini image generation (requires credentials).')
     media.add_argument('domain')
-    media.add_argument('--kind', choices=('jtbd', 'journey', 'relations', 'residuality', 'icons', 'tutorial', 'all'), default='all')
+    media.add_argument('--kind', choices=('jtbd', 'journey', 'relations', 'residuality', 'icons', 'tutorial', 'overview', 'all'), default='all')
     media.add_argument('--dry-run', action='store_true')
     media.add_argument('--lightweight', action='store_true')
     media.add_argument('--skip-existing', action='store_true')

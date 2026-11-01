@@ -19,17 +19,17 @@
               "source": ""
             },
             {
-              "name": "Insights",
-              "link": "../customers/index.html#insights",
-              "icon": "../customers/icons/insights.png",
-              "description": "customer groups, personas, and JTBDs",
-              "source": ""
-            },
-            {
               "name": "Competition",
               "link": "../competition/index.html",
               "icon": "../competition/icons/logo.png",
               "description": "key players, stats, and geography",
+              "source": ""
+            },
+            {
+              "name": "Insights",
+              "link": "../customers/index.html#insights",
+              "icon": "../customers/icons/insights.png",
+              "description": "customer groups, personas, and JTBDs",
               "source": ""
             }
           ]

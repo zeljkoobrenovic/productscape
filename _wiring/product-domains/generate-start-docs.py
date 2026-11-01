@@ -1,3 +1,4 @@
+import html
 import json
 import os
 import shutil
@@ -66,7 +67,6 @@ def view(name, link, icon, count=None):
 
 def customers_section(domain_id):
     customers = load_json_if_exists(domain_source_path(domain_id, 'customers/customers.json'), [])
-    insights = load_json_if_exists(domain_source_path(domain_id, 'customers/insights.json'), {})
     entries = []
     for group in customers:
         for customer in group.get('customers', []):
@@ -80,8 +80,6 @@ def customers_section(domain_id):
             'icon': '../customers/icons/logo.png', 'groups': group_items(entries), 'views': [
                 view('Visual Overview', '../customers/index.html#visual-overview', '../customers/icons/customer.png'),
                 view('Relations', '../customers/index.html#relations', '../customers/icons/care.png'),
-                view('Insights', '../customers/index.html#insights', '../customers/icons/insights.png',
-                     len(insights.get('items', []))),
                 view('Links', '../customers/index.html#links', '../customers/icons/link.png'),
             ]}
 
@@ -184,18 +182,29 @@ def competition_section(domain_id):
             player.get('name'), '../competition/landing_pages/' + str(player['id']) + '.html',
             '../competition/logos/' + logo_file if logo_file else '../competition/icons/logo.png',
             '../competition/icons/logo.png', player.get('description'))))
-    return {'id': 'competition', 'title': 'Competition', 'link': '../competition/index.html',
+    # countLabel names the count on the start page card ("N Competitors").
+    return {'id': 'competition', 'title': 'Competition', 'countLabel': 'Competitors',
+            'link': '../competition/index.html',
             'icon': '../competition/icons/logo.png', 'groups': group_items(entries)}
+
+
+def insights_section(domain_id):
+    # A single top-level link to the Customers page's Insights tab; the count
+    # shows on the start page card that links to the same tab.
+    insights = load_json_if_exists(domain_source_path(domain_id, 'customers/insights.json'), {})
+    return {'id': 'insights', 'title': 'Insights', 'link': '../customers/index.html#insights',
+            'icon': '../customers/icons/insights.png', 'groups': [], 'single': True,
+            'count': len(insights.get('items', []))}
 
 
 def sidebar_sections(domain_id):
     # The sidebar shows these categories as headings above their sections.
     categories = [
-        ('Business', [customers_section(domain_id), competition_section(domain_id)]),
+        ('Business', [customers_section(domain_id), competition_section(domain_id), insights_section(domain_id)]),
         ('Product Architecture', [*bricks_sections(domain_id), *products_sections(domain_id)]),
     ]
     sections = [dict(section, category=category) for category, members in categories
-                for section in members if section and section['groups']]
+                for section in members if section and (section['groups'] or section.get('single'))]
     # Single pages listed directly under "More", without a collapsible list.
     sections += [
         {'id': 'residuality', 'title': 'Stress Test', 'link': '../residuality/index.html',
@@ -204,6 +213,27 @@ def sidebar_sections(domain_id):
          'icon': 'icons/initiative.png', 'groups': [], 'category': 'More'},
     ]
     return sections
+
+
+OVERVIEW_FORMATS = ('png', 'jpg', 'jpeg', 'webp')
+
+
+def copy_overview_image(domain_id, docs_folder):
+    """Copy the optional overview image and return the start page figure for it."""
+    media = domain_source_path(domain_id, 'start/media')
+    source = next((os.path.join(media, 'domain-overview.' + fmt) for fmt in OVERVIEW_FORMATS
+                   if os.path.isfile(os.path.join(media, 'domain-overview.' + fmt))), None)
+    if not source:
+        return ''
+    os.makedirs(os.path.join(docs_folder, 'media'), exist_ok=True)
+    name = os.path.basename(source)
+    shutil.copyfile(source, os.path.join(docs_folder, 'media', name))
+    alt_file = os.path.join(media, 'domain-overview.alt.txt')
+    alt = open(alt_file, encoding='utf-8').read().strip() if os.path.isfile(alt_file) else 'Domain overview'
+    src = 'media/' + html.escape(name)
+    return ('<figure class="overview-figure"><a href="' + src + '" target="_blank" rel="noopener" '
+            'title="Open the full-size overview">' + '<img src="' + src + '" alt="' + html.escape(alt) +
+            '"></a></figure>')
 
 
 def script_json(value):
@@ -219,6 +249,8 @@ def create_docs(domain, docs_folder):
     copy_icons(templates_root + 'icons', docs_folder)
     copy_icons(source_icons, docs_folder)
 
+    overview_image = copy_overview_image(domain['id'], docs_folder)
+
     with open(os.path.join(docs_folder, 'index.html'), 'w') as html_file:
         template = open(templates_root + 'index.html').read()
         print(domain['description'])
@@ -229,6 +261,7 @@ def create_docs(domain, docs_folder):
                         .replace('${date}', date_string)
                         .replace('${apps}', script_json(apps))
                         .replace('${sidebar_sections}', script_json(sidebar_sections(domain['id'])))
+                        .replace('${overview_image}', overview_image)
                         .replace('${domain_name}', domain['name'])
                         .replace('${domain_description}', domain['description']))
 

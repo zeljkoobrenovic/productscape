@@ -88,7 +88,8 @@ class Tutorial(unittest.TestCase):
         for link in page.links:
             if link.startswith('#'):
                 self.assertIn(link[1:], page.ids)
-        self.assertIn('../start/index.html', page.links)
+        # The tutorial has no section navigation bar; the start page sidebar links to it.
+        self.assertNotIn('site-nav', self.page.read_text(encoding='utf-8'))
         # The start page lists the tutorial in its script-rendered sidebar.
         home_source = (self.page.parent.parent / 'start/index.html').read_text(encoding='utf-8')
         self.assertIn('"link": "../tutorial/index.html"', home_source)

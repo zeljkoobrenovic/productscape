@@ -114,6 +114,21 @@ class ToolkitCLI(unittest.TestCase):
         self.command('images', 'test-domain', '--dry-run', '--lightweight', '--skip-existing', launcher=True)
         self.assertEqual(snapshot(self.project), before)
 
+    def test_start_page_shows_the_overview_image_only_when_present(self):
+        domain = self.create()
+        self.command('build', 'test-domain', '--sections', 'start')
+        page = self.project / 'docs/sample/test-domain/start/index.html'
+        self.assertNotIn('overview-figure"', page.read_text())
+        self.assertNotIn('${overview_image}', page.read_text())
+        media = domain / 'start/media'
+        media.mkdir(parents=True)
+        (media / 'domain-overview.png').write_bytes(b'\x89PNG')
+        (media / 'domain-overview.alt.txt').write_text('Overview of "the" domain.\n')
+        self.command('build', 'test-domain', '--sections', 'start')
+        html = page.read_text()
+        self.assertIn('<img src="media/domain-overview.png" alt="Overview of &quot;the&quot; domain.">', html)
+        self.assertTrue((page.parent / 'media/domain-overview.png').is_file())
+
     def test_two_projects_do_not_share_domain_sources(self):
         self.create()
         first = self.project

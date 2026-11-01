@@ -445,6 +445,24 @@
             margin-bottom: 50px;
         }
 
+        /* Optional domain overview illustration (start/media/domain-overview.*). */
+        .overview-figure {
+            margin: -20px 0 44px;
+        }
+
+        .overview-figure a {
+            display: block;
+        }
+
+        .overview-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: white;
+        }
+
         .hero-logo {
             width: 202px;
             height: 202px;
@@ -700,6 +718,7 @@
                         </div>
                     </div>
                 </div>
+                ${overview_image}
                 <div id="appGroups"></div>
             </div>
         </section>
@@ -1144,7 +1163,11 @@
             .filter(section => (section.card || section.link) === app.link && section.groups.length)
             .map(section => '<span class="app-count"><strong>' +
                 section.groups.reduce((sum, group) => sum + group.items.length, 0) + '</strong> ' +
-                escapeHtml(section.title) + '</span>')
+                escapeHtml(section.countLabel || section.title) + '</span>')
+            .concat(sidebarSections
+                .filter(section => !section.groups.length && section.link === app.link && section.count > 0)
+                .map(section => '<span class="app-count"><strong>' + section.count + '</strong> ' +
+                    escapeHtml(section.title) + '</span>'))
             .concat(sidebarSections.flatMap(section => section.views || [])
                 .filter(view => view.link === app.link && view.count > 0)
                 .map(view => '<span class="app-count"><strong>' + view.count + '</strong> ' +

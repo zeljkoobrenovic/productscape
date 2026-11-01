@@ -102,6 +102,7 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
+            margin-right: 18px;
         }
 
         .deployment-panel {
@@ -1003,6 +1004,7 @@
     <a href="../product-bricks/index.html">Product Bricks</a>
     <a href="../product-deployments/index.html" class="active" aria-current="page">Products</a>
     <a href="../competition/index.html">Competition</a>
+    <a href="../customers/index.html#insights">Insights</a>
     <a href="../residuality/index.html">Stress Test</a>
     <a href="../tutorial/index.html">Domain Tutorial</a>
 </nav>
@@ -1031,6 +1033,8 @@ ${tabs_script}
 <div>
     <div id="tab_content_products" class="tabcontent">
         <div class="view-toggle">
+            <label><input type="checkbox" id="show_channels_toggle" onchange="update()"> Show delivery channels</label>
+            <label><input type="checkbox" id="show_bricks_toggle" onchange="update()"> Show bricks</label>
             <label><input type="checkbox" id="show_text_toggle" onchange="update()"> Show text</label>
         </div>
         <div id="products_content"></div>
@@ -1192,9 +1196,13 @@ ${tabs_script}
         return '<a target="_blank" href="../product-bricks/landing_pages/' + safeId + '.html" title="' + safeName + '">' + renderBrickIcon(brickId, brickName) + '</a>';
     }
 
-    function showTextEnabled() {
-        const toggle = document.getElementById('show_text_toggle');
+    function toggleChecked(id) {
+        const toggle = document.getElementById(id);
         return !!(toggle && toggle.checked);
+    }
+
+    function showTextEnabled() {
+        return toggleChecked('show_text_toggle');
     }
 
     function chipIconClass() {
@@ -1613,9 +1621,13 @@ ${tabs_script}
         portfolioProducts.forEach(product => {
             html += '<div style="margin: 30px; padding: 22px; padding-top: 0; display: inline-block; width: 400px; vertical-align: top; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; border-radius: 20px; border: 1px solid #f0f0f0;">';
             html += renderProductsTableLabeledCell('', null, renderProductsTableNameCell(product));
-            const deliveryChannels = collectProductDeliveryChannels(product, deploymentLookup);
-            html += renderProductsTableLabeledCell('Delivery Channels', deliveryChannels.length, renderProductsTableDeliveryChannelsCell(product, deliveryChannels));
-            html += renderProductsTableLabeledCell('Bricks', productBricks(product.id).length, renderProductsTableBricksCell(product));
+            if (toggleChecked('show_channels_toggle')) {
+                const deliveryChannels = collectProductDeliveryChannels(product, deploymentLookup);
+                html += renderProductsTableLabeledCell('Delivery Channels', deliveryChannels.length, renderProductsTableDeliveryChannelsCell(product, deliveryChannels));
+            }
+            if (toggleChecked('show_bricks_toggle')) {
+                html += renderProductsTableLabeledCell('Bricks', productBricks(product.id).length, renderProductsTableBricksCell(product));
+            }
             html += '</div>';
         });
 

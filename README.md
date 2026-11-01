@@ -79,6 +79,7 @@ For builds, a domain folder path also selects its data project automatically.
 | `skills --target .claude/skills` | Copy the same skills into another agent's skill directory |
 | `images ID --dry-run --lightweight` | Inspect optional image-generation scope |
 | `images ID --kind tutorial` | Generate tutorial concepts and configured overview illustrations |
+| `images ID --kind overview` | Generate the domain overview picture for the start page |
 
 The CLI builds a domain in this order: start, customers, products, product bricks
 (including streams and data), competition, residuality, tutorial. It also renders
@@ -154,6 +155,12 @@ definitions, configured participant and walkthrough overviews, and optional
 `illustrationPrompt` directions, saves images beside
 `tutorial/tutorial.json`, and adds media entries with alt text and captions.
 The tutorial page shows each illustration and opens the full image in a new tab.
+
+For a one-picture summary of a domain, use `--kind overview`. The generator draws
+a context map from the domain's own model: customer groups, competitors, and
+external systems outside; products, product brick groups, shared data, and
+delivery channels inside. It saves `start/media/domain-overview.png` with its
+prompt and alt text, and the start page shows it under the domain description.
 
 ## Verify the toolkit
 
