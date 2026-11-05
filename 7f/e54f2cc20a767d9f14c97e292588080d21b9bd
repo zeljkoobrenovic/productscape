@@ -1,0 +1,34 @@
+_config/scripts/image-generation/test_deployment_overview_image.py
+  s_78f26cc004539e::t_8b26798b65917f 94
+  s_78f26cc004539e::t_bd57183c632dea 1-37,39-61,63-66,72-74,99-101,106-144
+  s_78f26cc004539e::t_636ce9a9f7a92e 62,67-70,75,79-86,88,93,96-97
+  s_78f26cc004539e::t_74bb9e73d9497d 76-77,87
+  s_78f26cc004539e::t_789beec2f306bf 38
+  s_78f26cc004539e::t_0c11cc8e66e4c9 102-105
+  s_78f26cc004539e::t_01f40c2af0e8c4 71,78
+  s_78f26cc004539e::t_c0b495b71b4191 89-92,95,98
+_config/scripts/image-generation/generate_deployment_overview_image_gemini_nanobanana_api.py
+  s_78f26cc004539e::t_74bb9e73d9497d 105
+  s_78f26cc004539e::t_06bd6c9c70e41a 5-9,38,89,103,131-133,135-136,139-141,150-152,154,160-161,163-167,169-172,179,181-183,193-194,203,205-206,208-209,211,213-214,219,234,261
+  s_78f26cc004539e::t_d2b040c843c83c 69-75,77-78,80-81,84,86-87,118-120,123-124
+  s_78f26cc004539e::t_c0b495b71b4191 142
+  s_78f26cc004539e::t_0c11cc8e66e4c9 76,79,82-83,85,95,102
+  s_78f26cc004539e::t_dcf017d8936f42 1-4,10-37,39-68,88,90-94,96-101,104,106-117,121-122,125-130,143-149,153,155-159,168,173-178,180,184-192,195-202,204,210,212,215-218,220-233,235-260,262-309
+  s_78f26cc004539e::t_5ed6a2d6f1d78c 134,137-138,162,207
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7fe54f2cc20a767d9f14c97e292588080d21b9bd",
+  "prompts": {},
+  "sessions": {
+    "s_78f26cc004539e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "96803c36-5a6d-496c-837e-40a303f57bc2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
