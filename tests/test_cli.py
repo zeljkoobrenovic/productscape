@@ -81,6 +81,23 @@ class ToolkitCLI(unittest.TestCase):
         self.assertNotIn('hidden/', index)
         self.assertNotIn('<h2>Hidden</h2>', index)
 
+    def test_overview_start_package_becomes_the_site_entry(self):
+        self.create()
+        package = self.project / '_config/start-packages/overview/apps.json'
+        package.parent.mkdir(parents=True)
+        package.write_text(json.dumps({'config': {'name': 'Overview', 'description': 'All domains'}, 'apps': []}))
+        self.command('build', '--all', launcher=True)
+        docs = self.project / 'docs'
+        self.assertIn('url=start-packages/overview/index.html', (docs / 'index.html').read_text())
+        self.assertIn('sample/test-domain/start/index.html', (docs / 'overview.html').read_text())
+        # Without the overview package the catalog returns to index.html and the stale copy goes.
+        package.unlink()
+        package.parent.rmdir()
+        package.parent.parent.rmdir()
+        self.command('build', '--all', launcher=True)
+        self.assertIn('sample/test-domain/start/index.html', (docs / 'index.html').read_text())
+        self.assertFalse((docs / 'overview.html').exists())
+
     def test_domain_ids_are_unique_across_groups_and_paths_cannot_escape(self):
         self.create()
         before = snapshot(self.project)

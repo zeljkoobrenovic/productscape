@@ -119,6 +119,7 @@ def create_overview_docs(domain, docs_folder):
 
     copy_icons(templates_root + 'icons', docs_folder)
     copy_icons(domain_source_path(domain['id'], 'product-deployments/icons'), docs_folder)
+    overview_image, overview_alt = copy_deployment_overview_image(domain['id'], docs_folder)
 
     with open(os.path.join(docs_folder, 'index.html'), 'w') as html_file:
         html_file.write(template
@@ -133,8 +134,29 @@ def create_overview_docs(domain, docs_folder):
                         .replace('${date}', date_string)
                         .replace('${domain_name}', domain['name'])
                         .replace('${domain_description}', domain['description'])
+                        .replace('${overview_image}', json.dumps(overview_image))
+                        .replace('${overview_image_alt}', json.dumps(overview_alt))
                         .replace('${products}', json.dumps(products))
                         .replace('${deployment}', json.dumps(deployment)))
+
+
+OVERVIEW_IMAGE_STEM = 'deployment-overview'
+OVERVIEW_IMAGE_FORMATS = ('jpg', 'jpeg', 'png', 'webp')
+
+
+def copy_deployment_overview_image(domain_id, docs_folder):
+    """Copy the optional generated deployment map (product-deployments/media/
+    deployment-overview.<fmt>) into the docs; return its docs-relative path and alt text."""
+    media_dir = domain_source_path(domain_id, 'product-deployments/media')
+    for fmt in OVERVIEW_IMAGE_FORMATS:
+        source = os.path.join(media_dir, OVERVIEW_IMAGE_STEM + '.' + fmt)
+        if os.path.isfile(source) and os.path.getsize(source):
+            os.makedirs(os.path.join(docs_folder, 'media'), exist_ok=True)
+            shutil.copy2(source, os.path.join(docs_folder, 'media', os.path.basename(source)))
+            alt_path = os.path.join(media_dir, OVERVIEW_IMAGE_STEM + '.alt.txt')
+            alt = open(alt_path, encoding='utf-8').read().strip() if os.path.isfile(alt_path) else ''
+            return 'media/' + os.path.basename(source), alt
+    return '', ''
 
 def create_landing_pages(products, docs_folder):
     os.makedirs(os.path.join(docs_folder, 'landing_pages'), exist_ok=True)

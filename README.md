@@ -80,11 +80,14 @@ For builds, a domain folder path also selects its data project automatically.
 | `images ID --dry-run --lightweight` | Inspect optional image-generation scope |
 | `images ID --kind tutorial` | Generate tutorial concepts and configured overview illustrations |
 | `images ID --kind overview` | Generate the domain overview picture for the start page |
+| `images ID --kind deployments` | Generate the products-to-channels deployment map for the products page |
 
 The CLI builds a domain in this order: start, customers, products, product bricks
 (including streams and data), competition, residuality, tutorial. It also renders
 the evidence explorer and optional project start packages. Output goes under
-`docs/<group>/<domain-id>/`, with a catalog at `docs/index.html`.
+`docs/<group>/<domain-id>/`, with a catalog at `docs/index.html`. When the project
+has an `overview` start package, `docs/index.html` redirects to
+`start-packages/overview/index.html` and the catalog moves to `docs/overview.html`.
 
 Builds replace the selected generated folders. Keep authored changes in source
 JSON and templates. Missing required files or invalid JSON stop a build before
@@ -161,6 +164,12 @@ a context map from the domain's own model: customer groups, competitors, and
 external systems outside; products, product brick groups, shared data, and
 delivery channels inside. It saves `start/media/domain-overview.png` with its
 prompt and alt text, and the start page shows it under the domain description.
+
+For a picture of how products map onto deployment channels, use `--kind deployments`.
+It draws the products as a row of cards, the bricks they share, and the channel
+groups as lanes with their channels; it deliberately draws no product-to-lane links,
+which the page's heatmap and matrix show exactly. It saves `product-deployments/media/deployment-overview.png` (JPEG on macOS)
+with its prompt and alt text; the products page shows it at the top of its Overview tab.
 
 ## Verify the toolkit
 

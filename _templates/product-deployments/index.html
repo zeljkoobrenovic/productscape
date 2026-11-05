@@ -9,10 +9,21 @@
     ${tabs_style}
     ${breadcrumbs_style}
     <style>
+        :root {
+            /* data-viz roles (reference palette, light) */
+            --viz-ink: #0b0b0b;
+            --viz-ink-2: #52514e;
+            --viz-muted: #898781;
+            --viz-grid: #e1e0d9;
+            --viz-bar: #2a78d6;
+            --viz-track: #eef2f7;
+        }
+
         body {
             font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
             margin: 8px 28px 28px;
-            color: #202124;
+            color: var(--ink);
+            background: white;
         }
 
         a {
@@ -20,742 +31,817 @@
             text-decoration: none;
         }
 
-        .section-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .section-link {
-            display: inline-block;
-            padding: 8px 14px;
-            color: #4b5563;
-            text-decoration: none;
-            font-size: 13px;
-            border: 1px solid #d1d5db;
-            border-radius: 999px;
-            background-color: #f8fafc;
-            transition: 0.3s;
-        }
-
-        .section-link:hover {
-            background-color: #eef2f7;
-            border-color: #9ca3af;
-        }
-
-        .section-link.active {
-            background-color: #202124;
-            border-color: #202124;
-            color: white;
+        a:hover .link-text, a.link-text:hover {
+            color: var(--accent-ink);
+            text-decoration: underline;
         }
 
         .hero {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
             margin-bottom: 14px;
         }
 
-        .hero-table {
-            border-collapse: collapse;
-            width: auto;
-        }
-
         .hero-logo {
-            width: 92px;
-            height: 92px;
-            margin-right: 12px;
-        }
-
-        .hero-logo-cell {
-            border: none;
-            vertical-align: top;
-            padding-top: 12px;
-            padding-right: 12px;
-        }
-
-        .hero-copy-cell {
-            vertical-align: top;
-            border: none;
+            width: 84px;
+            height: 84px;
+            flex: none;
+            margin-top: 10px;
         }
 
         .hero-title {
-            font-size: 52px;
+            font-size: 48px;
             margin-bottom: 4px;
         }
 
         .hero-subtitle {
-            color: #6b7280;
-            font-size: 18px;
-            margin-bottom: 14px;
+            color: var(--muted);
+            font-size: 17px;
             max-width: 960px;
-            line-height: 1.4;
+            line-height: 1.45;
         }
 
-        .view-toggle {
-            margin: 0;
-            padding: 12px 0 0 0;
+        .panel {
+            padding: 18px 2px;
+        }
+
+        .section-title {
             font-size: 13px;
-            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            margin: 0 0 4px 0;
+            font-weight: normal;
         }
 
-        .view-toggle label {
-            display: inline-flex;
+        .section-intro {
+            color: var(--ink-soft);
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 900px;
+            margin: 0 0 14px 0;
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--panel);
+            box-shadow: var(--shadow);
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .num {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ---------- KPI tiles ---------- */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .kpi {
+            padding: 14px 16px;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            color: var(--viz-ink);
+            margin: 4px 0 2px 0;
+            line-height: 1.1;
+        }
+
+        .kpi-sub {
+            font-size: 12px;
+            color: var(--viz-ink-2);
+            line-height: 1.35;
+        }
+
+        /* ---------- overview layout ---------- */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 380px;
+            gap: 18px;
+            align-items: start;
+        }
+
+        /* many channels: heatmap spans the page, side panels sit below it */
+        .overview-grid.wide {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+
+        .overview-grid.wide > .span-all {
+            grid-column: 1 / -1;
+        }
+
+        .overview-grid.wide .heatmap {
+            width: 100%;
+        }
+
+        .overview-grid.wide .heat-channel-head {
+            width: auto;
+            min-width: 48px;
+            max-width: 96px;
+            font-size: 11px;
+            hyphens: auto;
+        }
+
+        .overview-grid.wide .heat-group-head {
+            white-space: normal;
+        }
+
+        .overview-grid.wide .heat-row-head {
+            white-space: normal;
+            min-width: 150px;
+            padding-right: 6px;
+        }
+
+        .overview-grid.wide .heat-total {
+            padding: 4px 4px;
+        }
+
+        @media (max-width: 1100px) {
+            .overview-grid, .overview-grid.wide {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        .block {
+            padding: 16px 18px;
+            margin-bottom: 18px;
+        }
+
+        .overview-figure {
+            margin: 0 0 18px 0;
+        }
+
+        .overview-figure img {
+            width: 100%;
+            max-width: 1100px;
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+            display: block;
+        }
+
+        .overview-figure figcaption {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        /* ---------- insights ---------- */
+        .insight-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .insight {
+            border-left: 3px solid var(--accent-line);
+            padding: 4px 0 4px 12px;
+            font-size: 14px;
+            line-height: 1.45;
+            color: var(--ink);
+        }
+
+        .insight.attention {
+            border-left-color: var(--ink-soft);
+        }
+
+        .insight-tag {
+            display: inline-block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .insight a {
+            color: var(--accent-ink);
+        }
+
+        .insight a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- heatmap ---------- */
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        .heatmap {
+            border-collapse: separate;
+            border-spacing: 2px;
+            font-size: 13px;
+        }
+
+        .heatmap th {
+            font-weight: normal;
+        }
+
+        .heat-group-head {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--viz-ink-2);
+            text-align: left;
+            padding: 4px 6px 4px 6px;
+            border-top: 3px solid var(--viz-muted);
+            white-space: nowrap;
+        }
+
+        .heat-channel-head {
+            vertical-align: bottom;
+            text-align: left;
+            padding: 4px 6px 6px 6px;
+            width: 96px;
+            min-width: 84px;
+            max-width: 130px;
+            font-size: 12px;
+            line-height: 1.25;
+            color: var(--ink);
+        }
+
+        .heat-channel-head img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .heat-row-head {
+            text-align: left;
+            padding: 4px 12px 4px 0;
+            white-space: nowrap;
+        }
+
+        .heat-row-head a {
+            display: flex;
             align-items: center;
             gap: 8px;
-            cursor: pointer;
-            margin-right: 18px;
         }
 
-        .deployment-panel {
-            padding: 18px;
-            background: white;
+        .heat-row-head img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
         }
 
-        .deployment-icon-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 18px;
+        .heat-cell, .heat-empty {
+            height: 38px;
+            text-align: center;
+            border-radius: 4px;
+            font-variant-numeric: tabular-nums;
         }
 
-        /* channel cards with embedded environments + brick circles */
-        .deployment-channel-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 14px;
-            margin-top: 18px;
+        .heat-cell a {
+            display: block;
+            line-height: 38px;
+            font-weight: 600;
         }
 
-        .deployment-channel-card {
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            background-color: white;
-            padding: 14px;
+        .heat-empty {
+            background: #f6f7f9;
+            color: #c3c2b7;
         }
 
-        .deployment-channel-head {
+        .heat-total {
+            text-align: center;
+            color: var(--viz-ink-2);
+            font-size: 12px;
+            padding: 4px 8px;
+            white-space: nowrap;
+        }
+
+        .heat-foot th, .heat-foot td {
+            padding-top: 6px;
+        }
+
+        .heat-legend {
             display: flex;
             align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 10px;
+        }
+
+        .heat-legend-swatch {
+            width: 22px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        /* ---------- horizontal bars ---------- */
+        .hbar-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .hbar-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 110px 34px;
             gap: 10px;
-            color: inherit;
-            text-decoration: none;
+            align-items: center;
+            font-size: 13px;
         }
 
-        .deployment-channel-head:hover .deployment-channel-name {
-            color: #1d4ed8;
+        .hbar-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
         }
 
-        .deployment-channel-head .deployment-grid-icon {
+        .hbar-label span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hbar-label img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            flex: none;
+        }
+
+        .hbar-track {
+            height: 10px;
+            background: var(--viz-track);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .hbar-fill {
+            height: 100%;
+            background: var(--viz-bar);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .hbar-value {
+            text-align: right;
+            color: var(--viz-ink-2);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .reuse-split {
+            display: flex;
+            gap: 2px;
+            height: 14px;
+            margin: 8px 0 6px 0;
+        }
+
+        .reuse-split div {
+            height: 100%;
+        }
+
+        .reuse-split div:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .reuse-split div:last-child {
+            border-radius: 0 4px 4px 0;
+        }
+
+        .reuse-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 14px;
+            font-size: 12px;
+            color: var(--viz-ink-2);
+            margin-bottom: 14px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            margin-right: 5px;
+            vertical-align: -1px;
+            flex: none;
+        }
+
+        /* ---------- toolbar ---------- */
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 16px;
+            align-items: center;
+            margin: 4px 0 16px 0;
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .toolbar input[type=search], .toolbar select {
+            font-family: inherit;
+            font-size: 13px;
+            padding: 7px 10px;
+            border: 1px solid var(--line-strong);
+            border-radius: 8px;
+            background: white;
+            color: var(--ink);
+        }
+
+        .toolbar input[type=search] {
+            width: 240px;
+        }
+
+        .toolbar label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .toolbar .spacer {
+            flex: 1;
+        }
+
+        .group-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 14px;
+            font-size: 12px;
+            color: var(--viz-ink-2);
+        }
+
+        /* ---------- product cards ---------- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 16px;
+        }
+
+        .product-card {
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: box-shadow 0.18s ease;
+        }
+
+        .product-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-head {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .product-head img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            flex: none;
+        }
+
+        .product-name {
+            font-size: 21px;
+            line-height: 1.2;
+        }
+
+        .product-type {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .clamp {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: 13px;
+            line-height: 1.45;
+            color: var(--ink-soft);
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 0;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .stat {
+            flex: 1;
+            padding: 8px 10px;
+            border-right: 1px solid var(--line);
+        }
+
+        .stat:last-child {
+            border-right: none;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            color: var(--viz-ink);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sub-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .seg-bar {
+            display: flex;
+            gap: 2px;
+            height: 8px;
+            margin-bottom: 8px;
+        }
+
+        .seg-bar div:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+
+        .seg-bar div:last-child {
+            border-radius: 0 4px 4px 0;
+        }
+
+        .seg-bar div:only-child {
+            border-radius: 4px;
+        }
+
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            color: var(--ink);
+            white-space: nowrap;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        a.pill:hover {
+            border-color: var(--accent-line);
+            background: var(--accent-soft);
+        }
+
+        .pill .pill-count {
+            color: var(--muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .pill img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .brick-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .brick-strip a {
+            position: relative;
+            display: inline-flex;
+        }
+
+        .brick-strip img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+            background: white;
+            padding: 2px;
+            box-sizing: border-box;
+        }
+
+        .brick-strip a.shared img {
+            border-color: var(--viz-bar);
+        }
+
+        .card-foot {
+            margin-top: auto;
+            font-size: 13px;
+            color: var(--accent-ink);
+        }
+
+        .empty-note {
+            font-size: 13px;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        /* ---------- channels ---------- */
+        .group-section {
+            margin-bottom: 26px;
+        }
+
+        .group-head {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-top: 3px solid var(--viz-muted);
+            padding-top: 10px;
+            margin-bottom: 4px;
+        }
+
+        .group-name {
+            font-size: 20px;
+        }
+
+        .group-meta {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .channel-card {
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .channel-head {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .channel-head img {
             width: 40px;
             height: 40px;
             object-fit: contain;
             flex: none;
         }
 
-        .deployment-channel-name {
-            font-size: 16px;
-            color: #1f2937;
+        .channel-name {
+            font-size: 17px;
             line-height: 1.25;
         }
 
-        .deployment-channel-type {
-            font-size: 12px;
-            color: #6b7280;
+        .channel-type {
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 2px;
+            letter-spacing: 0.06em;
+            color: var(--muted);
         }
 
-        .env-list {
-            margin-top: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        /* ---------- brick x product matrix ---------- */
+        .matrix {
+            border-collapse: collapse;
+            font-size: 13px;
         }
 
-        .env-block {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            background-color: #f8fafc;
-            padding: 10px;
-            margin-top: 10px;
+        .matrix th, .matrix td {
+            border-bottom: 1px solid var(--line);
+            padding: 6px 8px;
         }
 
-        .env-name {
-            font-size: 12px;
-            font-weight: bold;
-            color: #374151;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            margin-bottom: 8px;
-        }
-
-        .env-brick-count {
-            color: #9ca3af;
+        .matrix thead th {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+            vertical-align: bottom;
             font-weight: normal;
+            border-bottom: 1px solid var(--line-strong);
         }
 
-        .env-brick-circles {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
+        .matrix .m-product-head {
+            width: 110px;
+            min-width: 90px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.25;
         }
 
-        .env-brick-circle {
+        .matrix .m-product-head img {
             width: 32px;
             height: 32px;
-            border-radius: 50%;
-            border: 1px solid #d7dce1;
-            background-color: white;
-            overflow: hidden;
-            display: inline-flex;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 4px auto;
+        }
+
+        .matrix .m-brick {
+            text-align: left;
+            white-space: nowrap;
+            min-width: 260px;
+        }
+
+        .matrix .m-brick a {
+            display: flex;
             align-items: center;
+            gap: 8px;
+        }
+
+        .matrix .m-brick img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+
+        .matrix td.m-cell {
+            text-align: center;
+        }
+
+        .matrix tbody tr:hover td, .matrix tbody tr:hover th {
+            background: var(--surface);
+        }
+
+        .m-marks {
+            display: inline-flex;
+            gap: 3px;
+            flex-wrap: wrap;
             justify-content: center;
         }
 
-        .env-brick-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 2px;
-            box-sizing: border-box;
-        }
-
-        .env-empty {
-            font-size: 12px;
-            color: #9ca3af;
-            font-style: italic;
-        }
-
-        .deployment-icon-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: left;
-            width: 240px;
-            overflow: hidden;
-            height: 74px;
-            border: 1px solid #d1d5db;
-            border-radius: 16px;
-            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-            box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
-            padding: 6px 12px;
-        }
-
-        .deployment-icon-link:hover {
-            border-color: #93c5fd;
-            background: #eff6ff;
-        }
-
-        .deployment-grid-icon {
-            width: 82px;
-            height: 82px;
-            object-fit: contain;
-        }
-
-        .deployment-summary {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
-        .deployment-stat {
-            display: inline-block;
-            min-width: 120px;
-            padding: 12px 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            background: #f8fafc;
-        }
-
-        .deployment-stat-value {
-            font-size: 28px;
-            color: #1d4ed8;
-        }
-
-        .deployment-stat-label {
-            font-size: 12px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        .deployment-group {
-            margin-bottom: 24px;
-            border: 1px solid grey;
-            padding: 16px;
-            border-radius: 10px;
-        }
-
-        .deployment-group-title {
-            font-size: 15px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 10px;
-        }
-
-        .deployment-group-copy {
-            color: #4b5563;
-            margin-bottom: 12px;
-            max-width: 960px;
-            line-height: 1.5;
-        }
-
-        .deployment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 14px;
-        }
-
-        .deployment-card {
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            padding: 16px;
-            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-            box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
-        }
-
-        .deployment-card-title {
-            font-size: 32px;
-            color: black;
-            margin-bottom: 4px;
-        }
-
-        .deployment-card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-        }
-
-        .deployment-card-icon {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            border-radius: 10px;
-            background: white;
-            border: 1px solid #d1d5db;
-            padding: 5px;
-        }
-
-        .deployment-card-meta {
-            font-size: 11px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 10px;
-        }
-
-        .deployment-card-copy {
-            color: #4b5563;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        .deployment-subtitle {
-            font-size: 11px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-top: 12px;
-            margin-bottom: 8px;
-        }
-
-        .deployment-environment {
-            padding: 8px 10px;
-            border: 1px solid #dbeafe;
-            border-radius: 10px;
-            background: #eff6ff;
-            margin-bottom: 10px;
-        }
-
-        .deployment-environment-name {
-            font-size: 14px;
-            font-weight: bold;
-            color: #1d4ed8;
-        }
-
-        .deployment-environment-copy {
-            color: #4b5563;
-            font-size: 13px;
-            margin-top: 4px;
-            line-height: 1.4;
-        }
-
-        .deployment-link-row {
-            margin-top: 6px;
-        }
-
-        .deployment-link {
-            display: inline-block;
-            margin-right: 8px;
-            margin-bottom: 6px;
-            font-size: 12px;
-            color: #1d4ed8;
-        }
-
-        .brick-chip-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .entity-chip-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .brick-chip {
-            display: inline-flex;
-            align-items: flex-start;
-            gap: 8px;
-            padding: 8px 10px;
-            border-radius: 10px;
-            background: #f3f4f6;
-            border: 1px solid #e5e7eb;
-        }
-
-        .brick-chip-body {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .chip-icon {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-            border-radius: 6px;
-            background: white;
-            border: 2px solid #d1d5db;
-            padding: 2px;
-            flex: 0 0 auto;
-            margin-top: 1px;
-        }
-
-        .chip-icon-interface {
-            border-color: #7c3aed;
-        }
-
-        .chip-icon-channel {
-            border-color: #2563eb;
-        }
-
-        .chip-icon-brick {
-            border-color: #059669;
-        }
-
-
-        .chip-icon-large {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            padding: 4px;
-        }
-
-        .icon-only-chip {
-            display: inline-flex;
-        }
-
-        .icon-only-chip-link {
-            display: inline-flex;
-        }
-
-        .icon-badge-wrap {
-            position: relative;
-            display: inline-flex;
-        }
-
-        .icon-badge {
-            position: absolute;
-            min-width: 16px;
-            height: 16px;
-            padding: 1px;
-            border-radius: 999px;
-            background: #111827;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            line-height: 16px;
-            text-align: center;
+        .m-mark {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
             box-shadow: 0 0 0 2px white;
         }
 
-        .icon-badge-top {
-            top: -5px;
-            right: -5px;
+        .m-total {
+            text-align: right;
+            color: var(--viz-ink-2);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
         }
 
-        .icon-badge-bottom {
-            right: -5px;
-            bottom: -5px;
+        .m-foot td, .m-foot th {
+            border-bottom: none;
+            color: var(--viz-ink-2);
+            font-size: 12px;
+            text-align: center;
         }
 
-        .icon-badge-interface {
-            background: #7c3aed;
-        }
-
-        .icon-badge-channel {
-            background: #2563eb;
-        }
-
-        .icon-badge-brick {
-            background: #059669;
-        }
-
-        .brick-chip-body.hidden {
+        /* ---------- tooltip ---------- */
+        .viz-tip {
+            position: fixed;
+            z-index: 50;
+            pointer-events: none;
             display: none;
-        }
-
-        .brick-chip-title {
+            max-width: 320px;
+            background: #1f2430;
+            color: white;
             font-size: 12px;
-            font-weight: bold;
-            color: #111827;
-        }
-
-        .brick-chip-copy {
-            font-size: 11px;
-            color: #4b5563;
-            line-height: 1.35;
-        }
-
-        .deployment-muted {
-            color: #6b7280;
-            font-size: 90%;
-        }
-
-        .product-chip {
-            display: inline-flex;
-            flex-direction: column;
-            gap: 2px;
+            line-height: 1.45;
             padding: 8px 10px;
-            border-radius: 10px;
-            background: #eef2ff;
-            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            white-space: pre-line;
+            box-shadow: 0 6px 18px rgba(16, 24, 40, 0.25);
         }
-
-        .product-chip-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: #312e81;
-        }
-
-        .product-chip-copy {
-            font-size: 11px;
-            color: #4338ca;
-            line-height: 1.35;
-        }
-
-        .dependency-panel {
-            padding: 18px;
-            background: white;
-        }
-
-        .dependency-product {
-            margin-bottom: 22px;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            overflow: hidden;
-            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-            box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
-        }
-
-        .dependency-product-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 16px 8px 16px;
-        }
-
-        .dependency-product-copy {
-            font-size: 12px;
-            color: #6b7280;
-            padding: 0 16px 12px 16px;
-        }
-
-        .dependency-table-wrap {
-            overflow-x: auto;
-            padding: 0 16px 16px 16px;
-        }
-
-        .dependency-table {
-            border-collapse: collapse;
-            min-width: 720px;
-            width: 100%;
-        }
-
-        .dependency-table th,
-        .dependency-table td {
-            border: 1px solid #e5e7eb;
-            padding: 8px;
-            text-align: center;
-            vertical-align: middle;
-            background: white;
-        }
-
-        .dependency-table th {
-            background: #f8fafc;
-        }
-
-        .dependency-row-label {
-            min-width: 220px;
-            text-align: left;
-            background: #fbfdff;
-        }
-
-        .dependency-row-cell {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dependency-row-text {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .dependency-row-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: #111827;
-        }
-
-        .dependency-row-copy {
-            font-size: 11px;
-            color: #6b7280;
-        }
-
-        .dependency-marker-icon {
-            width: 22px;
-            height: 22px;
-            object-fit: contain;
-            border-radius: 6px;
-            background: white;
-            border: 1px solid #d1d5db;
-            padding: 2px;
-        }
-
-        .dependency-empty {
-            color: #cbd5e1;
-            font-size: 14px;
-        }
-
-        .dependency-section-row td {
-            background: #eef2f7;
-            color: #4b5563;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            text-align: left;
-            padding: 10px 12px;
-        }
-
-        .products-table-wrap {
-            padding: 18px;
-            text-align: center;
-            display: inline-block;
-        }
-
-        .products-table {
-            border-collapse: separate;
-            border-spacing: 0;
-            min-width: 1120px;
-            width: 100%;
-        }
-
-        .products-table th,
-        .products-table td {
-            border: 1px solid #e5e7eb;
-            padding: 14px;
-            vertical-align: top;
-            background: white;
-        }
-
-        .products-table td {
-            text-align: center;
-        }
-
-        .products-table thead th {
-            background: #f8fafc;
-        }
-
-        .products-table-product-cell {
-            min-width: 280px;
-        }
-
-        .products-table-section-label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #6b7280;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        .products-table-empty {
-            font-size: 12px;
-            color: #9ca3af;
-            font-style: italic;
-        }
-
-        .products-table-head {
-        }
-
-        .products-table-head-copy {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .products-table-name {
-            font-size: 24px;
-            line-height: 1.1;
-            color: #111827;
-            margin-top: 12px;
-        }
-
-        .products-table-product-icon {
-            width: 100px;
-            height: 100px;
-            padding: 6px;
-        }
-
-        .products-table-meta {
-            font-size: 11px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .products-table-cell-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .products-table-cell-stack .brick-chip {
-            width: 100%;
-            box-sizing: border-box;
-            justify-content: flex-start;
-            text-align: left;
-        }
-
-        .products-table-cell-stack.compact {
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            justify-content: center;
-        }
-
-        .products-table-cell-stack.compact .brick-chip {
-            width: auto;
-        }
-
         /* product dependency graph */
         .pdg-section {
             margin-top: 0;
@@ -975,7 +1061,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/force-graph@1.51.4/dist/force-graph.min.js"></script>
 </head>
-<body onload="initTab('products')" onhashchange="initTab('products')">
+<body onload="initTab('overview')" onhashchange="initTab('overview')">
 <style>
     .site-nav {
         display: flex;
@@ -1011,35 +1097,60 @@
 <div id="breadcrumbs"></div>
 ${tabs_script}
 <div class="hero">
-    <table class="hero-table">
-        <tr>
-            <td class="hero-logo-cell"><img class="hero-logo" src="icons/logo.png" alt="Products"></td>
-            <td class="hero-copy-cell">
-                <div class="hero-title" data-follows-tab>Product Deployments</div>
-                <div class="hero-subtitle">Products organize the customer value proposition into concrete offers, journeys, channels, and delivery structures. This page shows an overview of the
-                    product landscape and how products are exposed across deployment channels.
-                </div>
-            </td>
-        </tr>
-    </table>
+    <img class="hero-logo" src="icons/logo.png" alt="Products">
+    <div>
+        <div class="hero-title" data-follows-tab>Product Deployments</div>
+        <div class="hero-subtitle">Products organize the customer value proposition into concrete offers. This page shows
+            which product bricks each product is built from, where those bricks run, and how much products share.
+        </div>
+    </div>
 </div>
 
 <div class="tab section-tabs">
-    <button class="tablinks active" id="tab_products" data-tab-title="Products" onclick="openTab('products')">Products</button>
+    <button class="tablinks active" id="tab_overview" data-tab-title="Overview" onclick="openTab('overview')">Overview</button>
+    <button class="tablinks" id="tab_products" data-tab-title="Products" onclick="openTab('products')">Products</button>
     <button class="tablinks" id="tab_deployment" data-tab-title="Deployments" onclick="openTab('deployment')">Deployment Channels</button>
-    <button class="tablinks" id="tab_dependencies" data-tab-title="Dependencies" onclick="openTab('dependencies')">Dependencies</button>
-    <button class="tablinks" id="tab_matrix" data-tab-title="Matrix" onclick="openTab('matrix')">Matrix</button>
+    <button class="tablinks" id="tab_matrix" data-tab-title="Brick Matrix" onclick="openTab('matrix')">Brick Matrix</button>
+    <button class="tablinks" id="tab_dependencies" data-tab-title="Dependencies" onclick="openTab('dependencies')">Dependency Graph</button>
 </div>
 <div>
+    <div id="tab_content_overview" class="tabcontent"></div>
     <div id="tab_content_products" class="tabcontent">
-        <div class="view-toggle">
-            <label><input type="checkbox" id="show_channels_toggle" onchange="update()"> Show delivery channels</label>
-            <label><input type="checkbox" id="show_bricks_toggle" onchange="update()"> Show bricks</label>
-            <label><input type="checkbox" id="show_text_toggle" onchange="update()"> Show text</label>
+        <div class="panel">
+            <div class="toolbar">
+                <input type="search" id="product_search" placeholder="Search products, customers, bricks…" oninput="renderProducts()">
+                <label>Sort
+                    <select id="product_sort" onchange="renderProducts()">
+                        <option value="name">Name</option>
+                        <option value="bricks">Most bricks</option>
+                        <option value="channels">Most channels</option>
+                        <option value="shared">Most shared</option>
+                    </select>
+                </label>
+                <label><input type="checkbox" id="product_show_bricks" checked onchange="renderProducts()"> Show bricks</label>
+                <span class="spacer"></span>
+                <div class="group-legend" id="product_legend"></div>
+            </div>
+            <div id="products_content"></div>
         </div>
-        <div id="products_content"></div>
     </div>
     <div id="tab_content_deployment" class="tabcontent"></div>
+    <div id="tab_content_matrix" class="tabcontent">
+        <div class="panel">
+            <p class="section-intro">Every deployed brick against every product. Each mark is a deployment channel the brick
+                runs in for that product, coloured by channel group. Rows are sorted by how many products share the brick.</p>
+            <div class="toolbar">
+                <input type="search" id="matrix_search" placeholder="Search bricks…" oninput="renderMatrix()">
+                <label>Channel group
+                    <select id="matrix_group" onchange="renderMatrix()"></select>
+                </label>
+                <label><input type="checkbox" id="matrix_shared" onchange="renderMatrix()"> Only shared bricks</label>
+                <span class="spacer"></span>
+                <div class="group-legend" id="matrix_legend"></div>
+            </div>
+            <div class="table-scroll" id="matrix_content"></div>
+        </div>
+    </div>
     <div id="tab_content_dependencies" class="tabcontent">
         <div class="pdg-section">
             <div class="pdg-intro">All dependencies between products, deployment channels, and product bricks. Filter node types on the left.</div>
@@ -1057,19 +1168,22 @@ ${tabs_script}
             </div>
         </div>
     </div>
-    <div id="tab_content_matrix" class="tabcontent"></div>
 </div>
+<div class="viz-tip" id="viz_tip" role="tooltip"></div>
 
 <script>
     const products = ${products};
     const deployment = ${deployment};
+    const OVERVIEW_IMAGE = ${overview_image};
+    const OVERVIEW_IMAGE_ALT = ${overview_image_alt};
 
-    function updateTabCounts() {
-        const productCount = ((products.portfolio || {}).products || []).length;
-        const deploymentChannelCount = (deployment.channels || []).reduce((sum, group) => sum + ((group.channels || []).length), 0);
-        document.getElementById('tab_products').textContent = 'Products (' + productCount + ')';
-        document.getElementById('tab_deployment').textContent = 'Deployment Channels (' + deploymentChannelCount + ')';
-    }
+    // Categorical slots (fixed order) identify channel groups; groups past the
+    // eighth fold into a neutral "other" grey. Heat steps are one blue ramp.
+    const GROUP_COLORS = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#6250d6', '#e34948'];
+    const OTHER_COLOR = '#898781';
+    // Above this many channels the footprint heatmap gets the full page width.
+    const WIDE_HEATMAP_CHANNELS = 8;
+    const HEAT_STEPS =['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#256abf', '#184f95'];
 
     function escapeHtml(value) {
         return String(value ?? '')
@@ -1080,133 +1194,16 @@ ${tabs_script}
             .replaceAll("'", '&#39;');
     }
 
-    function buildDeploymentChannelLookup() {
-        const lookup = {};
-        (deployment.channels || []).forEach(group => {
-            (group.channels || []).forEach(channel => {
-                const ref = (group.groupId || '') + '/' + (channel.subChannelId || '');
-                lookup[ref] = {
-                    groupId: group.groupId || '',
-                    groupName: group.groupName || '',
-                    channelId: channel.subChannelId || '',
-                    channelName: channel.subChannelName || channel.subChannelId || '',
-                    channelType: channel.channelType || ''
-                };
-            });
-        });
-        return lookup;
+    function plural(count, one, many) {
+        return count + ' ' + (count === 1 ? one : (many || one + 's'));
     }
 
-    // Bricks live directly on a channel (subchannel): channel.deployedBricks.
-    function channelDeployedBricks(channel) {
-        return (channel && channel.deployedBricks) || [];
+    function verb(count, one, many) {
+        return count === 1 ? one : many;
     }
 
-    // Derive each product's deployed bricks and the channels they ship to from
-    // deployment.json (deployedBricks[].usedInProducts), since products.json no longer
-    // carries brick/channel links. Returns { byProduct: {pid: {bricks, brickChannelRefs}} }.
-    let productDeploymentIndexCache = null;
-
-    function buildProductDeploymentIndex() {
-        if (productDeploymentIndexCache) {
-            return productDeploymentIndexCache;
-        }
-        const byProduct = {};
-
-        function ensure(pid) {
-            if (!byProduct[pid]) {
-                byProduct[pid] = {bricks: {}, brickChannelRefs: {}};
-            }
-            return byProduct[pid];
-        }
-
-        (deployment.channels || []).forEach(group => {
-            (group.channels || []).forEach(channel => {
-                const ref = (group.groupId || '') + '/' + (channel.subChannelId || '');
-                channelDeployedBricks(channel).forEach(brick => {
-                    (brick.usedInProducts || []).forEach(use => {
-                        const pid = use.productId;
-                        if (!pid) {
-                            return;
-                        }
-                        const entry = ensure(pid);
-                        if (!entry.bricks[brick.brickId]) {
-                            entry.bricks[brick.brickId] = {
-                                brickId: brick.brickId,
-                                brickName: brick.brickName || brick.brickId,
-                                description: use.description || '',
-                                channelRefs: new Set()
-                            };
-                        }
-                        entry.bricks[brick.brickId].channelRefs.add(ref);
-                        if (!entry.brickChannelRefs[brick.brickId]) {
-                            entry.brickChannelRefs[brick.brickId] = new Set();
-                        }
-                        entry.brickChannelRefs[brick.brickId].add(ref);
-                    });
-                });
-            });
-        });
-        productDeploymentIndexCache = {byProduct: byProduct};
-        return productDeploymentIndexCache;
-    }
-
-    function productBricks(productId) {
-        const entry = buildProductDeploymentIndex().byProduct[productId];
-        return entry ? Object.values(entry.bricks) : [];
-    }
-
-    function productBrickChannelRefs(productId, brickId) {
-        const entry = buildProductDeploymentIndex().byProduct[productId];
-        if (!entry || !entry.brickChannelRefs[brickId]) {
-            return new Set();
-        }
-        return entry.brickChannelRefs[brickId];
-    }
-
-    function collectProductDeliveryChannels(product, deploymentLookup) {
-        const channels = {};
-        productBricks(product.id).forEach(brick => {
-            brick.channelRefs.forEach(ref => {
-                if (!ref || channels[ref]) {
-                    return;
-                }
-                const resolved = deploymentLookup[ref] || {};
-                channels[ref] = {
-                    ref: ref,
-                    channelName: resolved.channelName || ref,
-                    groupName: resolved.groupName || '',
-                    channelType: resolved.channelType || ''
-                };
-            });
-        });
-        return Object.values(channels).sort((left, right) => left.channelName.localeCompare(right.channelName));
-    }
-
-    function renderBrickIcon(brickId, brickName) {
-        const safeId = escapeHtml(brickId || '');
-        const safeName = escapeHtml(brickName || brickId || 'Product brick');
-        const fallback = "if(!this.dataset.fallbackStage){this.dataset.fallbackStage='jpeg';this.src='../product-bricks/icons/" + safeId + ".jpeg';}else if(this.dataset.fallbackStage==='jpeg'){this.dataset.fallbackStage='jpg';this.src='../product-bricks/icons/" + safeId + ".jpg';}else{this.onerror=null;this.src='../product-bricks/icons/logo.png';}";
-        return '<img src="../product-bricks/icons/' + safeId + '.png" alt="' + safeName + '" title="' + safeName + '" style="width: 40px; height: 40px; object-fit: contain; border-radius: 10px; background: white; border: 1px solid #d1d5db; padding: 4px;" onerror="' + fallback + '">';
-    }
-
-    function renderBrickLandingLink(brickId, brickName) {
-        const safeId = escapeHtml(brickId || '');
-        const safeName = escapeHtml(brickName || brickId || 'Product brick');
-        return '<a target="_blank" href="../product-bricks/landing_pages/' + safeId + '.html" title="' + safeName + '">' + renderBrickIcon(brickId, brickName) + '</a>';
-    }
-
-    function toggleChecked(id) {
-        const toggle = document.getElementById(id);
-        return !!(toggle && toggle.checked);
-    }
-
-    function showTextEnabled() {
-        return toggleChecked('show_text_toggle');
-    }
-
-    function chipIconClass() {
-        return showTextEnabled() ? 'chip-icon' : 'chip-icon chip-icon-large';
+    function pct(part, whole) {
+        return whole ? Math.round(100 * part / whole) : 0;
     }
 
     function deploymentIconFile(channel, group) {
@@ -1236,404 +1233,606 @@ ${tabs_script}
         return 'deployment.png';
     }
 
-    function renderDeploymentIcon(channel, group) {
-        const fileName = deploymentIconFile(channel, group);
-        const label = escapeHtml((channel && (channel.subChannelName || channel.subChannelId)) || 'Deployment channel');
-        return '<img class="deployment-card-icon" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
-    }
-
-    function renderBrickCircle(brick) {
-        const label = escapeHtml((brick.brickName || brick.brickId || 'Product brick') + (brick.deploymentRole ? ' — ' + brick.deploymentRole : ''));
-        return '<a class="env-brick-circle" href="../product-bricks/landing_pages/' + escapeHtml(brick.brickId || '') + '.html" target="_blank" title="' + label + '">' +
-            '<img src="../product-bricks/icons/' + escapeHtml(brick.brickId || '') + '.png" alt="' + escapeHtml(brick.brickName || brick.brickId || '') + '" onerror="this.onerror=null;this.src=\'../product-bricks/icons/logo.png\'">' +
-            '</a>';
-    }
-
-    function renderDeploymentChannelLink(channel, group) {
-        const fileName = deploymentIconFile(channel, group);
-        const label = escapeHtml((channel && (channel.subChannelName || channel.subChannelId)) || 'Deployment channel');
-        const channelHref = 'deployment/' + escapeHtml(channel.subChannelId || '') + '.html';
-        const bricks = channel.deployedBricks || [];
-
-        let html = '<div class="deployment-channel-card">';
-        html += '<a class="deployment-channel-head" href="' + channelHref + '" title="' + label + '">';
-        html += '<img class="deployment-grid-icon" src="icons/deployment/' + fileName + '" alt="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
-        html += '<div>';
-        if (channel.channelType) {
-            html += '<div class="deployment-channel-type">' + escapeHtml(channel.channelType) + '</div>';
-        }
-        html += '<div class="deployment-channel-name">' + label +
-            ' <span class="env-brick-count">(' + bricks.length + ')</span></div>';
-        html += '</div></a>';
-
-        if (bricks.length) {
-            html += '<div class="env-block"><div class="env-brick-circles">';
-            bricks.forEach(brick => {
-                html += renderBrickCircle(brick);
-            });
-            html += '</div></div>';
-        } else {
-            html += '<div class="env-block"><div class="env-empty">No bricks deployed.</div></div>';
-        }
-
-        html += '</div>';
-        return html;
-    }
-
-    function renderDeploymentChipIcon(channel) {
-        const fileName = deploymentIconFile({
-            subChannelId: channel && channel.channelId,
-            subChannelName: channel && channel.channelName,
-            channelType: channel && channel.channelType
-        }, {
-            groupName: channel && channel.groupName
+    /* ---------- derived model ---------- */
+    function buildModel() {
+        const model = {products: [], productById: {}, groups: [], channels: [], channelByRef: {}, bricks: [], brickById: {}, placements: 0};
+        ((products.portfolio || {}).products || []).forEach(raw => {
+            const entry = {raw: raw, id: raw.id, name: raw.name || raw.id, bricks: {}, channels: new Set()};
+            model.products.push(entry);
+            model.productById[raw.id] = entry;
         });
-        const label = escapeHtml((channel && channel.channelName) || 'Delivery channel');
-        return '<img class="' + chipIconClass() + ' chip-icon-channel" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
-    }
-
-    function renderDeploymentChipIconWithLabel(channel, labelText) {
-        const fileName = deploymentIconFile({
-            subChannelId: channel && channel.channelId,
-            subChannelName: channel && channel.channelName,
-            channelType: channel && channel.channelType
-        }, {
-            groupName: channel && channel.groupName
-        });
-        const label = escapeHtml(labelText || (channel && channel.channelName) || 'Delivery channel');
-        return '<img class="' + chipIconClass() + ' chip-icon-channel" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
-    }
-
-    function renderCustomerChipIcon(customer) {
-        const label = escapeHtml((customer && (customer.name || customer.id)) || 'Customer');
-        return '<img class="' + chipIconClass() + '" src="../customers/icons/' + escapeHtml((customer && customer.icon) || 'customer.png') + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'../customers/icons/customer.png\'">';
-    }
-
-    function renderBrickChipIcon(brickId, brickName) {
-        const safeId = escapeHtml(brickId || '');
-        const safeName = escapeHtml(brickName || brickId || 'Product brick');
-        const fallback = "if(!this.dataset.fallbackStage){this.dataset.fallbackStage='jpeg';this.src='../product-bricks/icons/" + safeId + ".jpeg';}else if(this.dataset.fallbackStage==='jpeg'){this.dataset.fallbackStage='jpg';this.src='../product-bricks/icons/" + safeId + ".jpg';}else{this.onerror=null;this.src='../product-bricks/icons/logo.png';}";
-        return '<img class="' + chipIconClass() + ' chip-icon-brick" src="../product-bricks/icons/' + safeId + '.png" alt="' + safeName + '" title="' + safeName + '" onerror="' + fallback + '">';
-    }
-
-    function renderBrickChipIconWithLabel(brickId, brickName, labelText) {
-        const safeId = escapeHtml(brickId || '');
-        const safeName = escapeHtml(labelText || brickName || brickId || 'Product brick');
-        const fallback = "if(!this.dataset.fallbackStage){this.dataset.fallbackStage='jpeg';this.src='../product-bricks/icons/" + safeId + ".jpeg';}else if(this.dataset.fallbackStage==='jpeg'){this.dataset.fallbackStage='jpg';this.src='../product-bricks/icons/" + safeId + ".jpg';}else{this.onerror=null;this.src='../product-bricks/icons/logo.png';}";
-        return '<img class="' + chipIconClass() + ' chip-icon-brick" src="../product-bricks/icons/' + safeId + '.png" alt="' + safeName + '" title="' + safeName + '" onerror="' + fallback + '">';
-    }
-
-    function renderIconChip(iconHtml, title, copy, href) {
-        const showText = showTextEnabled();
-        const safeTitle = escapeHtml(title || '');
-        const safeCopy = escapeHtml(copy || '');
-        const bodyClass = showText ? 'brick-chip-body' : 'brick-chip-body hidden';
-        let chip = '<div class="' + (showText ? 'brick-chip' : 'icon-only-chip') + '">';
-        chip += iconHtml;
-        chip += '<div class="' + bodyClass + '">';
-        chip += '<div class="brick-chip-title">' + safeTitle + '</div>';
-        if (safeCopy) {
-            chip += '<div class="brick-chip-copy">' + safeCopy + '</div>';
-        }
-        chip += '</div>';
-        chip += '</div>';
-        if (href) {
-            return '<a class="' + (showText ? '' : 'icon-only-chip-link') + '" target="_blank" href="' + href + '" title="' + safeTitle + '">' + chip + '</a>';
-        }
-        return chip;
-    }
-
-    function renderIconWithBadges(iconHtml, topBadgeClass, topBadge, bottomBadgeClass, bottomBadge) {
-        if (showTextEnabled()) {
-            return iconHtml;
-        }
-        let html = '<div class="icon-badge-wrap">' + iconHtml;
-        if (typeof topBadge === 'number') {
-            html += '<span class="icon-badge icon-badge-top ' + escapeHtml(topBadgeClass || '') + '">' + escapeHtml(String(topBadge)) + '</span>';
-        }
-        if (typeof bottomBadge === 'number') {
-            html += '<span class="icon-badge icon-badge-bottom ' + escapeHtml(bottomBadgeClass || '') + '">' + escapeHtml(String(bottomBadge)) + '</span>';
-        }
-        html += '</div>';
-        return html;
-    }
-
-    function renderMatrixHeaderIcon(channel) {
-        const fileName = deploymentIconFile({
-            subChannelId: channel && channel.channelId,
-            subChannelName: channel && channel.channelName,
-            channelType: channel && channel.channelType
-        }, {
-            groupId: channel && channel.groupId,
-            groupName: channel && channel.groupName
-        });
-        const label = escapeHtml((channel && channel.channelName) || 'Delivery channel');
-        return '<img class="chip-icon chip-icon-large" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
-    }
-
-    function renderDependencyMarkerIcon(channel) {
-        const fileName = deploymentIconFile({
-            subChannelId: channel && channel.channelId,
-            subChannelName: channel && channel.channelName,
-            channelType: channel && channel.channelType
-        }, {
-            groupId: channel && channel.groupId,
-            groupName: channel && channel.groupName
-        });
-        const label = escapeHtml((channel && channel.channelName) || 'Delivery channel');
-        return '<img class="dependency-marker-icon" src="icons/deployment/' + fileName + '" alt="' + label + '" title="' + label + '" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
-    }
-
-    function renderProductsTableCell(innerHtml) {
-        return '<div class="products-table-product-cell">' + innerHtml + '</div>';
-    }
-
-    function renderProductsTableLabeledCell(label, count, innerHtml) {
-        let fullLabel = label || '';
-        if (typeof count === 'number' && label) {
-            fullLabel += ' (' + count + ')';
-        }
-        return renderProductsTableCell('<div class="products-table-section-label">' + escapeHtml(fullLabel) + '</div>' + innerHtml);
-    }
-
-    function renderProductsTableEmpty(label) {
-        return '<div class="products-table-empty">' + escapeHtml(label) + '</div>';
-    }
-
-    function renderProductsTableNameCell(product) {
-        let html = '<a target="_blank" href="landing_pages/' + escapeHtml(product.id) + '.html">';
-        html += '<div class="products-table-head">';
-        html += '<img src="icons/' + escapeHtml(product.icon) + '" class="deployment-card-icon products-table-product-icon" onerror="this.onerror=null;this.src=\'icons/product.png\'">';
-        html += '<div class="products-table-head-copy">';
-        html += '<div class="products-table-name">' + escapeHtml(product.name) + '</div>';
-        html += '</div>';
-        html += '</div>';
-        html += '</a>';
-        return html;
-    }
-
-    function renderProductsTableCustomersCell(product) {
-        if (!(product.primaryCustomers || []).length) {
-            return renderProductsTableEmpty('No customers mapped');
-        }
-        let html = '<div class="products-table-cell-stack' + (showTextEnabled() ? '' : ' compact') + '">';
-        (product.primaryCustomers || []).forEach(customer => {
-            html += renderIconChip(
-                renderCustomerChipIcon(customer),
-                customer.name || customer.id,
-                customer.id || '',
-                '../customers/landing_pages/' + escapeHtml(customer.id || '') + '.html'
-            );
-        });
-        html += '</div>';
-        return html;
-    }
-
-    function renderProductsTableDeliveryChannelsCell(product, deliveryChannels) {
-        if (!deliveryChannels.length) {
-            return renderProductsTableEmpty('No delivery channels mapped');
-        }
-        let html = '<div class="products-table-cell-stack' + (showTextEnabled() ? '' : ' compact') + '">';
-        deliveryChannels.forEach(channel => {
-            const meta = [channel.groupName, channel.channelType].filter(Boolean).join(' · ');
-            const brickCount = productBricks(product.id).filter(brick => brick.channelRefs.has(channel.ref)).length;
-            const detailLabel = (channel.channelName || 'Delivery channel') + ' | ' + brickCount + ' bricks';
-            html += renderIconChip(
-                renderIconWithBadges(
-                    renderDeploymentChipIconWithLabel(channel, detailLabel),
-                    'icon-badge-brick',
-                    brickCount
-                ),
-                channel.channelName,
-                (meta || channel.ref) + ' | ' + brickCount + ' bricks'
-            );
-        });
-        html += '</div>';
-        return html;
-    }
-
-    function renderProductsTableBricksCell(product) {
-        const bricks = productBricks(product.id);
-        if (!bricks.length) {
-            return renderProductsTableEmpty('No product bricks mapped');
-        }
-        let html = '<div class="products-table-cell-stack' + (showTextEnabled() ? '' : ' compact') + '">';
-        bricks.forEach(brick => {
-            const channelCount = brick.channelRefs.size;
-            const detailLabel = (brick.brickName || brick.brickId || 'Product brick') + ' | ' + channelCount + ' channels';
-            html += renderIconChip(
-                renderIconWithBadges(
-                    renderBrickChipIconWithLabel(brick.brickId, brick.brickName, detailLabel),
-                    'icon-badge-channel',
-                    channelCount
-                ),
-                brick.brickName || brick.brickId,
-                channelCount + ' channels' + (brick.description ? ' · ' + brick.description : ''),
-                '../product-bricks/landing_pages/' + escapeHtml(brick.brickId) + '.html'
-            );
-        });
-        html += '</div>';
-        return html;
-    }
-
-    function collectProductDependencyModel(product, deploymentLookup) {
-        const channels = {};
-        const bricks = {};
-
-        productBricks(product.id).forEach(brick => {
-            bricks[brick.brickId] = {
-                key: brick.brickId,
-                name: brick.brickName || brick.brickId,
-                brickId: brick.brickId
+        (deployment.channels || []).forEach((rawGroup, index) => {
+            const group = {
+                raw: rawGroup,
+                id: rawGroup.groupId || ('group-' + index),
+                name: rawGroup.groupName || rawGroup.groupId || 'Channel group',
+                description: rawGroup.description || '',
+                color: index < GROUP_COLORS.length ? GROUP_COLORS[index] : OTHER_COLOR,
+                channels: []
             };
-            brick.channelRefs.forEach(ref => {
-                if (!ref || channels[ref]) {
+            model.groups.push(group);
+            (rawGroup.channels || []).forEach(rawChannel => {
+                const ref = (rawGroup.groupId || '') + '/' + (rawChannel.subChannelId || '');
+                const channel = {
+                    raw: rawChannel, ref: ref, group: group,
+                    id: rawChannel.subChannelId || '',
+                    name: rawChannel.subChannelName || rawChannel.subChannelId || ref,
+                    type: rawChannel.channelType || '',
+                    description: rawChannel.description || '',
+                    bricks: [],
+                    productBricks: {}
+                };
+                group.channels.push(channel);
+                model.channels.push(channel);
+                model.channelByRef[ref] = channel;
+                (rawChannel.deployedBricks || []).forEach(deployed => {
+                    if (!deployed || !deployed.brickId) {
+                        return;
+                    }
+                    let brick = model.brickById[deployed.brickId];
+                    if (!brick) {
+                        brick = {id: deployed.brickId, name: deployed.brickName || deployed.brickId, products: new Set(), channels: new Set()};
+                        model.brickById[brick.id] = brick;
+                        model.bricks.push(brick);
+                    }
+                    brick.channels.add(ref);
+                    model.placements += 1;
+                    const usedBy = [];
+                    (deployed.usedInProducts || []).forEach(use => {
+                        const product = model.productById[use.productId];
+                        if (!product) {
+                            return;
+                        }
+                        usedBy.push(product.id);
+                        brick.products.add(product.id);
+                        product.channels.add(ref);
+                        if (!product.bricks[brick.id]) {
+                            product.bricks[brick.id] = {brick: brick, channels: new Set(), description: use.description || ''};
+                        }
+                        product.bricks[brick.id].channels.add(ref);
+                        (channel.productBricks[product.id] = channel.productBricks[product.id] || new Set()).add(brick.id);
+                    });
+                    channel.bricks.push({brick: brick, role: deployed.deploymentRole || '', products: usedBy});
+                });
+            });
+        });
+        model.products.forEach(product => {
+            const list = Object.values(product.bricks);
+            product.brickCount = list.length;
+            product.sharedCount = list.filter(item => item.brick.products.size > 1).length;
+            product.channelCount = product.channels.size;
+        });
+        return model;
+    }
+
+    const MODEL = buildModel();
+
+    /* ---------- links and icons ---------- */
+    function productHref(product) {
+        return 'landing_pages/' + encodeURIComponent(product.id) + '.html';
+    }
+
+    function channelHref(channel) {
+        return 'deployment/' + encodeURIComponent(channel.id) + '.html';
+    }
+
+    function brickHref(brick) {
+        return '../product-bricks/landing_pages/' + encodeURIComponent(brick.id) + '.html';
+    }
+
+    function productIcon(product, cls) {
+        return '<img class="' + (cls || '') + '" src="icons/' + escapeHtml(product.raw.icon || 'product.png') + '" alt="" onerror="this.onerror=null;this.src=\'icons/product.png\'">';
+    }
+
+    function channelIcon(channel, cls) {
+        return '<img class="' + (cls || '') + '" src="icons/deployment/' + deploymentIconFile(channel.raw, channel.group.raw) + '" alt="" onerror="this.onerror=null;this.src=\'icons/deployment/deployment.png\'">';
+    }
+
+    function brickIcon(brick, cls) {
+        const id = escapeHtml(brick.id);
+        const fallback = "if(!this.dataset.f){this.dataset.f='1';this.src='../product-bricks/icons/" + id + ".jpeg';}else if(this.dataset.f==='1'){this.dataset.f='2';this.src='../product-bricks/icons/" + id + ".jpg';}else{this.onerror=null;this.src='../product-bricks/icons/logo.png';}";
+        return '<img class="' + (cls || '') + '" src="../product-bricks/icons/' + id + '.png" alt="" onerror="' + fallback + '">';
+    }
+
+    function customerIcon(customer) {
+        return '<img src="../customers/icons/' + escapeHtml(customer.icon || 'customer.png') + '" alt="" onerror="this.onerror=null;this.src=\'../customers/icons/customer.png\'">';
+    }
+
+    function tip(text) {
+        return ' data-tip="' + escapeHtml(text) + '"';
+    }
+
+    function heatColor(value, max) {
+        if (!value || !max) {
+            return null;
+        }
+        const index = Math.min(HEAT_STEPS.length - 1, Math.floor((value / max) * (HEAT_STEPS.length - 1) + 0.0001));
+        return {bg: HEAT_STEPS[index], ink: index >= 3 ? '#ffffff' : '#0b0b0b'};
+    }
+
+    function groupLegend() {
+        return MODEL.groups.map(group => '<span><span class="dot" style="background:' + group.color + '"></span>' + escapeHtml(group.name) + '</span>').join('');
+    }
+
+    function namesList(names, limit) {
+        const shown = names.slice(0, limit || 3);
+        let text = shown.join(', ');
+        if (names.length > shown.length) {
+            text += ' and ' + (names.length - shown.length) + ' more';
+        }
+        return text;
+    }
+
+    /* ---------- Overview ---------- */
+    function renderKpis() {
+        const sharedBricks = MODEL.bricks.filter(brick => brick.products.size > 1).length;
+        const usedChannels = MODEL.channels.filter(channel => Object.keys(channel.productBricks).length).length;
+        const avgBricks = MODEL.products.length ? (MODEL.products.reduce((sum, p) => sum + p.brickCount, 0) / MODEL.products.length) : 0;
+        const avgChannels = MODEL.products.length ? (MODEL.products.reduce((sum, p) => sum + p.channelCount, 0) / MODEL.products.length) : 0;
+        const multiChannel = MODEL.bricks.filter(brick => brick.channels.size > 1).length;
+        const tiles = [
+            ['Products', MODEL.products.length, 'avg ' + avgBricks.toFixed(1) + ' bricks each'],
+            ['Deployment channels', MODEL.channels.length, plural(MODEL.groups.length, 'channel group') + ' · ' + usedChannels + ' in use'],
+            ['Deployed bricks', MODEL.bricks.length, plural(MODEL.placements, 'placement') + ' across channels'],
+            ['Shared bricks', sharedBricks, pct(sharedBricks, MODEL.bricks.length) + '% used by 2+ products'],
+            ['Channels per product', avgChannels.toFixed(1), 'average deployment spread'],
+            ['Multi-channel bricks', multiChannel, 'run in more than one channel']
+        ];
+        return '<div class="kpi-row">' + tiles.map(tile =>
+            '<div class="card kpi"><div class="kpi-label">' + escapeHtml(tile[0]) + '</div>' +
+            '<div class="kpi-value">' + escapeHtml(String(tile[1])) + '</div>' +
+            '<div class="kpi-sub">' + escapeHtml(tile[2]) + '</div></div>').join('') + '</div>';
+    }
+
+    function linkTo(href, label) {
+        return '<a href="' + href + '">' + escapeHtml(label) + '</a>';
+    }
+
+    function computeInsights() {
+        const insights = [];
+        const channelsByLoad = MODEL.channels.slice().sort((a, b) => b.bricks.length - a.bricks.length);
+        const busiest = channelsByLoad[0];
+        if (busiest && busiest.bricks.length) {
+            insights.push({tag: 'Hotspot', html: linkTo(channelHref(busiest), busiest.name) + ' carries <strong>' + busiest.bricks.length +
+                    '</strong> of ' + MODEL.placements + ' brick placements (' + pct(busiest.bricks.length, MODEL.placements) + '%) and serves ' +
+                    plural(Object.keys(busiest.productBricks).length, 'product') + '.'});
+        }
+        const bricksByReuse = MODEL.bricks.slice().sort((a, b) => b.products.size - a.products.size || b.channels.size - a.channels.size);
+        const top = bricksByReuse[0];
+        if (top && top.products.size > 1) {
+            insights.push({tag: 'Reuse', html: linkTo(brickHref(top), top.name) + ' is the most shared brick, used by <strong>' + top.products.size +
+                    '</strong> of ' + MODEL.products.length + ' products.'});
+        } else if (MODEL.bricks.length) {
+            insights.push({tag: 'Reuse', attention: true, html: 'No brick is shared between products: every product has its own deployed bricks.'});
+        }
+        const productsByFootprint = MODEL.products.slice().sort((a, b) => b.brickCount - a.brickCount);
+        const largest = productsByFootprint[0];
+        if (largest && largest.brickCount) {
+            insights.push({tag: 'Footprint', html: linkTo(productHref(largest), largest.name) + ' has the largest footprint: <strong>' +
+                    plural(largest.brickCount, 'brick') + '</strong> across ' + plural(largest.channelCount, 'channel') + ', ' +
+                    pct(largest.sharedCount, largest.brickCount) + '% of them shared with other products.'});
+        }
+        const singleChannel = MODEL.products.filter(p => p.channelCount === 1);
+        if (singleChannel.length && MODEL.channels.length > 1) {
+            insights.push({tag: 'Concentration', attention: true, html: plural(singleChannel.length, 'product') + verb(singleChannel.length, ' runs', ' run') + ' in a single channel: ' +
+                    singleChannel.slice(0, 4).map(p => linkTo(productHref(p), p.name)).join(', ') + (singleChannel.length > 4 ? ' …' : '') + '.'});
+        }
+        const exclusive = MODEL.products.filter(p => p.brickCount && p.sharedCount === 0);
+        if (exclusive.length && MODEL.products.length > 1) {
+            insights.push({tag: 'Isolation', html: plural(exclusive.length, 'product') + verb(exclusive.length, ' shares', ' share') + ' no bricks with any other product: ' +
+                    exclusive.slice(0, 4).map(p => linkTo(productHref(p), p.name)).join(', ') + (exclusive.length > 4 ? ' …' : '') + '.'});
+        }
+        const unmapped = MODEL.products.filter(p => !p.brickCount);
+        if (unmapped.length) {
+            insights.push({tag: 'Gap', attention: true, html: plural(unmapped.length, 'product') + verb(unmapped.length, ' has', ' have') + ' no deployed bricks mapped: ' +
+                    unmapped.slice(0, 4).map(p => linkTo(productHref(p), p.name)).join(', ') + (unmapped.length > 4 ? ' …' : '') + '.'});
+        }
+        const idle = MODEL.channels.filter(c => !Object.keys(c.productBricks).length);
+        if (idle.length) {
+            insights.push({tag: 'Gap', attention: true, html: plural(idle.length, 'channel') + verb(idle.length, ' serves', ' serve') + ' no product: ' +
+                    idle.slice(0, 4).map(c => linkTo(channelHref(c), c.name)).join(', ') + (idle.length > 4 ? ' …' : '') + '.'});
+        }
+        const orphanBricks = MODEL.bricks.filter(b => !b.products.size);
+        if (orphanBricks.length) {
+            insights.push({tag: 'Gap', attention: true, html: plural(orphanBricks.length, 'deployed brick') + verb(orphanBricks.length, ' is', ' are') + ' not used by any product: ' +
+                    orphanBricks.slice(0, 4).map(b => linkTo(brickHref(b), b.name)).join(', ') + (orphanBricks.length > 4 ? ' …' : '') + '.'});
+        }
+        const dedicated = MODEL.channels.filter(c => Object.keys(c.productBricks).length === 1);
+        if (dedicated.length && MODEL.products.length > 1) {
+            insights.push({tag: 'Dedicated', html: plural(dedicated.length, 'channel') + verb(dedicated.length, ' serves', ' serve') + ' exactly one product: ' +
+                    dedicated.slice(0, 4).map(c => linkTo(channelHref(c), c.name) + ' → ' + escapeHtml(MODEL.productById[Object.keys(c.productBricks)[0]].name)).join('; ') +
+                    (dedicated.length > 4 ? ' …' : '') + '.'});
+        }
+        return insights;
+    }
+
+    function renderInsights() {
+        const insights = computeInsights();
+        let html = '<div class="card block"><h2 class="section-title">Key insights</h2>';
+        html += '<p class="section-intro">Derived from the deployment model.</p><div class="insight-list">';
+        if (!insights.length) {
+            html += '<div class="empty-note">No deployment data yet.</div>';
+        }
+        insights.forEach(item => {
+            html += '<div class="insight' + (item.attention ? ' attention' : '') + '"><span class="insight-tag">' + escapeHtml(item.tag) + '</span><br>' + item.html + '</div>';
+        });
+        return html + '</div></div>';
+    }
+
+    function renderFootprintHeatmap() {
+        const groups = MODEL.groups.filter(group => group.channels.length);
+        let max = 0;
+        MODEL.products.forEach(product => MODEL.channels.forEach(channel => {
+            max = Math.max(max, (channel.productBricks[product.id] || new Set()).size);
+        }));
+
+        let html = '<div class="card block"><h2 class="section-title">Deployment footprint</h2>';
+        html += '<p class="section-intro">How many of each product\'s bricks run in each channel. Darker means more bricks; hover a cell for the list, click to open the channel.</p>';
+        if (!MODEL.products.length || !MODEL.channels.length) {
+            return html + '<div class="empty-note">No products or channels mapped.</div></div>';
+        }
+        html += '<div class="table-scroll"><table class="heatmap"><thead><tr><th></th>';
+        groups.forEach(group => {
+            html += '<th class="heat-group-head" colspan="' + group.channels.length + '" style="border-top-color:' + group.color + '">' + escapeHtml(group.name) + '</th>';
+        });
+        html += '<th></th></tr><tr><th></th>';
+        groups.forEach(group => group.channels.forEach(channel => {
+            html += '<th class="heat-channel-head"><a href="' + channelHref(channel) + '"' + tip(channel.name + (channel.type ? ' · ' + channel.type : '') + '\n' + plural(channel.bricks.length, 'brick') + ' deployed') + '>' +
+                channelIcon(channel) + '<span class="link-text">' + escapeHtml(channel.name) + '</span></a></th>';
+        }));
+        html += '<th class="heat-total">Bricks</th></tr></thead><tbody>';
+
+        MODEL.products.forEach(product => {
+            html += '<tr><th class="heat-row-head"><a href="' + productHref(product) + '">' + productIcon(product) + '<span class="link-text">' + escapeHtml(product.name) + '</span></a></th>';
+            groups.forEach(group => group.channels.forEach(channel => {
+                const ids = Array.from(channel.productBricks[product.id] || []);
+                const color = heatColor(ids.length, max);
+                if (!color) {
+                    html += '<td class="heat-empty"' + tip(product.name + ' · ' + channel.name + '\nNo bricks') + '>·</td>';
                     return;
                 }
-                const resolved = deploymentLookup[ref] || {};
-                channels[ref] = {
-                    ref: ref,
-                    groupId: resolved.groupId || '',
-                    groupName: resolved.groupName || '',
-                    channelId: resolved.channelId || '',
-                    channelName: resolved.channelName || ref,
-                    channelType: resolved.channelType || ''
-                };
-            });
+                const names = ids.map(id => MODEL.brickById[id].name).sort();
+                html += '<td class="heat-cell" style="background:' + color.bg + ';color:' + color.ink + '"' +
+                    tip(product.name + ' · ' + channel.name + '\n' + plural(ids.length, 'brick') + ':\n' + names.join('\n')) + '>' +
+                    '<a href="' + channelHref(channel) + '">' + ids.length + '</a></td>';
+            }));
+            html += '<td class="heat-total">' + product.brickCount + '</td></tr>';
         });
 
-        return {
-            channels: Object.values(channels).sort((a, b) => a.channelName.localeCompare(b.channelName)),
-            bricks: Object.values(bricks).sort((a, b) => a.name.localeCompare(b.name))
-        };
+        html += '</tbody><tfoot class="heat-foot"><tr><th class="heat-total" style="text-align:left">Products served</th>';
+        groups.forEach(group => group.channels.forEach(channel => {
+            html += '<td class="heat-total">' + Object.keys(channel.productBricks).length + '</td>';
+        }));
+        html += '<td></td></tr></tfoot></table></div>';
+        html += '<div class="heat-legend">Fewer bricks' + HEAT_STEPS.map(step => '<span class="heat-legend-swatch" style="background:' + step + '"></span>').join('') +
+            'More (max ' + max + ')</div>';
+        return html + '</div>';
     }
 
-    function hasBrickChannelDependency(productId, brickId, channelRef) {
-        return productBrickChannelRefs(productId, brickId).has(channelRef);
-    }
+    function renderReuse() {
+        const total = MODEL.bricks.length;
+        let html = '<div class="card block"><h2 class="section-title">Brick reuse</h2>';
+        if (!total) {
+            return html + '<div class="empty-note">No deployed bricks.</div></div>';
+        }
+        const buckets = [
+            {label: 'Not used', test: n => n === 0, color: '#c3c2b7'},
+            {label: '1 product', test: n => n === 1, color: '#9ec5f4'},
+            {label: '2 products', test: n => n === 2, color: '#3987e5'},
+            {label: '3+ products', test: n => n >= 3, color: '#184f95'}
+        ].map(bucket => Object.assign(bucket, {count: MODEL.bricks.filter(b => bucket.test(b.products.size)).length}))
+            .filter(bucket => bucket.count);
 
-    function renderDependencyMatrix() {
-        const container = document.getElementById('tab_content_matrix');
-        const deploymentLookup = buildDeploymentChannelLookup();
-        let html = '<div class="dependency-panel">';
+        html += '<p class="section-intro">How many products each deployed brick serves.</p>';
+        html += '<div class="reuse-split">' + buckets.map(bucket =>
+            '<div style="flex:' + bucket.count + ';background:' + bucket.color + '"' + tip(bucket.label + ': ' + plural(bucket.count, 'brick') + ' (' + pct(bucket.count, total) + '%)') + '></div>').join('') + '</div>';
+        html += '<div class="reuse-legend">' + buckets.map(bucket =>
+            '<span><span class="dot" style="background:' + bucket.color + '"></span>' + escapeHtml(bucket.label) + ' <span class="num">' + bucket.count + '</span></span>').join('') + '</div>';
 
-        ((products.portfolio || {}).products || []).forEach(product => {
-            const model = collectProductDependencyModel(product, deploymentLookup);
-            html += '<section class="dependency-product">';
-            html += '<div class="dependency-product-header">';
-            html += '<img src="icons/' + escapeHtml(product.icon) + '" class="deployment-card-icon" onerror="this.onerror=null;this.src=\'icons/product.png\'">';
-            html += '<div><div class="deployment-card-title">' + escapeHtml(product.name) + '</div>';
-            html += '<div class="deployment-card-meta">' + escapeHtml((product.primaryCustomers || []).map(customer => customer.name).join(' | ')) + '</div></div>';
-            html += '</div>';
-            html += '<div class="dependency-product-copy">Brick-to-channel dependencies are derived from deployment channels whose deployed bricks are used in this product.</div>';
-            if (!model.channels.length) {
-                html += '<div class="dependency-product-copy">No deployment channels mapped for this product.</div>';
-                html += '</section>';
-                return;
-            }
-
-            html += '<div class="dependency-table-wrap">';
-            html += '<table class="dependency-table">';
-            html += '<thead><tr><th class="dependency-row-label"></th>';
-            model.channels.forEach(channel => {
-                html += '<th title="' + escapeHtml(channel.channelName) + '">' + renderMatrixHeaderIcon(channel) + '</th>';
-            });
-            html += '</tr></thead><tbody>';
-
-            html += '<tr class="dependency-section-row"><td colspan="' + (model.channels.length + 1) + '">Product Bricks</td></tr>';
-            model.bricks.forEach(brickMeta => {
-                html += '<tr>';
-                html += '<td class="dependency-row-label">';
-                html += '<div class="dependency-row-cell">';
-                html += renderBrickChipIcon(brickMeta.brickId, brickMeta.name);
-                html += '<div class="dependency-row-text"><div class="dependency-row-title">' + escapeHtml(brickMeta.name) + '</div></div>';
-                html += '</div>';
-                html += '</td>';
-                model.channels.forEach(channel => {
-                    html += '<td>' + (hasBrickChannelDependency(product.id, brickMeta.brickId, channel.ref) ? renderDependencyMarkerIcon(channel) : '<span class="dependency-empty"> </span>') + '</td>';
-                });
-                html += '</tr>';
-            });
-
-            html += '</tbody></table></div></section>';
+        const ranked = MODEL.bricks.slice()
+            .sort((a, b) => b.products.size - a.products.size || b.channels.size - a.channels.size || a.name.localeCompare(b.name))
+            .slice(0, 10);
+        const maxProducts = Math.max(1, MODEL.products.length);
+        html += '<div class="sub-label">Most shared bricks</div><div class="hbar-list">';
+        ranked.forEach(brick => {
+            const names = Array.from(brick.products).map(id => MODEL.productById[id].name);
+            html += '<a class="hbar-row" href="' + brickHref(brick) + '"' + tip(brick.name + '\nUsed by: ' + (names.join(', ') || 'no product') + '\nRuns in ' + plural(brick.channels.size, 'channel')) + '>' +
+                '<span class="hbar-label">' + brickIcon(brick) + '<span class="link-text">' + escapeHtml(brick.name) + '</span></span>' +
+                '<span class="hbar-track"><span class="hbar-fill" style="display:block;width:' + pct(brick.products.size, maxProducts) + '%"></span></span>' +
+                '<span class="hbar-value">' + brick.products.size + '</span></a>';
         });
+        html += '</div><div class="heat-legend">Bar = products using the brick, out of ' + MODEL.products.length + '.</div>';
+        return html + '</div>';
+    }
 
+    function renderOverview() {
+        let html = '<div class="panel">';
+        if (deployment.metadata && deployment.metadata.description) {
+            html += '<p class="section-intro">' + escapeHtml(deployment.metadata.description) + '</p>';
+        }
+        html += renderKpis();
+        html += overviewFigure('Illustrated summary; the footprint and matrix below are the exact data.');
+        if (MODEL.channels.length > WIDE_HEATMAP_CHANNELS) {
+            html += '<div class="overview-grid wide"><div class="span-all">' + renderFootprintHeatmap() + '</div>' +
+                '<div>' + renderInsights() + '</div><div>' + renderReuse() + '</div></div>';
+        } else {
+            html += '<div class="overview-grid"><div>' + renderFootprintHeatmap() + '</div><div>' + renderInsights() + renderReuse() + '</div></div>';
+        }
+        document.getElementById('tab_content_overview').innerHTML = html + '</div>';
+    }
+
+    /* ---------- Products ---------- */
+    function groupSegments(product) {
+        // brick placements of this product, per channel group, in group order
+        return MODEL.groups.map(group => {
+            let count = 0;
+            group.channels.forEach(channel => {
+                count += (channel.productBricks[product.id] || new Set()).size;
+            });
+            return {group: group, count: count};
+        }).filter(item => item.count);
+    }
+
+    function productMatches(product, query) {
+        if (!query) {
+            return true;
+        }
+        const haystack = [product.name, product.raw.type, product.raw.description]
+            .concat((product.raw.primaryCustomers || []).map(c => c.name))
+            .concat(Object.values(product.bricks).map(item => item.brick.name))
+            .join(' ').toLowerCase();
+        return haystack.indexOf(query) !== -1;
+    }
+
+    function renderProductCard(product, showBricks) {
+        const raw = product.raw;
+        let html = '<div class="card product-card">';
+        html += '<a class="product-head" href="' + productHref(product) + '">' + productIcon(product) +
+            '<div><div class="product-name link-text">' + escapeHtml(product.name) + '</div>' +
+            (raw.type ? '<div class="product-type">' + escapeHtml(raw.type) + '</div>' : '') + '</div></a>';
+        if (raw.description) {
+            html += '<div class="clamp"' + tip(raw.description) + '>' + escapeHtml(raw.description) + '</div>';
+        }
+        html += '<div class="stat-row">' +
+            '<div class="stat"><div class="stat-value">' + product.brickCount + '</div><div class="stat-label">Bricks</div></div>' +
+            '<div class="stat"><div class="stat-value">' + product.channelCount + '</div><div class="stat-label">Channels</div></div>' +
+            '<div class="stat"><div class="stat-value">' + pct(product.sharedCount, product.brickCount) + '%</div><div class="stat-label">Shared</div></div>' +
+            '</div>';
+
+        const channels = Array.from(product.channels).map(ref => MODEL.channelByRef[ref]).filter(Boolean)
+            .sort((a, b) => MODEL.groups.indexOf(a.group) - MODEL.groups.indexOf(b.group) || a.name.localeCompare(b.name));
+        html += '<div><div class="sub-label">Runs on</div>';
+        if (channels.length) {
+            const segments = groupSegments(product);
+            html += '<div class="seg-bar">' + segments.map(item => '<div style="flex:' + item.count + ';background:' + item.group.color + '"' +
+                tip(item.group.name + ': ' + plural(item.count, 'brick placement')) + '></div>').join('') + '</div>';
+            html += '<div class="pill-row">' + channels.map(channel => {
+                const count = (channel.productBricks[product.id] || new Set()).size;
+                return '<a class="pill" href="' + channelHref(channel) + '"' + tip(channel.group.name + ' · ' + channel.name + '\n' + plural(count, 'brick')) + '>' +
+                    '<span class="dot" style="background:' + channel.group.color + '"></span>' + escapeHtml(channel.name) +
+                    ' <span class="pill-count">' + count + '</span></a>';
+            }).join('') + '</div>';
+        } else {
+            html += '<div class="empty-note">Not deployed to any channel.</div>';
+        }
         html += '</div>';
-        container.innerHTML = html;
+
+        const customers = raw.primaryCustomers || [];
+        if (customers.length) {
+            html += '<div><div class="sub-label">Serves</div><div class="pill-row">' + customers.map(customer =>
+                '<a class="pill" href="../customers/landing_pages/' + encodeURIComponent(customer.id || '') + '.html">' + customerIcon(customer) +
+                escapeHtml(customer.name || customer.id) + '</a>').join('') + '</div></div>';
+        }
+
+        if (showBricks && product.brickCount) {
+            const bricks = Object.values(product.bricks).sort((a, b) => b.brick.products.size - a.brick.products.size || a.brick.name.localeCompare(b.brick.name));
+            html += '<div><div class="sub-label">Bricks <span class="muted" style="text-transform:none;letter-spacing:0">· blue ring = shared with other products</span></div><div class="brick-strip">' +
+                bricks.map(item => {
+                    const others = Array.from(item.brick.products).filter(id => id !== product.id).map(id => MODEL.productById[id].name);
+                    const channelNames = Array.from(item.channels).map(ref => MODEL.channelByRef[ref].name);
+                    return '<a class="' + (others.length ? 'shared' : '') + '" href="' + brickHref(item.brick) + '"' +
+                        tip(item.brick.name + (item.description ? '\n' + item.description : '') + '\nRuns in: ' + channelNames.join(', ') +
+                            (others.length ? '\nAlso used by: ' + others.join(', ') : '\nOnly this product')) + '>' + brickIcon(item.brick) + '</a>';
+                }).join('') + '</div></div>';
+        }
+        html += '<a class="card-foot" href="' + productHref(product) + '">Open product →</a>';
+        return html + '</div>';
+    }
+
+    function renderProducts() {
+        const query = (document.getElementById('product_search').value || '').trim().toLowerCase();
+        const sort = document.getElementById('product_sort').value;
+        const showBricks = document.getElementById('product_show_bricks').checked;
+        const sorters = {
+            name: (a, b) => a.name.localeCompare(b.name),
+            bricks: (a, b) => b.brickCount - a.brickCount || a.name.localeCompare(b.name),
+            channels: (a, b) => b.channelCount - a.channelCount || a.name.localeCompare(b.name),
+            shared: (a, b) => pct(b.sharedCount, b.brickCount) - pct(a.sharedCount, a.brickCount) || a.name.localeCompare(b.name)
+        };
+        const list = MODEL.products.filter(product => productMatches(product, query)).sort(sorters[sort] || sorters.name);
+        document.getElementById('product_legend').innerHTML = groupLegend();
+        document.getElementById('products_content').innerHTML = list.length
+            ? '<div class="product-grid">' + list.map(product => renderProductCard(product, showBricks)).join('') + '</div>'
+            : '<div class="empty-note">No products match the search.</div>';
+    }
+
+    /* ---------- Deployment channels ---------- */
+    function renderChannelCard(channel) {
+        let html = '<div class="card channel-card">';
+        html += '<a class="channel-head" href="' + channelHref(channel) + '">' + channelIcon(channel) + '<div>' +
+            (channel.type ? '<div class="channel-type">' + escapeHtml(channel.type) + '</div>' : '') +
+            '<div class="channel-name link-text">' + escapeHtml(channel.name) + '</div></div></a>';
+        if (channel.description) {
+            html += '<div class="clamp"' + tip(channel.description) + '>' + escapeHtml(channel.description) + '</div>';
+        }
+        const productIds = Object.keys(channel.productBricks);
+        html += '<div class="stat-row">' +
+            '<div class="stat"><div class="stat-value">' + channel.bricks.length + '</div><div class="stat-label">Bricks</div></div>' +
+            '<div class="stat"><div class="stat-value">' + productIds.length + '</div><div class="stat-label">Products</div></div>' +
+            '<div class="stat"><div class="stat-value">' + pct(channel.bricks.length, MODEL.placements) + '%</div><div class="stat-label">Of all</div></div>' +
+            '</div>';
+        html += '<div><div class="sub-label">Used by</div>';
+        if (productIds.length) {
+            html += '<div class="pill-row">' + productIds
+                .map(id => ({product: MODEL.productById[id], count: channel.productBricks[id].size}))
+                .sort((a, b) => b.count - a.count || a.product.name.localeCompare(b.product.name))
+                .map(item => '<a class="pill" href="' + productHref(item.product) + '"' + tip(item.product.name + ': ' + plural(item.count, 'brick') + ' in this channel') + '>' +
+                    productIcon(item.product) + escapeHtml(item.product.name) + ' <span class="pill-count">' + item.count + '</span></a>').join('') + '</div>';
+        } else {
+            html += '<div class="empty-note">No product uses this channel.</div>';
+        }
+        html += '</div>';
+        if (channel.bricks.length) {
+            html += '<div><div class="sub-label">Deployed bricks</div><div class="brick-strip">' + channel.bricks.map(item => {
+                const names = item.products.map(id => MODEL.productById[id].name);
+                return '<a class="' + (item.products.length > 1 ? 'shared' : '') + '" href="' + brickHref(item.brick) + '"' +
+                    tip(item.brick.name + (item.role ? '\n' + item.role : '') + '\nUsed by: ' + (names.join(', ') || 'no product')) + '>' + brickIcon(item.brick) + '</a>';
+            }).join('') + '</div></div>';
+        }
+        return html + '</div>';
+    }
+
+    // Optional generated deployment map (images --kind deployments); empty when absent.
+    // Shown on Overview and on Deployment Channels, which the start page's sidebar opens directly.
+    function overviewFigure(caption) {
+        if (!OVERVIEW_IMAGE) {
+            return '';
+        }
+        return '<figure class="overview-figure"><a href="' + escapeHtml(OVERVIEW_IMAGE) + '" target="_blank" title="Open the full image">' +
+            '<img src="' + escapeHtml(OVERVIEW_IMAGE) + '" alt="' + escapeHtml(OVERVIEW_IMAGE_ALT || 'Illustrated map of products, deployment channels and shared bricks') + '" ' +
+            'onerror="this.closest(\'figure\').remove()"></a>' +
+            '<figcaption>' + escapeHtml(caption) + '</figcaption></figure>';
     }
 
     function renderDeploymentChannels() {
-        const container = document.getElementById('tab_content_deployment');
-        const groups = deployment.channels || [];
-        const channels = groups.flatMap(group => group.channels || []);
-        const deployedBrickCount = channels.reduce((sum, channel) => sum + channelDeployedBricks(channel).length, 0);
-        const productChannelMap = {};
-        groups.forEach(group => {
-            (group.channels || []).forEach(channel => {
-                const ref = (group.groupId || '') + '/' + (channel.subChannelId || '');
-                channelDeployedBricks(channel).forEach(brick => {
-                    (brick.usedInProducts || []).forEach(use => {
-                        if (!use.productId) {
-                            return;
-                        }
-                        if (!productChannelMap[ref]) {
-                            productChannelMap[ref] = {};
-                        }
-                        productChannelMap[ref][use.productId] = true;
-                    });
-                });
-            });
-        });
-
-        const deployedProductCount = Object.values(productChannelMap).reduce((sum, byProduct) => sum + Object.keys(byProduct).length, 0);
-
-        let html = '<div class="deployment-panel">';
-
+        let html = '<div class="panel">';
         if (deployment.metadata && deployment.metadata.description) {
-            html += '<div class="deployment-group-copy" style="margin-bottom:18px;">' + escapeHtml(deployment.metadata.description) + '</div>';
+            html += '<p class="section-intro">' + escapeHtml(deployment.metadata.description) + '</p>';
         }
-
-        groups.forEach(group => {
-            html += '<section class="deployment-group">';
-            html += '<div class="deployment-group-title">' + escapeHtml(group.groupName || group.groupId) + '</div>';
-            if (group.description) {
-                html += '<div class="deployment-group-copy">' + escapeHtml(group.description) + '</div>';
-            }
-            html += '<div class="deployment-channel-grid">';
-
-            (group.channels || []).forEach(channel => {
-                html += renderDeploymentChannelLink(channel, group);
+        html += overviewFigure('Illustrated summary; the channel cards below show exactly which products and bricks use each channel.');
+        if (!MODEL.groups.length) {
+            html += '<div class="empty-note">No deployment channels defined.</div>';
+        }
+        MODEL.groups.forEach(group => {
+            const productIds = new Set();
+            let bricks = 0;
+            group.channels.forEach(channel => {
+                bricks += channel.bricks.length;
+                Object.keys(channel.productBricks).forEach(id => productIds.add(id));
             });
-
-            html += '</div>';
-            html += '</section>';
+            html += '<section class="group-section"><div class="group-head" style="border-top-color:' + group.color + '">' +
+                '<span class="group-name">' + escapeHtml(group.name) + '</span>' +
+                '<span class="group-meta">' + plural(group.channels.length, 'channel') + ' · ' + plural(bricks, 'brick placement') + ' · ' + plural(productIds.size, 'product') + '</span></div>';
+            if (group.description) {
+                html += '<div class="section-intro" style="margin-bottom:0">' + escapeHtml(group.description) + '</div>';
+            }
+            html += '<div class="channel-grid">' + group.channels.map(renderChannelCard).join('') + '</div></section>';
         });
+        document.getElementById('tab_content_deployment').innerHTML = html + '</div>';
+    }
 
-        html += '</div>';
+    /* ---------- Brick x product matrix ---------- */
+    function renderMatrix() {
+        const select = document.getElementById('matrix_group');
+        if (!select.options.length) {
+            select.innerHTML = '<option value="">All groups</option>' + MODEL.groups.map(group => '<option value="' + escapeHtml(group.id) + '">' + escapeHtml(group.name) + '</option>').join('');
+        }
+        document.getElementById('matrix_legend').innerHTML = groupLegend();
+        const query = (document.getElementById('matrix_search').value || '').trim().toLowerCase();
+        const groupId = select.value;
+        const onlyShared = document.getElementById('matrix_shared').checked;
+        const inGroup = ref => !groupId || MODEL.channelByRef[ref].group.id === groupId;
+
+        const rows = MODEL.bricks
+            .filter(brick => !query || brick.name.toLowerCase().indexOf(query) !== -1 || brick.id.toLowerCase().indexOf(query) !== -1)
+            .filter(brick => Array.from(brick.channels).some(inGroup))
+            .filter(brick => !onlyShared || brick.products.size > 1)
+            .sort((a, b) => b.products.size - a.products.size || b.channels.size - a.channels.size || a.name.localeCompare(b.name));
+
+        const container = document.getElementById('matrix_content');
+        if (!rows.length) {
+            container.innerHTML = '<div class="empty-note">No bricks match the filters.</div>';
+            return;
+        }
+        const columns = MODEL.products;
+        const columnCounts = columns.map(() => 0);
+        let html = '<table class="matrix"><thead><tr><th class="m-brick">Brick <span class="muted">(' + rows.length + ')</span></th>';
+        columns.forEach(product => {
+            html += '<th class="m-product-head"><a href="' + productHref(product) + '">' + productIcon(product) + '<span class="link-text">' + escapeHtml(product.name) + '</span></a></th>';
+        });
+        html += '<th class="m-total">Products</th><th class="m-total">Channels</th></tr></thead><tbody>';
+        rows.forEach(brick => {
+            html += '<tr><th class="m-brick"><a href="' + brickHref(brick) + '">' + brickIcon(brick) + '<span class="link-text">' + escapeHtml(brick.name) + '</span></a></th>';
+            columns.forEach((product, index) => {
+                const use = product.bricks[brick.id];
+                const refs = use ? Array.from(use.channels).filter(inGroup) : [];
+                if (!refs.length) {
+                    html += '<td class="m-cell"></td>';
+                    return;
+                }
+                columnCounts[index] += 1;
+                const channels = refs.map(ref => MODEL.channelByRef[ref]);
+                html += '<td class="m-cell"' + tip(brick.name + ' in ' + product.name + (use.description ? '\n' + use.description : '') + '\nRuns in: ' +
+                    channels.map(c => c.name + ' (' + c.group.name + ')').join(', ')) + '><span class="m-marks">' +
+                    channels.map(c => '<span class="m-mark" style="background:' + c.group.color + '"></span>').join('') + '</span></td>';
+            });
+            html += '<td class="m-total">' + brick.products.size + '</td><td class="m-total">' + brick.channels.size + '</td></tr>';
+        });
+        html += '</tbody><tfoot class="m-foot"><tr><th class="m-brick" style="text-align:left">Bricks per product</th>' +
+            columnCounts.map(count => '<td>' + count + '</td>').join('') + '<td></td><td></td></tr></tfoot></table>';
         container.innerHTML = html;
     }
 
-    function update() {
-        const deploymentLookup = buildDeploymentChannelLookup();
-        const portfolioProducts = ((products.portfolio || {}).products || []);
-        let html = '<div class="products-table-wrap">';
+    /* ---------- tooltip ---------- */
+    (function setupTooltip() {
+        const tipEl = document.getElementById('viz_tip');
+        let current = null;
 
-        portfolioProducts.forEach(product => {
-            html += '<div style="margin: 30px; padding: 22px; padding-top: 0; display: inline-block; width: 400px; vertical-align: top; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; border-radius: 20px; border: 1px solid #f0f0f0;">';
-            html += renderProductsTableLabeledCell('', null, renderProductsTableNameCell(product));
-            if (toggleChecked('show_channels_toggle')) {
-                const deliveryChannels = collectProductDeliveryChannels(product, deploymentLookup);
-                html += renderProductsTableLabeledCell('Delivery Channels', deliveryChannels.length, renderProductsTableDeliveryChannelsCell(product, deliveryChannels));
-            }
-            if (toggleChecked('show_bricks_toggle')) {
-                html += renderProductsTableLabeledCell('Bricks', productBricks(product.id).length, renderProductsTableBricksCell(product));
-            }
-            html += '</div>';
+        function place(x, y) {
+            const pad = 14;
+            const rect = tipEl.getBoundingClientRect();
+            let left = x + pad;
+            let top = y + pad;
+            if (left + rect.width > window.innerWidth - 8) left = x - rect.width - pad;
+            if (top + rect.height > window.innerHeight - 8) top = y - rect.height - pad;
+            tipEl.style.left = Math.max(8, left) + 'px';
+            tipEl.style.top = Math.max(8, top) + 'px';
+        }
+
+        function show(target, x, y) {
+            current = target;
+            tipEl.textContent = target.getAttribute('data-tip');
+            tipEl.style.display = 'block';
+            place(x, y);
+        }
+
+        function hide() {
+            current = null;
+            tipEl.style.display = 'none';
+        }
+
+        document.addEventListener('mouseover', event => {
+            const target = event.target.closest && event.target.closest('[data-tip]');
+            if (target) show(target, event.clientX, event.clientY); else hide();
         });
+        document.addEventListener('mousemove', event => {
+            if (current) place(event.clientX, event.clientY);
+        });
+        document.addEventListener('focusin', event => {
+            const target = event.target.closest && event.target.closest('[data-tip]');
+            if (target) {
+                const rect = target.getBoundingClientRect();
+                show(target, rect.left, rect.bottom);
+            }
+        });
+        document.addEventListener('focusout', hide);
+        window.addEventListener('scroll', hide, true);
+    })();
 
-        html += '</div>';
-
-        document.getElementById('products_content').innerHTML = html;
+    function updateTabCounts() {
+        document.getElementById('tab_products').textContent = 'Products (' + MODEL.products.length + ')';
+        document.getElementById('tab_deployment').textContent = 'Deployment Channels (' + MODEL.channels.length + ')';
+        document.getElementById('tab_matrix').textContent = 'Brick Matrix (' + MODEL.bricks.length + ')';
     }
 
     /* ---------- Product dependency graph (force 2D / mermaid) ---------- */
@@ -2092,9 +2291,10 @@ ${tabs_script}
     };
 
     updateTabCounts();
-    update();
+    renderOverview();
+    renderProducts();
     renderDeploymentChannels();
-    renderDependencyMatrix();
+    renderMatrix();
     renderProductDependencyGraph();
 </script>
 ${breadcrumbs_script}

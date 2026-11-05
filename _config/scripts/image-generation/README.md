@@ -23,6 +23,7 @@ Sources live in `_config/product-domains/<group>/<domain-id>/`. All image script
 - generates one Gemini Nano Banana illustration for every residuality stressor, writes it into `residuality/media/`, and patches the stressor's `media` entry
 - illustrates tutorial concepts, participant maps, and walkthrough overviews; saves images and prompts in `tutorial/media/` and updates their `media` entries in `tutorial/tutorial.json`
 - draws one high-level overview of each domain (its products and building blocks inside, its customers, external systems, and competitors outside) and saves it with its prompt and alt text in `start/media/`
+- draws one deployment map per domain (products, shared bricks, channel-group lanes with their channels; no product-specific links) and saves it with its prompt and alt text in `product-deployments/media/`
 
 ## Requirements
 
@@ -110,6 +111,47 @@ JSON update instead of replacing newer prose.
 Builds need no credentials. The tutorial renderer validates local image paths,
 copies them from the source media folder, and adds an accessible image link that
 opens the full image in a new tab. Do not edit generated HTML to add illustrations.
+
+### Deployment map picture
+
+One picture per domain for the top of the Product Deployments overview: which
+products run in which channel groups, and which products share building blocks.
+
+```sh
+python3 productscapes.py images my-domain --kind deployments --dry-run
+python3 _config/scripts/image-generation/generate_deployment_overview_image_gemini_nanobanana_api.py \
+  --project ../productscape-examples --domain my-domain --dry-run --show-prompts
+python3 productscapes.py images my-domain --kind deployments
+python3 productscapes.py build my-domain --sections products
+```
+
+The prompt is built from `product-deployments/products.json` and `deployment.json`:
+
+| Where in the picture | Source |
+| --- | --- |
+| Top: product cards | products, in authored order (capped by deployment footprint) |
+| Middle: one row of bricks | bricks every deployed product uses; otherwise the most shared bricks |
+| Bottom: lanes with channel tiles | channel groups and their largest sub-channels, in authored order |
+| One broad band | products row to lanes: "deployed onto these platforms" |
+| Dashed product cards | products with no deployed bricks |
+
+The picture shows structure only. It never ties a product to a lane, channel, or
+brick: in test runs image models repeatedly misplaced individual product-to-lane
+lines and brackets, drawing connections that do not exist. The page's footprint
+heatmap and brick matrix carry the exact links, and the alt text lists which
+product runs in which lane.
+
+`LIMITS` in the script caps the labels (9 products, 4 groups, 3 channels per group
+and 8 in total, 3 shared bricks); long names keep their head phrase ("B2B Customer
+Accounts and Self-Service Portal" becomes "B2B Customer Accounts"). `--scene`
+replaces the composition directions while keeping the labels.
+
+Output: `product-deployments/media/deployment-overview.jpg` (or the returned format
+without `sips`), `deployment-overview.prompt.txt`, and `deployment-overview.alt.txt`.
+Existing images are reused; `--overwrite` regenerates. Domains without products
+deployed to channels are skipped. The products build copies the image into the site
+and shows it, with its alt text, above the deployment footprint; the footprint,
+matrix, and insights remain the exact data.
 
 ### Domain overview picture
 

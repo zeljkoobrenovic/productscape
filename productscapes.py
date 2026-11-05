@@ -192,6 +192,9 @@ def build(args):
     print(f'Site: {docs / "index.html"}')
 
 
+START_OVERVIEW = 'start-packages/overview/index.html'
+
+
 def build_index(project):
     docs = project_paths.DOCS_ROOT
     groups = {}
@@ -206,7 +209,15 @@ def build_index(project):
     content = '\n'.join('<section><h2>' + html.escape(group.replace('-', ' ').title()) +
                         '</h2><ul>' + '\n'.join(cards) + '</ul></section>' for group, cards in sorted(groups.items()))
     template = (project_paths.TEMPLATES_ROOT / 'catalog/index.html').read_text(encoding='utf-8')
-    (docs / 'index.html').write_text(template.replace('${domains}', content), encoding='utf-8')
+    catalog = template.replace('${domains}', content)
+    # With an overview start package, the site opens on it and the catalog moves to overview.html.
+    if (project / '_config/start-packages/overview/apps.json').is_file() and (docs / START_OVERVIEW).is_file():
+        (docs / 'overview.html').write_text(catalog, encoding='utf-8')
+        redirect = (project_paths.TEMPLATES_ROOT / 'catalog/redirect.html').read_text(encoding='utf-8')
+        (docs / 'index.html').write_text(redirect.replace('${target}', START_OVERVIEW), encoding='utf-8')
+    else:
+        (docs / 'overview.html').unlink(missing_ok=True)
+        (docs / 'index.html').write_text(catalog, encoding='utf-8')
     (docs / '.nojekyll').touch()
 
 
@@ -240,6 +251,7 @@ def images(args):
         'residuality': 'generate_residuality_images_gemini_nanobanana_api.py',
         'icons': 'generate_missing_domain_icons_gemini_nanobanana_api.py',
         'overview': 'generate_domain_overview_image_gemini_nanobanana_api.py',
+        'deployments': 'generate_deployment_overview_image_gemini_nanobanana_api.py',
     }
     for kind in scripts if args.kind == 'all' else [args.kind]:
         extra = ['--domain', args.domain]
@@ -295,7 +307,7 @@ def main():
     kpis.set_defaults(action=lambda args: run_script('skills/scripts/check-kpi-pyramids.py', [args.domain], args.project))
     media = commands.add_parser('images', parents=[common], help='Optional Gemini image generation (requires credentials).')
     media.add_argument('domain')
-    media.add_argument('--kind', choices=('jtbd', 'journey', 'relations', 'residuality', 'icons', 'tutorial', 'overview', 'all'), default='all')
+    media.add_argument('--kind', choices=('jtbd', 'journey', 'relations', 'residuality', 'icons', 'tutorial', 'overview', 'deployments', 'all'), default='all')
     media.add_argument('--dry-run', action='store_true')
     media.add_argument('--lightweight', action='store_true')
     media.add_argument('--skip-existing', action='store_true')
