@@ -1,0 +1,98 @@
+_templates/product-deployments/landing_page.html
+  s_78f26cc004539e::t_d9973b36975174 14-96,781,822-824,862,871,879-886,908-912,917-920,986-988,992-996,999-1008,1013-1050,1575-1736
+  s_78f26cc004539e::t_6037ea2016ec8d 1737
+_wiring/product-domains/generate-products-docs.py
+  s_78f26cc004539e::t_bcd725bb97e01b 19,162-222,229-230,236,256-258
+_templates/customers/index.html
+  s_78f26cc004539e::t_d9a7b93a405fb4 476
+  s_78f26cc004539e::t_6f7b84f5150040 466,473,477,539,541
+  s_78f26cc004539e::t_039e49a624e184 474-475
+  s_78f26cc004539e::t_df35ab1370b0e7 307-308,366,369,378,381,392,748-755,758,770,790
+_templates/product-bricks/index.html
+  s_78f26cc004539e::t_140411d83bb4b9 290-291
+  s_78f26cc004539e::t_3a90dd4a5e7667 16-48,1400,1735,1737,1742-1744,1747-1748,1753,1758,1768,1770-1771,1775,1779,1781-1782,1787-1790,1827,1900,1989-2110,2121-2123,2177-2180,2187,2189-2192,2213,2224-2234,2237-2239,2241-2243,2245-2247,3135-3136,3155,3529-3532,3551-3554,3582
+  s_78f26cc004539e::t_6053b76054ea8a 15
+  s_78f26cc004539e::t_613b1ceb371332 49-51
+  s_78f26cc004539e::t_1c34482dcafff2 1397-1399
+  s_78f26cc004539e::t_fa177fcfde9337 1401
+  s_78f26cc004539e::t_b4b69f980a3540 1732-1734
+  s_78f26cc004539e::t_d8717d8ca75bf0 1736
+  s_78f26cc004539e::t_10e0480673b0ee 1738-1741
+  s_78f26cc004539e::t_a7b38d7170dbf4 1745-1746
+  s_78f26cc004539e::t_f9be61db7075e9 1749-1752
+  s_78f26cc004539e::t_bff07c049e67bd 1754-1757
+  s_78f26cc004539e::t_01c95fa59194d1 1759-1761,1765-1767
+  s_78f26cc004539e::t_0745df752eb273 1769
+  s_78f26cc004539e::t_02c977d056dca8 1772-1774
+  s_78f26cc004539e::t_bf19c04fe05eb8 1776-1778
+  s_78f26cc004539e::t_3e6705359ba344 1780
+  s_78f26cc004539e::t_aeb413a6531435 1783-1786
+  s_78f26cc004539e::t_5653d2120770ad 1791
+  s_78f26cc004539e::t_9f0f51432acd85 1824-1826
+  s_78f26cc004539e::t_c7ce93d3e6fa59 1828-1830
+  s_78f26cc004539e::t_f1d7d310beb100 1897-1899
+  s_78f26cc004539e::t_7cb142f9d2dd5d 52-84,319-320,325,330,338-352,573-574,705-706,1505,1511,1728-1731,1762-1764,1821-1823,1831-1836,1845-1847,3586-3592
+_templates/_imports/tabs/script.html
+  s_78f26cc004539e::t_6f7b84f5150040 93-98
+_config/scripts/image-generation/generate_domain_overview_image_gemini_nanobanana_api.py
+  s_f3f5573cde6f3f::t_6e6b7e29c409e4 246,248
+  s_f3f5573cde6f3f::t_d19d314925e9f0 68,266-269,274-303,338,344-345,359-360
+  s_f3f5573cde6f3f::t_48e78e552d1775 148-158
+  s_f3f5573cde6f3f::t_39d4f27c7957fb 218-219,223
+  s_f3f5573cde6f3f::t_8a8311ad803d44 201-203,242-243
+  s_f3f5573cde6f3f::t_66b3e81c072fb9 67,69,73,75-76,79-80,82-87
+  s_f3f5573cde6f3f::t_0eda06bdd8d4a2 221
+  s_f3f5573cde6f3f::t_a0babf1a5589ef 132-135
+  s_f3f5573cde6f3f::t_eed93e4c8e5e42 81,193-195,198-199,225-234,247
+_config/scripts/image-generation/test_domain_overview_image.py
+  s_f3f5573cde6f3f::t_acb2e5cb95b33d 84-85
+  s_f3f5573cde6f3f::t_856a834a8032ca 80,82-83,86-92
+  s_f3f5573cde6f3f::t_9b051951da7058 81
+  s_f3f5573cde6f3f::t_b4de1261e41298 68-71
+  s_f3f5573cde6f3f::t_8a8311ad803d44 75
+  s_f3f5573cde6f3f::t_e181fa5b894c26 93-102
+  s_f3f5573cde6f3f::t_ee5f83664e8124 76
+_templates/product-deployments/deployment_landing_page.html
+  s_78f26cc004539e::t_cd76be05b3be46 60-64,363,536-542,544-548,550-552,554-562,564-581,583-584,586-589
+  s_78f26cc004539e::t_508c72ca62396d 13-59,590,592-623,625-680,682-688,690-691,693-707,710-721,862-865,867-870,876
+skills/edit-customers/SKILL.md
+  s_78f26cc004539e::t_6f7b84f5150040 91,280
+_templates/product-bricks/stream_landing_page.html
+  s_78f26cc004539e::t_9fa45731edefd9 16-47,682-686,692-694,735,756-760,780-802,806,808-812,814-816,828-933,938-947,1089-1091,1093
+_templates/product-bricks/brick_landing_page.html
+  s_78f26cc004539e::t_4b3573d5053e8e 16-27,29-49,266-268,370-371,392,397,402,407,412,417,806-811,836-838,848-856,1030-1033,1035,1049,1057,1059,1065,1067,1152-1158,2102-2233,2250-2253
+  s_78f26cc004539e::t_1f4daa7f572480 28
+  s_78f26cc004539e::t_d3e032ea9b964f 812
+_templates/product-bricks/data_asset_landing_page.html
+  s_78f26cc004539e::t_e728ebdf9fb753 15-47,260,344-359,433-434,436-469,471-472,474-475,477-478,489,501-502,504-505,523-524,526-606,608-648,650-658,661-666
+_wiring/product-domains/generate-start-docs.py
+  s_78f26cc004539e::t_6b4542962b3247 81-82,213-214
+_templates/_imports/tabs/style.html
+  s_78f26cc004539e::t_034b4e09ab3505 7
+_templates/customers/landing_page.html
+  s_78f26cc004539e::t_8559e49e2630f5 152-153,159,527,542,555,1004,1053
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "910e5d7f31e0a0167e16ddd1ccd21d2ab75b7074",
+  "prompts": {},
+  "sessions": {
+    "s_78f26cc004539e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "96803c36-5a6d-496c-837e-40a303f57bc2",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    },
+    "s_f3f5573cde6f3f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bd27018f-89a4-4b34-9a21-a74d19ffbca3",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Zeljko Obrenovic <zeljkoobrenovic@yahoo.com>"
+    }
+  }
+}
