@@ -10,6 +10,58 @@
     ${tabs_style}
     ${breadcrumbs_style}
     <style>
+
+        /* Overview */
+        .tabcontent { padding: 12px 10px; }
+        .ov { max-width: 1200px; }
+        .ov-facts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+        .ov-fact { font-size: 12px; padding: 2px 10px; border-radius: 999px; background: #eef2ff; color: #3730a3; }
+        .ov-intro { color: #374151; font-size: 15px; max-width: 900px; margin-bottom: 14px; line-height: 1.5; }
+        .ov-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 22px; }
+        .ov-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border: 1px solid #e5e7eb;
+            border-radius: 10px; background: #fff; cursor: pointer; font: inherit; text-align: left; color: #111827; }
+        .ov-tile:disabled { cursor: default; }
+        .ov-tile:not(:disabled):hover, .ov-tile:focus-visible { border-color: #93c5fd; background: #f8fbff; }
+        .ov-tile.zero { color: #9ca3af; }
+        .ov-tile-value { font-size: 28px; font-weight: 700; line-height: 1.1; }
+        .ov-tile-label { font-size: 13px; color: #4b5563; }
+        .ov-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #1d4ed8; margin: 6px 0 10px; }
+        .ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 14px; margin-bottom: 22px; }
+        .ov-panel { border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; padding: 14px 16px; min-width: 0; }
+        .ov-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+        .ov-panel-title { font-weight: 700; font-size: 16px; color: #111827; }
+        .ov-panel-count { font-weight: 400; color: #6b7280; font-size: 14px; }
+        .ov-panel-link, .ov-more { border: 0; background: none; color: #1d4ed8; cursor: pointer; font: inherit; font-size: 13px; padding: 0; }
+        .ov-panel-link:hover, .ov-more:hover { text-decoration: underline; }
+        .ov-more { margin-top: 8px; }
+        .ov-panel-note { font-size: 13px; color: #4b5563; margin: -4px 0 10px; }
+        .ov-chips { display: flex; flex-direction: column; gap: 6px; }
+        .ov-chip { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; color: inherit; text-decoration: none; }
+        a.ov-chip:hover { background: #f3f4f6; }
+        .ov-chip img { width: 32px; height: 32px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; background: #fff; flex: 0 0 32px; }
+        .ov-chip-text { display: flex; flex-direction: column; min-width: 0; }
+        .ov-chip-label { font-weight: 600; color: #111827; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-chip-meta { font-size: 12px; color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-empty { color: #6b7280; font-size: 14px; }
+
+        /* Bricks and products tabs */
+        .pl-section { max-width: 1200px; }
+        .pl-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #1d4ed8; margin-bottom: 4px; }
+        .pl-section-note { font-size: 14px; color: #374151; margin-bottom: 12px; }
+        .pl-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 14px; margin-top: 10px; }
+        .pl-card { display: block; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; padding: 14px 16px; color: inherit; text-decoration: none; }
+        a.pl-card:hover { border-color: #93c5fd; }
+        .pl-card-head { display: flex; gap: 12px; align-items: center; margin-bottom: 10px }
+        .pl-card-icon { width: 48px; height: 48px; object-fit: cover; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; flex: 0 0 48px; }
+        .pl-card-meta { font-size: 12px; color: #6b7280; }
+        .pl-card-title { font-weight: 700; color: #111827; font-size: 16px; line-height: 1.3; }
+        .pl-card-copy { color: #374151; font-size: 14px; line-height: 1.45; margin-bottom: 10px; }
+        .pl-clamp { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .pl-card-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; margin: 18px 0 10px; }
+        .pl-list { margin: 0; padding-left: 18px; color: #111827; font-size: 14px; line-height: 1.5; }
+        .pl-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .pl-tag { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #f3f4f6; color: #374151; }
+
         body {
             font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
             margin: 8px 28px 28px;
@@ -308,7 +360,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 </head>
-<body onload="initTab('HomeTab')" onhashchange="initTab('HomeTab')">
+<body onload="initTab('overview')" onhashchange="initTab('overview')">
 <style>
     .site-nav {
         display: flex;
@@ -481,56 +533,191 @@ ${tabs_script}
         document.getElementById('Header').innerHTML = header;
     }
 
-    function renderHome() {
-        const current = findCurrentRecord();
-        const container = document.getElementById('tab_content_HomeTab');
-        if (!current) {
-            container.innerHTML = '<div class="empty-state">Deployment channel not found.</div>';
-            return;
-        }
+    // A usage note that only says "<brick> in <product>" repeats the names around it; drop it.
+    function meaningfulUsageNote(note, brickName, productName) {
+        const normalize = value => String(value || '').toLowerCase().replace(/[.\s]+$/, '').replace(/\s+/g, ' ').trim();
+        const text = normalize(note);
+        if (!text) return '';
+        return text === normalize((brickName || '') + ' in ' + (productName || '')) ? '' : note;
+    }
 
-        const productUsage = buildChannelProductUsage(current);
-        const deployedBricks = channelDeployedBricks(current.channel);
+    function productLookup() {
+        const lookup = {};
+        ((products.portfolio || {}).products || []).forEach(product => { lookup[product.id] = product; });
+        return lookup;
+    }
 
-        let html = '';
+    function plural(count, word) {
+        return count + ' ' + word + (count === 1 ? '' : 's');
+    }
 
-        const intro = [deployment.metadata && deployment.metadata.description, current.group.description, current.channel.description].filter(Boolean).join(' ');
-        if (intro) html += '<div class="deployment-copy">' + escapeHtml(intro) + '</div>';
-
-        html += '<div class="deployment-section-title">Deployed Bricks (' + deployedBricks.length + ')</div>';
-        if (deployedBricks.length) {
-            html += '<div class="chip-row">';
-            deployedBricks.forEach(brick => {
-                const productCount = (brick.usedInProducts || []).length;
-                const meta = [brick.deploymentRole || '', productCount ? 'Used in ' + productCount + (productCount === 1 ? ' product' : ' products') : ''].filter(Boolean).join(' · ');
-                html += renderChip('../../product-bricks/icons/' + escapeHtml(brick.brickId) + '.png', '../../product-bricks/icons/logo.png', brick.brickName || brick.brickId || 'Product brick', meta, '../../product-bricks/landing_pages/' + escapeHtml(brick.brickId) + '.html');
-            });
-            html += '</div>';
-        } else {
+    function renderBricksTab(current) {
+        const lookup = productLookup();
+        const bricks = channelDeployedBricks(current.channel);
+        // A role shared by every brick is said once above the cards, not repeated on each.
+        const roles = Array.from(new Set(bricks.map(brick => brick.deploymentRole || '')));
+        const commonRole = roles.length === 1 ? roles[0] : '';
+        let html = '<div class="pl-section">';
+        if (commonRole) html += '<div class="pl-section-note">' + escapeHtml(commonRole) + '</div>';
+        if (!bricks.length) {
             html += '<div class="empty-state">No bricks deployed in this channel.</div>';
-        }
-
-        html += '<div class="deployment-section-title">Products Using This Channel (' + productUsage.length + ')</div>';
-        if (productUsage.length) {
-            html += '<div class="chip-row">';
-            productUsage.forEach(product => {
-                const meta = product.brickCount + (product.brickCount === 1 ? ' brick' : ' bricks');
-                html += renderChip('../icons/' + escapeHtml(product.icon), '../icons/product.png', product.name, meta, '../landing_pages/' + escapeHtml(product.id) + '.html');
-            });
-            html += '</div>';
         } else {
-            html += '<div class="empty-state">No products currently reference this channel.</div>';
+            html += '<div class="pl-cards">' + bricks.map(brick => {
+                const uses = brick.usedInProducts || [];
+                let card = '<a class="pl-card" target="_blank" rel="noopener noreferrer" href="../../product-bricks/landing_pages/' + escapeHtml(brick.brickId) + '.html">';
+                card += '<div class="pl-card-head"><img class="pl-card-icon" src="../../product-bricks/icons/' + escapeHtml(brick.brickId) + '.png" alt="" onerror="this.onerror=null;this.src=\'../../product-bricks/icons/brick.png\'">';
+                card += '<div>' + (!commonRole && brick.deploymentRole ? '<div class="pl-card-meta">' + escapeHtml(brick.deploymentRole) + '</div>' : '') + '<div class="pl-card-title">' + escapeHtml(brick.brickName || brick.brickId) + '</div></div></div>';
+                if (uses.length) {
+                    card += '<div class="pl-card-label">Used in ' + plural(uses.length, 'product') + '</div><ul class="pl-list">' + uses.map(use =>
+                        (() => {
+                        const productName = (lookup[use.productId] || {}).name || use.productId;
+                        const note = meaningfulUsageNote(use.description, brick.brickName || brick.brickId, productName);
+                        return '<li><strong>' + escapeHtml(productName) + '</strong>' + (note ? ' — ' + escapeHtml(note) : '') + '</li>';
+                    })()).join('') + '</ul>';
+                } else {
+                    card += '<div class="empty-state">No product uses this brick here.</div>';
+                }
+                return card + '</a>';
+            }).join('') + '</div>';
         }
+        document.getElementById('tab_content_bricks').innerHTML = html + '</div>';
+    }
 
-        html += '<div class="deployment-section-title">Brick to Product Dependencies</div>';
-        html += '<div class="bpd-layout">';
-        html += '<div class="bpd-controls" id="BpdControls"></div>';
-        html += '<div class="bpd-graph" id="BpdGraph"></div>';
+    function renderProductsTab(current) {
+        const lookup = productLookup();
+        const usage = buildChannelProductUsage(current);
+        let html = '<div class="pl-section">';
+        if (!usage.length) {
+            html += '<div class="empty-state">No products currently reference this channel.</div>';
+        } else {
+            html += '<div class="pl-cards">' + usage.map(item => {
+                const product = lookup[item.id] || {};
+                const bricksHere = channelDeployedBricks(current.channel).filter(brick => (brick.usedInProducts || []).some(use => use.productId === item.id));
+                let card = '<a class="pl-card" target="_blank" rel="noopener noreferrer" href="../landing_pages/' + escapeHtml(item.id) + '.html">';
+                card += '<div class="pl-card-head"><img class="pl-card-icon" src="../icons/' + escapeHtml(item.icon) + '" alt="" onerror="this.onerror=null;this.src=\'../icons/product.png\'">';
+                card += '<div><div class="pl-card-meta">' + escapeHtml(product.type || 'Product') + '</div><div class="pl-card-title">' + escapeHtml(item.name) + '</div></div></div>';
+                if (product.description) card += '<div class="pl-card-copy pl-clamp">' + escapeHtml(product.description) + '</div>';
+                card += '<div class="pl-card-label">' + plural(bricksHere.length, 'brick') + ' on this channel</div>';
+                card += '<ul class="pl-list">' + bricksHere.map(brick => '<li>' + escapeHtml(brick.brickName || brick.brickId) + '</li>').join('') + '</ul>';
+                return card + '</a>';
+            }).join('') + '</div>';
+        }
+        document.getElementById('tab_content_products').innerHTML = html + '</div>';
+    }
+
+    // ---- Overview: the channel at a glance; every detail lives in its own tab. ----
+    const OVERVIEW_CHIP_LIMIT = 8;
+
+    function overviewChip(href, icon, fallback, label, meta, external) {
+        let chip = '<a class="ov-chip" href="' + escapeHtml(href) + '"' + (external ? ' target="_blank" rel="noopener noreferrer"' : '') + '>';
+        if (icon) chip += '<img src="' + escapeHtml(icon) + '" alt="" onerror="this.onerror=null;this.src=\'' + fallback + '\'">';
+        chip += '<span class="ov-chip-text"><span class="ov-chip-label">' + escapeHtml(label) + '</span>';
+        if (meta) chip += '<span class="ov-chip-meta">' + escapeHtml(meta) + '</span>';
+        return chip + '</span></a>';
+    }
+
+    function overviewChipList(items, renderItem, tab, emptyText) {
+        if (!items.length) return '<div class="ov-empty">' + escapeHtml(emptyText) + '</div>';
+        let list = '<div class="ov-chips">' + items.slice(0, OVERVIEW_CHIP_LIMIT).map(renderItem).join('') + '</div>';
+        if (items.length > OVERVIEW_CHIP_LIMIT) {
+            list += '<button class="ov-more" onclick="openTab(\'' + tab + '\')">+' + (items.length - OVERVIEW_CHIP_LIMIT) + ' more</button>';
+        }
+        return list;
+    }
+
+    function overviewPanel(title, tab, count, body, note) {
+        let panel = '<section class="ov-panel"><div class="ov-panel-head"><div class="ov-panel-title">' + escapeHtml(title) +
+            (count !== null ? ' <span class="ov-panel-count">' + count + '</span>' : '') + '</div>';
+        if (tab) panel += '<button class="ov-panel-link" onclick="openTab(\'' + tab + '\')">Details &rarr;</button>';
+        panel += '</div>';
+        if (note) panel += '<div class="ov-panel-note">' + escapeHtml(note) + '</div>';
+        return panel + body + '</section>';
+    }
+
+    function renderOverviewTab(current) {
+        const lookup = productLookup();
+        const bricks = channelDeployedBricks(current.channel).slice()
+            .sort((a, b) => (b.usedInProducts || []).length - (a.usedInProducts || []).length || (a.brickName || '').localeCompare(b.brickName || ''));
+        const usage = buildChannelProductUsage(current).sort((a, b) => b.brickCount - a.brickCount || a.name.localeCompare(b.name));
+        const shared = bricks.filter(brick => (brick.usedInProducts || []).length > 1).length;
+        const customers = {};
+        usage.forEach(item => ((lookup[item.id] || {}).primaryCustomers || []).forEach(customer => {
+            if (!customers[customer.id]) customers[customer.id] = {...customer, products: new Set()};
+            customers[customer.id].products.add(item.name);
+        }));
+        const customerList = Object.values(customers).sort((a, b) => b.products.size - a.products.size || a.name.localeCompare(b.name));
+        const siblings = (current.group.channels || []).filter(channel => channel.subChannelId !== current.channel.subChannelId);
+
+        const tiles = [
+            ['Bricks', bricks.length, 'bricks'],
+            ['Shared bricks', shared, 'bricks'],
+            ['Products', usage.length, 'products'],
+            ['Customers reached', customerList.length, 'products'],
+            ['Other channels in group', siblings.length, null],
+        ];
+        let html = '<div class="ov">';
+        const facts = [current.group.groupName || current.group.groupId, current.channel.channelType].filter(Boolean);
+        if (facts.length) html += '<div class="ov-facts">' + facts.map(fact => '<span class="ov-fact">' + escapeHtml(fact) + '</span>').join('') + '</div>';
+        if (current.group.description) html += '<div class="ov-intro">' + escapeHtml(current.group.description) + '</div>';
+        html += '<div class="ov-tiles">' + tiles.map(([label, value, tab]) =>
+            '<button class="ov-tile' + (value ? '' : ' zero') + '"' + (tab ? ' onclick="openTab(\'' + tab + '\')"' : ' disabled') + '><span class="ov-tile-value">' + value +
+            '</span><span class="ov-tile-label">' + escapeHtml(label) + '</span></button>').join('') + '</div>';
+
+        html += '<div class="ov-section-title">What runs here and who gets it</div><div class="ov-grid">';
+        html += overviewPanel('Bricks', 'bricks', bricks.length, overviewChipList(bricks, brick => {
+            const count = (brick.usedInProducts || []).length;
+            const meta = count ? 'in ' + plural(count, 'product') : 'not used by any product';
+            return overviewChip('../../product-bricks/landing_pages/' + brick.brickId + '.html', '../../product-bricks/icons/' + brick.brickId + '.png',
+                '../../product-bricks/icons/brick.png', brick.brickName || brick.brickId, meta, true);
+        }, 'bricks', 'No bricks deployed in this channel.'), 'Most widely used first.');
+        html += overviewPanel('Products', 'products', usage.length, overviewChipList(usage, item =>
+            overviewChip('../landing_pages/' + item.id + '.html', '../icons/' + item.icon, '../icons/product.png', item.name,
+                plural(item.brickCount, 'brick') + ' here', true), 'products', 'No products currently reference this channel.'), '');
+        html += overviewPanel('Customers reached', null, customerList.length, overviewChipList(customerList, customer =>
+            overviewChip('../../customers/landing_pages/' + customer.id + '.html', '../../customers/icons/' + (customer.icon || 'customer.png'),
+                '../../customers/icons/customer.png', customer.name, 'via ' + plural(customer.products.size, 'product'), true),
+            'products', 'No primary customers are listed for these products.'), 'Primary customers of the products above.');
         html += '</div>';
 
-        container.innerHTML = html;
-        renderBrickProductDependencies(current);
+        if (siblings.length) {
+            html += '<div class="ov-section-title">Same channel group</div><div class="ov-grid">';
+            html += overviewPanel(current.group.groupName || 'Channels', null, siblings.length, overviewChipList(siblings, channel =>
+                overviewChip(channel.subChannelId + '.html', '../icons/deployment/' + deploymentIconFile(channel, current.group), '../icons/deployment/deployment.png',
+                    channel.subChannelName || channel.subChannelId, plural((channel.deployedBricks || []).length, 'brick'), false), null, ''), '');
+            html += '</div>';
+        }
+        html += '</div>';
+        document.getElementById('tab_content_overview').innerHTML = html;
     }
+
+    function renderTabs() {
+        const current = findCurrentRecord();
+        if (!current) {
+            document.getElementById('tab_content_overview').innerHTML = '<div class="empty-state">Deployment channel not found.</div>';
+            return;
+        }
+        const bricks = channelDeployedBricks(current.channel);
+        document.getElementById('tab_bricks').textContent = 'Bricks (' + bricks.length + ')';
+        document.getElementById('tab_products').textContent = 'Products (' + buildChannelProductUsage(current).length + ')';
+        renderOverviewTab(current);
+        renderBricksTab(current);
+        renderProductsTab(current);
+        document.getElementById('tab_content_dependencies').innerHTML =
+            '<div class="pl-section"><div class="pl-section-title">Brick to product dependencies</div>' +
+            '<div class="bpd-layout"><div class="bpd-controls" id="BpdControls"></div><div class="bpd-graph" id="BpdGraph"></div></div></div>';
+    }
+
+    // The diagram renders when its tab first opens, so mermaid measures a visible box.
+    let bpdRendered = false;
+    window.afterOpenTab = function (tabName) {
+        if (tabName === 'dependencies' && !bpdRendered) {
+            const current = findCurrentRecord();
+            if (current) {
+                bpdRendered = true;
+                renderBrickProductDependencies(current);
+            }
+        }
+    };
 
     // --- Brick -> Product dependency diagram (mermaid) ---
     let bpdSelected = null; // Set of selected node ids (null = all)
@@ -672,15 +859,21 @@ ${tabs_script}
 <div id="ChannelNav"></div>
 <div class="hero" id="Header"></div>
 <div class="tab">
-    <button class="tablinks active" id="tab_HomeTab" onclick="openTab('HomeTab')">Channel</button>
+    <button class="tablinks active" id="tab_overview" onclick="openTab('overview')">Overview</button>
+    <button class="tablinks" id="tab_bricks" onclick="openTab('bricks')">Bricks</button>
+    <button class="tablinks" id="tab_products" onclick="openTab('products')">Products</button>
+    <button class="tablinks" id="tab_dependencies" onclick="openTab('dependencies')">Dependencies</button>
 </div>
-<div id="tab_content_HomeTab" class="tabcontent"></div>
+<div id="tab_content_overview" class="tabcontent"></div>
+<div id="tab_content_bricks" class="tabcontent"></div>
+<div id="tab_content_products" class="tabcontent"></div>
+<div id="tab_content_dependencies" class="tabcontent"></div>
 <script>
     if (typeof mermaid !== 'undefined') {
         mermaid.initialize({startOnLoad: false, securityLevel: 'loose', flowchart: {htmlLabels: false}});
     }
     renderNavAndHeader();
-    renderHome();
+    renderTabs();
 </script>
 ${breadcrumbs_script}
 </body>

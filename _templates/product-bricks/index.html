@@ -12,6 +12,76 @@
     ${tabs_style}
 
     <style>
+
+        /* Data tab: badges, ownership, insights and the asset x brick matrix */
+        .data-owner { font-size: 13px; color: #374151; margin-top: 8px; }
+        .data-owner a { color: #1d4ed8; }
+        .data-owner-missing { color: #9a3412; }
+        .data-counts { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; color: #4b5563; margin-top: 4px; }
+        .data-counts b { color: #111827; }
+        .dx-badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 2px 0 8px; }
+        .dx-badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #eef2f6; color: #374151; border: 1px solid #dbe2ea; }
+        .dx-badge-restricted { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+        .dx-badge-pii { background: #ede9fe; color: #5b21b6; border-color: #c4b5fd; }
+        .dx-badge-high { background: #ffedd5; color: #9a3412; border-color: #fdba74; }
+        .dx-badge-critical { background: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+        .dx-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin: 12px 0 16px; max-width: 1200px; }
+        .dx-tile { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; }
+        .dx-tile.zero { color: #9ca3af; }
+        .dx-tile-value { font-size: 28px; font-weight: 700; line-height: 1.1; }
+        .dx-tile-label { font-size: 13px; color: #4b5563; }
+        .dx-insights { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 10px; margin-bottom: 20px; max-width: 1200px; }
+        .dx-insight { border: 1px solid #e5e7eb; border-left: 4px solid #2a78d6; border-radius: 8px; background: #fff; padding: 10px 12px; }
+        .dx-insight-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; margin-bottom: 2px; }
+        .dx-insight-text { font-size: 14px; color: #111827; line-height: 1.45; }
+        .dx-insight-text a { color: #1d4ed8; }
+        .smx-cell.dmx-own { background: #184f95; color: #fff; }
+        .smx-cell.dmx-write { background: #3987e5; color: #fff; }
+        .smx-cell.dmx-read { background: #cde2fb; color: #184f95; }
+        .smx-cell.dmx-own, .smx-cell.dmx-write, .smx-cell.dmx-read { text-align: center; font-size: 11px; font-weight: 700; font-style: normal; }
+        .dmx-legend { display: flex; gap: 16px; font-size: 13px; color: #374151; margin-bottom: 8px; }
+        .dmx-legend span { display: inline-flex; align-items: center; gap: 6px; }
+        .dmx-legend .smx-cell { display: inline-block; width: 22px; height: 22px; line-height: 22px; }
+        .dmx-flag { color: #9a3412; font-weight: 700; }
+        .dmx-count { background: #f3f4f6; color: #111827; }
+
+
+        /* Streams tab: view switch, compact cards and the stream x brick matrix */
+        .stream-view-switch { display: inline-flex; border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; margin-right: 16px; vertical-align: middle; }
+        .stream-view-btn { border: 0; background: #fff; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; color: #374151; }
+        .stream-view-btn + .stream-view-btn { border-left: 1px solid #d1d5db; }
+        .stream-view-btn.active { background: #1d4ed8; color: #fff; }
+        .stream-counts { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 13px; color: #4b5563; margin: 8px 0 10px; }
+        .stream-counts b { color: #111827; }
+        .stream-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; margin: 6px 0 4px; }
+        .stream-outcomes { margin: 0 0 4px; padding-left: 18px; font-size: 14px; line-height: 1.45; color: #111827; }
+        .stream-more { font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+        .stream-bricks { margin-top: 10px; border-top: 1px solid #f3f4f6; padding-top: 8px; }
+        .stream-brick-icons { display: flex; flex-wrap: wrap; gap: 3px; }
+        .stream-brick-icons img { width: 22px; height: 22px; object-fit: contain; border: 1px solid #e5e7eb; border-radius: 4px; background: #fff; }
+        .smx-note { font-size: 13px; color: #4b5563; margin: 4px 0 10px; }
+        .smx-wrap { overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; }
+        .smx { border-collapse: separate; border-spacing: 2px; font-size: 13px; }
+        .smx th, .smx td { padding: 0; }
+        .smx-corner { position: sticky; left: 0; background: #fff; text-align: left; vertical-align: bottom; padding: 6px 8px !important; z-index: 2; }
+        .smx-col { vertical-align: bottom; height: 170px; width: 22px; }
+        .smx-col a { display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); max-height: 165px; overflow: hidden; text-overflow: ellipsis;
+            white-space: nowrap; font-weight: 400; color: #374151; font-size: 12px; }
+        .smx-col a:hover { color: #1d4ed8; }
+        .smx-total-head { vertical-align: bottom; font-size: 12px; color: #6b7280; padding: 0 6px 6px !important; }
+        .smx-group-row th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1d4ed8;
+            padding: 10px 8px 4px !important; position: sticky; left: 0; background: #fff; }
+        .smx-row { position: sticky; left: 0; background: #fff; text-align: left; font-weight: 400; white-space: nowrap; padding: 0 10px 0 8px !important;
+            max-width: 260px; overflow: hidden; text-overflow: ellipsis; z-index: 1; }
+        .smx-row a { color: #111827; }
+        .smx-row a:hover { color: #1d4ed8; }
+        .smx-cell { width: 22px; height: 22px; background: #f3f4f6; border-radius: 4px; }
+        .smx-cell.on { background: #256abf; }
+        .smx tbody tr:not(.smx-group-row):not(.smx-count-row):hover .smx-cell:not(.on) { background: #e5e7eb; }
+        .smx-total { text-align: center; color: #374151; padding: 0 6px !important; }
+        .smx-count-row th { font-size: 12px; color: #6b7280; padding-top: 6px !important; }
+        .smx-count { text-align: center; font-size: 11px; height: 22px; border-radius: 4px; font-weight: 600; }
+
         body {
             font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
             margin-left: 28px;
@@ -217,8 +287,8 @@
         .brick-card {
             margin: 14px;
             font-size: 12px;
-            width: 130px;
-            max-width: 130px;
+            width: 150px;
+            max-width: 150px;
             box-sizing: border-box;
             overflow: hidden;
             text-align: left;
@@ -246,16 +316,18 @@
 
         .brick-icon {
             width: 102px;
-            margin-top: 4px;
-            margin-bottom: 4px;
+            margin-top: 8px;
+            margin-bottom: 8px;
         }
 
         .brick-name {
             padding-top: 2px;
+            padding-bottom: 2px;
             overflow: hidden;
             width: 100%;
             font-size: 120%;
             display: block;
+            border-bottom: 1px solid black;
         }
 
         .brick-name-title {
@@ -263,7 +335,21 @@
             padding-right: 4px;
             font-weight: 700;
             line-height: 1.2;
-            margin-bottom: 4px;
+            margin-top: 10px;
+            margin-bottom: 14px;
+        }
+
+        .brick-description {
+            padding: 0 4px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #374151;
+            text-align: left;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .brick-structure-list {
@@ -484,7 +570,8 @@
         .data-card-copy {
             color: #4b5563;
             line-height: 1.5;
-            margin-bottom: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .data-card-subtitle {
@@ -615,7 +702,8 @@
         .stream-card-copy {
             color: #4b5563;
             line-height: 1.5;
-            margin-bottom: 12px;
+            margin-top: 20px;
+            margin-bottom: 20px;
             font-size: 80%;
         }
 
@@ -1306,6 +1394,11 @@
             return !toggle || toggle.checked;
         }
 
+        function shouldShowBrickDescriptions() {
+            const toggle = document.getElementById('brickDescriptionToggle');
+            return !toggle || toggle.checked;
+        }
+
         function shouldShowBrickStatus() {
             const toggle = document.getElementById('brickStatusToggle');
             return Boolean(toggle && toggle.checked);
@@ -1409,12 +1502,13 @@
             const brickCard = `
                 <div class="brick-card${item.isHighlighted ? ' highlighted' : ''}" style="background-color: ${item.color}; ${statusBorderStyle(item)}">
                     <div class="brick-card-main">
-                        <div style="background-color: #fafafa; width: 100%;">
+                        <div style="background-color: #fafafa; width: 100%; border-bottom: 1px solid black">
                         <img class="brick-icon" src="icons/${item.id}.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
                         </div>
                         <div class="brick-name">
                             <div class="brick-name-title">${item.name || ''}</div>
                         </div>
+                        ${shouldShowBrickDescriptions() && item.description ? `<div class="brick-description" title="${escapeHtml(item.description)}">${escapeHtml(item.description)}</div>` : ''}
                     </div>
                     ${structureMarkup}
                 </div>
@@ -1631,6 +1725,70 @@
             `;
         }
 
+
+        let streamView = 'cards';
+
+        function setStreamView(view) {
+            streamView = view;
+            document.querySelectorAll('.stream-view-btn').forEach(button => {
+                button.classList.toggle('active', button.getAttribute('data-stream-view') === view);
+            });
+            renderStreamsView();
+        }
+
+        // Stream rows (grouped as authored) against the bricks they run on. Columns are the
+        // bricks used by any stream, most shared first, so shared foundations sit on the left.
+        function renderStreamMatrix(hierarchicalGroups, grouped, brickLookup, brickUsage) {
+            const rows = [];
+            function collect(group, path) {
+                const label = path.concat(group.name).join(' / ');
+                const streams = group.streams || [];
+                if (streams.length) rows.push({group: label, streams: streams});
+                (group.subGroups || []).forEach(child => collect(child, path.concat(group.name)));
+            }
+            if (hierarchicalGroups.length) {
+                hierarchicalGroups.forEach(group => collect(group, []));
+            } else {
+                Object.keys(grouped).sort().forEach(area => rows.push({group: area, streams: grouped[area]}));
+            }
+            const brickIds = Object.keys(brickUsage).sort((a, b) =>
+                brickUsage[b].length - brickUsage[a].length || String((brickLookup[a] || {}).name || a).localeCompare(String((brickLookup[b] || {}).name || b)));
+            if (!brickIds.length) {
+                return '<div class="activity-muted">No stream lists brick dependencies yet.</div>';
+            }
+            const maxUse = Math.max(...brickIds.map(id => brickUsage[id].length));
+            const heat = ['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#256abf', '#184f95'];
+            const heatOf = n => heat[Math.min(heat.length - 1, Math.floor((n - 1) / Math.max(1, maxUse) * heat.length))];
+            const name = id => escapeHtml((brickLookup[id] || {}).name || id);
+
+            let html = '<div class="smx-note">Each filled cell means the stream runs on that brick. Columns are ordered by how many streams share the brick; the bottom row counts them.</div>';
+            html += '<div class="smx-wrap"><table class="smx"><thead><tr><th class="smx-corner">Stream</th>';
+            brickIds.forEach(id => {
+                html += `<th class="smx-col" title="${name(id)}"><a href="landing_pages/${id}.html" target="_blank"><span>${name(id)}</span></a></th>`;
+            });
+            html += '<th class="smx-total-head">Bricks</th></tr></thead><tbody>';
+            rows.forEach(row => {
+                html += `<tr class="smx-group-row"><th colspan="${brickIds.length + 2}">${escapeHtml(row.group)}</th></tr>`;
+                row.streams.forEach(stream => {
+                    const used = new Set((stream.brickDependencies || []).map(dep => dep.targetBrickId));
+                    html += `<tr><th class="smx-row"><a href="stream_pages/${stream.id}.html" target="_blank">${escapeHtml(stream.name || stream.id)}</a></th>`;
+                    brickIds.forEach(id => {
+                        html += used.has(id)
+                            ? `<td class="smx-cell on" title="${escapeHtml(stream.name || stream.id)} runs on ${name(id)}"></td>`
+                            : '<td class="smx-cell"></td>';
+                    });
+                    html += `<td class="smx-total">${used.size}</td></tr>`;
+                });
+            });
+            html += '<tr class="smx-count-row"><th class="smx-row">Streams using the brick</th>';
+            brickIds.forEach(id => {
+                const n = brickUsage[id].length;
+                html += `<td class="smx-count" style="background:${heatOf(n)};color:${n / maxUse > 0.5 ? '#fff' : '#111827'}" title="${name(id)}: ${n} stream${n === 1 ? '' : 's'}">${n}</td>`;
+            });
+            html += '<td></td></tr></tbody></table></div>';
+            return html;
+        }
+
         function renderStreamsView() {
             const container = document.getElementById('StreamsContent');
             if (!container) {
@@ -1660,6 +1818,22 @@
 
             function renderStreamCard(stream) {
                 const story = summarizeStreamStory(stream);
+                const flows = stream.flows || [];
+                const steps = flows.reduce((sum, flow) => sum + (flow.steps || []).length, 0);
+                const pains = flows.reduce((sum, flow) => sum + (flow.steps || []).reduce((n, step) => n + (step.painPoints || []).length, 0), 0);
+                const deps = (stream.brickDependencies || []).filter(dep => dep.targetBrickId);
+                const outcomes = stream.outcomes || [];
+                const counts = [[flows.length, 'flow'], [steps, 'step'], [pains, 'pain point'], [deps.length, 'brick']]
+                    .map(([n, word]) => `<span><b>${n}</b> ${word}${n === 1 ? '' : 's'}</span>`).join('');
+                const outcomeList = outcomes.length
+                    ? `<div style="margin-top: 20px;" class="stream-card-label">Outcomes</div><ul class="stream-outcomes">${outcomes.slice(0, 3).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` +
+                      (outcomes.length > 3 ? `<div class="stream-more">+${outcomes.length - 3} more on the stream page</div>` : '')
+                    : '<div class="stream-card-copy activity-muted">No outcomes listed.</div>';
+                const brickStrip = deps.length ? `
+                    <div class="stream-bricks" style="margin-top: 24px"><span class="stream-brick-icons">${deps.map(dep => {
+                        const brick = brickLookup[dep.targetBrickId] || {};
+                        return `<a href="landing_pages/${dep.targetBrickId}.html" target="_blank"><img src="icons/${dep.targetBrickId}.png" alt="${escapeHtml(brick.name || dep.targetBrickId)}" title="${escapeHtml(brick.name || dep.targetBrickId)}" onerror="this.onerror=null;this.src='icons/brick.png'"></a>`;
+                    }).join('')}</span></div>` : '';
                 return `
                     <div class="stream-card" id="stream-${stream.id}">
                         <div class="stream-card-header">
@@ -1668,8 +1842,9 @@
                         </div>
                         ${showDescriptions && stream.description ? `<div class="stream-card-copy">${stream.description}</div>` : ''}
                         ${story.actor ? `<div class="stream-card-copy"><strong>Actor:</strong> ${story.actor}</div>` : ''}
-                        ${story.trigger ? `<div class="stream-card-copy"><strong>Trigger:</strong> ${story.trigger}</div>` : ''}
-                        ${renderStreamPills(stream, brickLookup)}
+                        <div class="stream-counts">${counts}</div>
+                        ${outcomeList}
+                        ${brickStrip}
                     </div>
                 `;
             }
@@ -1719,6 +1894,10 @@
 
             const hierarchicalGroups = normalizeStreamGroups(streamRootGroups);
             const brickUsage = buildBrickUsage();
+            if (streamView === 'matrix') {
+                container.innerHTML = renderStreamMatrix(hierarchicalGroups, grouped, brickLookup, brickUsage);
+                return;
+            }
             const unusedBricks = getBrickCatalog().filter(brick => !brickUsage[brick.id]);
             const reusedBricks = getBrickCatalog().filter(brick => (brickUsage[brick.id] || []).length >= 2);
             container.innerHTML = `
@@ -1807,6 +1986,128 @@
             return assets;
         }
 
+
+        let dataView = 'cards';
+
+        function setDataView(view) {
+            dataView = view;
+            renderDataView();
+        }
+
+        function isPersonalData(asset) {
+            return !['', 'none'].includes(String(asset.personalDataLevel || 'none').toLowerCase());
+        }
+
+        function isHighCriticality(asset) {
+            return ['high', 'critical'].includes(String(asset.securityCriticality || '').toLowerCase());
+        }
+
+        function titleCaseWords(value) {
+            return String(value || '').split(/[-_\s]+/).filter(Boolean).map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+        }
+
+        // Badges carry identity in text; color only reinforces sensitivity.
+        function renderAssetBadges(asset) {
+            const badges = [];
+            if (asset.kind) badges.push(['', titleCaseWords(asset.kind)]);
+            const classification = String(asset.classification || '').toLowerCase();
+            if (classification) badges.push([['restricted', 'confidential'].includes(classification) ? 'dx-badge-restricted' : '', titleCaseWords(classification)]);
+            if (isPersonalData(asset)) badges.push(['dx-badge-pii', titleCaseWords(asset.personalDataLevel) + ' personal data']);
+            const criticality = String(asset.securityCriticality || '').toLowerCase();
+            if (criticality === 'critical') badges.push(['dx-badge-critical', 'Critical']);
+            else if (criticality === 'high') badges.push(['dx-badge-high', 'High criticality']);
+            if (!badges.length) return '';
+            return '<div class="dx-badges">' + badges.map(([cls, label]) => `<span class="dx-badge ${cls}">${escapeHtml(label)}</span>`).join('') + '</div>';
+        }
+
+        // "Assortment data." under a group called "Assortment" says nothing new.
+        function isTrivialGroupDescription(group) {
+            const norm = value => String(value || '').toLowerCase().replace(/[.\s]+$/, '').trim();
+            const description = norm(group.description);
+            const name = norm(group.name);
+            return !description || description === name || description === name + ' data' || description === name + ' data assets';
+        }
+
+        const WRITE_ROLES = ['own', 'write', 'publish', 'replicate', 'delete'];
+
+        function renderDataInsights(assets, usageById) {
+            const assetLink = asset => `<a href="data_pages/${escapeHtml(asset.id)}.html" target="_blank">${escapeHtml(asset.name || asset.id)}</a>`;
+            const listOf = items => items.slice(0, 3).map(assetLink).join(', ') + (items.length > 3 ? ` and ${items.length - 3} more` : '');
+            const writersOf = asset => (usageById[asset.id] || {producingBricks: []}).producingBricks;
+            const readersOf = asset => (usageById[asset.id] || {consumingBricks: []}).consumingBricks;
+            const insights = [];
+            const personal = assets.filter(isPersonalData);
+            if (personal.length) insights.push(['Personal data', personal.length + ' asset' + (personal.length === 1 ? '' : 's') + ' hold personal data: ' + listOf(personal) + '.']);
+            const critical = assets.filter(isHighCriticality);
+            if (critical.length) insights.push(['Sensitive', critical.length + ' asset' + (critical.length === 1 ? ' is' : 's are') + ' high or critical: ' + listOf(critical) + '.']);
+            const noOwner = assets.filter(asset => !asset.systemOfRecordBrickId);
+            if (noOwner.length) insights.push(['No owner', listOf(noOwner) + (noOwner.length === 1 ? ' has' : ' have') + ' no system of record.']);
+            const multiWriter = assets.filter(asset => new Set(writersOf(asset).map(item => item.id)).size > 1);
+            if (multiWriter.length) insights.push(['Shared writes', listOf(multiWriter) + (multiWriter.length === 1 ? ' is' : ' are') + ' written by more than one brick, so ownership may be unclear.']);
+            const unread = assets.filter(asset => !readersOf(asset).length);
+            if (unread.length) insights.push(['Unread', listOf(unread) + (unread.length === 1 ? ' is' : ' are') + ' not read by any brick.']);
+            const hub = assets.slice().sort((a, b) => new Set(readersOf(b).map(i => i.id)).size - new Set(readersOf(a).map(i => i.id)).size)[0];
+            const hubReaders = hub ? new Set(readersOf(hub).map(i => i.id)).size : 0;
+            if (hubReaders > 1) insights.push(['Hub', assetLink(hub) + ' is read by ' + hubReaders + ' bricks, the most of any asset.']);
+            if (!insights.length) return '';
+            return '<div class="dx-insights">' + insights.map(([label, text]) =>
+                `<div class="dx-insight"><div class="dx-insight-label">${label}</div><div class="dx-insight-text">${text}</div></div>`).join('') + '</div>';
+        }
+
+        // Asset rows (grouped as authored) against the bricks that touch them; O = owns, W = writes, R = reads.
+        function renderDataMatrix(assetGroups, assets, usageById, brickById) {
+            const rows = [];
+            function collect(group, path) {
+                const label = path.concat(group.name).join(' / ');
+                if ((group.assets || []).length) rows.push({group: label, assets: group.assets});
+                (group.subGroups || []).forEach(child => collect(child, path.concat(group.name)));
+            }
+            if (assetGroups.length) assetGroups.forEach(group => collect(group, []));
+            else rows.push({group: 'Data assets', assets: assets});
+
+            const roleByAssetBrick = {};
+            const brickAssetCount = {};
+            getBrickCatalog().forEach(brick => (brick.dataDependencies || []).forEach(dep => {
+                if (!dep.assetId) return;
+                const role = String(dep.role || 'read').toLowerCase();
+                const level = role === 'own' ? 3 : WRITE_ROLES.includes(role) ? 2 : 1;
+                const key = dep.assetId + '|' + brick.id;
+                if (!roleByAssetBrick[key] || roleByAssetBrick[key] < level) roleByAssetBrick[key] = level;
+                brickAssetCount[brick.id] = brickAssetCount[brick.id] || new Set();
+                brickAssetCount[brick.id].add(dep.assetId);
+            }));
+            const brickIds = Object.keys(brickAssetCount).sort((a, b) =>
+                brickAssetCount[b].size - brickAssetCount[a].size || String((brickById[a] || {}).name || a).localeCompare(String((brickById[b] || {}).name || b)));
+            if (!brickIds.length) return '<div class="activity-muted">No brick lists data dependencies yet.</div>';
+            const name = id => escapeHtml((brickById[id] || {}).name || id);
+            const cellOf = {3: ['own', 'O', 'owns'], 2: ['write', 'W', 'writes'], 1: ['read', 'R', 'reads']};
+
+            let html = '<div class="smx-note">Which bricks own, write or read each asset. Each asset should have exactly one owner; the last column flags the ones that do not.</div>';
+            html += '<div class="dmx-legend"><span><i class="smx-cell dmx-own">O</i> owns</span><span><i class="smx-cell dmx-write">W</i> writes</span><span><i class="smx-cell dmx-read">R</i> reads</span></div>';
+            html += '<div class="smx-wrap"><table class="smx"><thead><tr><th class="smx-corner">Data asset</th>';
+            brickIds.forEach(id => { html += `<th class="smx-col" title="${name(id)}"><a href="landing_pages/${id}.html" target="_blank"><span>${name(id)}</span></a></th>`; });
+            html += '<th class="smx-total-head">Owners</th></tr></thead><tbody>';
+            rows.forEach(row => {
+                html += `<tr class="smx-group-row"><th colspan="${brickIds.length + 2}">${escapeHtml(row.group)}</th></tr>`;
+                row.assets.forEach(asset => {
+                    let owners = 0;
+                    html += `<tr><th class="smx-row"><a href="data_pages/${escapeHtml(asset.id)}.html" target="_blank">${escapeHtml(asset.name || asset.id)}</a></th>`;
+                    brickIds.forEach(id => {
+                        const level = roleByAssetBrick[asset.id + '|' + id];
+                        if (!level) { html += '<td class="smx-cell"></td>'; return; }
+                        if (level === 3) owners += 1;
+                        const [cls, letter, verb] = cellOf[level];
+                        html += `<td class="smx-cell dmx-${cls}" title="${name(id)} ${verb} ${escapeHtml(asset.name || asset.id)}">${letter}</td>`;
+                    });
+                    html += `<td class="smx-total${owners === 1 ? '' : ' dmx-flag'}" title="${owners === 1 ? 'One owner' : owners + ' owners'}">${owners}${owners === 1 ? '' : ' ⚠'}</td></tr>`;
+                });
+            });
+            html += '<tr class="smx-count-row"><th class="smx-row">Assets the brick touches</th>';
+            brickIds.forEach(id => { html += `<td class="smx-count dmx-count">${brickAssetCount[id].size}</td>`; });
+            html += '<td></td></tr></tbody></table></div>';
+            return html;
+        }
+
         function renderDataView() {
             const container = document.getElementById('DataContent');
             if (!container) {
@@ -1817,7 +2118,9 @@
             const assets = dataAssetsPayload.assets || flattenDataAssetGroups(assetGroups);
             const stores = dataAssetsPayload.stores || [];
             const totalStoreRefs = assets.reduce((sum, asset) => sum + ((asset.stores || []).length), 0);
-            const governedAssets = assets.filter(asset => String(asset.personalDataLevel || 'none').toLowerCase() !== 'none' || String(asset.classification || '').toLowerCase() === 'restricted').length;
+            const brickById = buildBrickLookup();
+            const usageById = {};
+            assets.forEach(asset => { usageById[asset.id] = buildDataAssetUsage(asset.id); });
 
             function storeById(storeId) {
                 return stores.find(item => item.id === storeId) || {};
@@ -1871,13 +2174,22 @@
                         ${renderDataBrickPills(usage.consumingBricks, 'blue', 'read-data')}
                     `;
                 }
+                const usage = usageById[asset.id] || {producingBricks: [], consumingBricks: []};
+                const owner = asset.systemOfRecordBrickId ? (brickById[asset.systemOfRecordBrickId] || {}).name || asset.systemOfRecordBrickId : '';
+                const counts = [[usage.producingBricks.length, 'writer'], [usage.consumingBricks.length, 'reader'], [(asset.stores || []).length, 'store']]
+                    .map(([n, word]) => `<span><b>${n}</b> ${word}${n === 1 ? '' : 's'}</span>`).join('');
                 return `
                     <div class="data-card">
                         <a class="data-card-head" target="_blank" rel="noopener noreferrer" href="data_pages/${escapeHtml(asset.id)}.html" style="text-decoration:none;color:inherit;">
                             <img class="data-card-icon" src="icons/data.png" alt="" onerror="this.onerror=null;this.src='icons/brick.png'">
                             <div class="data-card-title">${escapeHtml(asset.name || asset.id)}</div>
                         </a>
+                        ${renderAssetBadges(asset)}
                         ${asset.description ? `<div class="data-card-copy">${escapeHtml(asset.description)}</div>` : ''}
+                        <div class="data-owner">${owner
+                            ? `Owned by <a href="landing_pages/${escapeHtml(asset.systemOfRecordBrickId)}.html" target="_blank">${escapeHtml(owner)}</a>`
+                            : '<span class="data-owner-missing">No system of record</span>'}</div>
+                        <div class="data-counts">${counts}</div>
                         ${detailMarkup}
                         ${brickMarkup}
                     </div>
@@ -1898,7 +2210,7 @@
                             <div class="data-group-title">${escapeHtml(group.name || 'Data Assets')}</div>
                             <div class="data-group-count">${totalAssets} ${totalAssets === 1 ? 'asset' : 'assets'}</div>
                         </div>
-                        ${group.description ? `<div class="data-group-description">${escapeHtml(group.description)}</div>` : ''}
+                        ${group.description && !isTrivialGroupDescription(group) ? `<div class="data-group-description">${escapeHtml(group.description)}</div>` : ''}
                         ${directAssetMarkup}
                         ${childMarkup}
                     </section>
@@ -1909,30 +2221,30 @@
                 ? assetGroups.map(group => renderAssetGroup(group)).join('')
                 : `<div class="data-grid">${assets.map(renderAssetCard).join('')}</div>`;
 
+            const touchingBricks = new Set();
+            Object.values(usageById).forEach(usage => usage.producingBricks.concat(usage.consumingBricks).forEach(item => touchingBricks.add(item.id)));
+            const personal = assets.filter(isPersonalData).length;
+            const critical = assets.filter(isHighCriticality).length;
+            const tiles = [
+                ['Assets', assets.length], ['Stores', stores.length], ['Store links', totalStoreRefs],
+                ['Bricks using data', touchingBricks.size], ['Personal data', personal], ['High or critical', critical]
+            ];
+            const body = dataView === 'matrix'
+                ? renderDataMatrix(assetGroups, assets, usageById, brickById)
+                : (assets.length ? assetMarkup : '<div class="activity-muted">No data assets are defined for this domain yet.</div>');
             container.innerHTML = `
                 <div class="data-options">
+                    <div class="stream-view-switch" role="group" aria-label="Data view">
+                        <button type="button" class="stream-view-btn${dataView === 'cards' ? ' active' : ''}" onclick="setDataView('cards')">Cards</button>
+                        <button type="button" class="stream-view-btn${dataView === 'matrix' ? ' active' : ''}" onclick="setDataView('matrix')">Asset × brick matrix</button>
+                    </div>
+                    ${dataView === 'cards' ? `
                     <label class="data-option"><input type="checkbox" id="dataShowDetailToggle" ${dataShowDetail ? 'checked' : ''} onchange="setDataShowDetail(this.checked)"> Show detail</label>
-                    <label class="data-option"><input type="checkbox" id="dataShowBricksToggle" ${dataShowBricks ? 'checked' : ''} onchange="setDataShowBricks(this.checked)"> Show bricks</label>
+                    <label class="data-option"><input type="checkbox" id="dataShowBricksToggle" ${dataShowBricks ? 'checked' : ''} onchange="setDataShowBricks(this.checked)"> Show bricks</label>` : ''}
                 </div>
-                <div class="data-summary">
-                    <div class="dependency-graph-stat">
-                        <div class="dependency-graph-stat-value">${assets.length}</div>
-                        <div class="dependency-graph-stat-label">Assets</div>
-                    </div>
-                    <div class="dependency-graph-stat">
-                        <div class="dependency-graph-stat-value">${stores.length}</div>
-                        <div class="dependency-graph-stat-label">Stores</div>
-                    </div>
-                    <div class="dependency-graph-stat">
-                        <div class="dependency-graph-stat-value">${totalStoreRefs}</div>
-                        <div class="dependency-graph-stat-label">Store Links</div>
-                    </div>
-                    <div class="dependency-graph-stat">
-                        <div class="dependency-graph-stat-value">${governedAssets}</div>
-                        <div class="dependency-graph-stat-label">Governed Assets</div>
-                    </div>
-                </div>
-                ${assets.length ? assetMarkup : '<div class="activity-muted">No data assets are defined for this domain yet.</div>'}
+                <div class="dx-tiles">${tiles.map(([label, value]) => `<div class="dx-tile${value ? '' : ' zero'}"><span class="dx-tile-value">${value}</span><span class="dx-tile-label">${label}</span></div>`).join('')}</div>
+                ${assets.length ? renderDataInsights(assets, usageById) : ''}
+                ${body}
             `;
         }
 
@@ -2820,6 +3132,8 @@
             const query = params.get('q');
             const searchInput = document.getElementById('BrickSearch');
             if (query && searchInput) searchInput.value = query;
+            const descriptionToggle = document.getElementById('brickDescriptionToggle');
+            if (descriptionToggle && params.get('descriptions') === '0') descriptionToggle.checked = false;
             const structureToggle = document.getElementById('brickStructureToggle');
             if (structureToggle && params.get('modules') === '1') structureToggle.checked = true;
             const statusToggle = document.getElementById('brickStatusToggle');
@@ -2838,6 +3152,7 @@
             const params = new URLSearchParams(window.location.search);
             const query = brickSearchQuery();
             if (query) params.set('q', query); else params.delete('q');
+            if (shouldShowBrickDescriptions()) params.delete('descriptions'); else params.set('descriptions', '0');
             if (shouldShowBrickStructure()) params.set('modules', '1'); else params.delete('modules');
             if (shouldShowBrickStatus()) params.set('status', '1'); else params.delete('status');
             const checkboxes = Array.from(document.querySelectorAll('.brick-status-filter-input'));
@@ -3211,6 +3526,10 @@ ${tabs_script}
             <div class="bricks-toolbar">
                 <input type="search" id="BrickSearch" class="brick-search" placeholder="Search bricks by name, id, or description&hellip;"
                        autocomplete="off" oninput="updateBricksView()">
+                <label class="bricks-toggle" for="brickDescriptionToggle">
+                    <input type="checkbox" checked id="brickDescriptionToggle" onchange="updateBricksView()">
+                    <span>Show descriptions</span>
+                </label>
                 <label class="bricks-toggle" for="brickStructureToggle">
                     <input type="checkbox" id="brickStructureToggle" onchange="updateBricksView()">
                     <span>Show modules</span>
@@ -3229,6 +3548,10 @@ ${tabs_script}
     <div id="tab_content_streams" class="tabcontent">
         <div class="streams-panel">
             <div class="streams-toolbar">
+                <div class="stream-view-switch" role="group" aria-label="Stream view">
+                    <button type="button" class="stream-view-btn active" data-stream-view="cards" onclick="setStreamView('cards')">Cards</button>
+                    <button type="button" class="stream-view-btn" data-stream-view="matrix" onclick="setStreamView('matrix')">Stream × brick matrix</button>
+                </div>
                 <label class="streams-toggle" for="streamDescriptionToggle">
                     <input type="checkbox" checked id="streamDescriptionToggle" onchange="renderStreamsView()">
                     <span>Show descriptions</span>
@@ -3256,14 +3579,20 @@ ${tabs_script}
         const bricksTitle = (bricksMetadata.title || 'Product Bricks').replace(/\s+(&|and)\s+Streams$/i, '');
         const titles = {
             streams: streamsMetadata.title || 'Product Streams',
-            data: (dataAssetsPayload.metadata || {}).title || 'Data Assets'
+            data: 'Data Assets'
         };
         const title = tabName === 'dependencies' ? 'Dependencies' : titles[tabName] || bricksTitle;
         document.getElementById('doc-title').innerText = title;
+        const subtitles = {
+            streams: 'Streams are the end-to-end outcomes this domain delivers. Each card shows what a stream achieves and how large it is; the matrix shows which bricks every stream runs on and which bricks many streams share.',
+            data: 'The data assets behind the domain: what each one holds, which bricks own or read it, and how it is grouped.',
+            dependencies: 'How bricks, streams and data assets depend on each other, as a diagram you can filter.'
+        };
+        document.getElementById('doc-description').innerText = subtitles[tabName] ||
+            'Product bricks connect customer and business needs to concrete implementation building blocks. This page shows an overview of the brick landscape, dependencies, streams, and delivery structure behind the domain.';
     }
 
     updateHeroTitle('bricks');
-    document.getElementById('doc-description').innerText = 'Product bricks connect customer and business needs to concrete implementation building blocks. This page shows an overview of the brick landscape, dependencies, streams, and delivery structure behind the domain.';
 </script>
 
 

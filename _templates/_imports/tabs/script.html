@@ -90,6 +90,12 @@
             if (!heroTitle.dataset.defaultTitle) heroTitle.dataset.defaultTitle = heroTitle.textContent;
             heroTitle.textContent = activeTab.dataset.tabTitle || heroTitle.dataset.defaultTitle;
         }
+        // A tab may describe itself; otherwise the page's own subtitle stays.
+        const heroSubtitle = document.querySelector('[data-follows-tab-subtitle]');
+        if (heroSubtitle) {
+            if (!heroSubtitle.dataset.defaultSubtitle) heroSubtitle.dataset.defaultSubtitle = heroSubtitle.textContent.trim();
+            heroSubtitle.textContent = activeTab.dataset.tabSubtitle || heroSubtitle.dataset.defaultSubtitle;
+        }
         if (typeof window.afterOpenTab === 'function') {
             window.afterOpenTab(resolvedTabName);
         }

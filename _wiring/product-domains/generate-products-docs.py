@@ -16,6 +16,7 @@ from generator_common import (
 )
 
 from generator_common import template_path
+from product_bricks_support import flatten_product_streams, load_product_streams_payload
 
 domain, site_config = load_domain_args()
 enter_docs_root()
@@ -158,17 +159,81 @@ def copy_deployment_overview_image(domain_id, docs_folder):
             return 'media/' + os.path.basename(source), alt
     return '', ''
 
+def deployed_brick_ids(deployment, product_id):
+    """Bricks deployed for a product on any channel, from deployment.json."""
+    bricks = set()
+    for group in deployment.get('channels', []):
+        for channel in group.get('channels', []):
+            for deployed in channel.get('deployedBricks', []):
+                if any(use.get('productId') == product_id for use in deployed.get('usedInProducts', [])):
+                    bricks.add(deployed.get('brickId', ''))
+    bricks.discard('')
+    return bricks
+
+
+def build_product_context(product, deployment, streams, customers):
+    """Streams, customers and jobs for one product's landing page.
+
+    Streams are those composed of at least one brick the product deploys. A job of a
+    primary customer counts as supported when one of its steps needs such a stream
+    or brick, the same rule the brick pages use.
+    """
+    brick_ids = deployed_brick_ids(deployment, product.get('id', ''))
+    product_streams = []
+    for stream in streams:
+        used = [dep.get('targetBrickId', '') for dep in stream.get('brickDependencies', [])
+                if dep.get('targetBrickId', '') in brick_ids]
+        if used:
+            product_streams.append({
+                'id': stream.get('id', ''), 'name': stream.get('name', ''), 'icon': stream.get('icon', ''),
+                'group': stream.get('group', ''), 'description': stream.get('description', ''),
+                'outcomes': stream.get('outcomes', []), 'bricksUsed': used,
+            })
+    stream_ids = {stream['id'] for stream in product_streams}
+
+    customer_records = {}
+    for group in customers:
+        for customer in group.get('customers', []):
+            customer_records[customer.get('id', '')] = dict(customer, group=group.get('group', ''))
+
+    product_customers, jobs = [], []
+    for primary in product.get('primaryCustomers', []):
+        record = customer_records.get(primary.get('id', ''), {})
+        product_customers.append({
+            'id': primary.get('id', ''), 'name': primary.get('name', record.get('name', '')),
+            'icon': primary.get('icon', record.get('icon', 'customer.png')), 'group': record.get('group', ''),
+            'description': record.get('description', ''), 'careAbout': record.get('careAbout', []),
+        })
+        for job in record.get('jobsToBeDone', []):
+            steps = []
+            for step in job.get('steps', []):
+                needs = [ref for ref in step.get('streamsNeeded', []) if ref.get('id') in stream_ids]
+                needs += [ref for ref in step.get('bricksNeeded', []) if ref.get('id') in brick_ids]
+                if needs:
+                    steps.append({'step': step.get('step', ''), 'description': step.get('description', ''),
+                                  'howItSupports': ' '.join(dict.fromkeys(ref.get('howItSupports', '') for ref in needs if ref.get('howItSupports')))})
+            if steps:
+                jobs.append({'customerId': primary.get('id', ''), 'customerName': product_customers[-1]['name'],
+                             'customerIcon': product_customers[-1]['icon'], 'jobId': job.get('id', ''),
+                             'jobName': job.get('name', ''), 'jobOutcome': job.get('outcome', job.get('whatItIs', '')),
+                             'steps': steps})
+    return product_streams, product_customers, jobs
+
+
 def create_landing_pages(products, docs_folder):
     os.makedirs(os.path.join(docs_folder, 'landing_pages'), exist_ok=True)
 
     template = open(templates_root + 'landing_page.html').read()
 
     deployment = load_deployment(domain['id'])
+    streams_path = domain_source_path(domain['id'], 'product-bricks/product-stream.json')
+    streams = flatten_product_streams(load_product_streams_payload(streams_path))
 
     date_string = datetime.date.today().strftime('%Y-%m-%d')
 
     if 'portfolio' in products:
         for product in products['portfolio']['products']:
+            product_streams, product_customers, product_jobs = build_product_context(product, deployment, streams, customers)
             landing_page_file = docs_folder + '/landing_pages/' + str(product['id']) + '.html'
             with open(landing_page_file, 'w') as html_file:
                 html_file.write(template
@@ -188,6 +253,9 @@ def create_landing_pages(products, docs_folder):
                                 .replace('${deployment}', json.dumps(deployment))
                                 .replace('${product_name}', product['name'])
                                 .replace('${domain_name}', domain['name'])
+                                .replace('${product_streams}', json.dumps(product_streams))
+                                .replace('${product_customers}', json.dumps(product_customers))
+                                .replace('${product_jobs}', json.dumps(product_jobs))
                                 .replace('${product}', json.dumps(product)))
 
 

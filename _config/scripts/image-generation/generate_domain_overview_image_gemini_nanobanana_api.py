@@ -64,13 +64,27 @@ EXTERNAL_TYPE_LABELS = {
     'hardware': 'Hardware devices',
     'sibling': 'Group companies',
     'network': 'Partner networks',
+    'ci-cd': 'CI/CD',
+    'store-pos': 'Store POS',
+    'cicd': 'CI/CD',
 }
 # Types that name a role rather than a kind of system ("data", "partner"). Their label is
 # the shortest concrete system name instead, and they rank after the specific types.
+# Any "...-consumer" type also names a role (who uses the domain), not a system kind.
 GENERIC_EXTERNAL_TYPES = {'data', 'partner', 'system', 'service', 'consumer', 'data-consumer',
-                          'customer-system', 'other', 'operational'}
+                          'customer-system', 'other', 'operational', 'integration', 'external',
+                          'external-system', 'external-service'}
 # People and customer devices are already shown through the customer groups.
 SKIPPED_EXTERNAL_TYPES = {'channel-consumer', 'user'}
+# The company a domain is modeled on is listed in its competition file for context,
+# but it is the domain itself, not an alternative to it.
+MODELED_COMPANY_CATEGORIES = {'modeled-company', 'reference-company'}
+# Words a label must not end on after it is cut to length ("Adoption and").
+DANGLING_WORDS = {'and', 'or', 'of', 'for', 'the', 'with', 'to', 'in', 'on', 'a', 'an', 'by', 'via'}
+
+
+def is_generic_external_type(kind):
+    return kind in GENERIC_EXTERNAL_TYPES or kind.endswith('-consumer') or kind.endswith(' consumer')
 
 
 def parse_args(argv=None):
@@ -115,7 +129,10 @@ def short_label(text, limit=40):
     if len(text) <= limit:
         return text
     # Cut at a word boundary without an ellipsis; models tend to copy "…" into the image.
-    return text[:limit + 1].rsplit(' ', 1)[0].rstrip(' ,;/&')
+    words = text[:limit + 1].rsplit(' ', 1)[0].rstrip(' ,;/&').split()
+    while len(words) > 1 and words[-1].lower() in DANGLING_WORDS:
+        words.pop()
+    return ' '.join(words).rstrip(' ,;/&')
 
 
 def first_sentence(text, limit=160):
@@ -128,7 +145,17 @@ def first_sentence(text, limit=160):
 def external_label(kind):
     if kind in EXTERNAL_TYPE_LABELS:
         return EXTERNAL_TYPE_LABELS[kind]
-    return kind.upper() if len(kind) <= 3 else kind.replace('-', ' ').replace('_', ' ').title()
+    if len(kind) <= 3:
+        return kind.upper()
+    words = kind.replace('-', ' ').replace('_', ' ').split()
+    return ' '.join(word if index and word in DANGLING_WORDS else word.capitalize()
+                    for index, word in enumerate(words))
+
+
+def role_label(systems, limit=32):
+    """A concrete system name for a role-like type, or None when every name would be cut."""
+    fitting = [name for name in systems if name and len(name) <= limit]
+    return min(fitting, key=len) if fitting else None
 
 
 def unique(values):
@@ -163,13 +190,17 @@ def collect_model(domain_dir):
     customer_groups = [group for group in customers if group.get('customers')]
     customer_groups.sort(key=lambda group: -len(group['customers']))
     customer_labels = unique(short_label(group.get('group'), 48) for group in customer_groups)[:LIMITS['customers']]
-    customer_context = [f"{group.get('group')}: " + ', '.join(c.get('name', '') for c in group['customers'])
-                        for group in customer_groups]
+    # Group names and sizes only: when told the individual roles, models label each person.
+    customer_context = [f"{group.get('group')} ({len(group['customers'])} customer roles)"
+                        for group in customer_groups if short_label(group.get('group'), 48) in customer_labels]
 
     product_list = (products.get('portfolio') or {}).get('products', []) or []
-    product_labels = unique(short_label(p.get('name')) for p in product_list)[:LIMITS['products']]
+    # Product cards hold two or three lines, so product names may be longer than other labels.
+    product_labels = unique(short_label(p.get('name'), 56) for p in product_list)[:LIMITS['products']]
     product_context = [f"{p.get('name')}" + (f" ({p['type']})" if p.get('type') else '') +
-                       (f": {first_sentence(p['description'])}" if p.get('description') else '') for p in product_list]
+                       (f": {first_sentence(p['description'])}" if p.get('description') else '')
+                       # Only the labelled products: models draw every product they are told about.
+                       for p in product_list if short_label(p.get('name'), 56) in product_labels]
 
     root_bricks = (bricks.get('rootGroups') or []) if isinstance(bricks, dict) else []
     brick_total = sum(count_items(group, 'bricks') for group in root_bricks)
@@ -184,12 +215,23 @@ def collect_model(domain_dir):
                     if not isinstance(system, dict) or system.get('type') in SKIPPED_EXTERNAL_TYPES:
                         continue
                     kind = str(system.get('type') or 'other').lower()
-                    external.setdefault(kind, []).append(short_label(system.get('system'), 32))
+                    # Keep whole names: a cut name ("Airports and venue operating") is not a label.
+                    external.setdefault(kind, []).append(short_label(system.get('system'), 200))
     # Specific types first (most systems first), then generic ones under a concrete system name.
-    external_kinds = sorted(external, key=lambda kind: (kind in GENERIC_EXTERNAL_TYPES, -len(external[kind])))
+    external_kinds = sorted(external, key=lambda kind: (is_generic_external_type(kind), -len(external[kind])))
     external_labels = unique(
-        min(external[kind], key=len) if kind in GENERIC_EXTERNAL_TYPES else external_label(kind)
+        role_label(external[kind]) if is_generic_external_type(kind) else external_label(kind)
         for kind in external_kinds)[:LIMITS['external']]
+    # A domain that types most systems with one role ("integration") would otherwise show a single
+    # tile, which models repeat; fill the free tiles with further concrete names, most used first.
+    if len(external_labels) < LIMITS['external']:
+        counts = {}
+        for kind in external_kinds:
+            if is_generic_external_type(kind):
+                for name in external[kind]:
+                    counts[name] = counts.get(name, 0) + 1
+        extra = sorted((name for name in counts if len(name) <= 32), key=lambda name: (-counts[name], len(name)))
+        external_labels = unique(external_labels + extra)[:LIMITS['external']]
     external_context = [f"{external_label(kind)}: " + ', '.join(unique(external[kind])[:4])
                         for kind in external_kinds]
 
@@ -197,10 +239,13 @@ def collect_model(domain_dir):
     channel_labels = unique(short_label(group.get('groupName') or group.get('groupId'))
                             for group in channel_groups)[:LIMITS['channels']]
     channel_context = [f"{group.get('groupName')}: " + ', '.join(
-        c.get('subChannelName') or c.get('subChannelId', '') for c in group['channels']) for group in channel_groups]
+        c.get('subChannelName') or c.get('subChannelId', '') for c in group['channels']) for group in channel_groups
+        if short_label(group.get('groupName') or group.get('groupId')) in channel_labels]
 
     rank = {'global_leader': 0, 'leader': 0, 'regional': 1, 'challenger': 2}
-    players = sorted(competition.get('players', []) or [], key=lambda p: rank.get(p.get('category'), 3))
+    players = [p for p in competition.get('players', []) or [] 
+               if str(p.get('category') or '').lower().replace('_', '-') not in MODELED_COMPANY_CATEGORIES]
+    players = sorted(players, key=lambda p: rank.get(p.get('category'), 3))
     competitor_labels = unique(short_label(p.get('name'), 32) for p in players)[:LIMITS['competitors']]
 
     data_groups = [group.get('name') for group in data_assets.get('rootGroups', []) or [] if group.get('name')]
@@ -218,24 +263,44 @@ def collect_model(domain_dir):
     }
 
 
-DEFAULT_SCENE = '''One wide "context map" read from left to right:
-- Left, outside the boundary: each customer group as ONE small cluster of two or three generic people
-  with exactly one label, the group name. Do not split a group into individual roles or label single people.
-- Center: one large rounded boundary for the domain. Inside it, the products as a row of distinct
+SCENE_INTRO = 'One wide "context map" read from left to right:'
+SCENE_CUSTOMERS = """- Left, outside the boundary: each customer group as ONE small cluster of two or three generic people
+  with exactly one label, the group name. Do not split a group into individual roles or label single people."""
+SCENE_INSIDE = """- Center: one large rounded boundary for the domain. Inside it, the products as a row of distinct
   product cards on top; below them ONE shared row of building-block piles, one pile per product brick
   group, spanning the full width under all products. Products are assembled from many groups and groups
   are shared by many products, so do not pair a product with a group: no columns and no product-to-group
   arrows; the product row simply rests on the brick row. Below the bricks a shared data layer (a simple
-  database shape) used by all brick groups.
-- Along the bottom edge of the boundary: the delivery channels as a base strip of runtime platforms
-  (servers, cloud, app stores) that the bricks are deployed to and the products are delivered through.
-- Right, outside the boundary: the external systems as separate service tiles, each connected to the
-  boundary with a two-way connector line.
-- Bottom right, set apart and smaller: competitors as alternative storefronts the customers could choose instead,
-  with a thin dashed line towards the customers, not connected to the domain.
-- Arrows: customers <-> products; the brick row reads and writes the data layer;
-  bricks are deployed onto the delivery channels;
-  the domain exchanges data with the external systems. No other arrows.'''
+  database shape) used by all brick groups."""
+SCENE_CHANNELS = """- Along the bottom edge of the boundary: the delivery channels as a base strip of runtime platforms
+  (servers, cloud, app stores) that the bricks are deployed to and the products are delivered through."""
+SCENE_NO_CHANNELS = '- No delivery-channel strip: the boundary ends below the data layer.'
+SCENE_EXTERNAL = """- Right, outside the boundary: the external systems as separate service tiles, each connected to the
+  boundary with a two-way connector line."""
+SCENE_NO_EXTERNAL = ('- No external systems: leave the area right of the boundary empty apart from the competitors; '
+                     'draw no service tiles or connector lines there.')
+SCENE_COMPETITORS = """- Bottom right, set apart and smaller: competitors as alternative storefronts the customers could choose instead,
+  with a thin dashed line towards the customers, not connected to the domain."""
+
+
+def default_scene(model):
+    """The composition, leaving out the parts the domain does not model so none get invented."""
+    has_channels, has_external = bool(model.get('channels')), bool(model.get('external'))
+    arrows = ['customers <-> products', 'the brick row reads and writes the data layer']
+    if has_channels:
+        arrows.append('bricks are deployed onto the delivery channels')
+    if has_external:
+        arrows.append('the domain exchanges data with the external systems')
+    parts = [SCENE_INTRO, SCENE_CUSTOMERS, SCENE_INSIDE,
+             SCENE_CHANNELS if has_channels else SCENE_NO_CHANNELS,
+             SCENE_EXTERNAL if has_external else SCENE_NO_EXTERNAL]
+    if model.get('competitors'):
+        parts.append(SCENE_COMPETITORS)
+    parts.append('- Arrows: ' + '; '.join(arrows) + '. No other arrows.')
+    return '\n'.join(parts)
+
+
+DEFAULT_SCENE = default_scene({'channels': [1], 'external': [1], 'competitors': [1]})
 
 
 def build_prompt(model, scene=None, aspect_ratio='16:9'):
@@ -270,13 +335,14 @@ Background (for understanding only; do not write it in the image):
 {context}
 
 Composition:
-{scene or DEFAULT_SCENE}
+{scene or default_scene(model)}
 
 Text in the image: write the domain name "{model['name']}" once as a small title at the top of the
 boundary, plus exactly these labels, spelled exactly as given, each next to its element:
 {label_text}
 Write no other text anywhere: no headline or caption above, below, or beside the boundary, no
-section captions (such as "Runtime platform" or "Deploy"), no job titles or descriptions under people,
+section captions (such as "Runtime platform", "Deploy", "Product", or "Delivery channels"), no
+sub-labels inside tiles, no job titles or descriptions under people,
 no arrow labels (such as "Read", "Write", or "Deployment"), numbers, legends, placeholder text (such as "Search..."), or invented names. Never
 write the words overview, diagram, illustration, or picture.
 
@@ -290,7 +356,8 @@ Style:
 - Labels in a clear sans-serif, large enough to read at half size on a laptop screen.
 - Generic, inclusive people and generic devices. No brand logos, trademarks, or watermarks anywhere,
   even for the named competitors, sales channels, and external systems: draw generic icons
-  (a shopping cart, a storefront, a truck) instead of company marks.
+  (a shopping cart, a storefront, a truck) instead of company marks. This includes app-store, browser,
+  payment-card, and social-network marks, and product cards drawn as wordmarks.
 '''.strip()
 
 

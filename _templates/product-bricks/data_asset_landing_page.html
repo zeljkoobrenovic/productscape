@@ -12,6 +12,39 @@
     ${breadcrumbs_style}
 
     <style>
+
+        /* Overview */
+        .tabcontent { padding-top: 12px; }
+        .ov { max-width: 1200px; }
+        .ov-meaning { font-size: 17px; color: #111827; margin-bottom: 14px; max-width: 900px; }
+        .ov-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 22px; }
+        .ov-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border: 1px solid #e5e7eb;
+            border-radius: 10px; background: #fff; cursor: pointer; font: inherit; text-align: left; color: #111827; }
+        .ov-tile:hover, .ov-tile:focus-visible { border-color: #93c5fd; background: #f8fbff; }
+        .ov-tile.zero { color: #9ca3af; }
+        .ov-tile-value { font-size: 28px; font-weight: 700; line-height: 1.1; }
+        .ov-tile-label { font-size: 13px; color: #4b5563; }
+        .ov-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #1d4ed8; margin: 6px 0 10px; }
+        .ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 14px; margin-bottom: 22px; }
+        .ov-panel { border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; padding: 14px 16px; min-width: 0; }
+        .ov-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+        .ov-panel-title { font-weight: 700; font-size: 16px; color: #111827; }
+        .ov-panel-count { font-weight: 400; color: #6b7280; font-size: 14px; }
+        .ov-panel-link, .ov-more { border: 0; background: none; color: #1d4ed8; cursor: pointer; font: inherit; font-size: 13px; padding: 0; }
+        .ov-panel-link:hover, .ov-more:hover { text-decoration: underline; }
+        .ov-more { margin-top: 8px; }
+        .ov-chips { display: flex; flex-direction: column; gap: 6px; }
+        .ov-chip { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; color: inherit; text-decoration: none; }
+        a.ov-chip:hover { background: #f3f4f6; }
+        .ov-chip img { width: 32px; height: 32px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; background: #fff; flex: 0 0 32px; }
+        .ov-chip-text { display: flex; flex-direction: column; min-width: 0; }
+        .ov-chip-label { font-weight: 600; color: #111827; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-chip-meta { font-size: 12px; color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-empty { color: #6b7280; font-size: 14px; }
+        .ov-facts-list { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0; }
+        .ov-facts-list dt { color: #6b7280; font-size: 13px; }
+        .ov-facts-list dd { margin: 0; color: #111827; }
+
         body {
             font-family: Vollkorn, Ubuntu, Optima, Segoe, Segoe UI, Candara, Calibri, Arial, sans-serif;
         }
@@ -224,7 +257,7 @@
 
 </head>
 
-<body>
+<body onload="updateAssetTabLabels(); initTab('overview')" onhashchange="initTab('overview')">
 <style>
     .site-nav {
         display: flex;
@@ -308,7 +341,22 @@
 
 <div id="Header"></div>
 
-<div class="page" id="MainContent"></div>
+<div class="page">
+    <div class="tab" id="primary_tabs">
+        <button class="tablinks active" id="tab_overview" onclick="openTab('overview')">Overview</button>
+        <button class="tablinks" id="tab_bricks" onclick="openTab('bricks')">Bricks</button>
+        <button class="tablinks" id="tab_stores" onclick="openTab('stores')">Stores</button>
+        <button class="tablinks" id="tab_interfaces" onclick="openTab('interfaces')">Interfaces</button>
+        <button class="tablinks" id="tab_lineage" onclick="openTab('lineage')">Lineage</button>
+        <button class="tablinks" id="tab_governance" onclick="openTab('governance')">Governance</button>
+    </div>
+    <div id="tab_content_overview" class="tabcontent"></div>
+    <div id="tab_content_bricks" class="tabcontent"></div>
+    <div id="tab_content_stores" class="tabcontent"></div>
+    <div id="tab_content_interfaces" class="tabcontent"></div>
+    <div id="tab_content_lineage" class="tabcontent"></div>
+    <div id="tab_content_governance" class="tabcontent"></div>
+</div>
 
 <script>
     let headerHtml = '<div class="nav-strip">';
@@ -382,33 +430,52 @@
         return html;
     }
 
-    function renderMain() {
-        let html = '';
+    // Full catalog entries (the shared asset list carries only ids and names).
+    const catalogAssets = ((window.SHARED_DOMAIN_DATA.dataAssetsPayload || {}).assets) || [];
 
-        // Overview / governance
-        html += '<div class="group"><div class="section-title">Overview & Governance</div>';
-        html += '<div class="meta-grid">';
-        html += renderMetaItem('Kind', titleCase(currentAsset.kind || ''));
-        html += renderMetaItem('Status', titleCase(currentAsset.status || ''));
-        html += renderMetaItem('Classification', titleCase(currentAsset.classification || ''));
-        html += renderMetaItem('Personal Data', titleCase(currentAsset.personalDataLevel || ''));
-        html += renderMetaItem('Security Criticality', titleCase(currentAsset.securityCriticality || ''));
-        html += renderMetaItem('Data Subjects', (currentAsset.dataSubjects || []).map(titleCase).join(', '));
-        html += renderMetaItem('Legal Tags', (currentAsset.legalTags || []).map(tag => String(tag).toUpperCase()).join(', '));
-        html += renderMetaItem('Access Scope', currentAsset.accessScope || '');
-        html += renderMetaItem('System Of Record Brick', currentAsset.systemOfRecordBrickId || '');
-        const gov = currentAsset.governance || {};
-        html += renderMetaItem('Retention', gov.retention || '');
-        html += renderMetaItem('Residency', (gov.residency || '').toUpperCase());
-        html += renderMetaItem('Sharing Policy', gov.sharingPolicy || '');
-        html += '</div>';
-        if (currentAsset.businessMeaning && currentAsset.businessMeaning !== currentAsset.description) {
-            html += '<div class="card-copy" style="margin-top:14px;"><strong>Business meaning:</strong> ' + escapeHtml(currentAsset.businessMeaning) + '</div>';
+    function assetInfo(id) {
+        return catalogAssets.find(item => item.id === id) || allAssets.find(item => item.id === id) || {id: id, name: id};
+    }
+
+    function sourceAssets() {
+        return (currentAsset.derivedFromAssetIds || []).map(assetInfo);
+    }
+
+    function derivedAssets() {
+        return catalogAssets.filter(item => (item.derivedFromAssetIds || []).includes(currentAsset.id));
+    }
+
+    function brickName(id) {
+        return ((all_bricks.find(item => item.id === id) || {}).name) || id;
+    }
+
+    function assetCards(items, meta, emptyText) {
+        if (!items.length) {
+            return '<div class="muted">' + escapeHtml(emptyText) + '</div>';
         }
-        html += '</div>';
+        return '<div class="card-grid">' + items.map(item => {
+            let card = '<a class="card" href="' + escapeHtml(item.id) + '.html">';
+            card += '<div class="card-meta">' + escapeHtml(meta) + (item.kind ? ' | ' + escapeHtml(titleCase(item.kind)) : '') + '</div>';
+            card += '<div class="card-title">' + escapeHtml(item.name || item.id) + '</div>';
+            if (item.description) {
+                card += '<div class="card-copy">' + escapeHtml(item.description) + '</div>';
+            }
+            return card + '</a>';
+        }).join('') + '</div>';
+    }
 
-        // Stores
-        html += '<div class="group"><div class="section-title">Stores</div>';
+    function renderBricksTab() {
+        let html = '<div class="group"><div class="section-title">Producing Bricks</div>';
+        html += renderBrickPills(producingBricks, 'No bricks own, write, or publish this asset.');
+        html += '</div>';
+        html += '<div class="group"><div class="section-title">Consuming Bricks</div>';
+        html += renderBrickPills(consumingBricks, 'No bricks read or query this asset.');
+        html += '</div>';
+        document.getElementById('tab_content_bricks').innerHTML = html;
+    }
+
+    function renderStoresTab() {
+        let html = '<div class="group"><div class="section-title">Stores</div>';
         const storeLinks = currentAsset.stores || [];
         if (!storeLinks.length) {
             html += '<div class="muted">No stores linked to this asset.</div>';
@@ -419,7 +486,7 @@
                 html += '<div class="card">';
                 html += '<div class="card-meta">' + escapeHtml(titleCase(link.role || 'store')) + '</div>';
                 html += '<div class="card-title">' + escapeHtml(store.name || link.storeId) + '</div>';
-                const storeMeta = [store.kind ? titleCase(store.kind) : '', store.technology || ''].filter(Boolean).join(' | ');
+                const storeMeta = [store.kind ? titleCase(store.kind) : '', store.technology ? titleCase(store.technology) : ''].filter(Boolean).join(' | ');
                 if (storeMeta) {
                     html += '<div class="muted">' + escapeHtml(storeMeta) + '</div>';
                 }
@@ -431,19 +498,11 @@
             html += '</div>';
         }
         html += '</div>';
+        document.getElementById('tab_content_stores').innerHTML = html;
+    }
 
-        // Producing bricks
-        html += '<div class="group"><div class="section-title">Producing Bricks</div>';
-        html += renderBrickPills(producingBricks, 'No bricks own, write, or publish this asset.');
-        html += '</div>';
-
-        // Consuming bricks
-        html += '<div class="group"><div class="section-title">Consuming Bricks</div>';
-        html += renderBrickPills(consumingBricks, 'No bricks read or query this asset.');
-        html += '</div>';
-
-        // Interfaces
-        html += '<div class="group"><div class="section-title">Interfaces</div>';
+    function renderInterfacesTab() {
+        let html = '<div class="group"><div class="section-title">Interfaces</div>';
         const interfaces = currentAsset.interfaces || [];
         if (!interfaces.length) {
             html += '<div class="muted">No access interfaces listed.</div>';
@@ -461,30 +520,150 @@
             html += '</div>';
         }
         html += '</div>';
-
-        // Lineage
-        const derivedIds = currentAsset.derivedFromAssetIds || [];
-        if (derivedIds.length) {
-            html += '<div class="group"><div class="section-title">Derived From</div>';
-            html += '<div class="card-grid">';
-            derivedIds.forEach(id => {
-                const source = allAssets.find(item => item.id === id) || { id: id, name: id };
-                html += '<a class="card" href="' + escapeHtml(id) + '.html">';
-                html += '<div class="card-meta">Source Asset</div>';
-                html += '<div class="card-title">' + escapeHtml(source.name || id) + '</div>';
-                if (source.description) {
-                    html += '<div class="card-copy">' + escapeHtml(source.description) + '</div>';
-                }
-                html += '</a>';
-            });
-            html += '</div>';
-            html += '</div>';
-        }
-
-        document.getElementById('MainContent').innerHTML = html;
+        document.getElementById('tab_content_interfaces').innerHTML = html;
     }
 
-    renderMain();
+    function renderLineageTab() {
+        let html = '<div class="group"><div class="section-title">Derived From</div>';
+        html += assetCards(sourceAssets(), 'Source asset', 'This asset is not derived from other data assets.');
+        html += '</div>';
+        html += '<div class="group"><div class="section-title">Feeds Into</div>';
+        html += assetCards(derivedAssets(), 'Derived asset', 'No other data assets are derived from this one.');
+        html += '</div>';
+        document.getElementById('tab_content_lineage').innerHTML = html;
+    }
+
+    function renderGovernanceTab() {
+        const gov = currentAsset.governance || {};
+        let html = '<div class="group"><div class="section-title">Classification &amp; Access</div><div class="meta-grid">';
+        html += renderMetaItem('Kind', titleCase(currentAsset.kind || ''));
+        html += renderMetaItem('Status', titleCase(currentAsset.status || ''));
+        html += renderMetaItem('Classification', titleCase(currentAsset.classification || ''));
+        html += renderMetaItem('Personal Data', titleCase(currentAsset.personalDataLevel || ''));
+        html += renderMetaItem('Security Criticality', titleCase(currentAsset.securityCriticality || ''));
+        html += renderMetaItem('Data Subjects', (currentAsset.dataSubjects || []).map(titleCase).join(', '));
+        html += renderMetaItem('Legal Tags', (currentAsset.legalTags || []).map(tag => String(tag).toUpperCase()).join(', '));
+        html += renderMetaItem('Access Scope', currentAsset.accessScope || '');
+        html += renderMetaItem('System Of Record Brick', currentAsset.systemOfRecordBrickId ? brickName(currentAsset.systemOfRecordBrickId) : '');
+        html += '</div>';
+        if (currentAsset.businessMeaning && currentAsset.businessMeaning !== currentAsset.description) {
+            html += '<div class="card-copy" style="margin-top:14px;"><strong>Business meaning:</strong> ' + escapeHtml(currentAsset.businessMeaning) + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="group"><div class="section-title">Lifecycle &amp; Sharing</div><div class="meta-grid">';
+        html += renderMetaItem('Retention', gov.retention || '');
+        html += renderMetaItem('Residency', (gov.residency || '').toUpperCase());
+        html += renderMetaItem('Sharing Policy', gov.sharingPolicy || '');
+        html += '</div></div>';
+        document.getElementById('tab_content_governance').innerHTML = html;
+    }
+
+    // ---- Overview: the asset at a glance; every detail lives in its own tab. ----
+    const OVERVIEW_CHIP_LIMIT = 8;
+
+    function overviewChip(href, icon, fallback, label, meta) {
+        let chip = href ? '<a class="ov-chip" href="' + escapeHtml(href) + '">' : '<div class="ov-chip">';
+        if (icon) {
+            chip += '<img src="' + escapeHtml(icon) + '" alt="" onerror="this.onerror=null;this.src=\'' + fallback + '\'">';
+        }
+        chip += '<span class="ov-chip-text"><span class="ov-chip-label">' + escapeHtml(label) + '</span>';
+        if (meta) chip += '<span class="ov-chip-meta">' + escapeHtml(meta) + '</span>';
+        return chip + '</span>' + (href ? '</a>' : '</div>');
+    }
+
+    function overviewChipList(items, renderItem, tab, emptyText) {
+        if (!items.length) return '<div class="ov-empty">' + escapeHtml(emptyText) + '</div>';
+        let list = '<div class="ov-chips">' + items.slice(0, OVERVIEW_CHIP_LIMIT).map(renderItem).join('') + '</div>';
+        if (items.length > OVERVIEW_CHIP_LIMIT) {
+            list += '<button class="ov-more" onclick="openTab(\'' + tab + '\')">+' + (items.length - OVERVIEW_CHIP_LIMIT) + ' more</button>';
+        }
+        return list;
+    }
+
+    function overviewPanel(title, tab, count, body) {
+        let panel = '<section class="ov-panel"><div class="ov-panel-head"><div class="ov-panel-title">' + escapeHtml(title) +
+            (count !== null ? ' <span class="ov-panel-count">' + count + '</span>' : '') + '</div>';
+        if (tab) panel += '<button class="ov-panel-link" onclick="openTab(\'' + tab + '\')">Details &rarr;</button>';
+        return panel + '</div>' + body + '</section>';
+    }
+
+    function renderOverviewTab() {
+        const stores = currentAsset.stores || [];
+        const interfaces = currentAsset.interfaces || [];
+        const sources = sourceAssets();
+        const derived = derivedAssets();
+        const gov = currentAsset.governance || {};
+        const tiles = [
+            ['Producing bricks', producingBricks.length, 'bricks'],
+            ['Consuming bricks', consumingBricks.length, 'bricks'],
+            ['Stores', stores.length, 'stores'],
+            ['Interfaces', interfaces.length, 'interfaces'],
+            ['Derived from', sources.length, 'lineage'],
+            ['Feeds into', derived.length, 'lineage'],
+        ];
+        let html = '<div class="ov">';
+        if (currentAsset.businessMeaning && currentAsset.businessMeaning !== currentAsset.description) {
+            html += '<div class="ov-meaning">' + escapeHtml(currentAsset.businessMeaning) + '</div>';
+        }
+        html += '<div class="ov-tiles">' + tiles.map(([label, value, tab]) =>
+            '<button class="ov-tile' + (value ? '' : ' zero') + '" onclick="openTab(\'' + tab + '\')"><span class="ov-tile-value">' + value +
+            '</span><span class="ov-tile-label">' + escapeHtml(label) + '</span></button>').join('') + '</div>';
+
+        const brickChip = brick => overviewChip('../landing_pages/' + brick.id + '.html', '../icons/' + brick.id + '.png', '../icons/brick.png',
+            brick.name || brick.id, titleCase(brick.role || ''));
+        html += '<div class="ov-section-title">Who works with it</div><div class="ov-grid">';
+        html += overviewPanel('Written by', 'bricks', producingBricks.length, overviewChipList(producingBricks, brickChip, 'bricks', 'No bricks own, write, or publish this asset.'));
+        html += overviewPanel('Read by', 'bricks', consumingBricks.length, overviewChipList(consumingBricks, brickChip, 'bricks', 'No bricks read or query this asset.'));
+        html += '</div>';
+
+        html += '<div class="ov-section-title">Where it lives and where it comes from</div><div class="ov-grid">';
+        html += overviewPanel('Stores', 'stores', stores.length, overviewChipList(stores, link => {
+            const store = storeById(link.storeId);
+            return overviewChip('', '', '', store.name || link.storeId, titleCase(link.role || 'store'));
+        }, 'stores', 'No stores linked to this asset.'));
+        html += overviewPanel('Interfaces', 'interfaces', interfaces.length, overviewChipList(interfaces,
+            iface => overviewChip('', '', '', iface.name || iface.type || 'Interface', titleCase(iface.type || '')), 'interfaces', 'No access interfaces listed.'));
+        const lineage = [
+            ...sources.map(item => ({item: item, meta: 'derived from'})),
+            ...derived.map(item => ({item: item, meta: 'feeds into'})),
+        ];
+        html += overviewPanel('Lineage', 'lineage', lineage.length, overviewChipList(lineage,
+            entry => overviewChip(entry.item.id + '.html', '', '', entry.item.name || entry.item.id, entry.meta), 'lineage', 'No lineage to other data assets.'));
+        html += '</div>';
+
+        const facts = [
+            ['Classification', titleCase(currentAsset.classification || '')],
+            ['Personal data', titleCase(currentAsset.personalDataLevel || '')],
+            ['Criticality', titleCase(currentAsset.securityCriticality || '')],
+            ['System of record', currentAsset.systemOfRecordBrickId ? brickName(currentAsset.systemOfRecordBrickId) : ''],
+            ['Retention', gov.retention || ''],
+            ['Residency', (gov.residency || '').toUpperCase()],
+        ].filter(([, value]) => value);
+        html += '<div class="ov-section-title">Governance</div><div class="ov-grid">';
+        html += overviewPanel('Key facts', 'governance', null, facts.length
+            ? '<dl class="ov-facts-list">' + facts.map(([label, value]) => '<dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(value) + '</dd>').join('') + '</dl>'
+            : '<div class="ov-empty">No governance details recorded.</div>');
+        html += '</div></div>';
+        document.getElementById('tab_content_overview').innerHTML = html;
+    }
+
+    function updateAssetTabLabels() {
+        const setLabel = (id, label, count) => {
+            const tab = document.getElementById(id);
+            if (tab) tab.textContent = label + ' (' + count + ')';
+        };
+        setLabel('tab_bricks', 'Bricks', producingBricks.length + consumingBricks.length);
+        setLabel('tab_stores', 'Stores', (currentAsset.stores || []).length);
+        setLabel('tab_interfaces', 'Interfaces', (currentAsset.interfaces || []).length);
+        setLabel('tab_lineage', 'Lineage', sourceAssets().length + derivedAssets().length);
+    }
+
+    renderOverviewTab();
+    renderBricksTab();
+    renderStoresTab();
+    renderInterfacesTab();
+    renderLineageTab();
+    renderGovernanceTab();
 </script>
 
 ${breadcrumbs_script}

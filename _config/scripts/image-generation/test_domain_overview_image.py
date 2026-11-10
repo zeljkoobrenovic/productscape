@@ -65,11 +65,40 @@ class DomainOverviewImage(unittest.TestCase):
         self.assertEqual(model['brick_total'], 3)
         self.assertEqual(model['external'], ['Payment providers', 'CRM'])  # Customer devices skipped.
         self.assertEqual(model['competitors'], ['Big Rental', 'Small Shop'])  # Leaders first.
+        self.write('business/competition.json', {'players': [
+            {'name': 'Tool Lending Co (modeled company)', 'category': 'modeled-company'},
+            {'name': 'Small Shop', 'category': 'challenger'}]})
+        self.assertEqual(overview.collect_model(self.domain)['competitors'], ['Small Shop'])  # Not itself.
         prompt = overview.build_prompt(model)
         self.assertIn('Product 0 (beta): Lends tools;', prompt)  # First sentence only.
         self.assertNotIn('long tail', prompt)
+        self.assertNotIn('Product 5', prompt)
+        self.assertNotIn('Weekend Fixer', prompt)  # Roles are not named, so they are not labelled.  # Over the cap: not even mentioned in the background.
         self.assertIn('  - Payment providers', prompt)
         self.assertNotIn('Browsers', prompt)
+
+    def test_labels_avoid_dangling_words_and_role_types(self):
+        self.assertEqual(overview.short_label('Enterprise Cloud Adoption and Modernization Services'),
+                         'Enterprise Cloud Adoption')
+        self.assertEqual(overview.external_label('ci-cd'), 'CI/CD')
+        self.assertEqual(overview.external_label('identity-and-compliance'), 'Identity and Compliance')
+        self.assertIsNone(overview.role_label(['Airports and venue operating systems and partners']))
+        self.write('product-bricks/product-bricks.json', {'rootGroups': [{'name': 'Core', 'bricks': [
+            {'id': 'b1', 'externalSystemsThisBrickDependsOn': [
+                {'system': 'Payroll Workflows', 'type': 'service-consumer'},
+                {'system': 'Stripe', 'type': 'payment'}]}]}]})
+        # Roles rank after system kinds and show a concrete system name, not "Service Consumer".
+        self.assertEqual(overview.collect_model(self.domain)['external'], ['Payment providers', 'Payroll Workflows'])
+
+    def test_scene_leaves_out_unmodeled_parts(self):
+        model = overview.collect_model(self.domain)
+        self.assertIn('external systems as separate service tiles', overview.build_prompt(model))
+        model.update(external=[], channels=[])
+        prompt = overview.build_prompt(model)
+        self.assertNotIn('external systems as separate service tiles', prompt)
+        self.assertIn('No external systems', prompt)
+        self.assertIn('No delivery-channel strip', prompt)
+        self.assertNotIn('deployed onto the delivery channels', prompt)
 
     def test_dry_run_writes_nothing_and_needs_no_key(self):
         self.assertEqual(self.run_script('--dry-run', api_key=''), 0)

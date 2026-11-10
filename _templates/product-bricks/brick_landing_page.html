@@ -13,6 +13,40 @@
 
     <style>
 
+        /* Overview */
+        .ov { max-width: 1200px; }
+        .ov-facts { display: flex; gap: 6px; margin-bottom: 12px; }
+        .ov-fact { font-size: 12px; padding: 2px 10px; border-radius: 999px; background: #eef2ff; color: #3730a3; text-transform: capitalize; }
+        .ov-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 22px; }
+        .ov-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border: 1px solid #e5e7eb;
+            border-radius: 10px; background: #fff; cursor: pointer; font: inherit; text-align: left; color: #111827; }
+        .ov-tile:hover, .ov-tile:focus-visible { border-color: #93c5fd; background: #f8fbff; }
+        .ov-tile.zero { color: #9ca3af; }
+        .ov-tile-value { font-size: 28px; font-weight: 700; line-height: 1.1; }
+        .ov-tile-label { font-size: 13px; color: #4b5563; }
+        .ov-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #1d4ed8; margin: 6px 0 10px; }
+        .ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 14px; margin-bottom: 22px; }
+        .ov-panel { border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; padding: 14px 16px; min-width: 0; }
+        .ov-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+        .ov-panel-title { font-weight: 700; font-size: 16px; color: #111827; }
+        .ov-panel-count { font-weight: 400; color: #6b7280; font-size: 14px; }
+        .ov-panel-link, .ov-more { border: 0; background: none; color: #1d4ed8; cursor: pointer; font: inherit; font-size: 13px; padding: 0; }
+        .ov-panel-link:hover, .ov-more:hover { text-decoration: underline; }
+        .ov-more { margin-top: 8px; }
+        .ov-panel-note { font-size: 13px; color: #4b5563; margin: -4px 0 10px; }
+        .ov-chips { display: flex; flex-direction: column; gap: 6px; }
+        .ov-chip { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; color: inherit; text-decoration: none; }
+        .ov-chip:hover { background: #f3f4f6; }
+        .ov-chip img { width: 32px; height: 32px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; background: #fff; flex: 0 0 32px; }
+        .ov-chip-text { display: flex; flex-direction: column; min-width: 0; }
+        .ov-chip-label { font-weight: 600; color: #111827; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-chip-meta { font-size: 12px; color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-empty { color: #6b7280; font-size: 14px; }
+        .ov-layers { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ov-layer { display: flex; align-items: baseline; gap: 6px; padding: 8px 12px; border-radius: 8px; border: 1px solid #e5e7eb;
+            background: #f9fafb; cursor: pointer; font: inherit; font-size: 13px; color: #111827; }
+        .ov-layer-count { font-size: 18px; font-weight: 700; }
+
         .links-group {
             margin-bottom: 20px;
             padding: 16px 18px;
@@ -226,13 +260,12 @@
         }
 
         .activity-muted {
-            color: #6b7280;
-            font-size: 90%;
         }
 
         .activity-block {
-            margin-bottom: 8px;
-            padding-left: 10px;
+            margin-top: 18px;
+            margin-bottom: 20px;
+            padding: 10px;
             border-left: 3px solid #d7dce1;
         }
 
@@ -334,7 +367,8 @@
 
         .home-link-copy {
             line-height: 1.5;
-            color: grey;
+            padding-bottom: 8px;
+            padding-top: 8px;
         }
 
         .structure-grid {
@@ -355,32 +389,32 @@
         }
 
 
-        .structure-card.structure-ui {
+        .structure-card.structure-ui, .ov-layer.structure-ui {
             background: rgba(245, 208, 254, 0.85);
             border-color: rgba(134, 25, 143, 0.24);
         }
 
-        .structure-card.structure-interfaces {
+        .structure-card.structure-interfaces, .ov-layer.structure-interfaces {
             background: rgba(219, 234, 254, 0.9);
             border-color: rgba(30, 64, 175, 0.28);
         }
 
-        .structure-card.structure-worker {
+        .structure-card.structure-worker, .ov-layer.structure-worker {
             background: rgba(254, 243, 199, 0.9);
             border-color: rgba(180, 83, 9, 0.24);
         }
 
-        .structure-card.structure-stateless-service {
+        .structure-card.structure-stateless-service, .ov-layer.structure-stateless-service {
             background: rgba(207, 250, 254, 0.9);
             border-color: rgba(14, 116, 144, 0.24);
         }
 
-        .structure-card.structure-service {
+        .structure-card.structure-service, .ov-layer.structure-service {
             background: rgba(220, 252, 231, 0.9);
             border-color: rgba(22, 101, 52, 0.24);
         }
 
-        .structure-card.structure-integration {
+        .structure-card.structure-integration, .ov-layer.structure-integration {
             background: rgba(252, 231, 243, 0.9);
             border-color: rgba(157, 23, 77, 0.24);
         }
@@ -769,6 +803,13 @@
             + (brick.externalSystemsThisBrickDependsOn || brick.externalSystemDependencies || []).length
             + (brick.externalSystemsDependingOnThisBrick || []).length;
         const linksCount = (brick.links || []).reduce((sum, group) => sum + (group.links || []).length, 0);
+        const setLabel = (id, label, count) => {
+            const tab = document.getElementById(id);
+            if (tab) tab.textContent = label + ' (' + count + ')';
+        };
+        setLabel('tab_streams', 'Streams', brickStreams().length);
+        setLabel('tab_products', 'Products', linkedProducts.length);
+        setLabel('tab_jobs', 'Customer Jobs', new Set(supportedJobs.map(item => item.jobId || item.jobName)).size);
         const modulesTab = document.getElementById('tab_modules');
         const dataTab = document.getElementById('tab_data');
         const dependenciesTab = document.getElementById('tab_dependencies');
@@ -792,6 +833,9 @@
 <div style="margin: 20px;">
     <div class="tab" id="primary_tabs">
         <button class="tablinks active" id="tab_overview" onclick="openTab('overview')">Overview</button>
+        <button class="tablinks" id="tab_streams" onclick="openTab('streams')">Streams</button>
+        <button class="tablinks" id="tab_products" onclick="openTab('products')">Products</button>
+        <button class="tablinks" id="tab_jobs" onclick="openTab('jobs')">Customer Jobs</button>
         <button class="tablinks" id="tab_modules" onclick="openTab('modules')">Modules</button>
         <button class="tablinks" id="tab_data" onclick="openTab('data')">Data</button>
         <button class="tablinks" id="tab_dependencies" onclick="openTab('dependencies')">Dependencies</button>
@@ -800,6 +844,15 @@
 
     <div id="tab_content_overview" class="tabcontent" style="padding: 10px">
         <div id="Overview"></div>
+    </div>
+    <div id="tab_content_streams" class="tabcontent" style="padding: 10px">
+        <div id="Streams"></div>
+    </div>
+    <div id="tab_content_products" class="tabcontent" style="padding: 10px">
+        <div id="Products"></div>
+    </div>
+    <div id="tab_content_jobs" class="tabcontent" style="padding: 10px">
+        <div id="Jobs"></div>
     </div>
     <div id="tab_content_modules" class="tabcontent" style="padding: 10px">
         <div id="Modules"></div>
@@ -974,10 +1027,12 @@
         return sectionHtml;
     }
 
+    function brickStreams() {
+        return allStreams.filter(stream => (stream.brickDependencies || []).some(dep => dep.targetBrickId === brick.id));
+    }
+
     function renderSupportedStreams() {
-        const supportedStreams = allStreams.filter(stream => {
-            return (stream.brickDependencies || []).some(dep => dep.targetBrickId === brick.id);
-        });
+        const supportedStreams = brickStreams();
 
         let sectionHtml = '<div class="home-section">';
         sectionHtml += '<div class="home-section-title">Supported Product Streams</div>';
@@ -991,7 +1046,7 @@
             sectionHtml += '<div class="home-link-card">';
             sectionHtml += '<div class="home-link-head">';
             sectionHtml += '<img class="home-link-icon" src="../icons/' + escapeHomeHtml(stream.icon || 'stream.png') + '" onerror="this.onerror=null;this.src=\'../icons/stream.png\'">';
-            sectionHtml += '<div style="vertical-align: top"><a target="_blank" rel="noopener noreferrer" href="../stream_pages/' + escapeHomeHtml(stream.id) + '.html"><div class="home-link-title"><div class="page-type-badge" style="font-size: 70%;">Experience</div><br>' + escapeHomeHtml(stream.name) + '</div>';
+            sectionHtml += '<div style="vertical-align: top"><a target="_blank" rel="noopener noreferrer" href="../stream_pages/' + escapeHomeHtml(stream.id) + '.html"><div class="home-link-title"><div class="page-type-badge" style="font-size: 70%;">Stream</div><br>' + escapeHomeHtml(stream.name) + '</div>';
             sectionHtml += '</a></div>';
             sectionHtml += '</div>';
             if (stream.description) {
@@ -999,17 +1054,17 @@
             }
             if (stream.flows && stream.flows.length) {
                 sectionHtml += '<div class="activity-block">';
-                sectionHtml += '<div class="activity-muted"><strong>Flows facilitated</strong></div>';
+                sectionHtml += '<div style="margin-bottom: 6px; color: grey">Flows facilitated:</div>';
                 stream.flows.forEach(flow => {
-                    sectionHtml += '<div class="activity-muted">- ' + escapeHomeHtml(flow.title || flow.id || '') + '</div>';
+                    sectionHtml += '<div class="activity-muted">● ' + escapeHomeHtml(flow.title || flow.id || '') + '</div>';
                 });
                 sectionHtml += '</div>';
             }
             if (stream.outcomes && stream.outcomes.length) {
                 sectionHtml += '<div class="activity-block">';
-                sectionHtml += '<div class="activity-muted"><strong>Outcomes</strong></div>';
+                sectionHtml += '<div style="margin-bottom: 6px; color: grey">Outcomes:</div>';
                 stream.outcomes.forEach(outcome => {
-                    sectionHtml += '<div class="activity-muted">- ' + escapeHomeHtml(outcome) + '</div>';
+                    sectionHtml += '<div class="activity-muted">● ' + escapeHomeHtml(outcome) + '</div>';
                 });
                 sectionHtml += '</div>';
             }
@@ -1094,12 +1149,13 @@
                     if (item.usedInSteps && item.usedInSteps.length) {
                         item.usedInSteps.forEach(step => {
                             sectionHtml += '<div class="activity-block">';
-                            sectionHtml += '<div><b>' + escapeHomeHtml(step.step) + '</b></div>';
-                            if (step.description) {
-                                sectionHtml += '<div class="activity-muted">' + escapeHomeHtml(step.description) + '</div>';
-                            }
-                            if (step.howItSupports) {
-                                sectionHtml += '<div class="activity-muted"> - How it supports: ' + escapeHomeHtml(step.howItSupports) + '</div>';
+                            sectionHtml += '<div style="font-size: 120%"><b>' + escapeHomeHtml(step.step) + '</b></div>';
+                            if (step.description || step.howItSupports) {
+                                sectionHtml += '<div class="activity-muted">' + escapeHomeHtml(step.description || '');
+                                if (step.howItSupports) {
+                                    sectionHtml += ' <span style="color: blue"> => ' + escapeHomeHtml(step.howItSupports) + '</span>';
+                                }
+                                sectionHtml += '</div>';
                             }
                             if (step.media && step.media.length) {
                                 const media = step.media[0];
@@ -2043,6 +2099,138 @@
         return sectionHtml;
     }
 
+
+    // ---- Overview: the brick at a glance; every detail lives in its own tab. ----
+    const OVERVIEW_CHIP_LIMIT = 8;
+
+    function overviewModuleCountsByLayer() {
+        return (brick.layers || []).map(layer => {
+            const modules = layer && layer.modules ? layer.modules : [];
+            const count = Array.isArray(modules) ? modules.length : Object.keys(modules).length;
+            return {id: layer.layer, label: moduleLayerLabel(layer.layer), count: count};
+        }).filter(layer => layer.count);
+    }
+
+    function overviewCustomers() {
+        const byId = {};
+        supportedJobs.forEach(item => {
+            if (!byId[item.customerId]) {
+                byId[item.customerId] = {id: item.customerId, name: item.customerName, group: item.customerGroup,
+                    icon: item.customerIcon, jobs: new Set()};
+            }
+            byId[item.customerId].jobs.add(item.jobId || item.jobName);
+        });
+        return Object.values(byId);
+    }
+
+    function overviewChip(href, icon, fallback, label, meta, external) {
+        let chip = '<a class="ov-chip" href="' + escapeHomeHtml(href) + '"' + (external ? ' target="_blank" rel="noopener noreferrer"' : '') + '>';
+        if (icon) {
+            chip += '<img src="' + escapeHomeHtml(icon) + '" alt="" onerror="this.onerror=null;this.src=\'' + fallback + '\'">';
+        }
+        chip += '<span class="ov-chip-text"><span class="ov-chip-label">' + escapeHomeHtml(label) + '</span>';
+        if (meta) chip += '<span class="ov-chip-meta">' + escapeHomeHtml(meta) + '</span>';
+        return chip + '</span></a>';
+    }
+
+    function overviewChipList(items, renderItem, tab, emptyText) {
+        if (!items.length) return '<div class="ov-empty">' + escapeHomeHtml(emptyText) + '</div>';
+        let list = '<div class="ov-chips">' + items.slice(0, OVERVIEW_CHIP_LIMIT).map(renderItem).join('') + '</div>';
+        if (items.length > OVERVIEW_CHIP_LIMIT) {
+            list += '<button class="ov-more" onclick="openTab(\'' + tab + '\')">+' + (items.length - OVERVIEW_CHIP_LIMIT) + ' more</button>';
+        }
+        return list;
+    }
+
+    function overviewPanel(title, tab, count, body, note) {
+        let panel = '<section class="ov-panel"><div class="ov-panel-head"><div class="ov-panel-title">' + escapeHomeHtml(title) +
+            (count !== null ? ' <span class="ov-panel-count">' + count + '</span>' : '') + '</div>';
+        if (tab) panel += '<button class="ov-panel-link" onclick="openTab(\'' + tab + '\')">Details &rarr;</button>';
+        panel += '</div>';
+        if (note) panel += '<div class="ov-panel-note">' + note + '</div>';
+        return panel + body + '</section>';
+    }
+
+    function renderOverview() {
+        const streams = brickStreams();
+        const customers = overviewCustomers();
+        const jobCount = new Set(supportedJobs.map(item => item.jobId || item.jobName)).size;
+        const layers = overviewModuleCountsByLayer();
+        const moduleTotal = layers.reduce((sum, layer) => sum + layer.count, 0);
+        const dataItems = brick.dataDependencies || [];
+        const outgoingBricks = brick.brickDependencies || [];
+        const outgoingExternal = brick.externalSystemsThisBrickDependsOn || brick.externalSystemDependencies || [];
+        const incomingBricks = findIncomingBrickDependencies();
+        const incomingExternal = brick.externalSystemsDependingOnThisBrick || [];
+
+        const tiles = [
+            ['Customers served', customers.length, 'jobs'],
+            ['Customer jobs', jobCount, 'jobs'],
+            ['Products', linkedProducts.length, 'products'],
+            ['Streams', streams.length, 'streams'],
+            ['Modules', moduleTotal, 'modules'],
+            ['Data assets', dataItems.length, 'data'],
+            ['Depends on', outgoingBricks.length + outgoingExternal.length, 'dependencies'],
+            ['Depended on by', incomingBricks.length + incomingExternal.length, 'dependencies'],
+        ];
+        let out = '<div class="ov">';
+        const facts = [brick.type, brick.status].filter(Boolean);
+        if (facts.length) {
+            out += '<div class="ov-facts">' + facts.map(fact => '<span class="ov-fact">' + escapeHomeHtml(fact) + '</span>').join('') + '</div>';
+        }
+        out += '<div class="ov-tiles">' + tiles.map(([label, value, tab]) =>
+            '<button class="ov-tile' + (value ? '' : ' zero') + '" onclick="openTab(\'' + tab + '\')"><span class="ov-tile-value">' + value +
+            '</span><span class="ov-tile-label">' + escapeHomeHtml(label) + '</span></button>').join('') + '</div>';
+
+        // Who the brick serves and where it shows up, in the order of the detail tabs.
+        out += '<div class="ov-section-title">Value it delivers</div><div class="ov-grid">';
+        out += overviewPanel('Customers', 'jobs', customers.length,
+            overviewChipList(customers, customer => overviewChip('../../customers/landing_pages/' + customer.id + '.html',
+                '../../customers/icons/' + (customer.icon || 'customer.png'), '../../customers/icons/customer.png',
+                customer.name, customer.jobs.size === 1 ? '1 job' : customer.jobs.size + ' jobs', true), 'jobs',
+                'No customer jobs were inferred for this brick.'),
+            jobCount ? 'Supports ' + jobCount + ' customer job' + (jobCount === 1 ? '' : 's') + '.' : '');
+        out += overviewPanel('Products', 'products', linkedProducts.length,
+            overviewChipList(linkedProducts, product => overviewChip('../../product-deployments/landing_pages/' + product.id + '.html',
+                '../../product-deployments/icons/' + (product.icon || 'product.png'), '../../product-deployments/icons/product.png',
+                product.name, product.type || '', true), 'products', 'No linked products were inferred for this brick.'), '');
+        out += overviewPanel('Streams', 'streams', streams.length,
+            overviewChipList(streams, stream => overviewChip('../stream_pages/' + stream.id + '.html',
+                '../icons/' + (stream.icon || 'stream.png'), '../icons/stream.png', stream.name, stream.group || '', true),
+                'streams', 'No product streams reference this brick.'), '');
+        out += '</div>';
+
+        // What it connects to and how it is built.
+        const brickName = id => ((all_bricks.find(candidate => candidate.id === id) || {}).name || id);
+        const outgoing = [
+            ...outgoingBricks.map(item => ({href: item.targetBrickId + '.html', icon: '../icons/' + item.targetBrickId + '.png', name: brickName(item.targetBrickId), meta: item.type || 'brick'})),
+            ...outgoingExternal.map(item => ({href: '#dependencies', icon: '', name: externalSystemName(item), meta: 'external system'})),
+        ];
+        const incoming = [
+            ...incomingBricks.map(item => ({href: item.sourceBrickId + '.html', icon: '../icons/' + item.sourceBrickId + '.png', name: item.sourceBrickName || item.sourceBrickId, meta: item.type || 'brick'})),
+            ...incomingExternal.map(item => ({href: '#dependencies', icon: '', name: externalSystemName(item), meta: 'external system'})),
+        ];
+        const depChip = item => overviewChip(item.href, item.icon, '../icons/brick.png', item.name, item.meta, false);
+        const assetLookup = buildDataAssetLookup();
+        const dataChip = item => {
+            const asset = assetLookup[item.assetId] || {};
+            return '<a class="ov-chip" href="#data"><span class="ov-chip-text"><span class="ov-chip-label">' + escapeHomeHtml(asset.name || item.assetId) +
+                '</span><span class="ov-chip-meta">' + escapeHomeHtml(item.role || 'uses') + '</span></span></a>';
+        };
+        const layerBody = layers.length
+            ? '<div class="ov-layers">' + layers.map(layer => '<button class="ov-layer ' + escapeHomeHtml(moduleLayerClass(layer.id)) +
+                '" onclick="openTab(\'modules\')"><span class="ov-layer-count">' + layer.count + '</span>' + escapeHomeHtml(layer.label) + '</button>').join('') + '</div>'
+            : '<div class="ov-empty">No modules are described for this brick.</div>';
+
+        out += '<div class="ov-section-title">How it fits in</div><div class="ov-grid">';
+        out += overviewPanel('Depends on', 'dependencies', outgoing.length, overviewChipList(outgoing, depChip, 'dependencies', 'Depends on no other bricks or external systems.'), '');
+        out += overviewPanel('Depended on by', 'dependencies', incoming.length, overviewChipList(incoming, depChip, 'dependencies', 'Nothing depends on this brick.'), '');
+        out += overviewPanel('Modules', 'modules', moduleTotal, layerBody, '');
+        out += overviewPanel('Data', 'data', dataItems.length, overviewChipList(dataItems, dataChip, 'data', 'No data assets are listed.'), '');
+        out += '</div></div>';
+        return out;
+    }
+
     html += renderLayeredModules();
     document.getElementById('Modules').innerHTML = html;
     html = '';
@@ -2059,11 +2247,10 @@
     document.getElementById('Dependencies').innerHTML = html;
     html = '';
 
-    html += renderSupportedStreams();
-    html += renderLinkedProducts();
-    html += renderSupportedJobs();
-    document.getElementById('Overview').innerHTML = html;
-    html = '';
+    document.getElementById('Streams').innerHTML = renderSupportedStreams();
+    document.getElementById('Products').innerHTML = renderLinkedProducts();
+    document.getElementById('Jobs').innerHTML = renderSupportedJobs();
+    document.getElementById('Overview').innerHTML = renderOverview();
 </script>
 
 

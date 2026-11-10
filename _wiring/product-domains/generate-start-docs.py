@@ -78,9 +78,8 @@ def customers_section(domain_id):
                 customer.get('description'))))
     return {'id': 'customers', 'title': 'Customers', 'link': '../customers/index.html',
             'icon': '../customers/icons/logo.png', 'groups': group_items(entries), 'views': [
-                view('Visual Overview', '../customers/index.html#visual-overview', '../customers/icons/customer.png'),
-                view('Relations', '../customers/index.html#relations', '../customers/icons/care.png'),
-                view('Links', '../customers/index.html#links', '../customers/icons/link.png'),
+                view('Jobs & Journeys', '../customers/index.html#visual-overview', '../customers/icons/customer.png'),
+                view('Customer Network', '../customers/index.html#relations', '../customers/icons/care.png'),
             ]}
 
 
@@ -211,6 +210,8 @@ def sidebar_sections(domain_id):
          'icon': 'icons/residuality.png', 'groups': [], 'category': 'More'},
         {'id': 'tutorial', 'title': 'Domain Tutorial', 'link': '../tutorial/index.html',
          'icon': 'icons/initiative.png', 'groups': [], 'category': 'More'},
+        {'id': 'external-links', 'title': 'External Links', 'link': '../customers/index.html#links',
+         'icon': '../customers/icons/link.png', 'groups': [], 'category': 'More'},
     ]
     return sections
 

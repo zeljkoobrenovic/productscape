@@ -88,7 +88,7 @@ compare `ride-sharing-marketplace` in productscape-examples for modeling depth.
 - Organize links into named groups; give each link a one-sentence `relevance` that
   says *why this matters to this domain* — not a generic site description.
 - Prefer primary/official sources; verify URLs resolve. Omit the file entirely if
-  there is nothing worth linking — the Links tab then shows an empty state.
+  there is nothing worth linking — the External Links tab then shows an empty state.
 
 ## Exact schema
 
@@ -277,7 +277,7 @@ Every non-leaf node below has ≥2 children — mirror this fan-out (top → 2 b
 }
 ```
 > Top level is an **object** with `groups[]` (not a bare array). Rendered as the
-> **Links** tab in `customers/index.html`. `description` and `tags` are optional;
+> **External Links** tab in `customers/index.html`. `description` and `tags` are optional;
 > `title`, `url`, and `relevance` carry the value. No cross-file ID references.
 
 ## Cross-file rules to keep intact

@@ -304,7 +304,8 @@
 
         .insight-summary {
             color: #4b5563;
-            margin-bottom: 10px;
+            margin-top: 20px;
+            margin-bottom: 24px;
             line-height: 1.5;
         }
 
@@ -337,9 +338,7 @@
 
         .links-group {
             margin-bottom: 28px;
-            border-left: 2px solid #d1d5db;
             padding: 10px;
-            background-color: #f9f9f9;
         }
 
         .links-group-label {
@@ -364,14 +363,10 @@
 
         .link-card {
             display: block;
-            border: 1px solid #d1d5db;
-            border-left: 5px solid #d1d5db;
-            border-radius: 10px;
-            padding: 14px 16px;
+            padding: 7px 0;
             background-color: white;
-            box-shadow: rgba(0, 0, 0, 0.05) 0 1px 3px;
             transition: 0.2s;
-            margin: 3px;
+            margin-bottom: 10px;
         }
 
         .link-card:hover {
@@ -380,10 +375,10 @@
         }
 
         .link-title {
-            font-size: 17px;
+            font-size: 19px;
             font-weight: bold;
             color: #1d4ed8;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
         }
 
         .link-url {
@@ -394,7 +389,7 @@
         }
 
         .link-relevance {
-            color: #4b5563;
+            color: grey;
             font-size: 14px;
             line-height: 1.5;
         }
@@ -468,20 +463,18 @@
             <td class="hero-logo-cell"><img class="hero-logo" src="icons/logo.png" alt="Customers"></td>
             <td class="hero-copy-cell">
                 <div class="hero-title" data-follows-tab>Customers</div>
-                <div class="hero-subtitle">Product strategy is defined around customers, their jobs to be done, and the outcomes they care about. This page shows an overview of the customer landscape,
-                    linked signals, and shared insights.
-                </div>
+                <div class="hero-subtitle" data-follows-tab-subtitle>Every customer segment in this domain, grouped, with what each one cares about. Search by name, group, or need, and open a customer for their full profile.</div>
             </td>
         </tr>
     </table>
 </div>
 
 <div class="tab section-tabs">
-    <button class="tablinks active" id="tab_customers" onclick="openTab('customers')">Customers</button>
-    <button class="tablinks" id="tab_visual-overview" data-tab-title="Visual Overview" onclick="openTab('visual-overview')">Visual Overview</button>
-    <button class="tablinks" id="tab_relations" data-tab-title="Relations" onclick="openTab('relations')">Relations</button>
-    <button class="tablinks" id="tab_insights" data-tab-title="Insights" onclick="openTab('insights')">Insights</button>
-    <button class="tablinks" id="tab_links" data-tab-title="Links" onclick="openTab('links')">Links</button>
+    <button class="tablinks active" id="tab_customers" data-tab-subtitle="Every customer segment in this domain, grouped, with what each one cares about. Search by name, group, or need, and open a customer for their full profile." onclick="openTab('customers')">Customers</button>
+    <button class="tablinks" id="tab_visual-overview" data-tab-subtitle="One row per customer with the jobs they need done and the journeys they go through, side by side, so segments can be compared at a glance." data-tab-title="Jobs &amp; Journeys" onclick="openTab('visual-overview')">Jobs &amp; Journeys</button>
+    <button class="tablinks" id="tab_relations" data-tab-subtitle="How customers relate to each other, drawn as a network. Toggle relation types to focus on one kind of connection." data-tab-title="Customer Network" onclick="openTab('relations')">Customer Network</button>
+    <button class="tablinks" id="tab_insights" data-tab-subtitle="Findings shared across customers, each with its evidence and the customers it was drawn from." data-tab-title="Insights" onclick="openTab('insights')">Insights</button>
+    <button class="tablinks" id="tab_links" data-tab-subtitle="Outside sources about this domain&#39;s customers, grouped by topic, with why each one is relevant." data-tab-title="External Links" onclick="openTab('links')">External Links</button>
 </div>
 <div>
     <div id="tab_content_customers" class="tabcontent">
@@ -543,9 +536,9 @@
 
     function updateTabLabels() {
         document.getElementById('tab_customers').textContent = 'Customers (' + customerCount + ')';
-        document.getElementById('tab_relations').textContent = 'Relations (' + relationCount + ')';
+        document.getElementById('tab_relations').textContent = 'Customer Network (' + relationCount + ')';
         document.getElementById('tab_insights').textContent = 'Insights (' + insightCount + ')';
-        document.getElementById('tab_links').textContent = 'Links (' + linkCount + ')';
+        document.getElementById('tab_links').textContent = 'External Links (' + linkCount + ')';
     }
 
     function topCustomerKpi(customer) {
@@ -743,7 +736,6 @@
         let html = '<div class="insight-grid">';
         insights.items.forEach(insight => {
             html += '<div class="insight-card">';
-            html += '<div class="insight-title">' + escapeHtml(insight.title) + '</div>';
             const evType = insight.evidenceType || ((insight.sourceIds && insight.sourceIds.length) || (insight.sources && insight.sources.length) ? 'sourced' : 'assumption');
             const evStyles = {
                 sourced: 'background:#e3f2e6;color:#1b5e20',
@@ -753,9 +745,17 @@
             };
             const evLabels = { sourced: 'Sourced finding', assumption: 'Assumption', hypothesis: 'Hypothesis', inferred: 'Inferred strategy' };
             html += '<div style="margin-bottom:8px"><span style="font-size:75%;font-weight:bold;padding:2px 8px;border-radius:10px;' + (evStyles[evType] || evStyles.inferred) + '">' + escapeHtml(evLabels[evType] || evType) + '</span></div>';
+            html += '<div class="insight-title">' + escapeHtml(insight.title) + '</div>';
+            if (insight.tags && insight.tags.length) {
+                html += '<div style="margin-bottom:10px">';
+                insight.tags.forEach(tag => {
+                    html += '<span class="insight-tag">' + escapeHtml(tag) + '</span>';
+                });
+                html += '</div>';
+            }
             html += '<div class="insight-summary">' + escapeHtml(insight.summary) + '</div>';
             if (insight.implication) {
-                html += '<div style="margin-bottom:12px"><b>Product implication:</b> ' + escapeHtml(insight.implication) + '</div>';
+                html += '<div style="margin-bottom: 12px; margin-top: 10px;"><b>Product implication:</b> ' + escapeHtml(insight.implication) + '</div>';
             }
             if (insight.validation) {
                 const v = insight.validation;
@@ -766,15 +766,8 @@
                 if (v.wouldRaiseConfidenceIf) { html += '<div class="insight-source"><b>Would raise confidence if:</b> ' + escapeHtml(v.wouldRaiseConfidenceIf) + '</div>'; }
                 html += '</div>';
             }
-            if (insight.tags && insight.tags.length) {
-                html += '<div style="margin-bottom:10px">';
-                insight.tags.forEach(tag => {
-                    html += '<span class="insight-tag">' + escapeHtml(tag) + '</span>';
-                });
-                html += '</div>';
-            }
             if (insight.linkedCustomers && insight.linkedCustomers.length) {
-                html += '<div style="margin-bottom:8px"><b>Connected customers:</b></div>';
+                html += '<div style="margin-top: 32px; margin-bottom: 6px"><b>Connected customers:</b></div>';
                 insight.linkedCustomers.forEach(link => {
                     const customer = lookup[link.customerId];
                     html += '<div class="insight-customer-link">';
@@ -794,7 +787,7 @@
                 });
             }
             if (insight.sources && insight.sources.length) {
-                html += '<div><b>Sources:</b></div>';
+                html += '<div style="margin-top: 32px"><b>Sources:</b></div>';
                 insight.sources.forEach(source => {
                     html += '<div class="insight-source">';
                     html += '<a target="_blank" href="' + escapeHtml(source.url) + '" style="color:#315b7c">' + escapeHtml(source.title) + '</a>';
@@ -829,13 +822,6 @@
                 html += '<div class="link-title">' + escapeHtml(link.title) + '</div>';
                 if (link.relevance) {
                     html += '<div class="link-relevance">' + escapeHtml(link.relevance) + '</div>';
-                }
-                if (link.tags && link.tags.length) {
-                    html += '<div>';
-                    link.tags.forEach(tag => {
-                        html += '<span class="link-tag">' + escapeHtml(tag) + '</span>';
-                    });
-                    html += '</div>';
                 }
                 if (link.references && link.references.length) {
                     html += '<div style="margin-top:8px;font-size:72%;color:#6b7280">Grounds: ';

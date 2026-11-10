@@ -13,6 +13,38 @@
 
     <style>
 
+        /* Overview */
+        .ov { max-width: 1200px; padding-top: 12px; }
+        .ov-facts { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .ov-fact { font-size: 12px; padding: 2px 10px; border-radius: 999px; background: #eef2ff; color: #3730a3; text-transform: capitalize; }
+        .ov-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 22px; }
+        .ov-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border: 1px solid #e5e7eb;
+            border-radius: 10px; background: #fff; cursor: pointer; font: inherit; text-align: left; color: #111827; }
+        .ov-tile:hover, .ov-tile:focus-visible { border-color: #93c5fd; background: #f8fbff; }
+        .ov-tile.zero { color: #9ca3af; }
+        .ov-tile-value { font-size: 28px; font-weight: 700; line-height: 1.1; }
+        .ov-tile-label { font-size: 13px; color: #4b5563; }
+        .ov-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #1d4ed8; margin: 6px 0 10px; }
+        .ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 14px; margin-bottom: 22px; }
+        .ov-panel { border: 1px solid #e5e7eb; border-radius: 10px; background: #fff; padding: 14px 16px; min-width: 0; }
+        .ov-panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+        .ov-panel-title { font-weight: 700; font-size: 16px; color: #111827; }
+        .ov-panel-count { font-weight: 400; color: #6b7280; font-size: 14px; }
+        .ov-panel-link, .ov-more { border: 0; background: none; color: #1d4ed8; cursor: pointer; font: inherit; font-size: 13px; padding: 0; }
+        .ov-panel-link:hover, .ov-more:hover { text-decoration: underline; }
+        .ov-more { margin-top: 8px; }
+        .ov-panel-note { font-size: 13px; color: #4b5563; margin: -4px 0 10px; }
+        .ov-chips { display: flex; flex-direction: column; gap: 6px; }
+        .ov-chip { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; color: inherit; text-decoration: none; }
+        a.ov-chip:hover { background: #f3f4f6; }
+        .ov-chip img { width: 32px; height: 32px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; background: #fff; flex: 0 0 32px; }
+        .ov-chip-text { display: flex; flex-direction: column; min-width: 0; }
+        .ov-chip-label { font-weight: 600; color: #111827; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-chip-meta { font-size: 12px; color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-empty { color: #6b7280; font-size: 14px; }
+        .ov-outcomes { margin: 0; padding-left: 20px; line-height: 1.6; color: #111827; }
+
+
         .links-group {
             margin-bottom: 20px;
             padding: 16px 18px;
@@ -647,13 +679,19 @@
 
 <div class="page">
     <div class="tab" id="primary_tabs">
-        <button class="tablinks active" id="tab_home" onclick="openTab('home')">Home</button>
-        <button class="tablinks" id="tab_flows" onclick="openTab('flows')">Flows Narratives (0)</button>
+        <button class="tablinks active" id="tab_home" onclick="openTab('home')">Overview</button>
+        <button class="tablinks" id="tab_flows" onclick="openTab('flows')">Flow Narratives</button>
+        <button class="tablinks" id="tab_bricks" onclick="openTab('bricks')">Bricks</button>
+        <button class="tablinks" id="tab_products" onclick="openTab('products')">Products</button>
+        <button class="tablinks" id="tab_jobs" onclick="openTab('jobs')">Customer Jobs</button>
         <button class="tablinks" id="tab_links" onclick="openTab('links')">Links</button>
     </div>
 
     <div id="tab_content_home" class="tabcontent"></div>
     <div id="tab_content_flows" class="tabcontent"></div>
+    <div id="tab_content_bricks" class="tabcontent"></div>
+    <div id="tab_content_products" class="tabcontent"></div>
+    <div id="tab_content_jobs" class="tabcontent"></div>
     <div id="tab_content_links" class="tabcontent"></div>
 
 
@@ -694,47 +732,8 @@
     headerHtml += '</div></div></div>';
     document.getElementById('Header').innerHTML = headerHtml;
 
-    function renderHome() {
-        const flows = getFlows();
-        const totalSteps = flows.reduce((count, flow) => count + ((flow.steps || []).length), 0);
-        const primaryActors = getPrimaryActors();
+    function renderBricksTab() {
         let html = '';
-
-        html += '<div class="group"><div class="section-title">Flow Narratives (' + flows.length + ')</div>';
-        if (!flows.length) {
-            html += '<div class="muted">No flows listed for this stream.</div>';
-        } else {
-            html += '<div class="card-grid">';
-            flows.forEach(flow => {
-                const summary = summarizeFlow(flow);
-                html += '<div class="card">';
-                html += '<div class="card-meta">' + escapeHtml(streamMetaPath(currentStream)) + '</div>';
-                html += '<div class="card-title">' + escapeHtml(flow.title || flow.id) + '</div>';
-                html += '<div class="card-copy">' + escapeHtml(flow.description || '') + '</div>';
-                html += '<div class="muted">' + ((flow.steps || []).length) + ' steps</div>';
-                if (summary.actor) {
-                    html += '<div class="card-copy"><strong>Actor:</strong> ' + escapeHtml(summary.actor) + '</div>';
-                }
-                if (summary.trigger) {
-                    html += '<div class="card-copy"><strong>Trigger:</strong> ' + escapeHtml(summary.trigger) + '</div>';
-                }
-                if (summary.result) {
-                    html += '<div class="card-copy"><strong>Success looks like:</strong> ' + escapeHtml(summary.result) + '</div>';
-                }
-                html += '</div>';
-            });
-            html += '</div>';
-        }
-        html += '</div>';
-
-        html += '<div class="group"><div class="section-title">Outcomes</div>';
-        if (!(currentStream.outcomes || []).length) {
-            html += '<div class="muted">No outcomes listed for this stream.</div>';
-        } else {
-            html += '<div class="card"><ul class="list">' + currentStream.outcomes.map(outcome => '<li>' + escapeHtml(outcome) + '</li>').join('') + '</ul></div>';
-        }
-        html += '</div>';
-
         html += '<div class="group"><div class="section-title">Supporting Product Bricks</div>';
         if (!related_bricks.length) {
             html += '<div class="muted">No linked product bricks.</div>';
@@ -754,6 +753,11 @@
         }
         html += '</div>';
 
+        document.getElementById('tab_content_bricks').innerHTML = html;
+    }
+
+    function renderProductsTab() {
+        let html = '';
         html += '<div class="group"><div class="section-title">Linked Products</div>';
         if (!linked_products.length) {
             html += '<div class="muted">No linked products were inferred from the supporting bricks.</div>';
@@ -773,16 +777,43 @@
         }
         html += '</div>';
 
-        html += '<div class="group"><div class="section-title">Supported Customer Jobs</div>';
-        if (!supported_jobs.length) {
+        document.getElementById('tab_content_products').innerHTML = html;
+    }
+
+    // One card per job; the same job reached through several products lists them together.
+    function groupedJobs() {
+        const byJob = new Map();
+        supported_jobs.forEach(job => {
+            const key = (job.customerId || '') + '|' + (job.jobId || job.jobName);
+            if (!byJob.has(key)) {
+                byJob.set(key, {...job, products: []});
+            }
+            const entry = byJob.get(key);
+            if (job.productName && !entry.products.includes(job.productName)) {
+                entry.products.push(job.productName);
+            }
+        });
+        return Array.from(byJob.values());
+    }
+
+    function renderJobsTab() {
+        const jobs = groupedJobs();
+        let html = '<div class="group"><div class="section-title">Supported Customer Jobs</div>';
+        if (!jobs.length) {
             html += '<div class="muted">No customer jobs were inferred from the supporting bricks.</div>';
         } else {
             html += '<div class="card-grid">';
-            supported_jobs.forEach(job => {
+            jobs.forEach(job => {
                 html += '<div class="card">';
-                html += '<div class="card-meta">' + escapeHtml(job.customerGroup || '') + (job.productName ? ' | ' + escapeHtml(job.productName) : '') + '</div>';
-                html += '<div class="card-title">' + escapeHtml(job.jobName || job.jobId) + '</div>';
+                html += '<div class="card-header">';
+                html += '<a href="../../customers/landing_pages/' + escapeHtml(job.customerId) + '.html" target="_blank" rel="noopener noreferrer"><img class="card-icon" src="../../customers/icons/' + escapeHtml(job.customerIcon || 'customer.png') + '" alt="" onerror="this.onerror=null;this.src=\'../../customers/icons/customer.png\'"></a>';
+                html += '<div><div class="card-meta">' + escapeHtml(job.customerName || job.customerGroup || '') + '</div>';
+                html += '<div class="card-title">' + escapeHtml(job.jobName || job.jobId) + '</div></div>';
+                html += '</div>';
                 html += '<div class="card-copy">' + escapeHtml(job.jobOutcome || job.jobWhatItIs || '') + '</div>';
+                if (job.products.length) {
+                    html += '<div class="card-copy"><strong>In:</strong> ' + escapeHtml(job.products.join(', ')) + '</div>';
+                }
                 if (job.supportRationale) {
                     html += '<div class="card-copy"><strong>Why this stream matters here:</strong> ' + escapeHtml(job.supportRationale) + '</div>';
                 }
@@ -794,8 +825,124 @@
             html += '</div>';
         }
         html += '</div>';
+        document.getElementById('tab_content_jobs').innerHTML = html;
+    }
+
+    // ---- Overview: the stream at a glance; every detail lives in its own tab. ----
+    const OVERVIEW_CHIP_LIMIT = 8;
+
+    function overviewChip(href, icon, fallback, label, meta, external) {
+        let chip = '<a class="ov-chip" href="' + escapeHtml(href) + '"' + (external ? ' target="_blank" rel="noopener noreferrer"' : '') + '>';
+        if (icon) {
+            chip += '<img src="' + escapeHtml(icon) + '" alt="" onerror="this.onerror=null;this.src=\'' + fallback + '\'">';
+        }
+        chip += '<span class="ov-chip-text"><span class="ov-chip-label">' + escapeHtml(label) + '</span>';
+        if (meta) chip += '<span class="ov-chip-meta">' + escapeHtml(meta) + '</span>';
+        return chip + '</span></a>';
+    }
+
+    function overviewChipList(items, renderItem, tab, emptyText) {
+        if (!items.length) return '<div class="ov-empty">' + escapeHtml(emptyText) + '</div>';
+        let list = '<div class="ov-chips">' + items.slice(0, OVERVIEW_CHIP_LIMIT).map(renderItem).join('') + '</div>';
+        if (items.length > OVERVIEW_CHIP_LIMIT) {
+            list += '<button class="ov-more" onclick="openTab(\'' + tab + '\')">+' + (items.length - OVERVIEW_CHIP_LIMIT) + ' more</button>';
+        }
+        return list;
+    }
+
+    function overviewPanel(title, tab, count, body, note) {
+        let panel = '<section class="ov-panel"><div class="ov-panel-head"><div class="ov-panel-title">' + escapeHtml(title) +
+            (count !== null ? ' <span class="ov-panel-count">' + count + '</span>' : '') + '</div>';
+        if (tab) panel += '<button class="ov-panel-link" onclick="openTab(\'' + tab + '\')">Details &rarr;</button>';
+        panel += '</div>';
+        if (note) panel += '<div class="ov-panel-note">' + escapeHtml(note) + '</div>';
+        return panel + body + '</section>';
+    }
+
+    function overviewCustomers() {
+        const byId = {};
+        supported_jobs.forEach(job => {
+            if (!byId[job.customerId]) {
+                byId[job.customerId] = {id: job.customerId, name: job.customerName, icon: job.customerIcon, jobs: new Set()};
+            }
+            byId[job.customerId].jobs.add(job.jobId || job.jobName);
+        });
+        return Object.values(byId);
+    }
+
+    function renderHome() {
+        const flows = getFlows();
+        const totalSteps = flows.reduce((count, flow) => count + ((flow.steps || []).length), 0);
+        const painPoints = flows.reduce((count, flow) => count + (flow.steps || []).reduce((sum, step) => sum + (step.painPoints || []).length, 0), 0);
+        const outcomes = currentStream.outcomes || [];
+        const customers = overviewCustomers();
+        const jobCount = groupedJobs().length;
+        const externals = currentStream.externalSystemsThisStreamDependsOn || [];
+
+        const tiles = [
+            ['Flows', flows.length, 'flows'],
+            ['Steps', totalSteps, 'flows'],
+            ['Pain points', painPoints, 'flows'],
+            ['Bricks', related_bricks.length, 'bricks'],
+            ['Products', linked_products.length, 'products'],
+            ['Customers', customers.length, 'jobs'],
+            ['Customer jobs', jobCount, 'jobs'],
+        ];
+        let html = '<div class="ov">';
+        const facts = [currentStream.type ? currentStream.type.replaceAll('-', ' ') : '', currentStream.group].filter(Boolean);
+        if (facts.length) {
+            html += '<div class="ov-facts">' + facts.map(fact => '<span class="ov-fact">' + escapeHtml(fact) + '</span>').join('') + '</div>';
+        }
+        html += '<div class="ov-tiles">' + tiles.map(([label, value, tab]) =>
+            '<button class="ov-tile' + (value ? '' : ' zero') + '" onclick="openTab(\'' + tab + '\')"><span class="ov-tile-value">' + value +
+            '</span><span class="ov-tile-label">' + escapeHtml(label) + '</span></button>').join('') + '</div>';
+
+        // What the stream achieves and how it unfolds.
+        html += '<div class="ov-section-title">What it achieves</div><div class="ov-grid">';
+        html += overviewPanel('Outcomes', null, outcomes.length, outcomes.length
+            ? '<ul class="ov-outcomes">' + outcomes.map(outcome => '<li>' + escapeHtml(outcome) + '</li>').join('') + '</ul>'
+            : '<div class="ov-empty">No outcomes listed for this stream.</div>', '');
+        html += overviewPanel('Flows', 'flows', flows.length, overviewChipList(flows, flow => {
+            const summary = summarizeFlow(flow);
+            const steps = (flow.steps || []).length;
+            const meta = [steps + (steps === 1 ? ' step' : ' steps'), summary.actor].filter(Boolean).join(' · ');
+            return overviewChip('#flows', '', '', flow.title || flow.id, meta, false);
+        }, 'flows', 'No flows listed for this stream.'), '');
+        html += '</div>';
+
+        // Who it serves and what it is built from.
+        html += '<div class="ov-section-title">Who it serves and what it runs on</div><div class="ov-grid">';
+        html += overviewPanel('Customers', 'jobs', customers.length,
+            overviewChipList(customers, customer => overviewChip('../../customers/landing_pages/' + customer.id + '.html',
+                '../../customers/icons/' + (customer.icon || 'customer.png'), '../../customers/icons/customer.png',
+                customer.name, customer.jobs.size === 1 ? '1 job' : customer.jobs.size + ' jobs', true),
+                'jobs', 'No customer jobs were inferred from the supporting bricks.'),
+            jobCount ? 'Supports ' + jobCount + ' customer job' + (jobCount === 1 ? '' : 's') + '.' : '');
+        html += overviewPanel('Products', 'products', linked_products.length,
+            overviewChipList(linked_products, product => overviewChip('../../product-deployments/landing_pages/' + product.id + '.html',
+                '../../product-deployments/icons/' + (product.icon || 'product.png'), '../../product-deployments/icons/product.png',
+                product.name || product.id, product.type || '', true), 'products', 'No linked products were inferred from the supporting bricks.'), '');
+        const builtOn = [
+            ...related_bricks.map(brick => ({href: '../landing_pages/' + brick.id + '.html', icon: '../icons/' + brick.id + '.png', name: brick.name || brick.id, meta: brick.group || brick.domain || 'brick'})),
+            ...externals.map(item => ({href: '', icon: '', name: item.system || item.name || 'External system', meta: 'external system'})),
+        ];
+        html += overviewPanel('Built on', 'bricks', builtOn.length, overviewChipList(builtOn, item => item.href
+            ? overviewChip(item.href, item.icon, '../icons/brick.png', item.name, item.meta, false)
+            : '<div class="ov-chip"><span class="ov-chip-text"><span class="ov-chip-label">' + escapeHtml(item.name) + '</span><span class="ov-chip-meta">' + escapeHtml(item.meta) + '</span></span></div>',
+            'bricks', 'No linked product bricks.'), '');
+        html += '</div></div>';
 
         document.getElementById('tab_content_home').innerHTML = html;
+    }
+
+    function updateStreamTabLabels() {
+        const setLabel = (id, label, count) => {
+            const tab = document.getElementById(id);
+            if (tab) tab.textContent = label + ' (' + count + ')';
+        };
+        setLabel('tab_bricks', 'Bricks', related_bricks.length);
+        setLabel('tab_products', 'Products', linked_products.length);
+        setLabel('tab_jobs', 'Customer Jobs', groupedJobs().length);
     }
 
     function renderFlows() {
@@ -939,7 +1086,11 @@
 
     renderHome();
     renderFlows();
+    renderBricksTab();
+    renderProductsTab();
+    renderJobsTab();
     renderLinks();
+    updateStreamTabLabels();
 </script>
 
 
