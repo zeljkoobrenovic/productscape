@@ -35,6 +35,7 @@ dirty worktree before regenerating.
 | Streams | `product-bricks/product-stream.json` | `generate-product-bricks-docs.py` |
 | Data assets | `data/data-assets.json` | `generate-product-bricks-docs.py` |
 | Competition | `business/competition.json` | `generate-competition-docs.py` |
+| Value & Growth (optional) | `business/value-growth.json` | `generate-value-growth-docs.py` |
 | Beginner tutorial (optional, no evidence/model references required) | `tutorial/tutorial.json` | `generate-tutorial-docs.py` |
 | Domain brief | `_domain/DOMAIN.md` | (narrative, not generated) |
 
@@ -77,6 +78,10 @@ deployment.json
 When you add or rename an entity, update **every** referencing file in the same
 edit. The validator catches brick/module breakage; customer- and
 asset-level references you must check by hand (see each `edit-*` skill).
+
+`business/value-growth.json` links segments to customers, their jobs and KPI IDs,
+products and competitors. Its validator resolves these references and internal
+source/segment IDs. Include it when renaming entities.
 
 ## Product-brick layer model (fixed)
 

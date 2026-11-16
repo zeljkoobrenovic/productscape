@@ -108,17 +108,19 @@ class GroupedDomainTests(unittest.TestCase):
         shutil.copy2(source / 'domain_paths.py', wiring)
         shutil.copy2(source / 'project_paths.py', wiring)
         shutil.copy2(source / 'tutorial_model.py', wiring)
+        shutil.copy2(source / 'value_growth_model.py', wiring)
         shutil.copy2(source.parent / 'productscapes.py', self.repo)
         (self.repo / 'skills/scripts').mkdir(parents=True)
         shutil.copy2(source.parent / 'skills/scripts/schema_check.py', self.repo / 'skills/scripts')
         (self.repo / '_config/_schema').mkdir(parents=True)
         shutil.copy2(source.parent / '_config/_schema/tutorial.schema.json', self.repo / '_config/_schema')
+        shutil.copy2(source.parent / '_config/_schema/value-growth.schema.json', self.repo / '_config/_schema')
         shutil.copytree(source.parent / '_templates/catalog', self.repo / '_templates/catalog')
         (self.repo / '_config/_shared').mkdir(parents=True)
         navigation = self.root / 'start/apps.json'
         navigation.parent.mkdir()
         shutil.copy2(source.parent / '_config/product-domains/start/apps.json', navigation)
-        for section in ('start', 'customers', 'product-deployments', 'product-bricks', 'competition', 'residuality', 'tutorial', 'evidence-explorer'):
+        for section in ('start', 'customers', 'product-deployments', 'product-bricks', 'competition', 'value-growth', 'residuality', 'tutorial', 'evidence-explorer'):
             template = self.repo / '_templates' / section / 'index.html'
             template.parent.mkdir(parents=True)
             template.write_text('stub template')
@@ -133,7 +135,7 @@ class GroupedDomainTests(unittest.TestCase):
         evidence.mkdir()
         (evidence / 'generate-evidence-explorer-docs.py').write_text('pass')
         shutil.copy2(source / 'product-domains/run.sh', scripts)
-        for name in ('start', 'customers', 'products', 'product-bricks', 'competition', 'residuality', 'tutorial'):
+        for name in ('start', 'customers', 'products', 'product-bricks', 'competition', 'value-growth', 'residuality', 'tutorial'):
             (scripts / f'generate-{name}-docs.py').write_text(
                 'import json, sys\n'
                 f'with open({str(scripts / "calls.jsonl")!r}, "a") as output:\n'
@@ -148,8 +150,8 @@ class GroupedDomainTests(unittest.TestCase):
             self.make_domain(group, domain_id)
         scripts = self.install_wrappers()
         for arguments, expected_ids in (
-            ([str(self.root / 'another-group/second')], ['second'] * 7),
-            (['--project', str(self.repo), '--all'], ['first'] * 7 + ['second'] * 7),
+            ([str(self.root / 'another-group/second')], ['second'] * 8),
+            (['--project', str(self.repo), '--all'], ['first'] * 8 + ['second'] * 8),
         ):
             with self.subTest(arguments=arguments):
                 calls = scripts / 'calls.jsonl'
@@ -167,8 +169,8 @@ class GroupedDomainTests(unittest.TestCase):
         result = subprocess.run(['sh', str(scripts / 'run.sh'), '--project', str(self.repo), '--all'], cwd=self.repo, capture_output=True, text=True)
         self.assertEqual(result.returncode, 1)
         records = [json.loads(line) for line in (scripts / 'calls.jsonl').read_text().splitlines()]
-        self.assertEqual([record[1] for record in records], ['broken'] * 7 + ['healthy'] * 7)
-        self.assertIn('7 failure(s)', result.stderr)
+        self.assertEqual([record[1] for record in records], ['broken'] * 8 + ['healthy'] * 8)
+        self.assertIn('8 failure(s)', result.stderr)
 
     def test_full_wrapper_fails_for_an_empty_registry(self):
         scripts = self.install_wrappers()

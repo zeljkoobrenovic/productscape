@@ -196,10 +196,17 @@ def insights_section(domain_id):
             'count': len(insights.get('items', []))}
 
 
+def value_growth_section(domain_id):
+    model = load_json_if_exists(domain_source_path(domain_id, 'business/value-growth.json'), {})
+    return {'id': 'value-growth', 'title': 'Value & Growth', 'link': '../value-growth/index.html',
+            'icon': '../value-growth/icons/logo.svg', 'groups': [], 'single': True,
+            'count': len(model.get('segments', []))}
+
+
 def sidebar_sections(domain_id):
     # The sidebar shows these categories as headings above their sections.
     categories = [
-        ('Business', [customers_section(domain_id), competition_section(domain_id), insights_section(domain_id)]),
+        ('Business', [customers_section(domain_id), competition_section(domain_id), value_growth_section(domain_id), insights_section(domain_id)]),
         ('Product Architecture', [*bricks_sections(domain_id), *products_sections(domain_id)]),
     ]
     sections = [dict(section, category=category) for category, members in categories

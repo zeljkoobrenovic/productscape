@@ -1,0 +1,1062 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "value-growth.schema.json",
+  "title": "Domain Value & Growth",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "enum": [
+        "1.0"
+      ]
+    },
+    "domainId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "ready"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "updated": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "summary": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "scope": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "framework": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "strategies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/strategy"
+          },
+          "minItems": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "summary",
+        "strategies",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "segments": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/segment"
+      },
+      "minItems": 0
+    },
+    "benchmarks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/benchmark"
+      },
+      "minItems": 0
+    },
+    "providers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/provider"
+      },
+      "minItems": 0
+    },
+    "growthLoops": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/loop"
+      },
+      "minItems": 0
+    },
+    "market": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "boundary": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "context": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/context"
+          },
+          "minItems": 0
+        },
+        "scenarios": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scenario"
+          },
+          "minItems": 0
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "summary",
+        "boundary",
+        "context",
+        "scenarios",
+        "exclusions"
+      ],
+      "additionalProperties": false
+    },
+    "economics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/metric"
+      },
+      "minItems": 0
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constraint"
+      },
+      "minItems": 0
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source"
+      },
+      "minItems": 0
+    },
+    "entryStrategy": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entryModel"
+          },
+          "minItems": 1
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entryExample"
+          },
+          "minItems": 0
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "summary",
+        "models",
+        "examples",
+        "evidence"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "domainId",
+    "status",
+    "title"
+  ],
+  "additionalProperties": false,
+  "if": {
+    "properties": {
+      "status": {
+        "const": "ready"
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "updated",
+      "summary",
+      "scope",
+      "framework",
+      "segments",
+      "market",
+      "economics",
+      "sources"
+    ],
+    "properties": {
+      "segments": {
+        "minItems": 1
+      },
+      "economics": {
+        "minItems": 1
+      },
+      "sources": {
+        "minItems": 1
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "observed",
+            "inferred",
+            "illustrative"
+          ]
+        },
+        "note": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "sourceIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "kind",
+        "note",
+        "sourceIds"
+      ],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "title": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "publisher": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "url": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "accessed": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "published": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "publisher",
+        "url",
+        "accessed"
+      ],
+      "additionalProperties": false
+    },
+    "customerRef": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "jobIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+          },
+          "minItems": 0
+        },
+        "kpiIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "customerId",
+        "jobIds",
+        "kpiIds"
+      ],
+      "additionalProperties": false
+    },
+    "strategy": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "definition": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "definition"
+      ],
+      "additionalProperties": false
+    },
+    "selling": {
+      "type": "object",
+      "properties": {
+        "motion": {
+          "enum": [
+            "bottom-up",
+            "top-down",
+            "hybrid"
+          ]
+        },
+        "users": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "champions": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "buyers": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "payers": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 0
+        },
+        "rationale": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "motion",
+        "users",
+        "champions",
+        "buyers",
+        "payers",
+        "channels",
+        "rationale"
+      ],
+      "additionalProperties": false
+    },
+    "positioning": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "enum": [
+            "dominant",
+            "differentiated",
+            "disruptive",
+            "mixed",
+            "unclassified"
+          ]
+        },
+        "alternative": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "rationale": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "strategy",
+        "alternative",
+        "rationale",
+        "conditions"
+      ],
+      "additionalProperties": false
+    },
+    "activation": {
+      "type": "object",
+      "properties": {
+        "entry": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "firstValue": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "repeatValue": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "expansion": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "frictions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 0
+        },
+        "entryOffer": {
+          "$ref": "#/$defs/entryOffer"
+        }
+      },
+      "required": [
+        "entry",
+        "firstValue",
+        "repeatValue",
+        "expansion",
+        "frictions"
+      ],
+      "additionalProperties": false
+    },
+    "segment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "summary": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "customerRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/customerRef"
+          },
+          "minItems": 0
+        },
+        "productIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+          },
+          "minItems": 0
+        },
+        "competitorIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+          },
+          "minItems": 0
+        },
+        "outcome": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "valueUnit": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "pricingUnit": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "pricingModel": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "valueProof": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "selling": {
+          "$ref": "#/$defs/selling"
+        },
+        "positioning": {
+          "$ref": "#/$defs/positioning"
+        },
+        "activation": {
+          "$ref": "#/$defs/activation"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "summary",
+        "customerRefs",
+        "productIds",
+        "competitorIds",
+        "outcome",
+        "valueUnit",
+        "pricingUnit",
+        "pricingModel",
+        "valueProof",
+        "selling",
+        "positioning",
+        "activation",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "benchmark": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "competitorId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "price": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "metric": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "geography": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "observedOn": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "scope": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "caveat": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "competitorId",
+        "name",
+        "price",
+        "metric",
+        "geography",
+        "currency",
+        "observedOn",
+        "scope",
+        "caveat",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "provider": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "competitorId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "summary": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "pattern": "\\S"
+              },
+              "text": {
+                "type": "string",
+                "pattern": "\\S"
+              }
+            },
+            "required": [
+              "label",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "competitorId",
+        "name",
+        "summary",
+        "points",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "loop": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "segmentIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+          },
+          "minItems": 0
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 0
+        },
+        "signals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 0
+        },
+        "constraint": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "segmentIds",
+        "steps",
+        "signals",
+        "constraint",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "label": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "value",
+        "description",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "geography": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "baseYear": {
+          "type": "integer"
+        },
+        "horizonYears": {
+          "type": "integer"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "unitLabel": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "revenueLabel": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "units": {
+          "type": "number",
+          "minimum": 0
+        },
+        "revenuePerUnit": {
+          "type": "number",
+          "minimum": 0
+        },
+        "serviceableShare": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "obtainableShare": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "\\S"
+          },
+          "minItems": 1
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "geography",
+        "baseYear",
+        "horizonYears",
+        "currency",
+        "unitLabel",
+        "revenueLabel",
+        "units",
+        "revenuePerUnit",
+        "serviceableShare",
+        "obtainableShare",
+        "assumptions",
+        "limitations",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "metric": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "formula": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "whyItMatters": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "measurementCautions": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "availability": {
+          "enum": [
+            "public",
+            "requires-internal-data",
+            "model"
+          ]
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "formula",
+        "whyItMatters",
+        "measurementCautions",
+        "availability",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "constraint": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "title": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "entryModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "definition": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "bestFit": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "conversion": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "limits": {
+          "type": "string",
+          "pattern": "\\S"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "definition",
+        "bestFit",
+        "conversion",
+        "limits"
+      ],
+      "additionalProperties": false
+    },
+    "entryExample": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "competitorId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "summary": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "caveat": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "id",
+        "competitorId",
+        "name",
+        "summary",
+        "caveat",
+        "evidence"
+      ],
+      "additionalProperties": false
+    },
+    "entryOffer": {
+      "type": "object",
+      "properties": {
+        "modelIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+          },
+          "minItems": 1
+        },
+        "rationale": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "freemiumFit": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "trialFit": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "evaluationScope": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "limits": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "paidTrigger": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "conversionMetric": {
+          "type": "string",
+          "pattern": "\\S"
+        },
+        "evidence": {
+          "$ref": "#/$defs/evidence"
+        }
+      },
+      "required": [
+        "modelIds",
+        "rationale",
+        "freemiumFit",
+        "trialFit",
+        "evaluationScope",
+        "limits",
+        "paidTrigger",
+        "conversionMetric",
+        "evidence"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

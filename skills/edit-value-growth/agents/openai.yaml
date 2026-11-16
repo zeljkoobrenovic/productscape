@@ -1,0 +1,4 @@
+interface:
+  display_name: "Edit Value & Growth"
+  short_description: "Model domain value, sales, growth and market economics"
+  default_prompt: "Use $edit-value-growth to research and update the commercial model for this product domain."

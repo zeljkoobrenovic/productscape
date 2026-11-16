@@ -32,6 +32,7 @@ site under `docs/`. No framework, no build system. Edit JSON in `_config/**`; tr
 | Add/edit product streams and flows | `edit-streams` |
 | Add/edit data assets, stores, classification, governance | `edit-data-assets` |
 | Add/edit the competitive landscape | `edit-competition` |
+| Model value/pricing metrics, selling, growth strategy, TAM/SAM/SOM and economics | `edit-value-growth` |
 | Check integrity & realism / find gaps & imbalance | `audit-domain-balance` |
 | Validate JSON + references and regenerate docs | `validate-domain` |
 
@@ -52,5 +53,7 @@ site under `docs/`. No framework, no build system. Edit JSON in `_config/**`; tr
 
 The live artifact set is: start, customers (+insights), products/deployment,
 product-bricks (+streams, +evidence), data-assets, and competition.
+An optional `business/value-growth.json` connects customer value, commercial strategy,
+market opportunity and economics, authored by `edit-value-growth`.
 An optional `tutorial/tutorial.json` provides a general introduction, authored by
 `create-domain-tutorial`. It does not require evidence or model cross-references.

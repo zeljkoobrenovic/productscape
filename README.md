@@ -2,7 +2,7 @@
 
 Reusable skills and scripts for turning product-domain research into structured
 JSON and a static website: customers, jobs to be done, strategy, products, product
-bricks, streams, data assets, competition, residuality stress tests, and
+bricks, streams, data assets, competition, value and growth, residuality stress tests, and
 beginner tutorials.
 
 **Requires Python 3.10+ and Git.** Creating, validating, and building domains uses
@@ -83,7 +83,7 @@ For builds, a domain folder path also selects its data project automatically.
 | `images ID --kind deployments` | Generate the products-to-channels deployment map for the products page |
 
 The CLI builds a domain in this order: start, customers, products, product bricks
-(including streams and data), competition, residuality, tutorial. It also renders
+(including streams and data), competition, value-growth, residuality, tutorial. It also renders
 the evidence explorer and optional project start packages. Output goes under
 `docs/<group>/<domain-id>/`, with a catalog at `docs/index.html`. When the project
 has an `overview` start package, `docs/index.html` redirects to
@@ -96,7 +96,7 @@ full builds continue with other generators and domains.
 
 ## Skills and repository boundaries
 
-There are 16 authoring and review skills. Start with
+For authoring and review, start with
 [product-domain](skills/product-domain/SKILL.md) for routing or
 [new-product-domain](skills/new-product-domain/SKILL.md) for complete authoring.
 The [model reference](skills/_references/domain-model.md) explains shapes and links.
@@ -108,6 +108,22 @@ source is `tutorial/tutorial.json`; `_templates/tutorial/` renders a reading pag
 with contents navigation and revealable answers. Tutorials do not require an
 evidence model. New scaffolds contain an empty draft; older domains can omit the
 file. Rebuild one with `python3 productscapes.py build my-domain --sections tutorial start`.
+
+Use [edit-value-growth](skills/edit-value-growth/SKILL.md) for value and pricing
+metrics, selling motions, growth positioning, activation, market opportunity and
+unit economics. Optional `business/value-growth.json` renders through
+`_templates/value-growth/` into the Business → Value & Growth page. It links to
+customers, jobs, KPIs, products and competitors, labels evidence and assumptions,
+and includes an editable TAM/SAM/SOM scenario calculator. Six tabs organize value,
+selling, activation, market opportunity, economics and sources. The page uses the
+shared tab component, a white background, the standard domain header, and spacious
+cards. See the [rendering guide](_wiring/product-domains/README.md#value--growth-rendering)
+for layout ownership and navigation behavior. Rebuild it with
+`python3 productscapes.py build my-domain --sections value-growth start`.
+
+Activation can also compare freemium, free trials, sandboxes, paid pilots and
+usage-priced entry. Optional entry-model definitions and provider examples pair
+with each offering's fit, limits, paid trigger and conversion measure.
 
 Canonical skills live in `skills/`. Install copies only if your agent needs a
 particular discovery directory; `skills --update` refreshes those copies.

@@ -12,6 +12,7 @@ from domain_paths import discover_domain_dirs, resolve_domain_dir
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import schema_check
 from tutorial_model import validate_tutorial
+from value_growth_model import validate_value_growth
 
 # artifact path (relative to the domain folder) -> schema file in _config/_schema/
 SCHEMA_BY_ARTIFACT = {
@@ -25,6 +26,7 @@ SCHEMA_BY_ARTIFACT = {
     'product-bricks/product-stream.json': 'product-stream.schema.json',
     'data/data-assets.json': 'data-assets.schema.json',
     'business/competition.json': 'competition.schema.json',
+    'business/value-growth.json': 'value-growth.schema.json',
     'residuality/residuality.json': 'residuality.schema.json',
     'tutorial/tutorial.json': 'tutorial.schema.json',
 }
@@ -35,6 +37,10 @@ def validate_against_schema(domain_dir, json_path, payload, errors):
     relative = json_path.relative_to(domain_dir).as_posix()
     schema_name = SCHEMA_BY_ARTIFACT.get(relative)
     if not schema_name:
+        return
+    if relative == 'business/value-growth.json':
+        for problem in validate_value_growth(payload, domain_dir.name, domain_dir):
+            errors.append(f'{domain_dir.name}: {relative} {problem}')
         return
     if relative == 'tutorial/tutorial.json':
         for problem in validate_tutorial(payload, domain_dir.name, domain_dir / 'tutorial'):

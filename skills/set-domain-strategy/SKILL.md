@@ -44,6 +44,7 @@ domains in productscape-examples plus the reference `ride-sharing-marketplace`.
 | KPI pyramids (north-star/supporting/diagnostic) | `customers/customers.json` → `kpiPyramids` |
 | Sourced strategic insights | `customers/insights.json` |
 | Competitive positioning | `business/competition.json` |
+| Value metrics, commercial strategy, market opportunity and economics | `business/value-growth.json` (see `edit-value-growth`) |
 
 ### start/config.json
 

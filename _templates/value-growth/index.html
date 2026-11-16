@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${title} · ${domain_name}</title>
+  <link rel="icon" href="icons/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+  ${breadcrumbs_style}
+  ${tokens_style}
+  ${tabs_style}
+  <style>${app_style}</style>
+  <noscript><style>.tab { display: none; } .tabcontent { display: block !important; }</style></noscript>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to the commercial model</a>
+  <div class="page">
+    <div id="breadcrumbs">${breadcrumbs}</div>
+    <header class="hero">
+      <div class="hero-layout">
+        <img class="hero-logo" src="icons/logo.svg" alt="">
+        <div>
+          <div class="eyebrow">Business · ${domain_name}</div>
+          <h1 class="hero-title">${title}</h1>
+          <div class="hero-subtitle">${summary}</div>
+          ${metadata}
+        </div>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      ${tabs}
+      ${content}
+    </main>
+  </div>
+  <script type="application/json" id="market-data">${market_data}</script>
+  ${tabs_script}
+  <script>${app_script}</script>
+</body>
+</html>

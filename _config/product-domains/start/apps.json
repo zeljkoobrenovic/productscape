@@ -26,6 +26,13 @@
               "source": ""
             },
             {
+              "name": "Value & Growth",
+              "link": "../value-growth/index.html",
+              "icon": "../value-growth/icons/logo.svg",
+              "description": "value metrics, selling, growth and market opportunity",
+              "source": ""
+            },
+            {
               "name": "Insights",
               "link": "../customers/index.html#insights",
               "icon": "../customers/icons/insights.png",

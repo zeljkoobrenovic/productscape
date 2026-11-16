@@ -15,8 +15,9 @@ sys.path.insert(0, str(TOOLKIT / '_wiring'))
 from domain_paths import discover_domain_dirs, resolve_domain_dir
 import project_paths
 from tutorial_model import validate_tutorial
+from value_growth_model import validate_value_growth
 
-SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'competition', 'residuality', 'tutorial')
+SECTIONS = ('start', 'customers', 'products', 'product-bricks', 'competition', 'value-growth', 'residuality', 'tutorial')
 # Groups whose domains build normally but stay out of the shared site index.
 UNLISTED_GROUPS = frozenset({'hidden'})
 REQUIRED = (
@@ -88,6 +89,11 @@ def preflight(domains, *, require_artifacts=True):
             problems = validate_tutorial(read_json(tutorial), domain.name, tutorial.parent)
             if problems:
                 raise ValueError(f'{domain.name}: tutorial/tutorial.json\n' + '\n'.join(problems))
+        value_growth = domain / 'business/value-growth.json'
+        if value_growth.is_file():
+            problems = validate_value_growth(read_json(value_growth), domain.name, domain)
+            if problems:
+                raise ValueError(f'{domain.name}: business/value-growth.json\n' + '\n'.join(problems))
 
 
 def init_project(project):

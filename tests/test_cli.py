@@ -59,7 +59,7 @@ class ToolkitCLI(unittest.TestCase):
         self.assertEqual(snapshot(self.project / '_config'), before)
         self.assertEqual(json.loads((domain / 'start/config.json').read_text())['name'], 'A "quoted" domain')
         self.assertEqual(json.loads((domain / 'customers/customers.json').read_text()), [])
-        for section in ('start', 'customers', 'product-deployments', 'product-bricks', 'competition', 'residuality'):
+        for section in ('start', 'customers', 'product-deployments', 'product-bricks', 'competition', 'value-growth', 'residuality'):
             self.assertTrue((self.project / 'docs/sample/test-domain' / section / 'index.html').is_file(), section)
         self.assertTrue((self.project / 'docs/evidence-explorer/index.html').is_file())
         for page in (self.project / 'docs').rglob('*.html'):
